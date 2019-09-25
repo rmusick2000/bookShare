@@ -8,13 +8,15 @@
 import sys
 import time
 import os
+import platform
 import logging
 
-from threading import Thread
 # from collections import OrderedDict
 
+from threading import Thread
 # https://docs.python.org/2/library/subprocess.html
-from subprocess import call
+from subprocess import call, Popen, PIPE
+from packaging import version
 
 import awsBSCommon
 
@@ -43,6 +45,7 @@ def InstallAWSPermissions():
     call("pip install paramiko --upgrade", shell=True )
     call("pip install certifi --upgrade", shell=True )
     call("pip install awscli --upgrade", shell=True )
+    call("pip install packaging --upgrade", shell=True )
     # urllib3 issues, this is dangerous
     # sudo pip install awscli --upgrade --ignore-installed urllib3
     # call("pip install urllib3 --upgrade", shell=True )
@@ -55,8 +58,32 @@ def InstallAWSPermissions():
 
 def validateConfiguration():
     logging.info("Validating local environment")
+    goodConfig = True
+    if( platform.system() != 'Linux' ) :
+        logging.warning( "You do not appear to be running on a Linux platform.  This code has not be tested on other platforms." )
+        goodConfig = False
+    if( call("command -v sam", shell=True) != 0 ) :
+        logging.warning( "AWS SAM CLI does not appear to be installed" )
+        goodConfig = False
+    if( call("command -v npm", shell=True) != 0 ) :
+        logging.warning( "npm does not appear to be installed" )
+        goodConfig = False
+    if( call("command -v nodejs", shell=True) != 0 ) :
+        logging.warning( "nodejs does not appear to be installed" )
+        goodConfig = False
+    else :
+        p = Popen(['nodejs', '--version'], stdin=PIPE, stdout=PIPE, stderr=PIPE)
+        o, e = p.communicate(b"")
 
-    
+        # XXX mv hardcoded val
+        if( version.parse( o.decode('utf-8') ) < version.parse("8.0.0") ) :
+            logging.warning( "Please update your nodejs version" )
+            goodConfig = False
+        
+        
+    return goodConfig
+
+        
 def main( cmd ):
     #print locals()
     #print globals()
@@ -64,7 +91,6 @@ def main( cmd ):
                         handlers= [logging.FileHandler(filename='bookShare.log'),logging.StreamHandler()],
                         level=logging.INFO)
 
-    # XXX Allow each to be separately called
     # XXX Set up like a makefile, almost..  Create calls x,y,z.  Destroy calls a.  Report calls e,f,g.
     logging.info("Validate configuration")  # check for SAM, boto3, nodejs, npm, etc
     logging.info("Get AWS stacks")
@@ -78,6 +104,11 @@ def main( cmd ):
     logging.info("Get insights AWS")
     logging.info("Get insights Github")
 
+    assert( validateConfiguration() )
+    if( cmd == "validateConfiguration" ) :
+        logging.info( "finished...exiting" )
+        return 
+    
     thread = Thread( target=globals()[cmd]() )
     thread.start()
     thread.join()

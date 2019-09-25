@@ -1,2 +1,3 @@
 .python-version
 dontBuild
+__pycache__
