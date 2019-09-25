@@ -14,3 +14,6 @@ language school by making it easy to share and track any book that a
 participating member is willing to loan out to the community.
 
 BookShare works best with book archiving apps, such as "My Library".
+
+
+NOTE: Set environment variable BSPATH to this github project directory.
