@@ -16,7 +16,12 @@ import logging
 from threading import Thread
 # https://docs.python.org/2/library/subprocess.html
 from subprocess import call, Popen, PIPE
+
 from packaging import version
+from datetime import datetime
+
+import boto3
+from botocore.exceptions import ClientError
 
 import awsBSCommon
 
@@ -80,10 +85,17 @@ def validateConfiguration():
             logging.warning( "Please update your nodejs version" )
             goodConfig = False
         
-        
     return goodConfig
 
-        
+def getCFStacks():
+    assert( validateConfiguration() )
+    
+    cfn = boto3.resource('cloudformation')
+    for stack in cfn.stacks.all() :
+        logging.info( stack.stack_name + " " + stack.stack_status + " " +  stack.last_updated_time.strftime("%m/%d/%Y -- %H:%M:%S") )
+        #print( stack.stack_name, stack.stack_status, stack.last_updated_time )
+
+    
 def main( cmd ):
     #print locals()
     #print globals()
@@ -92,7 +104,7 @@ def main( cmd ):
                         level=logging.INFO)
 
     # XXX Set up like a makefile, almost..  Create calls x,y,z.  Destroy calls a.  Report calls e,f,g.
-    logging.info("Validate configuration")  # check for SAM, boto3, nodejs, npm, etc
+
     logging.info("Get AWS stacks")
     logging.info("Read parameters")         # names for AWS resources
     logging.info("Check SAM Deploy Bucket")
@@ -104,8 +116,8 @@ def main( cmd ):
     logging.info("Get insights AWS")
     logging.info("Get insights Github")
 
-    assert( validateConfiguration() )
     if( cmd == "validateConfiguration" ) :
+        assert( validateConfiguration() )
         logging.info( "finished...exiting" )
         return 
     
