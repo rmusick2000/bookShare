@@ -8,6 +8,9 @@ def init():
     global access_key_id
     global secret_access_key
 
+    global samDeployBucket
+    global samStaticWebBucket
+    
     try:
         import configparser
         
@@ -37,3 +40,6 @@ def init():
     bsAuthPath     = os.environ['BSPATH']+"/ops/awsAuth/"
     bsSharedPem    = bsAuthPath+"awsKey.pem"
     bsProvPath     = os.environ['BSPATH']+"/ops/awsUtils/"
+
+    samDeployBucket   = "bookshare.sam.deploy"
+    samStaticWeBucket = "ber"
