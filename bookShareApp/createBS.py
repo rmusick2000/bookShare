@@ -1,15 +1,12 @@
 #!/usr/bin/env python
 
-# XXX Need bookShare version of awsCommon
-# XXX Does this provisioning get shared to Git?  yes.  Need directions for auth generation.
-# XXX gitignore files in awsAuth
-# XXX awsCommon is a good name within a local context.  pyenv, python search path?
-
 import sys
 import time
 import os
 import platform
 import logging
+
+from os import path
 
 # from collections import OrderedDict
 
@@ -62,12 +59,15 @@ def InstallAWSPermissions():
     call( "cp "+awsBSCommon.bsAuthPath+"credentials " + configLoc+"/credentials", shell=True) 
 
     
-# XXX Validate ubuntu
+
 def validateConfiguration():
     logging.info("Validating local environment")
     goodConfig = True
     if( platform.system() != 'Linux' ) :
         logging.warning( "You do not appear to be running on a Linux platform.  This code has not be tested on other platforms." )
+        goodConfig = False
+    if( "Ubuntu" not in platform.version() ) :
+        logging.warning( "You do not appear to be running an Ubuntu distribution.  This code has not be tested on other distributions." )
         goodConfig = False
     if( call("command -v sam", shell=True) != 0 ) :
         logging.warning( "AWS SAM CLI does not appear to be installed" )
@@ -95,7 +95,17 @@ def getCFStacks():
     for stack in cfn.stacks.all() :
         logging.info( stack.stack_name + " " + stack.stack_status + " " +  stack.last_updated_time.strftime("%m/%d/%Y -- %H:%M:%S") )
 
+def cfStackExists( stackName ):
+    exists = False
 
+    cfn = boto3.resource('cloudformation', region_name = awsBSCommon.bsRegion )
+    for stack in cfn.stacks.all() :
+        if( stack.stack_name == stackName ):
+            exists = True
+            break
+            
+    return exists
+        
 def s3CanCreate( bucketName ) :
     s3 = boto3.resource('s3')
 
@@ -112,6 +122,8 @@ def s3CanCreate( bucketName ) :
         if status_code == '404':  # does not exist
             exists = False
             canCreate = True
+
+    assert( not ( canCreate and exists ))
     return exists, canCreate, status_code
     
         
@@ -121,7 +133,6 @@ def makeDeployBucket():
     bucketName = awsBSCommon.samDeployBucket
     
     exists, canCreate, status_code = s3CanCreate( bucketName )
-    assert( not ( canCreate and exists ))
 
     if( exists and status_code != '403' ):
         logging.info( bucketName + " already exists, no action taken." )
@@ -137,13 +148,85 @@ def makeDeployBucket():
         else :
             s3.create_bucket(Bucket=bucketName, CreateBucketConfiguration={'LocationConstraint': awsBSCommon.bsRegion })
 
-            
-        
 
-        
+def runSAMTemplate( template, deployBucket, stackName ) :
+    logging.info( "Running SAM template: " + template )
+
+    # create the "Pack"aged string 
+    templPack = template
+    assert( len(templPack) > 5 )
+    assert( templPack[-4:] == "yaml" )
+    templPack = templPack[0:-5] + "Pack.yaml"
+    
+    if( not path.exists( template ) ) :
+        logging.error( "Yaml template " + template + " does not exist." )
+        return
+
+    if( cfStackExists( stackName ) ):
+        logging.warning( "Cloudformation stack " + stackName + " already exists.  No action taken." )
+        return
+    
+    try: 
+        cmd = "sam validate -t " + template
+        logging.info( cmd )
+        val = check_output(cmd, shell=True).decode('utf-8')    
+        logging.info( val )
+    except ClientError as e:
+        logging.error( e )
+
+    try: 
+        cmd = "sam build -t " + template
+        logging.info( cmd )
+        val = check_output(cmd, shell=True).decode('utf-8')    
+        logging.info( val )
+    except ClientError as e:
+        logging.error( e )
+
+    try: 
+        cmd  = "sam package --template-file " + template + " --output-template " + templPack
+        cmd += " --s3-bucket " + deployBucket
+        logging.info( cmd )
+        val = check_output(cmd, shell=True).decode('utf-8')    
+        logging.info( val )
+    except ClientError as e:
+        logging.error( e )
+
+    try: 
+        cmd =  "sam deploy --template-file " + templPack + " --region " + awsBSCommon.bsRegion
+        cmd += " --capabilities CAPABILITY_IAM --stack-name " + stackName
+        logging.info( cmd )
+        logging.info( "This may take a few minutes...." )
+        val = check_output(cmd, shell=True).decode('utf-8')    
+        logging.info( val )
+    except ClientError as e:
+        logging.error( e )
+
+
+def createStaticWebBucket() :
+    bucketName =  awsBSCommon.samStaticWebBucket 
+    logging.info( "Creating S3 static web bucket " + bucketName)
+
+    # Check deploy bucket
+    exists, canCreate, status_code = s3CanCreate( awsBSCommon.samDeployBucket )
+    if( not exists or status_code == '403' ) :
+        logging.info(  "Please create the SAM deployment bucket first." )
+        return
+
+    # Run template if static web bucket can be created
+    exists, canCreate, status_code = s3CanCreate( bucketName )
+    if( exists and status_code != '403' ):
+        logging.info( bucketName + " already exists, no action taken." )
+    elif( status_code == '403' ) :
+        logging.info( bucketName + " already exists, access is forbidden.  Please choose another name. ")        
+    elif( canCreate ) :
+        runSAMTemplate( template = awsBSCommon.samStaticWebYAML, deployBucket = awsBSCommon.samDeployBucket, stackName = awsBSCommon.samStaticWebStackName )
+
+
+
+
+    
 """
 
-    # The error received here is access denied, too broad.
     # cmd = "aws s3 ls \"s3://" + awsBSCommon.samDeployBucket + "\""
     # p = Popen(cmd, stdin=PIPE, stdout=PIPE, stderr=PIPE, shell=True)
     # o, e = p.communicate(b"")
@@ -162,7 +245,8 @@ for output in stack.outputs:
 
 """
         
-    
+# XXX Class me
+
 def main( cmd ):
     #print locals()
     #print globals()
@@ -175,8 +259,8 @@ def main( cmd ):
     if( cmd == "" ) :
         getCFStacks()
         makeDeployBucket()
+        createStaticWebBucket()
     
-    logging.info("Check SAM Deploy Bucket")
     logging.info("Create S3 static web")
     logging.info("Create Cognito auth")
     logging.info("Create Serverless Fwk")
