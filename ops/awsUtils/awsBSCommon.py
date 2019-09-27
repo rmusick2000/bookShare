@@ -5,11 +5,15 @@ def init():
     global bsAuthPath
     global bsSharedPem
     global bsProvPath
+    global bsAppPath
     global access_key_id
     global secret_access_key
-
+    
     global samDeployBucket
     global samStaticWebBucket
+    global samStaticWebYAML
+    global samStaticWebStackName
+    global samBookShareAppStackName
     
     try:
         import configparser
@@ -40,6 +44,11 @@ def init():
     bsAuthPath     = os.environ['BSPATH']+"/ops/awsAuth/"
     bsSharedPem    = bsAuthPath+"awsKey.pem"
     bsProvPath     = os.environ['BSPATH']+"/ops/awsUtils/"
+    bsAppPath      = os.environ['BSPATH']+"/bookShareApp/"
+    
+    samDeployBucket    = "bookshare.sam.deploy"
+    samStaticWebBucket = "bookshare.codeequity.net"   # note this has to be consistent with yaml
+    samStaticWebYAML   = os.environ['BSPATH']+"/bookShareApp/samStaticWeb.yaml"
 
-    samDeployBucket   = "bookshare.sam.deploy"
-    samStaticWeBucket = "ber"
+    samStaticWebStackName       = "bookShareS3"
+    samBookShareStackName       = "bookShareApp"
