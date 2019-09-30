@@ -12,6 +12,7 @@ def init():
     global samDeployBucket
     global samStaticWebBucket
     global samStaticWebYAML
+    global samInfrastructureYAML
     global samStaticWebStackName
     global samBookShareAppStackName
     
@@ -46,9 +47,10 @@ def init():
     bsProvPath     = os.environ['BSPATH']+"/ops/awsUtils/"
     bsAppPath      = os.environ['BSPATH']+"/bookShareApp/"
     
-    samDeployBucket    = "bookshare.sam.deploy"
-    samStaticWebBucket = "bookshare.codeequity.net"   # note this has to be consistent with yaml
-    samStaticWebYAML   = os.environ['BSPATH']+"/bookShareApp/samStaticWeb.yaml"
+    samDeployBucket        = "bookshare.sam.deploy"
+    samStaticWebBucket     = "bookshare.codeequity.net"   # note this has to be consistent with yaml
+    samStaticWebYAML       = os.environ['BSPATH']+"/bookShareApp/samStaticWeb.yaml"
+    samInfrastructureYAML  = os.environ['BSPATH']+"/bookShareApp/samInfrastructure.yaml"
 
     samStaticWebStackName       = "bookShareS3"
-    samBookShareStackName       = "bookShareApp"
+    samBookShareAppStackName    = "bookShareApp"
