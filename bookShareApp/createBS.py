@@ -221,18 +221,24 @@ def createStaticWebBucket() :
     elif( canCreate ) :
         runSAMTemplate( template = awsBSCommon.samStaticWebYAML, deployBucket = awsBSCommon.samDeployBucket, stackName = awsBSCommon.samStaticWebStackName )
 
+def createServerlessInfrastructure() :
+    webBucket =  awsBSCommon.samStaticWebBucket 
+    logging.info( "Creating Serverless Infrastructure for BookShare" )
+
+    # Check deploy bucket
+    exists, canCreate, status_code = s3CanCreate( awsBSCommon.samDeployBucket )
+    if( not exists or status_code == '403' ) :
+        logging.info(  "Please create the SAM deployment bucket first." )
+        return
+
+    # Run template
+    runSAMTemplate( template = awsBSCommon.samInfrastructureYAML, deployBucket = awsBSCommon.samDeployBucket, stackName = awsBSCommon.samBookShareAppStackName )
+
 
 
 
     
 """
-
-    # cmd = "aws s3 ls \"s3://" + awsBSCommon.samDeployBucket + "\""
-    # p = Popen(cmd, stdin=PIPE, stdout=PIPE, stderr=PIPE, shell=True)
-    # o, e = p.communicate(b"")
-    # if( e is not None ) : 
-    #    logging.warning( "SAM deployment bucket does not exist.. will create it." )
-
 
 stacks = conn.describe_stacks('MyStackID')
 if len(stacks) == 1:
@@ -260,10 +266,14 @@ def main( cmd ):
         getCFStacks()
         makeDeployBucket()
         createStaticWebBucket()
+        createServerlessInfrastructure()
     
-    logging.info("Create S3 static web")
-    logging.info("Create Cognito auth")
+
     logging.info("Create Serverless Fwk")
+    logging.info("Separate Cognito auth")
+    logging.info("add static pages, css, etc.  flutter? ")
+    logging.info("add lambdas.  add resource ids to config.js" )
+    logging.info("Connect static web to infrastructure")
     logging.info("Remove AWS Resources")
     logging.info("Run basic stress test")
     logging.info("Get insights AWS")

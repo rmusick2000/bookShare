@@ -1,0 +1,8 @@
+{
+  "name": "bookShareApp",
+  "version": "0.0.1",
+  "main": "bookShare.js",
+  "dependencies": {
+    "aws-sdk": "latest"
+  }
+}

@@ -1,0 +1,134 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: 
+  Construct serverless infrastructure for BookShare
+
+Resources:
+
+  BSCognitoUserPool:
+    Type: 'AWS::Cognito::UserPool'
+    Properties:
+      UserPoolName: BookShareCognitoUserPool
+      AutoVerifiedAttributes:
+        - email
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 8
+          RequireLowercase: true
+          RequireNumbers: true
+          RequireSymbols: false
+          RequireUppercase: true
+      Schema:
+        - AttributeDataType: String
+          Name: email
+          Required: true
+  
+  BSCognitoUserPoolClient:
+    Type: 'AWS::Cognito::UserPoolClient'
+    Properties:
+      UserPoolId: !Ref BSCognitoUserPool
+      ClientName: BookShareApp
+      GenerateSecret: false
+
+  BookTable:
+    Type: 'AWS::Serverless::SimpleTable'
+    Properties:
+      TableName: Books
+      PrimaryKey:
+        Name: BooksId
+        Type: String
+
+  # SAM implicit API does not handle edge, cors properly. Explicit is
+  #     required, meaning swagger def is required as well.
+  BSAPI:
+    Type: 'AWS::Serverless::Api'
+    Properties:
+      EndpointConfiguration: EDGE
+      #SAM is not fully expanding this as below, leading to mysterious auth failures.
+      #Cors: "'*'"
+      Cors:
+        AllowOrigin: "'*'"
+        AllowHeaders: "'*'"
+      StageName: prod
+      DefinitionBody:
+        swagger: 2.0
+        info:
+          title: Boooooooks
+        schemes:
+          - https
+        paths:
+            /find:
+              post:
+                produces:
+                - "application/json"
+                responses:
+                  "200":
+                    description: "200 response"
+                    schema:
+                      $ref: "#/definitions/Empty"
+                security:
+                - BookShareSec: []
+                x-amazon-apigateway-integration:
+                  httpMethod: POST
+                  contentHandling: "CONVERT_TO_TEXT"
+                  type: aws_proxy
+                  uri:
+                    Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${BSLambda.Arn}/invocations
+                  responses:
+                    default:
+                      statusCode: "200"
+        securityDefinitions:
+          BookShareSec:
+            type: "apiKey"
+            name: "Authorization"
+            in: "header"
+            x-amazon-apigateway-authtype: "cognito_user_pools"
+            x-amazon-apigateway-authorizer:
+              providerARNs:
+              - Fn::Sub: ${BSCognitoUserPool.Arn}
+              type: "cognito_user_pools"
+        definitions:
+          Empty:
+            type: "object"
+            title: "Empty Schema"
+
+  BSLambda:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      CodeUri: ./lambdaHandlers/
+      Handler: bookShare.handler
+      Runtime: nodejs8.10
+      Description: Git der
+      Events:
+        FindAPI:
+          Type: Api 
+          Properties:
+            RestApiId: !Ref BSAPI
+            Path: /find
+            Method: post
+            Auth:
+              Authorizer: BookShareSec
+      Policies:
+       - DynamoDBCrudPolicy:
+          TableName: !Ref BookTable 
+
+
+Outputs:
+  WebsiteURL:
+    Description: "API Gateway endpoint URL for Prod stage for Find function"
+    Value: !ImportValue "bookShareS3-CES3URL"
+  UserPoolID:
+    Value: !Ref BSCognitoUserPool
+    Description: Cognito user pool id
+  UserPoolClientId:
+    Value: !Ref BSCognitoUserPoolClient
+    Description: bookshare app id for cognito user pool
+  BookShareApiExecution:
+    Description: "API Gateway endpoint URL for Prod stage for BookShare function"
+    Value: !Sub "https://${BSAPI}.execute-api.${AWS::Region}.amazonaws.com/prod"
+  BookShareLambdadFunction:
+    Description: "BookShare Lambda Function ARN"
+    Value: !GetAtt BSLambda.Arn
+  BSLambdaFunctionIamRole:
+    Description: "Implicit IAM Role created for Hello World function"
+    Value: !GetAtt BSLambdaRole.Arn
