@@ -234,6 +234,55 @@ def createServerlessInfrastructure() :
     # Run template
     runSAMTemplate( template = awsBSCommon.samInfrastructureYAML, deployBucket = awsBSCommon.samDeployBucket, stackName = awsBSCommon.samBookShareAppStackName )
 
+def removeStackResources( cfStackName ) :
+    if( not cfStackExists( cfStackName ) ) :
+        logging.warning( cfStackName + " does not exist.  No need to delete it." )
+        return
+
+    client = boto3.client('cloudformation', region_name = awsBSCommon.bsRegion )
+
+    # delete all s3 bucket contents first, to allow removal of bucket
+    stackResourceSummaries = client.list_stack_resources( StackName = cfStackName )
+    for resource in stackResourceSummaries['StackResourceSummaries'] :
+        print( resource['LogicalResourceId'], resource['PhysicalResourceId'], resource['ResourceType'] )
+        if( resource['ResourceType'] == "AWS::S3::Bucket" ) :
+            # cmd = "aws s3 rb s3://bookshare.codeequity.net --force"
+            s3 = boto3.resource('s3')
+            bucket = s3.Bucket( resource['PhysicalResourceId'] )
+            bucket.objects.delete()
+                
+            # done?
+            for obj in bucket.objects.all() :
+                logging.error( "Bucket delete did not complete" )
+                assert( False )
+
+    # aws cloudformation delete-stack --stack-name S3StaticWeb
+    client.delete_stack( StackName = cfStackName )
+
+    seconds = 0
+    while( cfStackExists( cfStackName ) ) :
+        status = client.describe_stacks( StackName = cfStackName )['Stacks'][0]['StackStatus']
+        if( status == "DELETE_IN_PROGRESS" and seconds % 5 == 0 ) :
+            logging.info( cfStackName + " " + status + " time elapsed: " + str(seconds)  )
+
+        if( not status == "DELETE_IN_PROGRESS" or seconds >= 120 ) :
+            logging.error( cfStackName + " stack was not deleted. Perhaps it is in use by other cloudFormation stacks? " )
+            logging.error( "Time spent: " + str(seconds) + " status: " + status )
+            break
+        time.sleep(1)
+        seconds += 1
+        
+
+# XXX remove deployment bucket
+def deleteAWSRes() :
+    logging.info( "Removing CloudFormation stacks and resources" )
+    logging.info("")
+    logging.info("BookShare app stack")
+    removeStackResources( awsBSCommon.samBookShareAppStackName )
+    logging.info("")
+    logging.info("S3 stack")
+    removeStackResources( awsBSCommon.samStaticWebStackName )
+
 
 
 
@@ -269,12 +318,13 @@ def main( cmd ):
         createServerlessInfrastructure()
     
 
-    logging.info("Create Serverless Fwk")
-    logging.info("Separate Cognito auth")
     logging.info("add static pages, css, etc.  flutter? ")
-    logging.info("add lambdas.  add resource ids to config.js" )
     logging.info("Connect static web to infrastructure")
+
+    logging.info("Separate Cognito auth")
+
     logging.info("Remove AWS Resources")
+
     logging.info("Run basic stress test")
     logging.info("Get insights AWS")
     logging.info("Get insights Github")
