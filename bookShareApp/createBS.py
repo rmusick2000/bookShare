@@ -127,14 +127,18 @@ def main( cmd ):
     sam = samInstance( region = awsBSCommon.bsRegion )
 
     if( cmd == "" ) : getCFStacks( sam )
-    
+
+    logging.info("")
+    logging.info("TODO:")
     logging.info("add static pages, css, etc.  flutter? ")
     logging.info("Connect static web to infrastructure")
     logging.info("Separate Cognito auth")
     logging.info("Run basic stress test")
     logging.info("Get insights AWS")
     logging.info("Get insights Github")
-
+    logging.info( "END TODO")
+    logging.info("")
+    
     if( cmd == "validateConfiguration" or cmd == "") :
         logging.info( "finished...exiting" )
         return 
