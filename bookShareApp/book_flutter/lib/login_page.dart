@@ -1,8 +1,12 @@
-// import 'dart:convert';
-
 import 'package:flutter_cognito_plugin/flutter_cognito_plugin.dart';
 
+import 'dart:convert';
+import 'dart:async';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
 
 // XXX state HAS to reside in main app, else when switch between pages, rebuild
 //     wipes it out each time.
@@ -14,6 +18,49 @@ class BookShareLoginPage extends StatefulWidget {
   @override
   _BookShareLoginState createState() => _BookShareLoginState();
 }
+
+// This returns a Post class, created by parsing the json response.  a future.
+Future<Post> fetchPost( gatewayURL, authToken, postData ) async {
+   print( "fetchPost " + authToken );
+   final response =
+      await http.post(
+         gatewayURL,
+         headers: {HttpHeaders.authorizationHeader: authToken},
+         body: postData
+         );
+
+  if (response.statusCode == 200) {
+    // If the call to the server was successful, parse the JSON.
+    return Post.fromJson(json.decode(response.body));
+  } else {
+    // If that call was not successful, throw an error.
+     print( "RESPONSE: " + response.statusCode.toString() + " " + json.decode(response.body).toString());
+     throw Exception('Failed to load post');
+  }
+}
+
+// XXX fixme Post class
+class Post {
+   final int bookId;
+   final int book;
+   final String bookTitle;
+   final String user;
+   final String body;
+
+   Post({this.bookId, this.book, this.bookTitle, this.user, this.body});
+
+  factory Post.fromJson(Map<String, dynamic> json) {
+    return Post(
+      bookId: json['BookId'],
+      book: json['book'],  // eh?? XXX
+      bookTitle: json['BookTitle'],
+      user: json['username'],
+      body: json['body'],
+    );
+  }
+}
+
+
 
 
 class _BookShareLoginState extends State<BookShareLoginPage> {
@@ -99,6 +146,10 @@ class _BookShareLoginState extends State<BookShareLoginPage> {
    @override
    Widget build(BuildContext context) {
 
+      // _
+      // XXX to config
+      final _apiGatewayURL = "https://6g51wxfjd5.execute-api.us-east-1.amazonaws.com/prod/find";
+
      final usernameField = TextField(
         obscureText: false,
         style: style,
@@ -137,9 +188,29 @@ class _BookShareLoginState extends State<BookShareLoginPage> {
            ),
         );
 
+     
+     Future<Post> post;
      final backButton = RaisedButton(
-        onPressed: () { Navigator.pop( context ); },
-        child: Text( 'Go Back!'));
+        // onPressed: () { Navigator.pop( context ); },
+        // child: Text( 'Go Back!'));
+        onPressed: () async
+        {
+           print( userState.toString() );
+           // XXX auth_token, data
+           // XXX fix bookShare.js.  add 2 titles to books, fix 2 config locations
+           String data = '{ "BookTitle": "The Lincoln Lawyer" }';
+
+           // XXX crappy return value here.. 
+           //Map authToken = json.decode( tokenString ).acessToken();
+           List tokenString = (await Cognito.getTokens()).toString().split(" ");
+           // accessToken
+           //String authToken = tokenString[3].split(",")[0];
+           // idToken
+           String authToken = tokenString[5].split(",")[0];
+           post = fetchPost( _apiGatewayURL, authToken, data );
+           print(post);
+        },
+        child: Text( 'Try me!'));
                         
 
      // XXX convert backButton to return with userState
@@ -147,6 +218,7 @@ class _BookShareLoginState extends State<BookShareLoginPage> {
       appBar: AppBar( title: Text( "Login page" )),
       body: Center(
 
+         child: SingleChildScrollView( 
          child: Container(
             color: Colors.white,
             child: Padding(
@@ -168,6 +240,6 @@ class _BookShareLoginState extends State<BookShareLoginPage> {
                      Text( userState?.toString() ?? "UserState here", style: TextStyle(fontStyle: FontStyle.italic)),
                      ])))
          
-         ));
+            )));
    }
 }
