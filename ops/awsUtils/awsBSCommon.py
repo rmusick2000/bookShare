@@ -7,8 +7,9 @@ def init():
     global bsProvPath
     global bsAppPath
     global bsNodeJSVersion
-    global bsAppConfigPath
+    global bsAppConfigPath  # android assets for cognito plugin
     global bsAppConfigName
+    global bsAppAssetPath   # more typical pubspec.yaml assets
     global access_key_id
     global secret_access_key
     
@@ -52,6 +53,7 @@ def init():
     bsNodeJSVersion = "8.0.0"
     bsAppConfigPath = bsAppPath + "book_flutter/android/app/src/main/res/raw/"
     bsAppConfigName = "awsconfiguration.json"
+    bsAppAssetPath  = bsAppPath + "book_flutter/files/"
     
     samDeployBucket        = "bookshare.sam.deploy"
     samStaticWebBucket     = "bookshare.codeequity.net"   # note this has to be consistent with yaml

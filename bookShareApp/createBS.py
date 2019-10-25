@@ -126,7 +126,7 @@ def createConfigFiles( sam, Xs = False ):
     with open(filename, "w+") as f:
         f.write(configData)
 
-    filename = awsBSCommon.bsAppConfigPath + "apiBasePath"
+    filename = awsBSCommon.bsAppAssetPath + "api_base_path.txt"
     with open(filename, "w+") as f:
         f.write(apiBase)
     

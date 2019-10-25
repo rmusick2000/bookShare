@@ -16,9 +16,16 @@ class BookShareLoginPage extends StatefulWidget {
   _BookShareLoginState createState() => _BookShareLoginState();
 }
 
+Future<String> loadAsset(BuildContext context) async {
+   return await DefaultAssetBundle.of(context).loadString('files/api_base_path.txt');
+}
+  
+
 // This returns a promise to a Post class, created by parsing the json response.  a future.
-Future<Post> fetchPost( gatewayURL, authToken, postData ) async {
+Future<Post> fetchPost( context, postFunc, authToken, postData ) async {
    print( "fetchPost " + authToken );
+   final gatewayURL = (await loadAsset( context )).trim() + postFunc;
+
    final response =
       await http.post(
          gatewayURL,
@@ -146,16 +153,13 @@ class _BookShareLoginState extends State<BookShareLoginPage> {
     return wrapper;
   }
 
-
   
    @override
    Widget build(BuildContext context) {
 
-      // _
-      // XXX to config
-      final _apiGatewayURL = "https://55hs2rlbi5.execute-api.us-east-1.amazonaws.com/prod/find";
-   
-     final usernameField = TextField(
+      // XXX _
+
+      final usernameField = TextField(
         obscureText: false,
         style: style,
         decoration: InputDecoration(
@@ -294,10 +298,9 @@ class _BookShareLoginState extends State<BookShareLoginPage> {
            // String authToken = tokenString[3].split(",")[0];
            // idToken
            String authToken = tokenString[5].split(",")[0];
-           post = await fetchPost( _apiGatewayURL, authToken, data );
-           // print("MAGIC COOKIES! " + (await post).MagicCookie.toString());
+
+           post = await fetchPost( context, "/find", authToken, data );
            print("MAGIC COOKIES! " + post.MagicCookie.toString());
-           // use setState to cause display to update with new values
            setState(() { bookState = post.BookTitle + " written by " + post.Author; });
         },
         child: Text( 'Try me!'));
