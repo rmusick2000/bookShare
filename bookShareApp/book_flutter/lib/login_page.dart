@@ -19,7 +19,7 @@ class BookShareLoginPage extends StatefulWidget {
   _BookShareLoginState createState() => _BookShareLoginState();
 }
 
-// This returns a Post class, created by parsing the json response.  a future.
+// This returns a promise to a Post class, created by parsing the json response.  a future.
 Future<Post> fetchPost( gatewayURL, authToken, postData ) async {
    print( "fetchPost " + authToken );
    final response =
@@ -29,7 +29,7 @@ Future<Post> fetchPost( gatewayURL, authToken, postData ) async {
          body: postData
          );
 
-  if (response.statusCode == 200) {
+  if (response.statusCode == 201) {
     // If the call to the server was successful, parse the JSON.
     return Post.fromJson(json.decode(response.body));
   } else {
@@ -39,23 +39,24 @@ Future<Post> fetchPost( gatewayURL, authToken, postData ) async {
   }
 }
 
-// XXX fixme Post class
 class Post {
    final int bookId;
-   final int book;
-   final String bookTitle;
-   final String user;
-   final String body;
+   final String BookTitle;
+   final String Author;
+   final int MagicCookie;
+   final String User;
 
-   Post({this.bookId, this.book, this.bookTitle, this.user, this.body});
+   Post({this.bookId, this.BookTitle, this.Author, this.MagicCookie, this.User});
 
+   
   factory Post.fromJson(Map<String, dynamic> json) {
     return Post(
-      bookId: json['BookId'],
-      book: json['book'],  // eh?? XXX
-      bookTitle: json['BookTitle'],
-      user: json['username'],
-      body: json['body'],
+      bookId: json['bookId'],
+      BookTitle: json['BookTitle'],
+      Author: json['Author'],
+      MagicCookie: int.parse( json['MagicCookie'] ),
+      //MagicCookie: json['MagicCookie'],
+      User: json['User'],
     );
   }
 }
@@ -68,6 +69,7 @@ class _BookShareLoginState extends State<BookShareLoginPage> {
    var returnValue;
    UserState userState;
    double progress;
+   String bookState;
    final usernameController = TextEditingController();
    final passwordController = TextEditingController();
 
@@ -148,8 +150,8 @@ class _BookShareLoginState extends State<BookShareLoginPage> {
 
       // _
       // XXX to config
-      final _apiGatewayURL = "https://6g51wxfjd5.execute-api.us-east-1.amazonaws.com/prod/find";
-
+      final _apiGatewayURL = "https://55hs2rlbi5.execute-api.us-east-1.amazonaws.com/prod/find";
+   
      final usernameField = TextField(
         obscureText: false,
         style: style,
@@ -188,27 +190,32 @@ class _BookShareLoginState extends State<BookShareLoginPage> {
            ),
         );
 
-     
-     Future<Post> post;
+     // XXX OUCH!! automate me!!  2 config files, add db entries, signup, signin.... blarg, config for exmple(signup)
+     // XXX grack.. {"email": "xxxx"} in user attrs
+
+     // Future<Post> post;
+     Post post;
      final backButton = RaisedButton(
         // onPressed: () { Navigator.pop( context ); },
         // child: Text( 'Go Back!'));
         onPressed: () async
         {
            print( userState.toString() );
-           // XXX auth_token, data
-           // XXX fix bookShare.js.  add 2 titles to books, fix 2 config locations
-           String data = '{ "BookTitle": "The Lincoln Lawyer" }';
+           //String data = '{ "BookTitle": "The Last Ship" }';
+           String data = '{ "BookTitle": "Digital Fortress" }';
 
            // XXX crappy return value here.. 
            //Map authToken = json.decode( tokenString ).acessToken();
            List tokenString = (await Cognito.getTokens()).toString().split(" ");
            // accessToken
-           //String authToken = tokenString[3].split(",")[0];
+           // String authToken = tokenString[3].split(",")[0];
            // idToken
            String authToken = tokenString[5].split(",")[0];
-           post = fetchPost( _apiGatewayURL, authToken, data );
-           print(post);
+           post = await fetchPost( _apiGatewayURL, authToken, data );
+           // print("MAGIC COOKIES! " + (await post).MagicCookie.toString());
+           print("MAGIC COOKIES! " + post.MagicCookie.toString());
+           // use setState to cause display to update with new values
+           setState(() { bookState = post.BookTitle + " written by " + post.Author; });
         },
         child: Text( 'Try me!'));
                         
@@ -228,7 +235,7 @@ class _BookShareLoginState extends State<BookShareLoginPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
 
-                     Container( child: Image.asset( 'images/bookShare.jpeg', height: 100.0,  fit: BoxFit.contain)),
+                     Container( child: Image.asset( 'images/bookShare.jpeg', height: 80.0,  fit: BoxFit.contain)),
                      SizedBox(height: 40.0),
                      usernameField,
                      SizedBox(height: 15.0),
@@ -238,6 +245,7 @@ class _BookShareLoginState extends State<BookShareLoginPage> {
                      SizedBox(height: 15.0),
                      backButton,
                      Text( userState?.toString() ?? "UserState here", style: TextStyle(fontStyle: FontStyle.italic)),
+                     Text( bookState?.toString() ?? "illiterate", style: TextStyle(fontStyle: FontStyle.italic)),
                      ])))
          
             )));
