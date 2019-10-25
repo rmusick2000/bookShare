@@ -6,6 +6,9 @@ def init():
     global bsSharedPem
     global bsProvPath
     global bsAppPath
+    global bsNodeJSVersion
+    global bsAppConfigPath
+    global bsAppConfigName
     global access_key_id
     global secret_access_key
     
@@ -42,10 +45,13 @@ def init():
         print( "Try running:  python createBS.py 'InstallAWSPermissions()' " )
         #raise
 
-    bsAuthPath     = os.environ['BSPATH']+"/ops/awsAuth/"
-    bsSharedPem    = bsAuthPath+"awsKey.pem"
-    bsProvPath     = os.environ['BSPATH']+"/ops/awsUtils/"
-    bsAppPath      = os.environ['BSPATH']+"/bookShareApp/"
+    bsAuthPath      = os.environ['BSPATH']+"/ops/awsAuth/"
+    bsSharedPem     = bsAuthPath+"awsKey.pem"
+    bsProvPath      = os.environ['BSPATH']+"/ops/awsUtils/"
+    bsAppPath       = os.environ['BSPATH']+"/bookShareApp/"
+    bsNodeJSVersion = "8.0.0"
+    bsAppConfigPath = bsAppPath + "book_flutter/android/app/src/main/res/raw/"
+    bsAppConfigName = "awsconfiguration.json"
     
     samDeployBucket        = "bookshare.sam.deploy"
     samStaticWebBucket     = "bookshare.codeequity.net"   # note this has to be consistent with yaml

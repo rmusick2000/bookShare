@@ -51,8 +51,8 @@ class Post {
       bookId: json['bookId'],
       BookTitle: json['BookTitle'],
       Author: json['Author'],
-      MagicCookie: int.parse( json['MagicCookie'] ),
-      //MagicCookie: json['MagicCookie'],
+      //MagicCookie: int.parse( json['MagicCookie'] ),
+      MagicCookie: json['MagicCookie'],
       User: json['User'],
     );
   }
@@ -69,6 +69,8 @@ class _BookShareLoginState extends State<BookShareLoginPage> {
    String bookState;
    final usernameController = TextEditingController();
    final passwordController = TextEditingController();
+   final attributeController = TextEditingController();
+   final confirmationCodeController = TextEditingController();
 
   // init Cognito
   Future<void> doLoad() async {
@@ -112,6 +114,8 @@ class _BookShareLoginState extends State<BookShareLoginPage> {
     Cognito.registerCallback(null);
     usernameController.dispose();
     passwordController.dispose();
+    attributeController.dispose();
+    confirmationCodeController.dispose();
     super.dispose();
   }
 
@@ -171,6 +175,26 @@ class _BookShareLoginState extends State<BookShareLoginPage> {
            OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
         controller: passwordController,
         );
+     final emailField = TextField(
+        obscureText: false,
+        style: style,
+        decoration: InputDecoration(
+           contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+           hintText: "email address",
+           border:
+           OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
+        controller: attributeController,
+        );
+     final confirmationCodeField = TextField(
+        obscureText: false,
+        style: style,
+        decoration: InputDecoration(
+           contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+           hintText: "confirmation code",
+           border:
+           OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
+        controller: confirmationCodeController,
+        );
      final loginButton = Material(
         elevation: 5.0,
         borderRadius: BorderRadius.circular(30.0),
@@ -195,16 +219,54 @@ class _BookShareLoginState extends State<BookShareLoginPage> {
         child: MaterialButton(
            //minWidth: MediaQuery.of(context).size.width,
            padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-           // onPressed: onPressWrapper(() => Cognito.signOut()),
            onPressed: onPressWrapper(() {
                  Cognito.signOut();
                  setState(() {
                        bookState = "illiterate";
                        usernameController.clear();
                        passwordController.clear();
+                       attributeController.clear();
+                       confirmationCodeController.clear();
                     });
               }),
            child: Text("Logout",
+                       textAlign: TextAlign.center,
+                       style: style.copyWith(
+                          color: Colors.white, fontWeight: FontWeight.bold)),
+           ),
+        );
+     // XXX Very easy to break ATM.  no email provided?  no confirmation possible.
+     // XXX Need good error checking in here.
+     final signupButton = Material(
+        elevation: 5.0,
+        borderRadius: BorderRadius.circular(30.0),
+        color: Color(0xff01A0C7),
+        child: MaterialButton(
+           //minWidth: MediaQuery.of(context).size.width,
+           padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+           onPressed: onPressWrapper(() {
+                 final email = {'email' : attributeController.text };
+                 Cognito.signUp( usernameController.text, passwordController.text, email );
+                 // XXX inform user to look for email
+              }),
+           child: Text("Signup",
+                       textAlign: TextAlign.center,
+                       style: style.copyWith(
+                          color: Colors.white, fontWeight: FontWeight.bold)),
+           ),
+        );
+     final confirmSignupButton = Material(
+        elevation: 5.0,
+        borderRadius: BorderRadius.circular(30.0),
+        color: Color(0xff01A0C7),
+        child: MaterialButton(
+           //minWidth: MediaQuery.of(context).size.width,
+           padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+           // onPressed: onPressWrapper(() => Cognito.signOut()),
+           onPressed: onPressWrapper(() {
+                 Cognito.confirmSignUp( usernameController.text, confirmationCodeController.text );
+              }),
+           child: Text("Confirm Signup",
                        textAlign: TextAlign.center,
                        style: style.copyWith(
                           color: Colors.white, fontWeight: FontWeight.bold)),
@@ -256,15 +318,21 @@ class _BookShareLoginState extends State<BookShareLoginPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
 
-                     Container( child: Image.asset( 'images/bookShare.jpeg', height: 80.0,  fit: BoxFit.contain)),
-                     SizedBox(height: 40.0),
+                     Container( child: Image.asset( 'images/bookShare.jpeg', height: 40.0,  fit: BoxFit.contain)),
+                     SizedBox(height: 5.0),
                      usernameField,
-                     SizedBox(height: 15.0),
+                     SizedBox(height: 5.0),
                      passwordField,
-                     SizedBox( height: 20.0),
+                     SizedBox( height: 5.0),
+                     emailField,
+                     SizedBox( height: 5.0),
+                     confirmationCodeField,
+                     SizedBox( height: 5.0),
                      Row( mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [ loginButton, logoutButton ] ),
-                     SizedBox(height: 15.0),
+                     Row( mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [ signupButton, confirmSignupButton ] ),
+                     SizedBox(height: 5.0),
                      backButton,
                      Text( userState?.toString() ?? "UserState here", style: TextStyle(fontStyle: FontStyle.italic)),
                      Text( bookState?.toString() ?? "illiterate", style: TextStyle(fontStyle: FontStyle.italic)),
