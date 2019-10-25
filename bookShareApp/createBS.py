@@ -15,6 +15,11 @@ from packaging import version
 from samInstance import samInstance
 import awsBSCommon
 
+# XXX create, delete awsConfig for bookFlutter, when create/delete BS resources
+# XXX buuuuuuuuut.... app in wild, BS rejuvinates, app dies??  no. need to connect.
+# XXX aws resource discovery?  somehow via static web?  reinstall updated apk... ummm..
+# XXX later, something like https://aws.amazon.com/blogs/architecture/new-application-integration-with-aws-cloud-map-for-service-discovery/
+# XXX add db entries for testing
 
 def updateHost():
     logging.info("Trying to update localhost")
@@ -73,8 +78,7 @@ def validateConfiguration():
         goodConfig = False
     else :
         nver = check_output(["nodejs", "--version"]).decode('utf-8')
-        # XXX mv hardcoded val
-        if( version.parse( nver ) < version.parse("8.0.0") ) :
+        if( version.parse( nver ) < version.parse(awsBSCommon.bsNodeJSVersion) ) :
             logging.warning( "Please update your nodejs version" )
             goodConfig = False
         
@@ -85,6 +89,53 @@ def validateConfiguration():
 def getCFStacks( sam ) :
     sam.getStacks()
 
+
+def createTestDDBEntries( sam ) :
+    cmd = "aws dynamodb put-item --table-name Books --item  \'{\"BooksId\": {\"S\": \"823480\"}, \"BookTitle\": {\"S\": \"The Last Ship\"}, \"Author\": {\"S\": \"Bill Blinky\"}, \"Owner\": {\"S\": \"HR\"}, \"MagicCookie\": {\"N\": \"22\"}}\'"
+
+    if( call(cmd,shell=True) != 0 ) :
+        logging.warning( "Test DynamoDB entry was not created successfully" )
+    
+    cmd = "aws dynamodb put-item --table-name Books --item  \'{\"BooksId\": {\"S\": \"923480\"}, \"BookTitle\": {\"S\": \"Digital Fortress\"}, \"Author\": {\"S\": \"Dan Brown\"}, \"Owner\": {\"S\": \"Bryce\"}, \"MagicCookie\": {\"N\": \"77\"}}\'"
+
+    if( call(cmd,shell=True) != 0 ) :
+        logging.warning( "Test DynamoDB entry was not created successfully" )
+
+def createConfigFiles( sam, Xs = False ):
+    poolID   = "us-east-1_XXXXXXXXX"
+    clientID = "XXXXXXXXXXXXXXXXXXXXXXXXXXX"
+    apiBase  = "https://XXXXXXXXXX.execute-api.us-east-1.amazonaws.com/XXXX"
+
+    if( not Xs ) :
+        poolID   = sam.getStackOutput( awsBSCommon.samBookShareAppStackName, "UserPoolID" )
+        clientID = sam.getStackOutput( awsBSCommon.samBookShareAppStackName, "UserPoolClientId" )
+        apiBase  = sam.getStackOutput( awsBSCommon.samBookShareAppStackName, "BookShareApiExecution" )
+
+    configData = "{\n"
+    configData += "    \"CognitoUserPool\": {\n"
+    configData += "        \"Default\": {\n"
+    configData += "            \"PoolId\": \"" + poolID + "\",\n"
+    configData += "            \"AppClientId\": \"" + clientID + "\",\n"
+    configData += "            \"AppClientSecret\": \"\",\n"
+    configData += "            \"Region\": \"" + awsBSCommon.bsRegion + "\"\n"
+    configData += "        }\n"
+    configData += "    }\n"
+    configData += "}\n\n"
+    
+    filename = awsBSCommon.bsAppConfigPath + awsBSCommon.bsAppConfigName
+    with open(filename, "w+") as f:
+        f.write(configData)
+
+    filename = awsBSCommon.bsAppConfigPath + "apiBasePath"
+    with open(filename, "w+") as f:
+        f.write(apiBase)
+    
+    
+def anonymizeConfigFiles( sam ):
+    createConfigFiles( sam, Xs = True )
+
+
+        
 def makeBSResources( sam ) :
     #Make a SAM deployment bucket, create another S3 bucket for static pages, then create the infrastructure
     sam.makeDeployBucket( awsBSCommon.samDeployBucket )
@@ -98,6 +149,9 @@ def makeBSResources( sam ) :
                                         template     = awsBSCommon.samInfrastructureYAML,
                                         webBucket    = awsBSCommon.samStaticWebBucket, 
                                         deployBucket = awsBSCommon.samDeployBucket )
+
+    # XXX Until we have dynamic resource configuration, create local BS config files
+    createConfigFiles( sam )
 
 
 def help() :
@@ -113,6 +167,7 @@ def help() :
     logging.info( "  - InstallAWSPermissions: Attempts to create a valid dev environment.  Best used as a set of hints for now." )
 
 
+# XXX remove deployment bucket? option to keep buckets around, so names not lost?
 def deleteBSResources( sam ) :
     logging.info("")
     logging.info("Remove BookShare app stack")
@@ -120,14 +175,17 @@ def deleteBSResources( sam ) :
     logging.info("")
     logging.info("Remove S3 stack")
     sam.removeStackResources( awsBSCommon.samStaticWebStackName )
-    # XXX remove deployment bucket
-    # XXX option to keep buckets around, so names not lost
+
+    # XXX Until we have dynamic resource configuration, delete local BS config files
+    anonymizeConfigFiles( sam )
+    
 
 def getStackOutputs( sam ) :
     sam.describeStack( awsBSCommon.samBookShareAppStackName )
     sam.describeStack( awsBSCommon.samStaticWebStackName )
-    
 
+
+    
 def main( cmd ):
     #print locals()
     #print globals()

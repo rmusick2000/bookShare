@@ -199,7 +199,7 @@ class samInstance():
                 if( status == "DELETE_IN_PROGRESS" and seconds % 5 == 0 ) :
                     logging.info( stackName + " " + status + " time elapsed: " + str(seconds)  )
             except ClientError as e:
-                // If AWS completes between stackExists and describeStacks, this exception can be thrown
+                # If AWS completes between stackExists and describeStacks, this exception can be thrown
                 logging.info( stackName + " deleted. " )
 
             if( not status == "DELETE_IN_PROGRESS" or seconds >= 120 ) :
@@ -217,6 +217,18 @@ class samInstance():
             for output in outputs:
                 logging.info( output['OutputKey'] + "=" + output['OutputValue'] + ", " + output['Description'] )
                 if( 'ExportName' in output.keys() ) : logging.info( " *** Exported as " + output['ExportName'] )
+        except ClientError as e:
+            logging.error( e )
+
+    def getStackOutput( self, stackName, outputName ) :
+        try:
+            outputs = self.cfClient.describe_stacks( StackName = stackName )['Stacks'][0]['Outputs']
+            res = ""
+            for output in outputs:
+                if( outputName == output['OutputKey'] ) :
+                    res = output['OutputValue']
+                    break
+            return res
         except ClientError as e:
             logging.error( e )
 
