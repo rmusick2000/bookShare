@@ -7,6 +7,9 @@ with other members.
 For example, a bookclub can use BookShare to keep track of who
 currently has which books on the reading list for the summer.
 
+For example, an extended family can share all the Warriors books
+between the cousins.
+
 For example, a language school typically has a very interested, active
 community of families, together with a rich but inaccessible trove of
 foreign language books.  Bookshare unlocks that treasure for the

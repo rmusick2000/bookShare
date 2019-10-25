@@ -100,34 +100,19 @@ def makeBSResources( sam ) :
                                         deployBucket = awsBSCommon.samDeployBucket )
 
 
-# XXX listCommands
-# XXX limit output to what u need
-"""
-# XXX XXX XXX
-10/23/2019 04:57:21 PM INFO: Remove S3 stack
-10/23/2019 04:57:21 PM INFO: Get AWS Cloudformation stacks
-10/23/2019 04:57:21 PM INFO: bookShareS3 CREATE_COMPLETE 10/21/2019 -- 15:25:33
-10/23/2019 04:57:21 PM INFO: codeEquityS3 CREATE_COMPLETE 09/04/2019 -- 19:16:38
-10/23/2019 04:57:21 PM INFO: BookShareBucket bookshare.codeequity.net AWS::S3::Bucket
-10/23/2019 04:57:22 PM INFO: BucketPolicy bookShareS3-BucketPolicy-178M8Y5TIXNRH AWS::S3::BucketPolicy
-10/23/2019 04:57:22 PM INFO: bookShareS3 DELETE_IN_PROGRESS time elapsed: 0
-10/23/2019 04:57:28 PM INFO: bookShareS3 DELETE_IN_PROGRESS time elapsed: 5
-Traceback (most recent call last):
-  File "createBS.py", line 162, in <module>
-    else:
-  File "createBS.py", line 147, in main
-    
-  File "createBS.py", line 110, in deleteBSResources
-    logging.info("Remove S3 stack")
-  File "/home/musick/pop/src/bookShare/ops/awsUtils/samInstance.py", line 197, in removeStackResources
-    status = self.cfClient.describe_stacks( StackName = stackName )['Stacks'][0]['StackStatus']
-  File "/home/musick/.pyenv/versions/3.6.7/lib/python3.6/site-packages/botocore/client.py", line 357, in _api_call
-    return self._make_api_call(operation_name, kwargs)
-  File "/home/musick/.pyenv/versions/3.6.7/lib/python3.6/site-packages/botocore/client.py", line 661, in _make_api_call
-    raise error_class(parsed_response, operation_name)
-botocore.exceptions.ClientError: An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id bookShareS3 does not exist
+def help() :
+    logging.info( "Available commands:" )
+    logging.info( "  - makeBSResources:       create all required BookShare resources on AWS." )
+    logging.info( "  - deleteBSResources:     remove all BookShare resources on AWS." )
+    logging.info( "  - getCFStacks:           list your AWS CloudFormation stacks." )
+    logging.info( "  - getStackOutputs:       display the outputs of BookShare's AWS CloudFormation stacks." )
+    logging.info( "  - validateConfiguration: Will assert if your dev environment doesn't look suitable." )
+    logging.info( "  - help:                  list available commands." )
+    logging.info( "" )
+    logging.info( "Alpha-level commands:" )
+    logging.info( "  - InstallAWSPermissions: Attempts to create a valid dev environment.  Best used as a set of hints for now." )
 
-"""
+
 def deleteBSResources( sam ) :
     logging.info("")
     logging.info("Remove BookShare app stack")
@@ -154,22 +139,22 @@ def main( cmd ):
 
     sam = samInstance( region = awsBSCommon.bsRegion )
 
-    if( cmd == "" ) : getCFStacks( sam )
-
     logging.info("")
     logging.info("TODO:")
-    logging.info("add static pages, css, etc.  flutter? ")
-    logging.info("Connect static web to infrastructure")
-    logging.info("Separate Cognito auth")
-    logging.info("Run basic stress test")
+    logging.info("Separate Cognito auth in yamls?")
+    logging.info("Run stress tests")
     logging.info("Get insights AWS")
     logging.info("Get insights Github")
     logging.info( "END TODO")
     logging.info("")
     
-    if( cmd == "validateConfiguration" or cmd == "") :
+    if( cmd == "validateConfiguration") :
         logging.info( "finished...exiting" )
         return 
+
+    if( cmd == "help" or cmd == "") :
+        help()
+        return
 
     thread = Thread( target=globals()[cmd]( sam ) )
     thread.start()

@@ -1,15 +1,12 @@
 import 'package:flutter_cognito_plugin/flutter_cognito_plugin.dart';
 
-import 'dart:convert';
+import 'dart:convert';  // json encode/decode
 import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-
-// XXX state HAS to reside in main app, else when switch between pages, rebuild
-//     wipes it out each time.
 
 // android/app/src/main/res/raw/awsconfiguration.json
 class BookShareLoginPage extends StatefulWidget {
@@ -113,6 +110,8 @@ class _BookShareLoginState extends State<BookShareLoginPage> {
   @override
   void dispose() {
     Cognito.registerCallback(null);
+    usernameController.dispose();
+    passwordController.dispose();
     super.dispose();
   }
 
@@ -177,13 +176,35 @@ class _BookShareLoginState extends State<BookShareLoginPage> {
         borderRadius: BorderRadius.circular(30.0),
         color: Color(0xff01A0C7),
         child: MaterialButton(
-           minWidth: MediaQuery.of(context).size.width,
+           // minWidth: MediaQuery.of(context).size.width,
            padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
            onPressed:
              onPressWrapper(() {
                    return Cognito.signIn( usernameController.text, passwordController.text );
                 }),
            child: Text("Login",
+                       textAlign: TextAlign.center,
+                       style: style.copyWith(
+                          color: Colors.white, fontWeight: FontWeight.bold)),
+           ),
+        );
+     final logoutButton = Material(
+        elevation: 5.0,
+        borderRadius: BorderRadius.circular(30.0),
+        color: Color(0xff01A0C7),
+        child: MaterialButton(
+           //minWidth: MediaQuery.of(context).size.width,
+           padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+           // onPressed: onPressWrapper(() => Cognito.signOut()),
+           onPressed: onPressWrapper(() {
+                 Cognito.signOut();
+                 setState(() {
+                       bookState = "illiterate";
+                       usernameController.clear();
+                       passwordController.clear();
+                    });
+              }),
+           child: Text("Logout",
                        textAlign: TextAlign.center,
                        style: style.copyWith(
                           color: Colors.white, fontWeight: FontWeight.bold)),
@@ -241,7 +262,8 @@ class _BookShareLoginState extends State<BookShareLoginPage> {
                      SizedBox(height: 15.0),
                      passwordField,
                      SizedBox( height: 20.0),
-                     loginButton,
+                     Row( mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [ loginButton, logoutButton ] ),
                      SizedBox(height: 15.0),
                      backButton,
                      Text( userState?.toString() ?? "UserState here", style: TextStyle(fontStyle: FontStyle.italic)),
