@@ -194,9 +194,13 @@ class samInstance():
 
         seconds = 0
         while( self._stackExists( stackName, silent = True ) ) :
-            status = self.cfClient.describe_stacks( StackName = stackName )['Stacks'][0]['StackStatus']
-            if( status == "DELETE_IN_PROGRESS" and seconds % 5 == 0 ) :
-                logging.info( stackName + " " + status + " time elapsed: " + str(seconds)  )
+            try: 
+                status = self.cfClient.describe_stacks( StackName = stackName )['Stacks'][0]['StackStatus']
+                if( status == "DELETE_IN_PROGRESS" and seconds % 5 == 0 ) :
+                    logging.info( stackName + " " + status + " time elapsed: " + str(seconds)  )
+            except ClientError as e:
+                // If AWS completes between stackExists and describeStacks, this exception can be thrown
+                logging.info( stackName + " deleted. " )
 
             if( not status == "DELETE_IN_PROGRESS" or seconds >= 120 ) :
                 logging.error( stackName + " stack was not deleted. Perhaps it is in use by other cloudFormation stacks? " )
