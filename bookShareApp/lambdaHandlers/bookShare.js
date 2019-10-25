@@ -29,21 +29,32 @@ exports.handler = (event, context, callback) => {
 
     const bookTitle = requestBody.BookTitle;
 
-    const book = findBook(bookTitle);
+    // findbook returns a promise - scan is async.  
+    let booksPromise = findBook(bookTitle);
+    // findbook return val is in books
+    booksPromise.then((books) => {
 
-    recordBook(bookId, username, book).then(() => {
-        // You can use the callback function to provide a return value from your Node.js
-        // Lambda functions. The first parameter is used for failed invocations. The
-        // second parameter specifies the result data of the invocation.
+	// XXX cleanme
+	let res = {};
+	let book = {};
+	books.Items.forEach(function (element) {
+	    console.log( "Element: ", element );
+	    book = element;
+	    res.BookTitle = element.BookTitle;
+	    res.Author = element.Author;
+	    res.MagicCookie = element.MagicCookie;
+	});
+	console.log('Results: ', res );
+	
+	console.log( "About to create JSON response, ", book );
 
-        // Because this Lambda function is called by an API Gateway proxy integration
-        // the result object must use the following structure.
-        callback(null, {
+	callback(null, {
             statusCode: 201,
             body: JSON.stringify({
                 BookId: bookId,
-                Book: book,
-                BookTitle: book.title,
+                BookTitle: book.BookTitle,
+		Author: book.Author,
+		MagicCookie: book.MagicCookie,
                 User: username
             }),
             headers: {
@@ -52,21 +63,33 @@ exports.handler = (event, context, callback) => {
         });
     }).catch((err) => {
         console.error(err);
-
         // If there is an error during processing, catch it and return
         // from the Lambda function successfully. Specify a 500 HTTP status
         // code and provide an error message in the body. This will provide a
         // more meaningful error response to the end client.
-        errorResponse(err.message, context.awsRequestId, callback)
+        errorResponse(err.message, context.awsRequestId, callback);
     });
 };
 
-
+// Scan.. not cheap.. XXX TEMP for testing
 function findBook(bookTitle) {
-    console.log('Finding book for ', book.title );
-    // XXX bsdb.get
-    return null;
+    console.log('Finding book for ', bookTitle );
+
+    // BookTitle must be :bookTitle, where :bookTitle = bookTitle.  grack.
+    const params = {
+        TableName: 'Books',
+        FilterExpression: 'BookTitle = :bookTitle',
+        ExpressionAttributeValues: { ":bookTitle": bookTitle }
+    };
+
+    // aws dynamodb scan \
+    // --table-name Books \
+    // --filter-expression "BookTitle = :bookTitle" \
+    // --expression-attribute-values '{":bookTitle":{"S":"Digital Fortress"}}'
+
+    return bsdb.scan( params ).promise();
 }
+
 
 function recordBook(bookId, username, book) {
     return bsdb.put({
