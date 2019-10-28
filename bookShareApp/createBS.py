@@ -90,17 +90,22 @@ def getCFStacks( sam ) :
     sam.getStacks()
 
 
+# XXX change all ids to numbers.. testData AND yaml
 def createTestDDBEntries( sam ) :
-    cmd = "aws dynamodb put-item --table-name Books --item  \'{\"BooksId\": {\"S\": \"823480\"}, \"BookTitle\": {\"S\": \"The Last Ship\"}, \"Author\": {\"S\": \"Bill Blinky\"}, \"Owner\": {\"S\": \"HR\"}, \"MagicCookie\": {\"N\": \"22\"}}\'"
-
-    if( call(cmd,shell=True) != 0 ) :
-        logging.warning( "Test DynamoDB entry was not created successfully" )
+    cmd = "aws dynamodb batch-write-item --request-items file://testData/testDataPeople.json"
+    if( call(cmd, shell=True) != 0 ) : logging.warning( "Failed to write test data: People " )
     
-    cmd = "aws dynamodb put-item --table-name Books --item  \'{\"BooksId\": {\"S\": \"923480\"}, \"BookTitle\": {\"S\": \"Digital Fortress\"}, \"Author\": {\"S\": \"Dan Brown\"}, \"Owner\": {\"S\": \"Bryce\"}, \"MagicCookie\": {\"N\": \"77\"}}\'"
+    cmd = "aws dynamodb batch-write-item --request-items file://testData/testDataBooks.json"
+    if( call(cmd, shell=True) != 0 ) : logging.warning( "Failed to write test data: Books " )
 
-    if( call(cmd,shell=True) != 0 ) :
-        logging.warning( "Test DynamoDB entry was not created successfully" )
+    cmd = "aws dynamodb batch-write-item --request-items file://testData/testDataOwnerships.json"
+    if( call(cmd, shell=True) != 0 ) : logging.warning( "Failed to write test data: Ownerships " )
 
+    cmd = "aws dynamodb batch-write-item --request-items file://testData/testDataLibraries.json"
+    if( call(cmd, shell=True) != 0 ) : logging.warning( "Failed to write test data: Libraries " )
+
+
+    
 def createConfigFiles( sam, Xs = False ):
     poolID   = "us-east-1_XXXXXXXXX"
     clientID = "XXXXXXXXXXXXXXXXXXXXXXXXXXX"
@@ -161,6 +166,7 @@ def help() :
     logging.info( "  - getCFStacks:           list your AWS CloudFormation stacks." )
     logging.info( "  - getStackOutputs:       display the outputs of BookShare's AWS CloudFormation stacks." )
     logging.info( "  - validateConfiguration: Will assert if your dev environment doesn't look suitable." )
+    logging.info( "  - createTestDDBEntries:  Adds some test data to AWS DynamoDB tables")
     logging.info( "  - help:                  list available commands." )
     logging.info( "" )
     logging.info( "Alpha-level commands:" )

@@ -30,12 +30,60 @@ Resources:
       ClientName: BookShareApp
       GenerateSecret: false
 
+  PersonTable:
+    Type: 'AWS::Serverless::SimpleTable'
+    Properties:
+      TableName: People
+      PrimaryKey:
+        Name: PersonId
+        Type: String
+
   BookTable:
     Type: 'AWS::Serverless::SimpleTable'
     Properties:
       TableName: Books
       PrimaryKey:
-        Name: BooksId
+        Name: BookId
+        Type: String
+
+  LibraryTable:
+    Type: 'AWS::Serverless::SimpleTable'
+    Properties:
+      TableName: Libraries
+      PrimaryKey:
+        Name: LibraryId
+        Type: String
+
+  OwnershipTable:
+    Type: 'AWS::Serverless::SimpleTable'
+    Properties:
+      TableName: Ownerships
+      PrimaryKey:
+        Name: OwnershipId
+        Type: String
+
+  RequestTable:
+    Type: 'AWS::Serverless::SimpleTable'
+    Properties:
+      TableName: Requests
+      PrimaryKey:
+        Name: RequestId
+        Type: String
+
+  ProposalTable:
+    Type: 'AWS::Serverless::SimpleTable'
+    Properties:
+      TableName: Proposals
+      PrimaryKey:
+        Name: ProposalId
+        Type: String
+
+  ShareTable:
+    Type: 'AWS::Serverless::SimpleTable'
+    Properties:
+      TableName: Shares
+      PrimaryKey:
+        Name: ShareId
         Type: String
 
   # SAM implicit API does not handle edge, cors properly. Explicit is

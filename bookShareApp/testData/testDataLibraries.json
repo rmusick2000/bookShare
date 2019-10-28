@@ -1,0 +1,39 @@
+{
+    "Libraries": [
+        {
+            "PutRequest": {
+                "Item": {
+		    "LibraryId": {"S": "12"},
+		    "LibaryName": {"S": "vsamPrivate"},
+		    "Members": {"L": [
+			{ "S": "38785"}
+		    ]}
+		}}},
+        {
+            "PutRequest": {
+                "Item": {
+		    "LibraryId": {"S": "13"},
+		    "LibaryName": {"S": "aspellPrivate"},
+		    "Members": {"L": [
+			{ "S": "38786"}
+		    ]}
+		}}},
+        {
+            "PutRequest": {
+                "Item": {
+		    "LibraryId": {"S": "14"},
+		    "LibaryName": {"S": "dbasePrivate"},
+		    "Members": {"L": [
+			{ "S": "38796"}
+		    ]}
+		}}},
+        {
+            "PutRequest": {
+                "Item": {
+		    "LibraryId": {"S": "15"},
+		    "LibaryName": {"S": "codeTalkers"},
+		    "Members": {"L": [
+			{ "S": "38785"}, { "S": "38786"}
+		    ]}
+		}}}
+    ]}

@@ -277,8 +277,6 @@ class _BookShareLoginState extends State<BookShareLoginPage> {
            ),
         );
 
-     // XXX OUCH!! automate me!!  2 config files, add db entries, signup, signin.... blarg, config for exmple(signup)
-     // XXX grack.. {"email": "xxxx"} in user attrs
 
      // Future<Post> post;
      Post post;
@@ -288,8 +286,8 @@ class _BookShareLoginState extends State<BookShareLoginPage> {
         onPressed: () async
         {
            print( userState.toString() );
-           //String data = '{ "BookTitle": "The Last Ship" }';
-           String data = '{ "BookTitle": "Digital Fortress" }';
+           String data = '{ "BookTitle": "The Last Ship" }';
+           //String data = '{ "BookTitle": "Digital Fortress" }';
 
            // XXX crappy return value here.. 
            //Map authToken = json.decode( tokenString ).acessToken();

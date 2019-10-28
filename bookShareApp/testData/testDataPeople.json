@@ -1,0 +1,45 @@
+{
+    "People": [
+        {
+            "PutRequest": {
+                "Item": {
+		    "PersonId": {"S": "38785"},
+		    "First": {"S": "Vanir"},
+		    "Last": {"S": "Sams"},
+		    "UserName": {"S": "vsam"},
+		    "Email": {"S": "rmusick+vsam@gmail.com"},
+		    "Image": {"B":"bla"}
+		}}},
+	{
+            "PutRequest": {
+                "Item": {
+		    "PersonId": {"S": "38786"},
+		    "First": {"S": "Aria"},
+		    "Last": {"S": "Godspell"},
+		    "UserName": {"S": "aspell"},
+		    "Email": {"S": "rmusick+aspell@gmail.com"},
+		    "Image": {"B":"bla"}
+		}}},
+	{
+            "PutRequest": {
+                "Item": {
+		    "PersonId": {"S": "38796"},
+		    "First": {"S": "Dinna"},
+		    "Last": {"S": "Basil"},
+		    "UserName": {"S": "dbase"},
+		    "Email": {"S": "rmusick+dbase@gmail.com"},
+		    "Image": {"B":"bla"}
+		}}},
+	{
+            "PutRequest": {
+                "Item": {
+		    "PersonId": {"S": "38886"},
+		    "First": {"S": "General"},
+		    "Last": {"S": "Public"},
+		    "UserName": {"S": "---"},
+		    "Email": {"S": "---"},
+		    "Image": {"B":"bla"}
+		}}}
+    ]
+}
+

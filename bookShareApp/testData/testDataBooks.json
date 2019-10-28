@@ -1,0 +1,58 @@
+{
+    "Books": [
+        {
+            "PutRequest": {
+                "Item": {
+		    "BookId": {"S": "112233"},
+		    "Author": {"S": "Bill Blinky"},
+		    "Title": {"S": "The Last Ship"},
+		    "ISBN": {"S": "99098980"},
+		    "Image": {"B": "bla"}
+		}}},
+        {
+            "PutRequest": {
+                "Item": {
+		    "BookId": {"S": "112244"},
+		    "Author": {"S": "Dan Brown"},
+		    "Title": {"S": "Digital Fortress"},
+		    "ISBN": {"S": "9734587658"},
+		    "Image": {"B": "bla"}
+		}}},
+        {
+            "PutRequest": {
+                "Item": {
+		    "BookId": {"S": "112255"},
+		    "Author": {"S": "Douglas R. Mason"},
+		    "Title": {"S": "Dilation Effect"},
+		    "ISBN": {"S": "98734987656"},
+		    "Image": {"B": "bla"}
+		}}},
+        {
+            "PutRequest": {
+                "Item": {
+		    "BookId": {"S": "112266"},
+		    "Author": {"S": "Annie Proulx"},
+		    "Title": {"S": "The Shipping News"},
+		    "ISBN": {"S": "934987656"},
+		    "Image": {"B": "bla"}
+		}}},
+        {
+            "PutRequest": {
+                "Item": {
+		    "BookId": {"S": "112277"},
+		    "Author": {"S": "Katherine Neville"},
+		    "Title": {"S": "The Eight"},
+		    "ISBN": {"S": "9873498765"},
+		    "Image": {"B": "bla"}
+		}}},
+        {
+            "PutRequest": {
+                "Item": {
+		    "BookId": {"S": "112288"},
+		    "Author": {"S": "Kalid Hosseini"},
+		    "Title": {"S": "Kite Runner"},
+		    "ISBN": {"S": "98738765"},
+		    "Image": {"B": "bla"}
+		}}}
+    ]
+}
