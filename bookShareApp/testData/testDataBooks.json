@@ -3,7 +3,7 @@
         {
             "PutRequest": {
                 "Item": {
-		    "BookId": {"S": "112233"},
+		    "BookId": {"N": "112233"},
 		    "Author": {"S": "Bill Blinky"},
 		    "Title": {"S": "The Last Ship"},
 		    "ISBN": {"S": "99098980"},
@@ -12,7 +12,7 @@
         {
             "PutRequest": {
                 "Item": {
-		    "BookId": {"S": "112244"},
+		    "BookId": {"N": "112244"},
 		    "Author": {"S": "Dan Brown"},
 		    "Title": {"S": "Digital Fortress"},
 		    "ISBN": {"S": "9734587658"},
@@ -21,7 +21,7 @@
         {
             "PutRequest": {
                 "Item": {
-		    "BookId": {"S": "112255"},
+		    "BookId": {"N": "112255"},
 		    "Author": {"S": "Douglas R. Mason"},
 		    "Title": {"S": "Dilation Effect"},
 		    "ISBN": {"S": "98734987656"},
@@ -30,7 +30,7 @@
         {
             "PutRequest": {
                 "Item": {
-		    "BookId": {"S": "112266"},
+		    "BookId": {"N": "112266"},
 		    "Author": {"S": "Annie Proulx"},
 		    "Title": {"S": "The Shipping News"},
 		    "ISBN": {"S": "934987656"},
@@ -39,7 +39,7 @@
         {
             "PutRequest": {
                 "Item": {
-		    "BookId": {"S": "112277"},
+		    "BookId": {"N": "112277"},
 		    "Author": {"S": "Katherine Neville"},
 		    "Title": {"S": "The Eight"},
 		    "ISBN": {"S": "9873498765"},
@@ -48,7 +48,7 @@
         {
             "PutRequest": {
                 "Item": {
-		    "BookId": {"S": "112288"},
+		    "BookId": {"N": "112288"},
 		    "Author": {"S": "Kalid Hosseini"},
 		    "Title": {"S": "Kite Runner"},
 		    "ISBN": {"S": "98738765"},

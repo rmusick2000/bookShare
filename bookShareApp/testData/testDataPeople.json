@@ -3,7 +3,7 @@
         {
             "PutRequest": {
                 "Item": {
-		    "PersonId": {"S": "38785"},
+		    "PersonId": {"N": "38785"},
 		    "First": {"S": "Vanir"},
 		    "Last": {"S": "Sams"},
 		    "UserName": {"S": "vsam"},
@@ -13,7 +13,7 @@
 	{
             "PutRequest": {
                 "Item": {
-		    "PersonId": {"S": "38786"},
+		    "PersonId": {"N": "38786"},
 		    "First": {"S": "Aria"},
 		    "Last": {"S": "Godspell"},
 		    "UserName": {"S": "aspell"},
@@ -23,7 +23,7 @@
 	{
             "PutRequest": {
                 "Item": {
-		    "PersonId": {"S": "38796"},
+		    "PersonId": {"N": "38796"},
 		    "First": {"S": "Dinna"},
 		    "Last": {"S": "Basil"},
 		    "UserName": {"S": "dbase"},
@@ -33,7 +33,7 @@
 	{
             "PutRequest": {
                 "Item": {
-		    "PersonId": {"S": "38886"},
+		    "PersonId": {"N": "38886"},
 		    "First": {"S": "General"},
 		    "Last": {"S": "Public"},
 		    "UserName": {"S": "---"},

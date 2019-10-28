@@ -3,32 +3,32 @@
         {
             "PutRequest": {
                 "Item": {
-		    "OwnershipId": {"S": "12233"},
-		    "PersonId": {"S": "38786"},
+		    "OwnershipId": {"N": "12233"},
+		    "PersonId": {"N": "38786"},
 		    "Books": {"L": [
-			{ "M":{ "BookId": {"S": "112233"}, "ShareCount": {"N": "0"}}},
-			{ "M":{ "BookId": {"S": "112244"}, "ShareCount": {"N": "0"}}},
-			{ "M":{ "BookId": {"S": "112255"}, "ShareCount": {"N": "0"}}}
+			{ "M":{ "BookId": {"N": "112233"}, "ShareCount": {"N": "0"}}},
+			{ "M":{ "BookId": {"N": "112244"}, "ShareCount": {"N": "0"}}},
+			{ "M":{ "BookId": {"N": "112255"}, "ShareCount": {"N": "0"}}}
 		    ]}
 		}}},
         {
             "PutRequest": {
                 "Item": {
-		    "OwnershipId": {"S": "12234"},
-		    "PersonId": {"S": "38785"},
+		    "OwnershipId": {"N": "12234"},
+		    "PersonId": {"N": "38785"},
 		    "Books": {"L": [
-			{ "M":{ "BookId": {"S": "112255"}, "ShareCount": {"N": "0"}}},
-			{ "M":{ "BookId": {"S": "112266"}, "ShareCount": {"N": "0"}}},
-			{ "M":{ "BookId": {"S": "112277"}, "ShareCount": {"N": "0"}}}
+			{ "M":{ "BookId": {"N": "112255"}, "ShareCount": {"N": "0"}}},
+			{ "M":{ "BookId": {"N": "112266"}, "ShareCount": {"N": "0"}}},
+			{ "M":{ "BookId": {"N": "112277"}, "ShareCount": {"N": "0"}}}
 		    ]}
 		}}},
         {
             "PutRequest": {
                 "Item": {
-		    "OwnershipId": {"S": "12235"},
-		    "PersonId": {"S": "38796"},
+		    "OwnershipId": {"N": "12235"},
+		    "PersonId": {"N": "38796"},
 		    "Books": {"L": [
-			{ "M":{ "BookId": {"S": "112288"}, "ShareCount": {"N": "0"}}}
+			{ "M":{ "BookId": {"N": "112288"}, "ShareCount": {"N": "0"}}}
 		    ]}
 		}}}
     ]

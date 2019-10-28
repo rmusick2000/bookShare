@@ -36,7 +36,7 @@ Resources:
       TableName: People
       PrimaryKey:
         Name: PersonId
-        Type: String
+        Type: Number
 
   BookTable:
     Type: 'AWS::Serverless::SimpleTable'
@@ -44,7 +44,7 @@ Resources:
       TableName: Books
       PrimaryKey:
         Name: BookId
-        Type: String
+        Type: Number
 
   LibraryTable:
     Type: 'AWS::Serverless::SimpleTable'
@@ -52,7 +52,7 @@ Resources:
       TableName: Libraries
       PrimaryKey:
         Name: LibraryId
-        Type: String
+        Type: Number
 
   OwnershipTable:
     Type: 'AWS::Serverless::SimpleTable'
@@ -60,7 +60,7 @@ Resources:
       TableName: Ownerships
       PrimaryKey:
         Name: OwnershipId
-        Type: String
+        Type: Number
 
   RequestTable:
     Type: 'AWS::Serverless::SimpleTable'
@@ -68,7 +68,7 @@ Resources:
       TableName: Requests
       PrimaryKey:
         Name: RequestId
-        Type: String
+        Type: Number
 
   ProposalTable:
     Type: 'AWS::Serverless::SimpleTable'
@@ -76,15 +76,23 @@ Resources:
       TableName: Proposals
       PrimaryKey:
         Name: ProposalId
-        Type: String
+        Type: Number
 
-  ShareTable:
+  LibraryShareTable:
     Type: 'AWS::Serverless::SimpleTable'
     Properties:
-      TableName: Shares
+      TableName: LibraryShares
       PrimaryKey:
-        Name: ShareId
-        Type: String
+        Name: LibraryShareId
+        Type: Number
+
+  LoansTable:
+    Type: 'AWS::Serverless::SimpleTable'
+    Properties:
+      TableName: Loans
+      PrimaryKey:
+        Name: LoanId
+        Type: Number
 
   # SAM implicit API does not handle edge, cors properly. Explicit is
   #     required, meaning swagger def is required as well.
