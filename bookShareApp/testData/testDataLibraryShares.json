@@ -1,0 +1,78 @@
+{
+    "LibraryShares": [
+        {
+            "PutRequest": {
+                "Item": {
+		    "LibraryShareId": {"N": "998"},
+		    "PersonId": {"N": "38785"},
+		    "BookId": {"N": "112255"},
+		    "Libraries": {"L": [
+			{ "N": "12"},
+			{ "N": "15"}
+		    ]}
+		}}},
+	{
+            "PutRequest": {
+                "Item": {
+		    "LibraryShareId": {"N": "999"},
+		    "PersonId": {"N": "38785"},
+		    "BookId": {"N": "112266"},
+		    "Libraries": {"L": [
+			{ "N": "12"}
+		    ]}
+		}}},
+	{
+            "PutRequest": {
+                "Item": {
+		    "LibraryShareId": {"N": "1000"},
+		    "PersonId": {"N": "38785"},
+		    "BookId": {"N": "112277"},
+		    "Libraries": {"L": [
+			{ "N": "12"},
+			{ "N": "15"}
+		    ]}
+		}}},
+	{
+            "PutRequest": {
+                "Item": {
+		    "LibraryShareId": {"N": "1001"},
+		    "PersonId": {"N": "38786"},
+		    "BookId": {"N": "112233"},
+		    "Libraries": {"L": [
+			{ "N": "13"},
+			{ "N": "15"}
+		    ]}
+		}}},
+	{
+            "PutRequest": {
+                "Item": {
+		    "LibraryShareId": {"N": "1002"},
+		    "PersonId": {"N": "38786"},
+		    "BookId": {"N": "112244"},
+		    "Libraries": {"L": [
+			{ "N": "13"},
+			{ "N": "15"}
+		    ]}
+		}}},
+	{
+            "PutRequest": {
+                "Item": {
+		    "LibraryShareId": {"N": "1003"},
+		    "PersonId": {"N": "38786"},
+		    "BookId": {"N": "112255"},
+		    "Libraries": {"L": [
+			{ "N": "13"},
+			{ "N": "15"}
+		    ]}
+		}}},
+	{
+            "PutRequest": {
+                "Item": {
+		    "LibraryShareId": {"N": "1004"},
+		    "PersonId": {"N": "38796"},
+		    "BookId": {"N": "112288"},
+		    "Libraries": {"L": [
+			{ "N": "14"}
+		    ]}
+		}}}
+    ]}

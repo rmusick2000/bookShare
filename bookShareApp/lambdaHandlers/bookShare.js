@@ -27,7 +27,7 @@ exports.handler = (event, context, callback) => {
     // header first and use a different parsing strategy based on that value.
     const requestBody = JSON.parse(event.body);
 
-    const bookTitle = requestBody.BookTitle;
+    const bookTitle = requestBody.Title;
 
     // findbook returns a promise - scan is async.  
     let booksPromise = findBook(bookTitle);
@@ -40,9 +40,9 @@ exports.handler = (event, context, callback) => {
 	books.Items.forEach(function (element) {
 	    console.log( "Element: ", element );
 	    book = element;
-	    res.BookTitle = element.BookTitle;
+	    res.Title = element.Title;
 	    res.Author = element.Author;
-	    res.MagicCookie = element.MagicCookie;
+	    res.MagicCookie = element.ISBN;
 	});
 	console.log('Results: ', res );
 	
@@ -52,9 +52,9 @@ exports.handler = (event, context, callback) => {
             statusCode: 201,
             body: JSON.stringify({
                 BookId: bookId,
-                BookTitle: book.BookTitle,
+                Title: book.Title,
 		Author: book.Author,
-		MagicCookie: book.MagicCookie,
+		MagicCookie: book.ISBN,
                 User: username
             }),
             headers: {
@@ -75,17 +75,12 @@ exports.handler = (event, context, callback) => {
 function findBook(bookTitle) {
     console.log('Finding book for ', bookTitle );
 
-    // BookTitle must be :bookTitle, where :bookTitle = bookTitle.  grack.
+    // Title must be :bookTitle, where :bookTitle = bookTitle.  grack.
     const params = {
         TableName: 'Books',
-        FilterExpression: 'BookTitle = :bookTitle',
+        FilterExpression: 'Title = :bookTitle',
         ExpressionAttributeValues: { ":bookTitle": bookTitle }
     };
-
-    // aws dynamodb scan \
-    // --table-name Books \
-    // --filter-expression "BookTitle = :bookTitle" \
-    // --expression-attribute-values '{":bookTitle":{"S":"Digital Fortress"}}'
 
     return bsdb.scan( params ).promise();
 }

@@ -45,20 +45,19 @@ Future<Post> fetchPost( context, postFunc, authToken, postData ) async {
 
 class Post {
    final int bookId;
-   final String BookTitle;
+   final String Title;
    final String Author;
-   final int MagicCookie;
+   final String MagicCookie;
    final String User;
 
-   Post({this.bookId, this.BookTitle, this.Author, this.MagicCookie, this.User});
+   Post({this.bookId, this.Title, this.Author, this.MagicCookie, this.User});
 
    
   factory Post.fromJson(Map<String, dynamic> json) {
     return Post(
       bookId: json['bookId'],
-      BookTitle: json['BookTitle'],
+      Title: json['Title'],
       Author: json['Author'],
-      //MagicCookie: int.parse( json['MagicCookie'] ),
       MagicCookie: json['MagicCookie'],
       User: json['User'],
     );
@@ -286,8 +285,8 @@ class _BookShareLoginState extends State<BookShareLoginPage> {
         onPressed: () async
         {
            print( userState.toString() );
-           String data = '{ "BookTitle": "The Last Ship" }';
-           //String data = '{ "BookTitle": "Digital Fortress" }';
+           String data = '{ "Title": "The Last Ship" }';
+           //String data = '{ "Title": "Digital Fortress" }';
 
            // XXX crappy return value here.. 
            //Map authToken = json.decode( tokenString ).acessToken();
@@ -299,7 +298,7 @@ class _BookShareLoginState extends State<BookShareLoginPage> {
 
            post = await fetchPost( context, "/find", authToken, data );
            print("MAGIC COOKIES! " + post.MagicCookie.toString());
-           setState(() { bookState = post.BookTitle + " written by " + post.Author; });
+           setState(() { bookState = post.Title + " written by " + post.Author; });
         },
         child: Text( 'Try me!'));
                         
