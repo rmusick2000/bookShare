@@ -1,3 +1,5 @@
 .python-version
 dontBuild
 __pycache__
+*~
+*Pack.yaml
