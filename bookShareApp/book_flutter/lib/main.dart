@@ -1,10 +1,21 @@
 import 'package:flutter/material.dart';
 
-import 'login_page.dart';
-import 'signup_page.dart';
-import 'utils.dart';
+// bookShare package name from pubspec.yaml
+import 'package:bookShare/screens/login_page.dart';
+import 'package:bookShare/screens/signup_page.dart';
+import 'package:bookShare/screens/home_page.dart';
 
-void main() => runApp(BSApp());
+import 'package:bookShare/models/app_state.dart';
+
+import 'package:bookShare/app_state_container.dart';
+import 'package:bookShare/utils.dart';  // XXX combine
+import 'package:bookShare/auth.dart';
+
+
+
+void main() => runApp(
+   new AppStateContainer( child: new BSApp() )
+   );
 
 
 class BSApp extends StatelessWidget {
@@ -14,29 +25,46 @@ class BSApp extends StatelessWidget {
       title: 'BookShare',
       debugShowCheckedModeBanner: false,
       theme: ThemeData( primarySwatch: Colors.green ),
-      home:  BSHomePage( title: 'BookShare'),
+      home:  BSMainPage( title: 'BookShare'),
     );
   }
 }
 
 
-class BSHomePage extends StatefulWidget {
-   BSHomePage({Key key, this.title}) : super(key: key);
+class BSMainPage extends StatefulWidget {
+   BSMainPage({Key key, this.title}) : super(key: key);
 
    final String title;
    
   @override
-  _BSHomePageState createState() => _BSHomePageState();
+  _BSMainPageState createState() => _BSMainPageState();
 }
 
 
-class _BSHomePageState extends State<BSHomePage> {
+class _BSMainPageState extends State<BSMainPage> {
 
+   final auth = new BookShareAuth();
 
+   AppState appState;    // Declaration.  Definition is in build, can be used below
+   
+   @override
+   void initState() {
+      print( "... Main init state" );
+      super.initState();
+   }
+
+  @override
+  void dispose() {
+     super.dispose();
+  }
   
   @override
   Widget build(BuildContext context) {
-    
+
+     var container = AppStateContainer.of(context);
+     appState = container.state;
+     print( "State check, aname is.. " + appState.aname?.toString() ?? "NULL ANAME" );
+     
     Color color = Theme.of(context).primaryColor;
 
     Widget _loginButton = makeActionButton( context, 'Login', (() {
@@ -59,7 +87,6 @@ class _BSHomePageState extends State<BSHomePage> {
          'Share books with people you know.\n'
          'Browse, borrow and loan the books you love!',
          softWrap: true,
-         // style: new TextStyle( fontFamily: 'Montserrat', fontSize: 16.0, fontWeight: FontWeight.bold, color: Colors.green )
          style: new TextStyle( fontFamily: 'Montserrat', fontSize: 15.0, fontWeight: FontWeight.bold, color: Colors.pink[300] )
           ));
 
