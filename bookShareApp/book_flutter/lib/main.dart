@@ -8,9 +8,7 @@ import 'package:bookShare/screens/home_page.dart';
 import 'package:bookShare/models/app_state.dart';
 
 import 'package:bookShare/app_state_container.dart';
-import 'package:bookShare/utils.dart';  // XXX combine
-import 'package:bookShare/auth.dart';
-
+import 'package:bookShare/utils.dart';  
 
 
 void main() => runApp(
@@ -43,8 +41,6 @@ class BSMainPage extends StatefulWidget {
 
 class _BSMainPageState extends State<BSMainPage> {
 
-   final auth = new BookShareAuth();
-
    AppState appState;    // Declaration.  Definition is in build, can be used below
    
    @override
@@ -63,7 +59,6 @@ class _BSMainPageState extends State<BSMainPage> {
 
      var container = AppStateContainer.of(context);
      appState = container.state;
-     print( "State check, aname is.. " + appState.aname?.toString() ?? "NULL ANAME" );
      
     Color color = Theme.of(context).primaryColor;
 

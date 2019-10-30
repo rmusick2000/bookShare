@@ -1,13 +1,14 @@
-import 'package:flutter_cognito_plugin/flutter_cognito_plugin.dart';
-
 import 'dart:convert';  // json encode/decode
 import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_cognito_plugin/flutter_cognito_plugin.dart';
 
 import 'package:bookShare/utils.dart';
+import 'package:bookShare/app_state_container.dart';
+import 'package:bookShare/models/app_state.dart';
 
 class BookShareHomePage extends StatefulWidget {
   BookShareHomePage({Key key}) : super(key: key);
@@ -71,104 +72,44 @@ class _BookShareHomeState extends State<BookShareHomePage> {
 
    TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
    String bookState;
-   var returnValue;
-   UserState userState;
-   double progress;
-   
-   // XXX Split this to auth.dart
-  Future<void> doLoad() async {
-    var value;
-    try {
-      value = await Cognito.initialize();
-    } catch (e, trace) {
-      print(e);
-      print(trace);
-
-      if (!mounted) return;
-      setState(() {
-        returnValue = e;
-        progress = -1;
-      });
-
-      return;
-    }
-
-    if (!mounted) return;
-    setState(() {
-      progress = -1;
-      userState = value;
-    });
-  }
 
   @override
       void initState() {
       super.initState();
-      doLoad();
-      Cognito.registerCallback((value) {
-            if (!mounted) return;
-            setState(() {
-                  userState = value;
-               });
-         });
    }
 
 
   @override
   void dispose() {
-    Cognito.registerCallback(null);
     super.dispose();
   }
-
-  // XXX _ 
-  // wraps a function from the auth library with some scaffold code.
-  onPressWrapper(fn) {
-    wrapper() async {
-      setState(() {
-        progress = null;
-      });
-
-      String value;
-      try {
-        value = (await fn()).toString();
-      } catch (e, stacktrace) {
-        print(e);
-        print(stacktrace);
-        setState(() => value = e.toString());
-      } finally {
-        setState(() {
-          progress = -1;
-        });
-      }
-
-      setState(() => returnValue = value);
-    }
-
-    return wrapper;
-  }
-
   
    @override
    Widget build(BuildContext context) {
 
       // XXX _
 
-     final logoutButton = makeActionButton( context, 'Logout', onPressWrapper((){
-              Cognito.signOut();
-              setState(() {
-                    bookState = "illiterate";
-                    // XXX conf code, email
-                    // XXX usernameController.clear();
-                    // XXX passwordController.clear();
-                 });
-           }));
+      final container = AppStateContainer.of(context);
+      final appState = container.state;
 
+
+      final logoutButton = makeActionButton( context, 'Logout', container.onPressWrapper((){
+               Cognito.signOut();
+               setState(() {
+                     bookState = "illiterate";
+                     // XXX conf code, email
+                     appState.usernameController.clear();
+                     appState.passwordController.clear();
+                  });
+            }));
+      
      Post post;
      final tryMeButton = RaisedButton(
         onPressed: () async
         {
-           print( userState.toString() );
-           String data = '{ "Title": "The Last Ship" }';
-           //String data = '{ "Title": "Digital Fortress" }';
+           print( appState.userState.toString() );
+           //String data = '{ "Title": "The Last Ship" }';
+           String data = '{ "Title": "Digital Fortress" }';
 
            // XXX crappy return value here.. 
            //Map authToken = json.decode( tokenString ).acessToken();
@@ -203,7 +144,7 @@ class _BookShareHomeState extends State<BookShareHomePage> {
                      SizedBox(height: 5.0),
                      tryMeButton,
                      SizedBox(height: 5.0),
-                     Text( userState?.toString() ?? "UserState here", style: TextStyle(fontStyle: FontStyle.italic)),
+                     Text( appState.userState?.toString() ?? "UserState here", style: TextStyle(fontStyle: FontStyle.italic)),
                      Text( bookState?.toString() ?? "illiterate", style: TextStyle(fontStyle: FontStyle.italic)),
                      ])))
          
