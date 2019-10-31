@@ -39,33 +39,13 @@ class _BookShareLoginState extends State<BookShareLoginPage> {
   @override
   Widget build(BuildContext context) {
 
-     // XXX _
-      
      final container = AppStateContainer.of(context);
      final appState = container.state;
 
-     final usernameField = TextField(
-        obscureText: false,
-        style: style,
-        decoration: InputDecoration(
-           contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-           hintText: "Username",
-           border:
-           OutlineInputBorder(borderRadius: BorderRadius.circular(10.0))),
-        controller: appState.usernameController,
-        );
-     final passwordField = TextField(
-        obscureText: true,
-        style: style,
-        decoration: InputDecoration(
-           contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-           hintText: "Password",
-           border:
-           OutlineInputBorder(borderRadius: BorderRadius.circular(10.0))),
-        controller: appState.passwordController,
-        );
+     final usernameField = makeInputField( context, "username", false, appState.usernameController );
+     final passwordField = makeInputField( context, "password", true, appState.passwordController );
      final loginButton = makeActionButton( context, 'Login', container.onPressWrapper((){
-                    return Cognito.signIn( appState.usernameController.text, appState.passwordController.text );
+              return Cognito.signIn( appState.usernameController.text, appState.passwordController.text );
            }));
 
      final homeButton = RaisedButton(

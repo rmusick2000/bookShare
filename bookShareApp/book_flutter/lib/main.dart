@@ -87,15 +87,6 @@ class _BSSplashPageState extends State<BSSplashPage> {
                    Container( child: Image.asset( 'images/bookShare.jpeg', width: devWidth - 50, fit: BoxFit.fitWidth)), 
                    Positioned( bottom: 60 , left: 10, child: Text("BookShare", style: new TextStyle( fontFamily: 'Mansalva', fontSize: 54.0))),
                    ]))
-          /*
-          body: Container(
-             decoration: BoxDecoration(
-                image: DecorationImage(
-                   image: AssetImage("images/bookShare.jpeg"),
-                   fit: BoxFit.cover)
-                ))
-          );
-          */
           );}
 }
 

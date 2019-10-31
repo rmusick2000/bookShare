@@ -12,12 +12,10 @@ import 'package:bookShare/utils.dart';
 import 'package:bookShare/app_state_container.dart';
 import 'package:bookShare/models/app_state.dart';
 
-class BookShareHomePage extends StatefulWidget {
-  BookShareHomePage({Key key}) : super(key: key);
 
-  @override
-  _BookShareHomeState createState() => _BookShareHomeState();
-}
+
+
+// XXX this will move
 
 Future<String> loadAsset(BuildContext context) async {
    return await DefaultAssetBundle.of(context).loadString('files/api_base_path.txt');
@@ -70,6 +68,14 @@ class Post {
 
 
 
+class BookShareHomePage extends StatefulWidget {
+  BookShareHomePage({Key key}) : super(key: key);
+
+  @override
+  _BookShareHomeState createState() => _BookShareHomeState();
+}
+
+
 class _BookShareHomeState extends State<BookShareHomePage> {
 
    TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
@@ -89,8 +95,6 @@ class _BookShareHomeState extends State<BookShareHomePage> {
    @override
    Widget build(BuildContext context) {
 
-      // XXX _
-
       final container = AppStateContainer.of(context);
       final appState = container.state;
 
@@ -104,9 +108,10 @@ class _BookShareHomeState extends State<BookShareHomePage> {
                   );
                setState(() {
                      bookState = "illiterate";
-                     // XXX conf code, email
                      appState.usernameController.clear();
                      appState.passwordController.clear();
+                     appState.attributeController.clear();
+                     appState.confirmationCodeController.clear();
                   });
             }));
       
@@ -118,7 +123,8 @@ class _BookShareHomeState extends State<BookShareHomePage> {
            //String data = '{ "Title": "The Last Ship" }';
            String data = '{ "Title": "Digital Fortress" }';
 
-           // XXX crappy return value here.. 
+           // XXX crappy return value here..
+           // XXX value belongs in AppState
            //Map authToken = json.decode( tokenString ).acessToken();
            List tokenString = (await Cognito.getTokens()).toString().split(" ");
            // accessToken
