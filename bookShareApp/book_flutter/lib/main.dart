@@ -1,14 +1,14 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_cognito_plugin/flutter_cognito_plugin.dart';
 
 // bookShare package name from pubspec.yaml
-import 'package:bookShare/screens/login_page.dart';
-import 'package:bookShare/screens/signup_page.dart';
+import 'package:bookShare/screens/launch_page.dart';
 import 'package:bookShare/screens/home_page.dart';
 
 import 'package:bookShare/models/app_state.dart';
 
 import 'package:bookShare/app_state_container.dart';
-import 'package:bookShare/utils.dart';  
 
 
 void main() => runApp(
@@ -23,23 +23,23 @@ class BSApp extends StatelessWidget {
       title: 'BookShare',
       debugShowCheckedModeBanner: false,
       theme: ThemeData( primarySwatch: Colors.green ),
-      home:  BSMainPage( title: 'BookShare'),
+      home:  BSSplashPage( title: 'BookShare'),
     );
   }
 }
 
 
-class BSMainPage extends StatefulWidget {
-   BSMainPage({Key key, this.title}) : super(key: key);
+class BSSplashPage extends StatefulWidget {
+   BSSplashPage({Key key, this.title}) : super(key: key);
 
    final String title;
    
   @override
-  _BSMainPageState createState() => _BSMainPageState();
+  _BSSplashPageState createState() => _BSSplashPageState();
 }
 
 
-class _BSMainPageState extends State<BSMainPage> {
+class _BSSplashPageState extends State<BSSplashPage> {
 
    AppState appState;    // Declaration.  Definition is in build, can be used below
    
@@ -47,12 +47,28 @@ class _BSMainPageState extends State<BSMainPage> {
    void initState() {
       print( "... Main init state" );
       super.initState();
+      startTimer();
    }
 
   @override
   void dispose() {
      super.dispose();
   }
+
+  void startTimer() {
+     Timer(Duration(seconds: 3), () {
+           navigateUser();
+        });
+  }
+
+  void navigateUser() async{
+     if( appState.userState == UserState.SIGNED_IN ) {
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => BookShareHomePage()));
+     } else {
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => BSLaunchPage()));
+     }
+  }
+
   
   @override
   Widget build(BuildContext context) {
@@ -60,59 +76,27 @@ class _BSMainPageState extends State<BSMainPage> {
      var container = AppStateContainer.of(context);
      appState = container.state;
      
-    Color color = Theme.of(context).primaryColor;
+     Color color     = Theme.of(context).primaryColor;
+     final devWidth  = MediaQuery.of(context).size.width;
+     final devHeight = MediaQuery.of(context).size.height;
 
-    Widget _loginButton = makeActionButton( context, 'Login', (() {
-             Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => BookShareLoginPage()));
-          }));
-       
-    Widget _signupButton = makeActionButton( context, 'Create New Account', (() {
-             Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => BookShareSignupPage()));
-          }));
-
-    // XXX 'How does it work?' option
-    // XXX General public login
-    Widget _nurb = Container(
-       padding: const EdgeInsets.all(4),
-       child: Text(
-         'Share books with people you know.\n'
-         'Browse, borrow and loan the books you love!',
-         softWrap: true,
-         style: new TextStyle( fontFamily: 'Montserrat', fontSize: 15.0, fontWeight: FontWeight.bold, color: Colors.pink[300] )
-          ));
-
-    final devWidth = MediaQuery.of(context).size.width;
-    final devHeight = MediaQuery.of(context).size.height;
- 
-    return Scaffold(
-
-       // appBar: AppBar( title: Text( widget.title, style: new TextStyle( fontFamily: 'Mansalva', fontSize: 16 ))),
-      body: Center(
-
-         child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-               SizedBox( height: devHeight / 8.0),
-               Stack(
-                  children: <Widget>[
-                     Container( child: Image.asset( 'images/bookShare.jpeg', width: devWidth - 50, fit: BoxFit.fitWidth)), 
-                     Positioned( bottom: 60 , left: 10, child: Text("BookShare", style: new TextStyle( fontFamily: 'Mansalva', fontSize: 54.0))),
-                     Positioned( bottom: 20, left: 10, child: _nurb )
-                     ]),
-               SizedBox( height: devHeight / 10.0 ),
-               _signupButton,
-               SizedBox( height: 20.0),
-               _loginButton,
-               ]),
-         
-          )
-      );
-
-  }
+       return Scaffold(
+          body: Center(
+             child: Stack(
+                children: <Widget>[
+                   Container( child: Image.asset( 'images/bookShare.jpeg', width: devWidth - 50, fit: BoxFit.fitWidth)), 
+                   Positioned( bottom: 60 , left: 10, child: Text("BookShare", style: new TextStyle( fontFamily: 'Mansalva', fontSize: 54.0))),
+                   ]))
+          /*
+          body: Container(
+             decoration: BoxDecoration(
+                image: DecorationImage(
+                   image: AssetImage("images/bookShare.jpeg"),
+                   fit: BoxFit.cover)
+                ))
+          );
+          */
+          );}
 }
 
 
