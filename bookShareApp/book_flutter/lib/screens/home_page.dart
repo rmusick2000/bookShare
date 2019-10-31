@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_cognito_plugin/flutter_cognito_plugin.dart';
 
+import 'package:bookShare/screens/launch_page.dart';
+
 import 'package:bookShare/utils.dart';
 import 'package:bookShare/app_state_container.dart';
 import 'package:bookShare/models/app_state.dart';
@@ -95,6 +97,11 @@ class _BookShareHomeState extends State<BookShareHomePage> {
 
       final logoutButton = makeActionButton( context, 'Logout', container.onPressWrapper((){
                Cognito.signOut();
+               Navigator.pushAndRemoveUntil(
+                  context, 
+                  MaterialPageRoute(builder: (context) => BSLaunchPage()),
+                  ModalRoute.withName("BSSplashPage")
+                  );
                setState(() {
                      bookState = "illiterate";
                      // XXX conf code, email
