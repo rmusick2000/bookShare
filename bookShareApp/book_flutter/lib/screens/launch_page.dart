@@ -44,8 +44,6 @@ class _BSLaunchPageState extends State<BSLaunchPage> {
                 MaterialPageRoute(builder: (context) => BookShareSignupPage()));
           }));
 
-    // XXX 'How does it work?' option
-    // XXX General public login
     Widget _nurb = Container(
        padding: const EdgeInsets.all(4),
        child: Text(

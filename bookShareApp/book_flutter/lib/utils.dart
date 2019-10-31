@@ -18,3 +18,16 @@ makeActionButton( BuildContext context, buttonText, fn ) {
          )
       );
 }
+
+makeInputField( BuildContext context, hintText, obscure, controller ) {
+   TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
+   return TextField(
+      obscureText: obscure,
+      style: style,
+      decoration: InputDecoration(
+         contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+         hintText: hintText,
+         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0))),
+      controller: controller
+      );
+}
