@@ -1,10 +1,8 @@
-import 'dart:convert';  // json encode/decode
-import 'dart:async';
-import 'dart:io';
-import 'package:flutter_cognito_plugin/flutter_cognito_plugin.dart';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_cognito_plugin/flutter_cognito_plugin.dart';
+
+import 'package:bookShare/screens/launch_page.dart';
 
 import 'package:bookShare/screens/my_library_page.dart';
 import 'package:bookShare/screens/loan_page.dart';
@@ -18,70 +16,15 @@ import 'package:bookShare/app_state_container.dart';
 import 'package:bookShare/models/app_state.dart';
 
 
-
-
-// XXX this will move
-
-Future<String> loadAsset(BuildContext context) async {
-   return await DefaultAssetBundle.of(context).loadString('files/api_base_path.txt');
-}
-  
-
-// This returns a promise to a Post class, created by parsing the json response.  a future.
-Future<Post> fetchPost( context, postFunc, authToken, postData ) async {
-   print( "fetchPost " + authToken );
-   final gatewayURL = (await loadAsset( context )).trim() + postFunc;
-
-   final response =
-      await http.post(
-         gatewayURL,
-         headers: {HttpHeaders.authorizationHeader: authToken},
-         body: postData
-         );
-
-  if (response.statusCode == 201) {
-    // If the call to the server was successful, parse the JSON.
-    return Post.fromJson(json.decode(response.body));
-  } else {
-    // If that call was not successful, throw an error.
-     print( "RESPONSE: " + response.statusCode.toString() + " " + json.decode(response.body).toString());
-     throw Exception('Failed to load post');
-  }
-}
-
-class Post {
-   final int bookId;
-   final String Title;
-   final String Author;
-   final String MagicCookie;
-   final String User;
-
-   Post({this.bookId, this.Title, this.Author, this.MagicCookie, this.User});
-
-   
-  factory Post.fromJson(Map<String, dynamic> json) {
-    return Post(
-      bookId: json['bookId'],
-      Title: json['Title'],
-      Author: json['Author'],
-      MagicCookie: json['MagicCookie'],
-      User: json['User'],
-    );
-  }
-}
-
-
-
-
-class BookShareHomePage extends StatefulWidget {
-  BookShareHomePage({Key key}) : super(key: key);
+class BookShareProfilePage extends StatefulWidget {
+  BookShareProfilePage({Key key}) : super(key: key);
 
   @override
-  _BookShareHomeState createState() => _BookShareHomeState();
+  _BookShareProfileState createState() => _BookShareProfileState();
 }
 
 
-class _BookShareHomeState extends State<BookShareHomePage> {
+class _BookShareProfileState extends State<BookShareProfilePage> {
 
    TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
    String bookState;
@@ -103,30 +46,23 @@ class _BookShareHomeState extends State<BookShareHomePage> {
       final container = AppStateContainer.of(context);
       final appState = container.state;
 
+
+      final logoutButton = makeActionButton( context, 'Logout', container.onPressWrapper((){
+               Cognito.signOut();
+               Navigator.pushAndRemoveUntil(
+                  context, 
+                  MaterialPageRoute(builder: (context) => BSLaunchPage()),
+                  ModalRoute.withName("BSSplashPage")
+                  );
+               setState(() {
+                     bookState = "illiterate";
+                     appState.usernameController.clear();
+                     appState.passwordController.clear();
+                     appState.attributeController.clear();
+                     appState.confirmationCodeController.clear();
+                  });
+            }));
       
-     Post post;
-     final tryMeButton = RaisedButton(
-        onPressed: () async
-        {
-           print( appState.userState.toString() );
-           //String data = '{ "Title": "The Last Ship" }';
-           String data = '{ "Title": "Digital Fortress" }';
-
-           // XXX crappy return value here..
-           // XXX value belongs in AppState
-           //Map authToken = json.decode( tokenString ).acessToken();
-           List tokenString = (await Cognito.getTokens()).toString().split(" ");
-           // accessToken
-           // String authToken = tokenString[3].split(",")[0];
-           // idToken
-           String authToken = tokenString[5].split(",")[0];
-
-           post = await fetchPost( context, "/find", authToken, data );
-           print("MAGIC COOKIES! " + post.MagicCookie.toString());
-           setState(() { bookState = post.Title + " written by " + post.Author; });
-        },
-        child: Text( 'Try me!'));
-                        
      return Scaffold(
         appBar: PreferredSize(
            preferredSize: Size.fromHeight(32.0),
@@ -175,8 +111,13 @@ class _BookShareHomeState extends State<BookShareHomePage> {
                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                  children: <Widget>[
                     IconButton(
-                       icon: Icon(customIcons.home_here),
-                       onPressed: () {},
+                       icon: Icon(customIcons.home),
+                       onPressed: ()
+                       {
+                          Navigator.push(
+                             context,
+                             MaterialPageRoute(builder: (context) => BookShareHomePage()));
+                       },
                        iconSize: 25,
                        padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 2.0)
                        ),
@@ -195,13 +136,8 @@ class _BookShareHomeState extends State<BookShareHomePage> {
                              padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 2.0)
                              ),
                           IconButton(
-                             icon: Icon(customIcons.profile),
-                             onPressed: ()
-                             {
-                                Navigator.push(
-                                   context,
-                                   MaterialPageRoute(builder: (context) => BookShareProfilePage()));
-                             },
+                             icon: Icon(customIcons.profile_here),
+                             onPressed: () {},
                              iconSize: 25,
                              padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 2.0)
                              )
@@ -218,12 +154,10 @@ class _BookShareHomeState extends State<BookShareHomePage> {
                        crossAxisAlignment: CrossAxisAlignment.center,
                        mainAxisAlignment: MainAxisAlignment.center,
                        children: <Widget>[
-                          
                           SizedBox(height: 5.0),
-                          tryMeButton,
+                          logoutButton,
                           SizedBox(height: 5.0),
-                          Text( appState.userState?.toString() ?? "UserState here", style: TextStyle(fontStyle: FontStyle.italic)),
-                          Text( bookState?.toString() ?? "illiterate", style: TextStyle(fontStyle: FontStyle.italic)),
+                          Text( appState.userState?.toString() ?? "UserState here", style: TextStyle(fontStyle: FontStyle.italic))
                           ])))
               
               )));

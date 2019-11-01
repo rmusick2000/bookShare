@@ -19,12 +19,19 @@ void main() => runApp(
 class BSApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'BookShare',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData( primarySwatch: Colors.green ),
-      home:  BSSplashPage( title: 'BookShare'),
-    );
+     // note: primarySwatch takes a set of colors (color + shade value), not an individual color.
+     return MaterialApp(
+        title: 'BookShare',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+           primarySwatch: Colors.green,
+           appBarTheme: AppBarTheme(
+              color: Colors.grey[200],
+              textTheme: TextTheme( title: TextStyle( color: Colors.black )),
+              iconTheme: IconThemeData( color: Colors.black ) ),
+           bottomAppBarColor: Colors.grey[200] ),
+        home:  BSSplashPage( title: 'BookShare'),
+        );
   }
 }
 

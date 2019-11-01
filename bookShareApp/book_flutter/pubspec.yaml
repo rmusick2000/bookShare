@@ -63,6 +63,9 @@ flutter:
      - family: Mansalva
        fonts:
         - asset: fonts/Mansalva-Regular.ttf
+     - family: customIcons
+       fonts:
+        - asset: fonts/customIcons.ttf
 
   #   - family: Schyler
   #     fonts:
