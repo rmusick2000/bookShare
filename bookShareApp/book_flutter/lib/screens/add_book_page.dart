@@ -44,86 +44,8 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
       final appState = container.state;
 
      return Scaffold(
-        appBar: PreferredSize(
-           preferredSize: Size.fromHeight(32.0),
-           child: AppBar(
-              leading: IconButton(
-                 icon: Icon(customIcons.book_shelf),
-                 onPressed: ()
-                 {
-                    Navigator.push(
-                       context,
-                       MaterialPageRoute(builder: (context) => BookShareMyLibraryPage()));
-                 },
-                 iconSize: 25,
-                 padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 2.0)
-                 ),
-              title: Text( "BookShare", style: new TextStyle( fontFamily: 'Mansalva', fontSize: 16 )),
-              actions: <Widget>[
-                 IconButton(
-                    icon: Icon(customIcons.loan),
-                    onPressed: ()
-                    {
-                       Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => BookShareLoanPage()));
-                    },
-                    iconSize: 25,
-                    //padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 1.0)
-                    ),
-                 IconButton(
-                    icon: Icon(customIcons.search),
-                    onPressed: ()
-                    {
-                       Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => BookShareSearchPage()));
-                    },
-                    iconSize: 25,
-                    padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 1.0)
-                    ),
-                 ])),
-
-        bottomNavigationBar: SizedBox( height: 32, 
-           child: BottomAppBar(
-              child: Row(
-                 mainAxisSize: MainAxisSize.max,
-                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                 children: <Widget>[
-                    IconButton(
-                       icon: Icon(customIcons.home),
-                       onPressed: ()
-                       {
-                          Navigator.push(
-                             context,
-                             MaterialPageRoute(builder: (context) => BookShareHomePage()));
-                       },
-                       iconSize: 25,
-                       padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 2.0)
-                       ),
-                    Row(
-                       mainAxisSize: MainAxisSize.max,
-                       children: [
-                          IconButton(
-                             icon: Icon(customIcons.add_book_here),
-                             onPressed: (){},
-                             iconSize: 25,
-                             padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 2.0)
-                             ),
-                          IconButton(
-                             icon: Icon(customIcons.profile),
-                             onPressed: ()
-                             {
-                                Navigator.push(
-                                   context,
-                                   MaterialPageRoute(builder: (context) => BookShareProfilePage()));
-                             },
-                             iconSize: 25,
-                             padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 2.0)
-                             )
-                          ])
-                    ]))),
-
+        appBar: makeTopAppBar( context, "AddBook" ),
+        bottomNavigationBar: makeBotAppBar( context, "AddBook" ),
         body: Center(
            child: SingleChildScrollView( 
               child: Container(
