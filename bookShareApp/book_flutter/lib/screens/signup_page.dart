@@ -37,9 +37,9 @@ class _BookShareSignupState extends State<BookShareSignupPage> {
       super.dispose();
    }
 
-   void showToast(BuildContext context) {
+   void showToast(BuildContext context, msg) {
       Fluttertoast.showToast(
-         msg: "Code sent to your email.",
+         msg: msg,
          toastLength: Toast.LENGTH_LONG,
          gravity: ToastGravity.CENTER,
          backgroundColor: Colors.pinkAccent,
@@ -61,9 +61,19 @@ class _BookShareSignupState extends State<BookShareSignupPage> {
       final confirmationCodeField = makeInputField( context, "confirmation code", false, appState.confirmationCodeController );
       final signupButton = makeActionButton( context, "Send confirmation code", container.onPressWrapper(() async {
                final email = {'email' : appState.attributeController.text };
-               await Cognito.signUp( appState.usernameController.text, appState.passwordController.text, email );
-               showToast( context );
-               setState(() { showCC = true; });
+               try{
+                  await Cognito.signUp( appState.usernameController.text, appState.passwordController.text, email );
+                  showToast( context, "Code sent to your email");
+                  setState(() { showCC = true; });
+               } catch(e) {
+                  if( e.toString().contains("\'password\' failed") ) {
+                     showToast( context, "Password needs 8 chars, some Caps, and some not in the alphabet." );
+                  } else if(e.toString().contains("Invalid email address") ) {
+                     showToast( context, "Email address is broken." );
+                  } else {
+                     showToast( context, e.toString() );
+                  }}
+                  
             }));
       final confirmSignupButton = makeActionButton( context, "Confirm signup, and Log in", container.onPressWrapper(() async {
                await Cognito.confirmSignUp( appState.usernameController.text, appState.confirmationCodeController.text );

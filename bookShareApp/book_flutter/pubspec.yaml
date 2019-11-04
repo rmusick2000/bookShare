@@ -45,7 +45,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - images/bookShare.jpeg
+    - images/
     - files/api_base_path.txt
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -63,6 +63,9 @@ flutter:
      - family: Mansalva
        fonts:
         - asset: fonts/Mansalva-Regular.ttf
+     - family: customIcons
+       fonts:
+        - asset: fonts/customIcons.ttf
 
   #   - family: Schyler
   #     fonts:
