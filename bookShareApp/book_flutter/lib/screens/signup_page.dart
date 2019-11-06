@@ -5,7 +5,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_cognito_plugin/flutter_cognito_plugin.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:bookShare/utils.dart';
 import 'package:bookShare/app_state_container.dart';
@@ -35,17 +34,6 @@ class _BookShareSignupState extends State<BookShareSignupPage> {
    @override
    void dispose() {
       super.dispose();
-   }
-
-   void showToast(BuildContext context, msg) {
-      Fluttertoast.showToast(
-         msg: msg,
-         toastLength: Toast.LENGTH_LONG,
-         gravity: ToastGravity.CENTER,
-         backgroundColor: Colors.pinkAccent,
-         textColor: Colors.white,
-         fontSize: 18.0
-         );
    }
    
    @override

@@ -4,7 +4,7 @@
             "PutRequest": {
                 "Item": {
 		    "LibraryId": {"N": "12"},
-		    "LibaryName": {"S": "vsamPrivate"},
+		    "LibraryName": {"S": "vsamPrivate"},
 		    "Members": {"L": [
 			{ "N": "38785"}
 		    ]}
@@ -13,7 +13,7 @@
             "PutRequest": {
                 "Item": {
 		    "LibraryId": {"N": "13"},
-		    "LibaryName": {"S": "aspellPrivate"},
+		    "LibraryName": {"S": "aspellPrivate"},
 		    "Members": {"L": [
 			{ "N": "38786"}
 		    ]}
@@ -22,7 +22,7 @@
             "PutRequest": {
                 "Item": {
 		    "LibraryId": {"N": "14"},
-		    "LibaryName": {"S": "dbasePrivate"},
+		    "LibraryName": {"S": "dbasePrivate"},
 		    "Members": {"L": [
 			{ "N": "38796"}
 		    ]}
@@ -31,7 +31,7 @@
             "PutRequest": {
                 "Item": {
 		    "LibraryId": {"N": "15"},
-		    "LibaryName": {"S": "codeTalkers"},
+		    "LibraryName": {"S": "codeTalkers"},
 		    "Members": {"L": [
 			{ "N": "38785"}, { "N": "38786"}
 		    ]}

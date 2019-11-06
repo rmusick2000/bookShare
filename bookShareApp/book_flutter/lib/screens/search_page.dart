@@ -1,7 +1,6 @@
 import 'dart:convert';  // json encode/decode
 import 'dart:async';
 import 'dart:io';
-import 'package:flutter_cognito_plugin/flutter_cognito_plugin.dart';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -17,17 +16,11 @@ import 'package:bookShare/utils.dart';
 import 'package:bookShare/app_state_container.dart';
 import 'package:bookShare/models/app_state.dart';
 
-// XXX this will move
-
-Future<String> loadAsset(BuildContext context) async {
-   return await DefaultAssetBundle.of(context).loadString('files/api_base_path.txt');
-}
   
 
 // This returns a promise to a Post class, created by parsing the json response.  a future.
-Future<Post> fetchPost( context, postFunc, authToken, postData ) async {
-   print( "fetchPost " + authToken );
-   final gatewayURL = (await loadAsset( context )).trim() + postFunc;
+Future<Post> fetchPost( context, gatewayURL, authToken, postData ) async {
+   print( "fetchPost " + postData );
 
    final response =
       await http.post(
@@ -37,13 +30,15 @@ Future<Post> fetchPost( context, postFunc, authToken, postData ) async {
          );
 
   if (response.statusCode == 201) {
-    // If the call to the server was successful, parse the JSON.
     return Post.fromJson(json.decode(response.body));
-  } else {
-    // If that call was not successful, throw an error.
+  } else if( response.statusCode == 500 ) {
      print( "RESPONSE: " + response.statusCode.toString() + " " + json.decode(response.body).toString());
-     throw Exception('Failed to load post');
+     throw Exception('Endpoint failure');
+  } else {
+     print( "RESPONSE: " + response.statusCode.toString() + " " + json.decode(response.body).toString());
+     throw Exception('Server failure');
   }
+  
 }
 
 class Post {
@@ -104,22 +99,16 @@ class _BookShareSearchState extends State<BookShareSearchPage> {
      final tryMeButton = RaisedButton(
         onPressed: () async
         {
-           print( appState.userState.toString() );
-           //String data = '{ "Title": "The Last Ship" }';
-           String data = '{ "Title": "Digital Fortress" }';
+           String data = '{ "Endpoint": "FindBook", "Title": "Digital Fortress" }';
+           String lambdaAddr = appState.apiBasePath + "/find";
+           try{ 
+              post = await fetchPost( context, lambdaAddr, appState.idToken, data );
+              print( "Got Book: " + post.Title + " " + post.Author);
+              setState(() { bookState = post.Title + " written by " + post.Author; });
+           } catch( error, trace ) {
+              showToast( context, error.toString() );
+           }
 
-           // XXX crappy return value here..
-           // XXX value belongs in AppState
-           //Map authToken = json.decode( tokenString ).acessToken();
-           List tokenString = (await Cognito.getTokens()).toString().split(" ");
-           // accessToken
-           // String authToken = tokenString[3].split(",")[0];
-           // idToken
-           String authToken = tokenString[5].split(",")[0];
-
-           post = await fetchPost( context, "/find", authToken, data );
-           print("MAGIC COOKIES! " + post.MagicCookie.toString());
-           setState(() { bookState = post.Title + " written by " + post.Author; });
         },
         child: Text( 'Try me!'));
                         
