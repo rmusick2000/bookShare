@@ -1,1 +1,1 @@
-https://vvto6xq7q5.execute-api.us-east-1.amazonaws.com/prod
+https://fgdaijmtjg.execute-api.us-east-1.amazonaws.com/prod

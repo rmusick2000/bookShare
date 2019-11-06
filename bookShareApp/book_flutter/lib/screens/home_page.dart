@@ -16,8 +16,89 @@ import 'package:bookShare/screens/profile_page.dart';
 import 'package:bookShare/utils.dart';
 import 'package:bookShare/app_state_container.dart';
 import 'package:bookShare/models/app_state.dart';
+import 'package:bookShare/models/libraries.dart';
 
 
+// XXX Hmm... push to models?    go MVC?
+class LibraryParts {
+
+   final apiBasePath;
+   final authToken;
+
+   LibraryParts(this.apiBasePath, this.authToken);
+
+   // When populating libraryBar, do not need list of members.
+   Future<List<Library>> _fetchLibrary( gatewayURL, authToken, postData ) async {
+      print( "fetchLibrary " + postData );
+      
+      final response =
+         await http.post(
+            gatewayURL,
+            headers: {HttpHeaders.authorizationHeader: authToken},
+            body: postData
+            );
+
+      if (response.statusCode == 201) {
+         print( response.body.toString() );         
+
+         Iterable l = json.decode(response.body);
+         List<Library> libs = l.map((sketch)=> Library.fromJson(sketch)).toList();
+         return libs;
+      } else {
+         print( "RESPONSE: " + response.statusCode.toString() + " " + json.decode(response.body).toString());
+         throw Exception('Failed to load librarySketch');
+      }
+   }
+
+   GestureDetector _makeLibraryChunk( libraryName ) {
+      return GestureDetector(
+         onTap: () { print(libraryName + " clicked"); },
+         child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+               Padding(
+                  padding: const EdgeInsets.fromLTRB(12.0, 12.0, 0, 0.0),
+                  child: ClipRRect(
+                     borderRadius: new BorderRadius.circular(12.0),
+                     child: Image.asset( 'images/kiteLibrary.jpg', height: 60.0, width: 60.0, fit: BoxFit.fill))),
+               Padding(
+                  padding: const EdgeInsets.fromLTRB(12.0, 4.0, 0, 0.0),
+                  child: Text(libraryName, style: TextStyle(fontSize: 12)))])
+         );
+   }
+
+   // XXX listViewBuilder?
+   Widget makeLibraryRow( authToken) {
+      String gatewayURL = apiBasePath + "/find";
+      String data = '{ "Endpoint": "GetLibs" }';
+      List<Widget> libChunks = [];
+
+      return FutureBuilder(
+         future: _fetchLibrary( gatewayURL, authToken, data ),
+         builder: (context, snapshotData)
+         {
+            // print( "in Builder" );
+            if (snapshotData.connectionState == ConnectionState.done ) {
+               //print( snapshotData.data );
+               snapshotData.data.forEach((lib) => libChunks.add( _makeLibraryChunk( lib.name )));
+
+               return
+                  SingleChildScrollView(
+                     scrollDirection: Axis.horizontal,
+                     child: Row (
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: libChunks
+                        ));
+            }
+            else {
+               // CircularProgressIndicator
+               return Container();
+            }
+         });
+   }
+}
 
 
 
@@ -27,7 +108,6 @@ class BookShareHomePage extends StatefulWidget {
   @override
   _BookShareHomeState createState() => _BookShareHomeState();
 }
-
 
 class _BookShareHomeState extends State<BookShareHomePage> {
 
@@ -44,88 +124,15 @@ class _BookShareHomeState extends State<BookShareHomePage> {
    void dispose() {
       super.dispose();
    }
+
    
-   final libraryBar = SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row (
-         mainAxisSize: MainAxisSize.max,
-         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-         children: <Widget>[
-            GestureDetector(
-               onTap: () {
-                               print("Container clicked");
-                            },
-               child: Column(
-               crossAxisAlignment: CrossAxisAlignment.center,
-               mainAxisAlignment: MainAxisAlignment.center,
-               children: <Widget>[
-                  Padding(
-                     padding: const EdgeInsets.fromLTRB(12.0, 12.0, 0, 0.0),
-                     child: ClipRRect(
-                        borderRadius: new BorderRadius.circular(12.0),
-                        child: Image.asset( 'images/kiteLibrary.jpg', height: 60.0, width: 60.0, fit: BoxFit.fill))),
-                  Padding(
-                     padding: const EdgeInsets.fromLTRB(12.0, 4.0, 0, 0.0),
-                     child: Text("My Libraryxx", style: TextStyle(fontSize: 12)))])
-               ),
-            Column(
-               crossAxisAlignment: CrossAxisAlignment.center,
-               mainAxisAlignment: MainAxisAlignment.center,
-               children: <Widget>[
-                  Padding(
-                     padding: const EdgeInsets.fromLTRB(12.0, 12.0, 0, 0.0),
-                     child: ClipRRect(
-                        borderRadius: new BorderRadius.circular(12.0),
-                        child: Image.asset( 'images/kiteLibrary.jpg', height: 60.0, width: 60.0, fit: BoxFit.fill))),
-                  Padding(
-                     padding: const EdgeInsets.fromLTRB(12.0, 4.0, 0, 0.0),
-                     child: Text("My Libraryxx", style: TextStyle(fontSize: 12)))]),
-            Column(
-               crossAxisAlignment: CrossAxisAlignment.center,
-               mainAxisAlignment: MainAxisAlignment.center,
-               children: <Widget>[
-                  Padding(
-                     padding: const EdgeInsets.fromLTRB(12.0, 12.0, 0, 0.0),
-                     child: ClipRRect(
-                        borderRadius: new BorderRadius.circular(12.0),
-                        child: Image.asset( 'images/kiteLibrary.jpg', height: 60.0, width: 60.0, fit: BoxFit.fill))),
-                  Padding(
-                     padding: const EdgeInsets.fromLTRB(12.0, 4.0, 0, 0.0),
-                     child: Text("My Libraryxx", style: TextStyle(fontSize: 12)))]),
-            Column(
-               crossAxisAlignment: CrossAxisAlignment.center,
-               mainAxisAlignment: MainAxisAlignment.center,
-               children: <Widget>[
-                  Padding(
-                     padding: const EdgeInsets.fromLTRB(12.0, 12.0, 0, 0.0),
-                     child: ClipRRect(
-                        borderRadius: new BorderRadius.circular(12.0),
-                        child: Image.asset( 'images/kiteLibrary.jpg', height: 60.0, width: 60.0, fit: BoxFit.fill))),
-                  Padding(
-                     padding: const EdgeInsets.fromLTRB(12.0, 4.0, 0, 0.0),
-                     child: Text("My Libraryxx", style: TextStyle(fontSize: 12)))]),
-            Column(
-               crossAxisAlignment: CrossAxisAlignment.center,
-               mainAxisAlignment: MainAxisAlignment.center,
-               children: <Widget>[
-                  Padding(
-                     padding: const EdgeInsets.fromLTRB(12.0, 12.0, 0, 0.0),
-                     child: ClipRRect(
-                        borderRadius: new BorderRadius.circular(12.0),
-                        child: Image.asset( 'images/kiteLibrary.jpg', height: 60.0, width: 60.0, fit: BoxFit.fill))),
-                  Padding(
-                     padding: const EdgeInsets.fromLTRB(12.0, 4.0, 0, 0.0),
-                     child: Text("My Libraryxx", style: TextStyle(fontSize: 12)))]),
-               
-               ]));
-
-
    @override
    Widget build(BuildContext context) {
 
       final container = AppStateContainer.of(context);
       final appState = container.state;
-
+      final libraryBar = LibraryParts( appState.apiBasePath, appState.idToken );
+         
       return Scaffold(
          appBar: makeTopAppBar( context, "Home" ),
          bottomNavigationBar: makeBotAppBar( context, "Home" ),
@@ -134,7 +141,7 @@ class _BookShareHomeState extends State<BookShareHomePage> {
                crossAxisAlignment: CrossAxisAlignment.center,
                mainAxisAlignment: MainAxisAlignment.start,
                children: <Widget>[
-                  libraryBar,
+                  libraryBar.makeLibraryRow( appState.idToken ),
                   Divider( color: Colors.grey[200], thickness: 3.0 ),
                   
                   SingleChildScrollView( 

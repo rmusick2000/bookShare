@@ -167,6 +167,19 @@ Resources:
       Policies:
        - DynamoDBCrudPolicy:
           TableName: !Ref BookTable 
+       - DynamoDBCrudPolicy:
+          TableName: !Ref PersonTable
+       - DynamoDBCrudPolicy:
+          TableName: !Ref LibraryTable 
+       - DynamoDBCrudPolicy:
+          TableName: !Ref OwnershipTable 
+       - DynamoDBCrudPolicy:
+          TableName: !Ref ProposalTable 
+       - DynamoDBCrudPolicy:
+          TableName: !Ref LibraryShareTable 
+       - DynamoDBCrudPolicy:
+          TableName: !Ref LoansTable 
+
 
 
 Outputs:

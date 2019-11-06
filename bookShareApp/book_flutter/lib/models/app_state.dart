@@ -9,18 +9,25 @@ class AppState {
 
    var returnValue;
    UserState userState;
+   String accessToken;
+   String idToken;
    double progress;
+   String apiBasePath;
    TextEditingController usernameController;
    TextEditingController passwordController;
    TextEditingController attributeController; 
    TextEditingController confirmationCodeController;
 
+   
    init() {
       isLoading = true;
       
       // Cognito values
       UserState userState = UserState.UNKNOWN;
+      accessToken = "";
+      idToken = "";
       double progress = -1;
+      apiBasePath = "";
       usernameController = TextEditingController();
       passwordController = TextEditingController();
       attributeController = TextEditingController();

@@ -53,6 +53,30 @@ class _AppStateContainerState extends State<AppStateContainer> {
         });
   }
   
+  void getAuthTokens() async {
+     print( "GAT, with " + state.idToken );
+     if( state.accessToken == "" || state.idToken == "" ) {
+        List tokenString = (await Cognito.getTokens()).toString().split(" ");
+        String accessToken = tokenString[3].split(",")[0];
+        String idToken = tokenString[5].split(",")[0];
+        setState(() {
+              state.accessToken = accessToken;
+              state.idToken = idToken;
+           });
+     }
+  }
+
+
+  void getAPIBasePath() async {
+     if( state.apiBasePath == "" ) {
+        String basePath = await DefaultAssetBundle.of(context).loadString('files/api_base_path.txt');
+        setState(() {
+              state.apiBasePath = basePath.trim();
+           });
+     }
+  }
+
+
   @override
   void initState() {
     super.initState();
@@ -71,8 +95,16 @@ class _AppStateContainerState extends State<AppStateContainer> {
           if (!mounted) return;
           setState(() {
                 state.userState = value;
+                if( value == UserState.SIGNED_IN ) { getAuthTokens(); }
+                else {
+                   state.accessToken = "";
+                   state.idToken = "";
+                }
              });
        });
+
+    // AWS lambda base
+    getAPIBasePath();
   }
   
   @override

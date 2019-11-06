@@ -2,9 +2,9 @@ import 'dart:convert';  // json encode/decode
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter_cognito_plugin/flutter_cognito_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_cognito_plugin/flutter_cognito_plugin.dart';
 
 import 'package:bookShare/utils.dart';
 import 'package:bookShare/app_state_container.dart';
@@ -44,20 +44,23 @@ class _BookShareLoginState extends State<BookShareLoginPage> {
 
      final usernameField = makeInputField( context, "username", false, appState.usernameController );
      final passwordField = makeInputField( context, "password", true, appState.passwordController );
-     final loginButton = makeActionButton( context, 'Login', container.onPressWrapper((){
-              return Cognito.signIn( appState.usernameController.text, appState.passwordController.text );
+     final loginButton = makeActionButton( context, 'Login', container.onPressWrapper(() async {
+              try{ 
+                 await Cognito.signIn( appState.usernameController.text, appState.passwordController.text );
+                 Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => BookShareHomePage()));
+              } catch(e) {
+                 if( e.toString().contains("User does not exist") ) {
+                    showToast( context, "Username or password is incorrect." );
+                 } else if( e.toString().contains( "NotAuthorizedExcept" ) ) {
+                    showToast( context, "Username or password is incorrect." );                    
+                 } else {
+                    showToast( context, e.toString() );
+                 }
+              }
            }));
 
-     final homeButton = RaisedButton(
-        onPressed: ()
-        {
-           Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => BookShareHomePage()));
-        },
-        child: Text( 'Home'));
-     
-     
      return Scaffold(
       body: Center(
 
@@ -78,8 +81,6 @@ class _BookShareLoginState extends State<BookShareLoginPage> {
                      passwordField,
                      SizedBox( height: 5.0),
                      loginButton,
-                     SizedBox( height: 5.0),
-                     homeButton,
                      SizedBox(height: 5.0),
                      Text( appState.userState?.toString() ?? "UserState here", style: TextStyle(fontStyle: FontStyle.italic)),
                      ])))

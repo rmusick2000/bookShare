@@ -20,6 +20,17 @@ void notYetImplemented(BuildContext context) {
       );
 }
 
+void showToast(BuildContext context, msg) {
+   Fluttertoast.showToast(
+      msg: msg,
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.CENTER,
+      backgroundColor: Colors.pinkAccent,
+      textColor: Colors.white,
+      fontSize: 18.0
+      );
+}
+
 makeActionButton( BuildContext context, buttonText, fn ) {
    TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 14.0);
    return Material(

@@ -4,51 +4,140 @@ const AWS = require('aws-sdk');
 const bsdb = new AWS.DynamoDB.DocumentClient();
 const randomBytes = require('crypto').randomBytes;
 
+// Because we're using a Cognito User Pools authorizer, all of the claims
+// included in the authentication token are provided in the request context.
+// This includes the username as well as other attributes.
+// The body field of the event in a proxy integration is a raw string.
+// In order to extract meaningful values, we need to first parse this string
+// into an object. A more robust implementation might inspect the Content-Type
+// header first and use a different parsing strategy based on that value.
 exports.handler = (event, context, callback) => {
 
     console.log( 'BookShare Handler start' );
-
+    
     if (!event.requestContext.authorizer) {
-      errorResponse('Authorization not configured, dude', context.awsRequestId, callback);
-      return;
+	callback( null, errorResponse("401", 'Authorization not configured, dude', context.awsRequestId));
+	return;
     }
     
-    const bookId = toUrlString(randomBytes(16));
-    console.log('Received event (', bookId, '): ', event);
+    console.log('Received event: ', event);
 
-    // Because we're using a Cognito User Pools authorizer, all of the claims
-    // included in the authentication token are provided in the request context.
-    // This includes the username as well as other attributes.
     const username = event.requestContext.authorizer.claims['cognito:username'];
-
-    // The body field of the event in a proxy integration is a raw string.
-    // In order to extract meaningful values, we need to first parse this string
-    // into an object. A more robust implementation might inspect the Content-Type
-    // header first and use a different parsing strategy based on that value.
     const requestBody = JSON.parse(event.body);
 
-    const bookTitle = requestBody.Title;
+    var endPoint = requestBody.Endpoint;
+    var resultPromise;
+
+    if(      endPoint == "FindBook" ) { resultPromise = findBook( requestBody.Title, username ); }
+    else if( endPoint == "GetLibs")   { resultPromise = getLibs( username ); }
+    else {
+	callback( null, errorResponse( "500", "EndPoint request not understood", context.awsRequestId));
+	return;
+    }
+
+    resultPromise.then((result) => {
+	console.log( 'Result: ', result ); 
+	callback( null, result );
+    }).catch((err) => {
+        console.error(err);
+        callback( null, errorResponse(err.statusCode, err.message, context.awsRequestId));
+    });
+
+};
+
+function getLibs( username ) {
+    var assert = require('assert');
+    console.log('Get Libs! ' + username );
+
+    // Params to get PersonID from UserName
+    const paramsP = {
+        TableName: 'People',
+        FilterExpression: 'UserName = :uname',
+        ExpressionAttributeValues: { ":uname": username }
+    };
+
+    
+    // Get PersonId
+
+    let personPromise = bsdb.scan( paramsP ).promise();
+    return personPromise.then((persons) => {
+	console.log( "Persons: ", persons );
+	assert(persons.Count == 1 );
+	// XXX get item 0 only
+	let person = {};
+	persons.Items.forEach(function (element) {
+	    console.log( "Element: ", element );  
+	    person = element;
+	});
+	console.log( "Found person ", person );
+	return person.PersonId;
+    }).then((personId) => {
+
+	// Get Libraries
+
+	// Params to get Libraries that have PersonID in Members
+	const paramsL = {
+            TableName: 'Libraries',
+            FilterExpression: 'contains(Members, :pid)',
+            ExpressionAttributeValues: { ":pid": personId }
+	};
+	
+	console.log( "Working with ", personId );
+	let librariesPromise = bsdb.scan( paramsL ).promise();
+	return librariesPromise.then((libraries) => {
+	    
+	    assert(libraries.Count >= 1 );
+	    console.log( "Result: ", libraries );
+	    return {
+		statusCode: 201,
+		body: JSON.stringify( libraries.Items ),
+		headers: { 'Access-Control-Allow-Origin': '*' }
+	    };
+	});
+    });
+
+    /*
+    return new Promise((resolve, reject) => {
+	resolve(  {
+        statusCode: 201,
+        body: JSON.stringify([{
+            id: 3,
+            name: "MoJo Moomin",
+	    imageID: 234
+        }]),
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+        }});
+    });
+    */
+}
+
+
+function findBook(bookTitle, username) {
+    console.log('Finding book for ', bookTitle ); 
+
+    const bookId = toUrlString(randomBytes(16));
+
+    // Title must be :bookTitle, where :bookTitle = bookTitle.  grack.
+    const params = {
+        TableName: 'Books',
+        FilterExpression: 'Title = :bookTitle',
+        ExpressionAttributeValues: { ":bookTitle": bookTitle }
+    };
 
     // findbook returns a promise - scan is async.  
-    let booksPromise = findBook(bookTitle);
-    // findbook return val is in books
-    booksPromise.then((books) => {
+    let booksPromise = bsdb.scan( params ).promise();
 
-	// XXX cleanme
-	let res = {};
+    // findbook return val is in books
+    return booksPromise.then((books) => {
+
 	let book = {};
 	books.Items.forEach(function (element) {
-	    console.log( "Element: ", element );
+	    console.log( "Element: ", element );  
 	    book = element;
-	    res.Title = element.Title;
-	    res.Author = element.Author;
-	    res.MagicCookie = element.ISBN;
 	});
-	console.log('Results: ', res );
-	
 	console.log( "About to create JSON response, ", book );
-
-	callback(null, {
+	return {
             statusCode: 201,
             body: JSON.stringify({
                 BookId: bookId,
@@ -59,30 +148,10 @@ exports.handler = (event, context, callback) => {
             }),
             headers: {
                 'Access-Control-Allow-Origin': '*',
-            },
-        });
-    }).catch((err) => {
-        console.error(err);
-        // If there is an error during processing, catch it and return
-        // from the Lambda function successfully. Specify a 500 HTTP status
-        // code and provide an error message in the body. This will provide a
-        // more meaningful error response to the end client.
-        errorResponse(err.message, context.awsRequestId, callback);
+            }
+	};
+	
     });
-};
-
-// Scan.. not cheap.. XXX TEMP for testing
-function findBook(bookTitle) {
-    console.log('Finding book for ', bookTitle );
-
-    // Title must be :bookTitle, where :bookTitle = bookTitle.  grack.
-    const params = {
-        TableName: 'Books',
-        FilterExpression: 'Title = :bookTitle',
-        ExpressionAttributeValues: { ":bookTitle": bookTitle }
-    };
-
-    return bsdb.scan( params ).promise();
 }
 
 
@@ -105,15 +174,13 @@ function toUrlString(buffer) {
         .replace(/=/g, '');
 }
 
-function errorResponse(errorMessage, awsRequestId, callback) {
-  callback(null, {
-    statusCode: 500,
-    body: JSON.stringify({
-      Error: errorMessage,
-      Reference: awsRequestId,
-    }),
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-    },
-  });
+function errorResponse(status, errorMessage, awsRequestId) {
+    return {
+	statusCode: status, 
+	body: JSON.stringify({
+	    Error: errorMessage,
+	    Reference: awsRequestId,
+	}),
+	headers: { 'Access-Control-Allow-Origin': '*' }
+    };
 }
