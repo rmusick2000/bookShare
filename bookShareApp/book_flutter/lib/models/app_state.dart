@@ -18,6 +18,11 @@ class AppState {
    TextEditingController attributeController; 
    TextEditingController confirmationCodeController;
 
+   // Route-related
+   List<Route> routeStack;
+   int anchor;
+   
+   // App logic 
    
    init() {
       isLoading = true;
@@ -32,6 +37,9 @@ class AppState {
       passwordController = TextEditingController();
       attributeController = TextEditingController();
       confirmationCodeController = TextEditingController();
+
+      routeStack = new List(9);
+      anchor = 0;
    }
 
    
