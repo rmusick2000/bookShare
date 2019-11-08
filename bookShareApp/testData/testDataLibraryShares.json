@@ -46,6 +46,16 @@
 	{
             "PutRequest": {
                 "Item": {
+		    "LibraryShareId": {"N": "1005"},
+		    "PersonId": {"N": "38786"},
+		    "BookId": {"N": "112299"},
+		    "Libraries": {"L": [
+			{ "N": "13"}
+		    ]}
+		}}},
+	{
+            "PutRequest": {
+                "Item": {
 		    "LibraryShareId": {"N": "1002"},
 		    "PersonId": {"N": "38786"},
 		    "BookId": {"N": "112244"},
