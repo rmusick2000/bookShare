@@ -30,6 +30,7 @@ exports.handler = (event, context, callback) => {
 
     if(      endPoint == "FindBook" ) { resultPromise = findBook( requestBody.Title, username ); }
     else if( endPoint == "GetLibs")   { resultPromise = getLibs( username ); }
+    else if( endPoint == "GetBooks")  { resultPromise = getBooks( requestBody.SelectedLib, username ); }
     else {
 	callback( null, errorResponse( "500", "EndPoint request not understood", context.awsRequestId));
 	return;
@@ -44,6 +45,53 @@ exports.handler = (event, context, callback) => {
     });
 
 };
+
+
+// XXX Beware 100 item limit in scan
+function getBooks( selectedLib, username ) {
+    console.log('Get Books! ' + username + selectedLib );
+
+    // Get Shares
+    
+    // Params to get shares that have selectedLib in Libraries
+    const paramsS = {
+        TableName: 'LibraryShares',
+        FilterExpression: 'contains(Libraries, :lid)',
+        ExpressionAttributeValues: { ":lid": selectedLib }
+    };
+    
+    let sharesPromise = bsdb.scan( paramsS ).promise();
+    return sharesPromise.then((shares) => {
+	console.log( "Shares: ", shares );
+	var books = [];
+	shares.Items.forEach(function(share) {
+	    books.push( share.BookId );
+	});
+	return books;
+    }).then((books) => {
+
+	// Get Books for shares
+
+	// Params to get Books that are in books
+	const paramsB = {
+	    TableName: 'Books',
+	    FilterExpression: 'contains(:books, BookId)',
+	    ExpressionAttributeValues: { ":books": books }
+	};
+
+	let booksPromise = bsdb.scan( paramsB ).promise();
+	return booksPromise.then((books) => {
+	    
+	    console.log( "Result: ", books );
+	    return {
+		statusCode: 201,
+		body: JSON.stringify( books.Items ),
+		headers: { 'Access-Control-Allow-Origin': '*' }
+	    };
+	});
+	
+    });
+}
 
 function getLibs( username ) {
     var assert = require('assert');
@@ -111,6 +159,7 @@ function getLibs( username ) {
     });
     */
 }
+
 
 
 function findBook(bookTitle, username) {

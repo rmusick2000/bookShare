@@ -48,6 +48,15 @@
         {
             "PutRequest": {
                 "Item": {
+		    "BookId": {"N": "112299"},
+		    "Author": {"S": "James Clavell"},
+		    "Title": {"S": "Shogun"},
+		    "ISBN": {"S": "9873422365"},
+		    "Image": {"B": "bla"}
+		}}},
+        {
+            "PutRequest": {
+                "Item": {
 		    "BookId": {"N": "112288"},
 		    "Author": {"S": "Kalid Hosseini"},
 		    "Title": {"S": "Kite Runner"},

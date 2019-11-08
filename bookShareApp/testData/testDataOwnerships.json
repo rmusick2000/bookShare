@@ -8,6 +8,7 @@
 		    "Books": {"L": [
 			{ "M":{ "BookId": {"N": "112233"}, "ShareCount": {"N": "0"}}},
 			{ "M":{ "BookId": {"N": "112244"}, "ShareCount": {"N": "0"}}},
+			{ "M":{ "BookId": {"N": "112299"}, "ShareCount": {"N": "0"}}},
 			{ "M":{ "BookId": {"N": "112255"}, "ShareCount": {"N": "0"}}}
 		    ]}
 		}}},
