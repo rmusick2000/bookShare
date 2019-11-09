@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 // Note - this requires state here: android/app/src/main/res/raw/awsconfiguration.json
 import 'package:flutter_cognito_plugin/flutter_cognito_plugin.dart';
+import 'package:bookShare/models/libraries.dart';
+import 'package:bookShare/models/books.dart';
 
 
 class AppState {
@@ -22,8 +24,17 @@ class AppState {
    List<Route> routeStack;
    int anchor;
    
-   // App logic 
+   // App logic
+   bool loaded;
+   List<Library> myLibraries;
+   Map<String, List<Book>> booksInLib;
    
+   initAppData() {
+      loaded = false;
+      myLibraries = null;
+      booksInLib = new Map<String, List<Book>>();
+   }
+
    init() {
       isLoading = true;
       
@@ -40,6 +51,8 @@ class AppState {
 
       routeStack = new List(9);
       anchor = 0;
+
+      initAppData();
    }
 
    
