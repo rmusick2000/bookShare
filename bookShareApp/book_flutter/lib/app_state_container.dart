@@ -1,9 +1,13 @@
-import 'models/app_state.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // Note - this requires state here: android/app/src/main/res/raw/awsconfiguration.json
 import 'package:flutter_cognito_plugin/flutter_cognito_plugin.dart';
+
+
+import 'package:bookShare/models/app_state.dart';
+import 'package:bookShare/utils_load.dart';
+
 
 class AppStateContainer extends StatefulWidget {
    
@@ -76,39 +80,54 @@ class _AppStateContainerState extends State<AppStateContainer> {
      }
   }
 
-
   @override
   void initState() {
-    super.initState();
+     super.initState();
 
-    if (widget.state != null) {
-       state = widget.state;
-       print( "AppState: already initialized." );
-    } else {
-       state = new AppState.loading();
-       print( "AppState: initializing." );
-    }
+     if (widget.state != null) {
+        state = widget.state;
+        print( "AppState: already initialized." );
+     } else {
+        state = new AppState.loading();
+        print( "AppState: initializing." );
+     }
+     
+     doLoad();
+     // This callback controls state updating
+     Cognito.registerCallback((value) async {
+           if (!mounted) return;
+           bool stateLoaded = false;
+           
+           if( value == UserState.SIGNED_IN )
+           {
+              print( "SIGNED IN CALLBACK" );
+              await getAuthTokens();
+              
+              // Libraries and books
+              await getAPIBasePath();
+              
+              // Future.delayed( Duration(milliseconds: 200 ),() { initMyLibraries( state );  });
+              await initMyLibraries( state );
+              stateLoaded = true;
+              print ("CALLBACK, loaded TRUE" );
+           }
 
-    doLoad();
-    // This callback controls state updating
-    Cognito.registerCallback((value) {
-          if (!mounted) return;
-          setState(() {
-                state.userState = value;
-                if( value == UserState.SIGNED_IN ) { getAuthTokens(); }
-                else {
-                   state.accessToken = "";
-                   state.idToken = "";
-                }
-             });
-       });
 
-    // AWS lambda base
-    getAPIBasePath();
+           // If this becomes async, build is not predictably triggered on state change
+           setState(() {
+                 state.userState = value;
+                 state.loaded = stateLoaded;
+                 if( !stateLoaded ) {
+                    state.accessToken = "";
+                    state.idToken = "";
+                    state.initAppData();
+                 }
+              });
+        });
   }
   
   @override
-     void dispose() {
+  void dispose() {
      Cognito.registerCallback(null);
      state.usernameController.dispose();
      state.passwordController.dispose();
@@ -171,3 +190,32 @@ class _InheritedStateContainer extends InheritedWidget {
   @override
   bool updateShouldNotify(_InheritedStateContainer old) => true;
 }
+
+
+
+          /*          
+          setState(() async {
+                state.userState = value;
+                state.loaded = false;
+
+                if( value == UserState.SIGNED_IN )
+                {
+                   print( "SIGNED IN CALLBACK" );
+                   await getAuthTokens();
+
+                   // Libraries and books
+                   await getAPIBasePath();
+
+                   // Future.delayed( Duration(milliseconds: 200 ),() { initMyLibraries( state );  });
+                   await initMyLibraries( state );
+                   state.loaded = true;
+                   print ("CALLBACK, loaded TRUE" );
+                }
+                else {
+                   state.accessToken = "";
+                   state.idToken = "";
+                   state.initAppData();
+                }
+             });
+          */
+

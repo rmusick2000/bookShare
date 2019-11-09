@@ -22,6 +22,13 @@ class Library {
          members: new List<int>.from(dynamicMem)
          );
    }
+
+   String toString() {
+      String res = "\nLibrary : " + name;
+      res += "\n   id: " + id.toString();
+      res += "\n   members: " + members.toString();
+      return res;
+   }
 }
 
 class LibrarySketch {

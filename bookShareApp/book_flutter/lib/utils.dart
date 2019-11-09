@@ -2,12 +2,16 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import 'package:bookShare/app_state_container.dart';
 import 'package:bookShare/screens/my_library_page.dart';
 import 'package:bookShare/screens/loan_page.dart';
 import 'package:bookShare/screens/search_page.dart';
 import 'package:bookShare/screens/home_page.dart';
 import 'package:bookShare/screens/add_book_page.dart';
 import 'package:bookShare/screens/profile_page.dart';
+
+import 'package:bookShare/models/app_state.dart';
+
 
 void notYetImplemented(BuildContext context) {
    Fluttertoast.showToast(
@@ -63,7 +67,7 @@ makeInputField( BuildContext context, hintText, obscure, controller ) {
 }
 
 makeTopAppBar( BuildContext context, currentPage ) {
-
+   print ("MAKE TOP BAR" );
    return PreferredSize(
       preferredSize: Size.fromHeight(32.0),
       child: AppBar(
@@ -71,10 +75,9 @@ makeTopAppBar( BuildContext context, currentPage ) {
             icon: currentPage == "MyLibrary" ? Icon(customIcons.book_shelf_here) : Icon(customIcons.book_shelf),
             onPressed: ()
             {
-               currentPage == "MyLibrary" ? {} : 
-               Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => BookShareMyLibraryPage()));
+               MaterialPageRoute newPage = MaterialPageRoute(builder: (context) => BookShareMyLibraryPage());
+               manageRouteStack( context, newPage );
+               currentPage == "MyLibrary" ? {} : Navigator.push( context, newPage );
             },
             iconSize: 25,
             padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 2.0)
@@ -85,10 +88,9 @@ makeTopAppBar( BuildContext context, currentPage ) {
                icon: currentPage == "Loan" ? Icon(customIcons.loan_here) : Icon(customIcons.loan),
                onPressed: ()
                {
-                  currentPage == "Loan" ? {} : 
-                  Navigator.push(
-                     context,
-                     MaterialPageRoute(builder: (context) => BookShareLoanPage()));
+                  MaterialPageRoute newPage = MaterialPageRoute(builder: (context) => BookShareLoanPage());
+                  manageRouteStack( context, newPage );
+                  currentPage == "Loan" ? {} : Navigator.push( context, newPage);
                },
                iconSize: 25,
                //padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 1.0)
@@ -97,10 +99,9 @@ makeTopAppBar( BuildContext context, currentPage ) {
                icon: currentPage == "Search" ? Icon(customIcons.search_here) : Icon(customIcons.search),
                onPressed: ()
                {
-                  currentPage == "Search" ? {} : 
-                  Navigator.push(
-                     context,
-                     MaterialPageRoute(builder: (context) => BookShareSearchPage()));
+                  MaterialPageRoute newPage = MaterialPageRoute(builder: (context) => BookShareSearchPage());
+                  manageRouteStack( context, newPage );
+                  currentPage == "Search" ? {} : Navigator.push( context, newPage );
                },
                iconSize: 25,
                padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 1.0)
@@ -110,6 +111,7 @@ makeTopAppBar( BuildContext context, currentPage ) {
 
 makeBotAppBar( BuildContext context, currentPage ) {
    
+   print ("MAKE BOT BAR" );
    return SizedBox(
       height: 32, 
       child: BottomAppBar(
@@ -121,10 +123,9 @@ makeBotAppBar( BuildContext context, currentPage ) {
                   icon: currentPage == "Home" ? Icon(customIcons.home_here) : Icon(customIcons.home),
                   onPressed: ()
                   {
-                     currentPage == "Home" ? {} : 
-                     Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => BookShareHomePage()));
+                     MaterialPageRoute newPage = MaterialPageRoute(builder: (context) => BookShareHomePage());
+                     manageRouteStack( context, newPage );
+                     currentPage == "Home" ? {} : Navigator.push( context, newPage );
                   },
                   iconSize: 25,
                   padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 2.0)
@@ -136,10 +137,9 @@ makeBotAppBar( BuildContext context, currentPage ) {
                         icon: currentPage == "AddBook" ? Icon(customIcons.add_book_here) : Icon(customIcons.add_book),
                         onPressed: ()
                         {
-                           currentPage == "AddBook" ? {} : 
-                           Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => BookShareAddBookPage()));
+                           MaterialPageRoute newPage = MaterialPageRoute(builder: (context) => BookShareAddBookPage());
+                           manageRouteStack( context, newPage );
+                           currentPage == "AddBook" ? {} : Navigator.push( context, newPage );
                         },
                         iconSize: 25,
                         padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 2.0)
@@ -148,10 +148,9 @@ makeBotAppBar( BuildContext context, currentPage ) {
                         icon: currentPage == "Profile" ? Icon(customIcons.profile_here) : Icon(customIcons.profile),
                         onPressed: ()
                         {
-                           currentPage == "Profile" ? {} : 
-                           Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => BookShareProfilePage()));
+                           MaterialPageRoute newPage = MaterialPageRoute(builder: (context) => BookShareProfilePage());
+                           manageRouteStack( context, newPage );
+                           currentPage == "Profile" ? {} : Navigator.push( context, newPage );
                         },
                         iconSize: 25,
                         padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 2.0)
@@ -159,6 +158,32 @@ makeBotAppBar( BuildContext context, currentPage ) {
                      ])
                ])));
 }
+
+
+
+// Keep a rotating route stack, in a list, to support navigator removeBelowRoute.
+// This helps keep a functioning back button (up to some number), while putting a hard
+// limit on the size of the navigator stack.  Stack size limit is routeStack.length + 1
+void manageRouteStack( context, newPage ) {
+   final container   = AppStateContainer.of(context);
+   final appState    = container.state;
+
+   // Remove anchor if it's on the stack
+   try {
+      if( appState.routeStack[appState.anchor] != null ) {
+         // Hmmm this deletes stuff badly if routeStack is null
+         Navigator.removeRouteBelow( context, appState.routeStack[appState.anchor] );
+      }
+   } catch( e ) {
+      print( "MRS failed to removeRoute, anchor: " + appState.anchor.toString() );
+   }
+       
+   // update
+   appState.routeStack[appState.anchor] = newPage;
+   appState.anchor = (appState.anchor+1) % appState.routeStack.length;
+   
+}
+
 
 
 

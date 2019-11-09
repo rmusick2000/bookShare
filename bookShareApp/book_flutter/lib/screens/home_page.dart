@@ -14,12 +14,11 @@ import 'package:bookShare/screens/add_book_page.dart';
 import 'package:bookShare/screens/profile_page.dart';
 
 import 'package:bookShare/utils.dart';
+import 'package:bookShare/utils_load.dart';
 import 'package:bookShare/app_state_container.dart';
 import 'package:bookShare/models/app_state.dart';
 import 'package:bookShare/models/libraries.dart';
 import 'package:bookShare/models/books.dart';
-
-// XXX REFACTOR!! 
 
 class LibraryParts {
 
@@ -29,54 +28,9 @@ class LibraryParts {
    
    LibraryParts(this.apiBasePath, this.authToken, this.updateFn);
 
-   Future<List<Library>> fetchLibraries( postData ) async {
-      print( "fetchLibrary " + postData );
-      final gatewayURL = apiBasePath + "/find"; 
-         
-      final response =
-         await http.post(
-            gatewayURL,
-            headers: {HttpHeaders.authorizationHeader: authToken},
-            body: postData
-            );
-
-      if (response.statusCode == 201) {
-         print( response.body.toString() );         
-
-         Iterable l = json.decode(response.body);
-         List<Library> libs = l.map((sketch)=> Library.fromJson(sketch)).toList();
-         return libs;
-      } else {
-         print( "RESPONSE: " + response.statusCode.toString() + " " + json.decode(response.body).toString());
-         throw Exception('Failed to load library');
-      }
-   }
-
-   // XXX 1 func for all here?  
-   Future<List<Book>> fetchBooks( postData ) async {
-      print( "fetchBook " + postData );
-      final gatewayURL = apiBasePath + "/find"; 
-         
-      final response =
-         await http.post(
-            gatewayURL,
-            headers: {HttpHeaders.authorizationHeader: authToken},
-            body: postData
-            );
-
-      if (response.statusCode == 201) {
-         print( response.body.toString() );         
-
-         Iterable l = json.decode(response.body);
-         List<Book> books = l.map((sketch)=> Book.fromJson(sketch)).toList();
-         return books;
-      } else {
-         print( "RESPONSE: " + response.statusCode.toString() + " " + json.decode(response.body).toString());
-         throw Exception('Failed to load books');
-      }
-   }
 
    GestureDetector makeLibraryChunk( libraryName, libraryId ) {
+      print( "IN MLC " + libraryName + " " + libraryId.toString() );
       return GestureDetector(
          onTap: () { updateFn( libraryId ); },
          child: Column(
@@ -135,63 +89,52 @@ class BookShareHomePage extends StatefulWidget {
 class _BookShareHomeState extends State<BookShareHomePage> {
 
    TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
-   LibraryParts libraryBar;
-   List<Library> myLibraries = null;
-   Map<String, List<Book>> booksInLib = new Map<String, List<Book>>();
    int selectedLibrary = -1;
+   bool booksLoaded = true;
 
    AppState appState;
    
    @override
    void initState() {
+      print( "HOMEPAGE INIT" );
       super.initState();
-      print( "InitHomepage" );
-      // async call delegates the call until after initialization, then use context 
-      // Future.delayed with 0 completes no sooner than in the next event-loop iteration, after all microtasks have run.
-      if( selectedLibrary == -1 ) {
-         print( "Init Libs" );
-         // duration.zero fails when uninstall/reinstall app for existing user.  100ms works.. 200 to be safe
-         Future.delayed( Duration(milliseconds: 200 ),() { initMyLibraries( context );  });
-      }
    }
 
    @override
    void dispose() {
       super.dispose();
    }
-
-   initMyLibraries( context ) async {
-      libraryBar  = LibraryParts( appState.apiBasePath, appState.idToken, updateSelectedLibrary );   
-      myLibraries = await libraryBar.fetchLibraries( '{ "Endpoint": "GetLibs" }' );
-      initSelectedLibrary();
-   }
-
-   initSelectedLibrary() {
-      print( "InitSelectedLib" );
-      assert( myLibraries.length >= 1 );
-      updateSelectedLibrary( myLibraries[0].id );   // XXX XXX XXX
-      initLibBooks();
-   }
-
-   initLibBooks() async {
-      print( "InitLIBBOOKS" );
-      booksInLib["lib"+selectedLibrary.toString()] = await libraryBar.fetchBooks( '{ "Endpoint": "GetBooks", "SelectedLib": $selectedLibrary }' );  
-   }
-     
    
-   updateSelectedLibrary( selectedLib ) {
+   updateSelectedLibrary( selectedLib ) async {
       print( "UpdateSelectedLib " + selectedLib.toString() );
-      setState(() { selectedLibrary = selectedLib; } );
+      if( !appState.booksInLib.containsKey( "lib"+selectedLib.toString() )) {
+         setState(() {
+               selectedLibrary = selectedLib;
+               booksLoaded = false;
+            });
+      } else {
+         setState(() {
+               selectedLibrary = selectedLib;
+            });
+      }
+
+      if( !booksLoaded ) {
+         print( "Re-init libBooks for selected: " + selectedLib.toString() );
+         await initLibBooks( appState, selectedLib );
+         setState(() {
+               booksLoaded = true;
+            });
+      }
    }
    
    Widget makeSelectedLib( libId ) {
       // Selected Lib can be uninitialized briefly
-      if( myLibraries == null ) { return Container(); }
+      if( appState.myLibraries == null ) { return Container(); }
       print( "makeSelectedLib" );
       
       Library selectedLib;
-      assert( myLibraries.length >= 1 );
-      for( final lib in myLibraries ) {
+      assert( appState.myLibraries.length >= 1 );
+      for( final lib in appState.myLibraries ) {
          if( lib.id == libId ) { selectedLib = lib; break; }
       };
 
@@ -216,24 +159,6 @@ class _BookShareHomeState extends State<BookShareHomePage> {
             ));
    }   
 
-   Widget makeLibraryRow() {
-      List<Widget> libChunks = [];
-      // NOTE this will be null for a brief flash of time at init
-      if( myLibraries == null ) { return CircularProgressIndicator(); }
-
-      assert( myLibraries.length >= 1 );
-      myLibraries.forEach((lib) => libChunks.add( libraryBar.makeLibraryChunk( lib.name, lib.id )));
-      
-      // XXX ListView me
-      return SingleChildScrollView(
-         scrollDirection: Axis.horizontal,
-         child: Row (
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: libChunks
-            ));
-   }
-
 
    @override
    Widget build(BuildContext context) {
@@ -241,28 +166,44 @@ class _BookShareHomeState extends State<BookShareHomePage> {
       final container   = AppStateContainer.of(context);
       appState          = container.state;
       // Keep this here.  Else, on first init after uninstall, initMyLibs may not yet have finished, leading to RSOD
-      final libraryBar  = LibraryParts( appState.apiBasePath, appState.idToken, updateSelectedLibrary );
+      final libraryBar  = new LibraryParts( appState.apiBasePath, appState.idToken, updateSelectedLibrary );
 
       print( "Build Homepage" );
 
-      // XXX this won't update, not currently dependent on selectedLib
-      // XXX NOTE!  Need a dict of selectedLib : books.  Else, no cache, slow on click
-      Widget makeBooks( selectedLib ) {
-         List<Widget> bookChunks = [];
-         print( makeBooks );
-         if( booksInLib == null ) { print( "Fak"); return Container(); }
-
-         if( !booksInLib.containsKey( "lib"+selectedLib.toString() )) {
-            print( "Re-init libBooks for selected: " + selectedLib.toString() );
-            initLibBooks();
-         }
+      Widget makeLibraryRow() {
+         List<Widget> libChunks = [];
+         // NOTE this will be null for a brief flash of time at init
+         if( appState.myLibraries == null ) { return Container(); }
          
-         var bil = booksInLib["lib"+selectedLib.toString()];
-         // XXXX why?
-         // assert( bil != null );
+         assert( appState.myLibraries.length >= 1 );
+         print( "XXXXXX  MLR: " );
+         print( appState.myLibraries.toString() );
+         assert( libraryBar != null );
+         print( libraryBar.apiBasePath );
+         print( "XXXXXX  MLR: " );
+         appState.myLibraries.forEach((lib) => libChunks.add( libraryBar.makeLibraryChunk( lib.name, lib.id )));
+         
+         // XXX ListView me
+         return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row (
+               mainAxisSize: MainAxisSize.max,
+               mainAxisAlignment: MainAxisAlignment.start,
+               children: libChunks
+               ));
+      }
+
+      Widget makeBooks( ) {
+         List<Widget> bookChunks = [];
+         String libName = "lib" + selectedLibrary.toString();
+         print( "makeBooks" );
+
+         if( appState.booksInLib == null ) { print( "Fak"); return Container(); }
+         var bil = appState.booksInLib[libName];
          if( bil == null || bil.length == 0 ) { print( "Fik"); return Container(); }
 
-         // XXX could save widgets if time-pressed
+         if( !booksLoaded ) { return CircularProgressIndicator(); }
+         
          bil.forEach((book) => bookChunks.add( libraryBar.makeBookChunk( context, book.title, book.author, book.ISBN )));
          
          return Expanded(
@@ -273,11 +214,48 @@ class _BookShareHomeState extends State<BookShareHomePage> {
                   )));
       }   
 
+      Widget makeBody() {
+         print( "homepage MB  &&&&&&&" );
+         if( appState.loaded ) {
+            print( "homepage Loaded" );
+
+            assert( appState.myLibraries != null );
+            if( selectedLibrary == -1 ) {
+               updateSelectedLibrary( appState.myLibraries[0].id );  // XXX
+            }
+            
+            return Center(
+               child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,    // required for listView child
+                  children: <Widget>[
+                     makeLibraryRow(),
+                     Divider( color: Colors.grey[200], thickness: 3.0 ),
+                     makeSelectedLib( selectedLibrary ),
+                     Divider( color: Colors.grey[200], thickness: 3.0 ),
+                     makeBooks( )
+                     ]));
+               } else {
+            print( "homepage Not Loaded" );
+            return CircularProgressIndicator();
+         }
+      }
+
+      print( "Build Homepage, scaffold" );
       
       return Scaffold(
          appBar: makeTopAppBar( context, "Home" ),
          bottomNavigationBar: makeBotAppBar( context, "Home" ),
-         body: Center(
+         body: makeBody()
+         );
+      
+   }
+}
+
+
+      /*
+         Center(
             child: Column(
                crossAxisAlignment: CrossAxisAlignment.start,
                mainAxisAlignment: MainAxisAlignment.start,
@@ -289,11 +267,7 @@ class _BookShareHomeState extends State<BookShareHomePage> {
                   Divider( color: Colors.grey[200], thickness: 3.0 ),
                   makeBooks( selectedLibrary )
                   ])));
-   }
-}
-
-
-
+         */
 
 
    /*
