@@ -28,9 +28,7 @@ class LibraryParts {
    
    LibraryParts(this.apiBasePath, this.authToken, this.updateFn);
 
-
    GestureDetector makeLibraryChunk( libraryName, libraryId ) {
-      print( "IN MLC " + libraryName + " " + libraryId.toString() );
       return GestureDetector(
          onTap: () { updateFn( libraryId ); },
          child: Column(
@@ -41,7 +39,7 @@ class LibraryParts {
                   padding: const EdgeInsets.fromLTRB(12.0, 12.0, 0, 0.0),
                   child: ClipRRect(
                      borderRadius: new BorderRadius.circular(12.0),
-                     child: Image.asset( 'images/kiteLibrary.jpg', height: 60.0, width: 60.0, fit: BoxFit.fill))),
+                     child: Image.asset( 'images/kiteLibrary.jpg', height: 60, width: 60.0, fit: BoxFit.fill))),
                Padding(
                   padding: const EdgeInsets.fromLTRB(12.0, 4.0, 0, 0.0),
                   child: Text(libraryName, style: TextStyle(fontSize: 12)))])
@@ -168,7 +166,8 @@ class _BookShareHomeState extends State<BookShareHomePage> {
       // Keep this here.  Else, on first init after uninstall, initMyLibs may not yet have finished, leading to RSOD
       final libraryBar  = new LibraryParts( appState.apiBasePath, appState.idToken, updateSelectedLibrary );
 
-      print( "Build Homepage" );
+      appState.screenHeight = MediaQuery.of(context).size.height;
+      appState.screenWidth = MediaQuery.of(context).size.width;
 
       Widget makeLibraryRow() {
          List<Widget> libChunks = [];
@@ -176,11 +175,7 @@ class _BookShareHomeState extends State<BookShareHomePage> {
          if( appState.myLibraries == null ) { return Container(); }
          
          assert( appState.myLibraries.length >= 1 );
-         print( "XXXXXX  MLR: " );
-         print( appState.myLibraries.toString() );
          assert( libraryBar != null );
-         print( libraryBar.apiBasePath );
-         print( "XXXXXX  MLR: " );
          appState.myLibraries.forEach((lib) => libChunks.add( libraryBar.makeLibraryChunk( lib.name, lib.id )));
          
          // XXX ListView me
@@ -198,11 +193,18 @@ class _BookShareHomeState extends State<BookShareHomePage> {
          String libName = "lib" + selectedLibrary.toString();
          print( "makeBooks" );
 
-         if( appState.booksInLib == null ) { print( "Fak"); return Container(); }
          var bil = appState.booksInLib[libName];
-         if( bil == null || bil.length == 0 ) { print( "Fik"); return Container(); }
 
-         if( !booksLoaded ) { return CircularProgressIndicator(); }
+         // first time through, books have not yet been fetched
+         if( appState.booksInLib == null || bil == null || bil.length == 0 || !booksLoaded ) {
+            return Container(
+               height: 366,
+               child:  Center(
+                  child: Container(
+                     height: 100,
+                     child: CircularProgressIndicator() ))
+               );
+         }
          
          bil.forEach((book) => bookChunks.add( libraryBar.makeBookChunk( context, book.title, book.author, book.ISBN )));
          
@@ -215,9 +217,7 @@ class _BookShareHomeState extends State<BookShareHomePage> {
       }   
 
       Widget makeBody() {
-         print( "homepage MB  &&&&&&&" );
          if( appState.loaded ) {
-            print( "homepage Loaded" );
 
             assert( appState.myLibraries != null );
             if( selectedLibrary == -1 ) {
@@ -237,12 +237,11 @@ class _BookShareHomeState extends State<BookShareHomePage> {
                      makeBooks( )
                      ]));
                } else {
-            print( "homepage Not Loaded" );
             return CircularProgressIndicator();
          }
       }
 
-      print( "Build Homepage, scaffold" );
+      print( "Build Homepage, scaffold x,y: " + appState.screenHeight.toString() + " " + appState.screenWidth.toString() );
       
       return Scaffold(
          appBar: makeTopAppBar( context, "Home" ),
@@ -252,23 +251,6 @@ class _BookShareHomeState extends State<BookShareHomePage> {
       
    }
 }
-
-
-      /*
-         Center(
-            child: Column(
-               crossAxisAlignment: CrossAxisAlignment.start,
-               mainAxisAlignment: MainAxisAlignment.start,
-               mainAxisSize: MainAxisSize.min,    // required for listView child
-               children: <Widget>[
-                  makeLibraryRow(),
-                  Divider( color: Colors.grey[200], thickness: 3.0 ),
-                  makeSelectedLib( selectedLibrary ),
-                  Divider( color: Colors.grey[200], thickness: 3.0 ),
-                  makeBooks( selectedLibrary )
-                  ])));
-         */
-
 
    /*
    // This worked well, with 2 critical flaws.

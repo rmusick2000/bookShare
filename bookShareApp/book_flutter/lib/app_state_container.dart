@@ -83,13 +83,13 @@ class _AppStateContainerState extends State<AppStateContainer> {
   @override
   void initState() {
      super.initState();
-
+     
      if (widget.state != null) {
         state = widget.state;
         print( "AppState: already initialized." );
      } else {
         state = new AppState.loading();
-        print( "AppState: initializing." );
+        print( "AppStateContainer: initializing." );
      }
      
      doLoad();
@@ -100,16 +100,23 @@ class _AppStateContainerState extends State<AppStateContainer> {
            
            if( value == UserState.SIGNED_IN )
            {
-              print( "SIGNED IN CALLBACK" );
-              await getAuthTokens();
-              
-              // Libraries and books
-              await getAPIBasePath();
-              
-              // Future.delayed( Duration(milliseconds: 200 ),() { initMyLibraries( state );  });
-              await initMyLibraries( state );
+
+              // This callback can get executed several times on startup.  
+              // Callbacks can run back to back, before awaits below finish)
+              if( !state.loading && !state.loaded )
+              {
+                 state.loading = true;
+                 print( "SIGNED IN CALLBACK" );
+                 await getAuthTokens();
+                 
+                 // Libraries and books
+                 await getAPIBasePath();
+                 
+                 await initMyLibraries( state );
+                 print ("CALLBACK, loaded TRUE" );
+              }
+              state.loading = false;
               stateLoaded = true;
-              print ("CALLBACK, loaded TRUE" );
            }
 
 
