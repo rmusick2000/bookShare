@@ -67,7 +67,6 @@ makeInputField( BuildContext context, hintText, obscure, controller ) {
 }
 
 makeTopAppBar( BuildContext context, currentPage ) {
-   print ("MAKE TOP BAR" );
    return PreferredSize(
       preferredSize: Size.fromHeight(32.0),
       child: AppBar(
@@ -110,8 +109,6 @@ makeTopAppBar( BuildContext context, currentPage ) {
 }
 
 makeBotAppBar( BuildContext context, currentPage ) {
-   
-   print ("MAKE BOT BAR" );
    return SizedBox(
       height: 32, 
       child: BottomAppBar(

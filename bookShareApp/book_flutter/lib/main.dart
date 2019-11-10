@@ -53,7 +53,9 @@ class _BSSplashPageState extends State<BSSplashPage> {
    @override
    void initState() {
       print( "... Main init state" );
-      super.initState();
+
+      // XXX excess, unnecessary work.  both this and container are new'd above
+      // super.initState();
       startTimer();
    }
 

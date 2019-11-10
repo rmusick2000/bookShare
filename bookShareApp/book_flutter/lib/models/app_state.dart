@@ -19,24 +19,30 @@ class AppState {
    TextEditingController passwordController;
    TextEditingController attributeController; 
    TextEditingController confirmationCodeController;
-
+   double screenHeight;
+   double screenWidth;
+   
    // Route-related
    List<Route> routeStack;
    int anchor;
    
    // App logic
    bool loaded;
+   bool loading; 
    List<Library> myLibraries;
    Map<String, List<Book>> booksInLib;
    
    initAppData() {
       loaded = false;
+      loading = false;
       myLibraries = null;
       booksInLib = new Map<String, List<Book>>();
    }
 
    init() {
       isLoading = true;
+      screenHeight = -1;
+      screenWidth = -1;
       
       // Cognito values
       UserState userState = UserState.UNKNOWN;
