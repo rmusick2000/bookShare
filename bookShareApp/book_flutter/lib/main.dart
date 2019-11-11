@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cognito_plugin/flutter_cognito_plugin.dart';
 
 // bookShare package name from pubspec.yaml
+import 'package:bookShare/utils.dart';
 import 'package:bookShare/screens/launch_page.dart';
 import 'package:bookShare/screens/home_page.dart';
 
@@ -72,7 +73,9 @@ class _BSSplashPageState extends State<BSSplashPage> {
 
   void navigateUser() async{
      if( appState.userState == UserState.SIGNED_IN ) {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => BookShareHomePage()));
+        MaterialPageRoute newPage = MaterialPageRoute(builder: (context) => BookShareHomePage());
+        manageRouteStack( context, newPage, "home" );
+        Navigator.pushReplacement(context, newPage );
      } else {
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => BSLaunchPage()));
      }
@@ -88,6 +91,8 @@ class _BSSplashPageState extends State<BSSplashPage> {
      Color color     = Theme.of(context).primaryColor;
      final devWidth  = MediaQuery.of(context).size.width;
      final devHeight = MediaQuery.of(context).size.height;
+     appState.screenHeight = devHeight;
+     appState.screenWidth = devWidth;
 
        return Scaffold(
           body: Center(

@@ -37,12 +37,14 @@ void showToast(BuildContext context, msg) {
 
 makeActionButton( BuildContext context, buttonText, fn ) {
    TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 14.0);
+   final container   = AppStateContainer.of(context);
+   final appState    = container.state;
    return Material(
       elevation: 5.0,
       borderRadius: BorderRadius.circular(10.0),
       color: Color(0xff01A0C7),
       child: MaterialButton(
-         minWidth: MediaQuery.of(context).size.width - 30,
+         minWidth: appState.screenWidth - 30,
          padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
          onPressed: fn,
          child: Text( buttonText,
@@ -67,18 +69,22 @@ makeInputField( BuildContext context, hintText, obscure, controller ) {
 }
 
 makeTopAppBar( BuildContext context, currentPage ) {
+   final container   = AppStateContainer.of(context);
+   final appState    = container.state;
+   final iconSize    = appState.screenHeight*.0422;
    return PreferredSize(
-      preferredSize: Size.fromHeight(32.0),
+      preferredSize: Size.fromHeight( appState.screenHeight*.054 ),
       child: AppBar(
          leading: IconButton(
             icon: currentPage == "MyLibrary" ? Icon(customIcons.book_shelf_here) : Icon(customIcons.book_shelf),
             onPressed: ()
             {
+               if( currentPage == "MyLibrary" ) { return; }
                MaterialPageRoute newPage = MaterialPageRoute(builder: (context) => BookShareMyLibraryPage());
-               manageRouteStack( context, newPage );
-               currentPage == "MyLibrary" ? {} : Navigator.push( context, newPage );
+               manageRouteStack( context, newPage, "mylib" );
+               Navigator.push( context, newPage );
             },
-            iconSize: 25,
+            iconSize: iconSize,
             padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 2.0)
             ),
          title: Text( "BookShare", style: new TextStyle( fontFamily: 'Mansalva', fontSize: 16 )),
@@ -87,30 +93,34 @@ makeTopAppBar( BuildContext context, currentPage ) {
                icon: currentPage == "Loan" ? Icon(customIcons.loan_here) : Icon(customIcons.loan),
                onPressed: ()
                {
+                  if( currentPage == "Loan" ) { return; }
                   MaterialPageRoute newPage = MaterialPageRoute(builder: (context) => BookShareLoanPage());
-                  manageRouteStack( context, newPage );
-                  currentPage == "Loan" ? {} : Navigator.push( context, newPage);
+                  manageRouteStack( context, newPage, "loan" );
+                  Navigator.push( context, newPage);
                },
-               iconSize: 25,
-               //padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 1.0)
+               iconSize: iconSize,
                ),
             IconButton(
                icon: currentPage == "Search" ? Icon(customIcons.search_here) : Icon(customIcons.search),
                onPressed: ()
                {
+                  if( currentPage == "Search" ) { return; }
                   MaterialPageRoute newPage = MaterialPageRoute(builder: (context) => BookShareSearchPage());
-                  manageRouteStack( context, newPage );
-                  currentPage == "Search" ? {} : Navigator.push( context, newPage );
+                  manageRouteStack( context, newPage, "search" );
+                  Navigator.push( context, newPage );
                },
-               iconSize: 25,
+               iconSize: iconSize,
                padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 1.0)
                ),
             ]));
 }
 
 makeBotAppBar( BuildContext context, currentPage ) {
+   final container   = AppStateContainer.of(context);
+   final appState    = container.state;
+   final iconSize    = appState.screenHeight*.0422;
    return SizedBox(
-      height: 32, 
+      height: appState.screenHeight*.054, 
       child: BottomAppBar(
          child: Row(
             mainAxisSize: MainAxisSize.max,
@@ -120,11 +130,12 @@ makeBotAppBar( BuildContext context, currentPage ) {
                   icon: currentPage == "Home" ? Icon(customIcons.home_here) : Icon(customIcons.home),
                   onPressed: ()
                   {
+                     if( currentPage == "Home" ) { return; }
                      MaterialPageRoute newPage = MaterialPageRoute(builder: (context) => BookShareHomePage());
-                     manageRouteStack( context, newPage );
-                     currentPage == "Home" ? {} : Navigator.push( context, newPage );
+                     manageRouteStack( context, newPage, "home" );
+                     Navigator.push( context, newPage );
                   },
-                  iconSize: 25,
+                  iconSize: iconSize,
                   padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 2.0)
                   ),
                Row(
@@ -134,42 +145,44 @@ makeBotAppBar( BuildContext context, currentPage ) {
                         icon: currentPage == "AddBook" ? Icon(customIcons.add_book_here) : Icon(customIcons.add_book),
                         onPressed: ()
                         {
+                           if( currentPage == "AddBook" ) { return; }
                            MaterialPageRoute newPage = MaterialPageRoute(builder: (context) => BookShareAddBookPage());
-                           manageRouteStack( context, newPage );
-                           currentPage == "AddBook" ? {} : Navigator.push( context, newPage );
+                           manageRouteStack( context, newPage, "add" );
+                           Navigator.push( context, newPage );
                         },
-                        iconSize: 25,
+                        iconSize: iconSize,
                         padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 2.0)
                         ),
                      IconButton(
                         icon: currentPage == "Profile" ? Icon(customIcons.profile_here) : Icon(customIcons.profile),
                         onPressed: ()
                         {
+                           if( currentPage == "Profile" ) { return; }
                            MaterialPageRoute newPage = MaterialPageRoute(builder: (context) => BookShareProfilePage());
-                           manageRouteStack( context, newPage );
-                           currentPage == "Profile" ? {} : Navigator.push( context, newPage );
+                           manageRouteStack( context, newPage, "profile" );
+                           Navigator.push( context, newPage );
                         },
-                        iconSize: 25,
+                        iconSize: iconSize,
                         padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 2.0)
                         )
                      ])
                ])));
 }
 
-
-
 // Keep a rotating route stack, in a list, to support navigator removeBelowRoute.
 // This helps keep a functioning back button (up to some number), while putting a hard
 // limit on the size of the navigator stack.  Stack size limit is routeStack.length + 1
-void manageRouteStack( context, newPage ) {
+void manageRouteStack( context, newPage, pageName ) {
    final container   = AppStateContainer.of(context);
    final appState    = container.state;
 
    // Remove anchor if it's on the stack
+   // Remove is very sensitive and error prone.  If routeStack is null, looks like memory corruption
+   // if try to remove at stack depth, bad things can happen.  Only allow at stack depth + 1
    try {
-      if( appState.routeStack[appState.anchor] != null ) {
-         // Hmmm this deletes stuff badly if routeStack is null
+      if( appState.routeStack[appState.anchor] != null && appState.stackDepth > appState.maxDepth ) {
          Navigator.removeRouteBelow( context, appState.routeStack[appState.anchor] );
+         appState.stackDepth = appState.maxDepth;
       }
    } catch( e ) {
       print( "MRS failed to removeRoute, anchor: " + appState.anchor.toString() );
@@ -177,11 +190,45 @@ void manageRouteStack( context, newPage ) {
        
    // update
    appState.routeStack[appState.anchor] = newPage;
-   appState.anchor = (appState.anchor+1) % appState.routeStack.length;
+   appState.stackDepth++;
    
+   // Because the stack is on the widge tree, they get updated.  This enables a short-circuit
+   // in each screen to do the minimal work.  buuuut.. does it kill back?
+   appState.routeName[appState.anchor] = pageName;
+   appState.anchor = (appState.anchor+1) % appState.routeStack.length;
 }
 
+bool isCurrentRoute( appState, pageName, routeNum ) {
+   bool retVal = false;
+   int anchor = getRouteNum( appState );
+   
+   if( ( routeNum == anchor || routeNum == -1 ) && appState.routeName[anchor] == pageName ) { retVal = true; }
 
+   return retVal;
+}
+
+int getRouteNum( appState ) {
+   if( appState.anchor > 0 ) { return appState.anchor - 1; }
+   else                      { return appState.routeName.length - 1; }
+}
+
+// Without managing back button, computation avoidance with routeName fails (empty container)
+Future<bool> requestPop( context ) {
+   final container   = AppStateContainer.of(context);
+   final appState    = container.state;
+   
+   if( appState.anchor > 0 ) { appState.anchor--; }
+   else {  appState.anchor = appState.routeName.length - 1; }
+
+   // Remove route from routeStack, else next push removeRouteBelow, anchor is not null,
+   // nor is it on Navigator's stack.  Furthermore, probably has been disposed, and so is in bad
+   // internal shape.
+   appState.routeStack[appState.anchor] = null;
+   appState.routeName[appState.anchor] = "";
+   appState.stackDepth--;
+   
+   return new Future.value(true);
+}
 
 
 // XXX This doesn't belong here.

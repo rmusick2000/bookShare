@@ -25,10 +25,12 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
 
    TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
    String bookState;
+   int myRouteNum;
 
   @override
       void initState() {
       super.initState();
+      myRouteNum = -1;
    }
 
 
@@ -43,7 +45,15 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
       final container = AppStateContainer.of(context);
       final appState = container.state;
 
-     return Scaffold(
+      if( !isCurrentRoute( appState, "add", myRouteNum )) {
+         return Container();
+      }
+      print( "Building AddBook " + myRouteNum.toString() );
+      myRouteNum = getRouteNum( appState ); 
+
+      return WillPopScope(
+        onWillPop: () => requestPop(context),
+         child: Scaffold(
         appBar: makeTopAppBar( context, "AddBook" ),
         bottomNavigationBar: makeBotAppBar( context, "AddBook" ),
         body: Center(
@@ -62,6 +72,6 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
                           Text( appState.userState?.toString() ?? "UserState here", style: TextStyle(fontStyle: FontStyle.italic))
                           ])))
               
-              )));
+              ))));
    }
 }

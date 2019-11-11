@@ -24,6 +24,9 @@ class AppState {
    
    // Route-related
    List<Route> routeStack;
+   List<String> routeName;
+   int stackDepth;
+   int maxDepth;
    int anchor;
    
    // App logic
@@ -55,8 +58,12 @@ class AppState {
       attributeController = TextEditingController();
       confirmationCodeController = TextEditingController();
 
-      routeStack = new List(9);
+      // XXX Minor: framework error if the size here grows to 9.  Buut, 6 is fine..
+      maxDepth = 6; 
+      routeStack = new List(maxDepth);
+      routeName = new List(maxDepth);
       anchor = 0;
+      stackDepth = 0;
 
       initAppData();
    }

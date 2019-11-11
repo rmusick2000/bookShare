@@ -47,9 +47,9 @@ class _BookShareLoginState extends State<BookShareLoginPage> {
      final loginButton = makeActionButton( context, 'Login', container.onPressWrapper(() async {
               try{ 
                  await Cognito.signIn( appState.usernameController.text, appState.passwordController.text );
-                 Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => BookShareHomePage()));
+                 MaterialPageRoute newPage = MaterialPageRoute(builder: (context) => BookShareHomePage());
+                 manageRouteStack( context, newPage, "home" );
+                 Navigator.push( context, newPage );
               } catch(e) {
                  if( e.toString().contains("User does not exist") ) {
                     showToast( context, "Username or password is incorrect." );

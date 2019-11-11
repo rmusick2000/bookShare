@@ -96,6 +96,7 @@ class _AppStateContainerState extends State<AppStateContainer> {
      // This callback controls state updating
      Cognito.registerCallback((value) async {
            if (!mounted) return;
+           if( state.loading ) return;  // do nothing if callback already in progress
            bool stateLoaded = false;
            
            if( value == UserState.SIGNED_IN )
@@ -113,10 +114,12 @@ class _AppStateContainerState extends State<AppStateContainer> {
                  await getAPIBasePath();
                  
                  await initMyLibraries( state );
+                 stateLoaded = true;
+                 state.loading = false;
                  print ("CALLBACK, loaded TRUE" );
               }
-              state.loading = false;
-              stateLoaded = true;
+              // stateLoaded = true;
+              // state.loading = false;
            }
 
 
@@ -199,30 +202,4 @@ class _InheritedStateContainer extends InheritedWidget {
 }
 
 
-
-          /*          
-          setState(() async {
-                state.userState = value;
-                state.loaded = false;
-
-                if( value == UserState.SIGNED_IN )
-                {
-                   print( "SIGNED IN CALLBACK" );
-                   await getAuthTokens();
-
-                   // Libraries and books
-                   await getAPIBasePath();
-
-                   // Future.delayed( Duration(milliseconds: 200 ),() { initMyLibraries( state );  });
-                   await initMyLibraries( state );
-                   state.loaded = true;
-                   print ("CALLBACK, loaded TRUE" );
-                }
-                else {
-                   state.accessToken = "";
-                   state.idToken = "";
-                   state.initAppData();
-                }
-             });
-          */
 
