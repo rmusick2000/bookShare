@@ -25,10 +25,12 @@ class _BookShareLoanState extends State<BookShareLoanPage> {
 
    TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
    String bookState;
+   int myRouteNum;
 
   @override
-      void initState() {
-      super.initState();
+     void initState() {
+     super.initState();
+     myRouteNum = -1;
    }
 
 
@@ -43,7 +45,15 @@ class _BookShareLoanState extends State<BookShareLoanPage> {
       final container = AppStateContainer.of(context);
       final appState = container.state;
 
-     return Scaffold(
+      if( !isCurrentRoute( appState, "loan", myRouteNum )) {
+         return Container();
+      }
+      print( "Building Loan " + myRouteNum.toString() );
+      myRouteNum = getRouteNum( appState ); 
+
+     return WillPopScope(
+         onWillPop: () => requestPop(context),   // Future<bool> function()
+         child: Scaffold(
         appBar: makeTopAppBar( context, "Loan" ),
         bottomNavigationBar: makeBotAppBar( context, "Loan" ),
         body: Center(
@@ -62,6 +72,6 @@ class _BookShareLoanState extends State<BookShareLoanPage> {
                           Text( appState.userState?.toString() ?? "UserState here", style: TextStyle(fontStyle: FontStyle.italic))
                           ])))
               
-              )));
+              ))));
    }
 }

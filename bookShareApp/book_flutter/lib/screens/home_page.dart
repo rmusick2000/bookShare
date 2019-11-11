@@ -20,62 +20,6 @@ import 'package:bookShare/models/app_state.dart';
 import 'package:bookShare/models/libraries.dart';
 import 'package:bookShare/models/books.dart';
 
-class LibraryParts {
-
-   final apiBasePath;
-   final authToken;
-   final updateFn;
-   
-   LibraryParts(this.apiBasePath, this.authToken, this.updateFn);
-
-   GestureDetector makeLibraryChunk( libraryName, libraryId ) {
-      return GestureDetector(
-         onTap: () { updateFn( libraryId ); },
-         child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-               Padding(
-                  padding: const EdgeInsets.fromLTRB(12.0, 12.0, 0, 0.0),
-                  child: ClipRRect(
-                     borderRadius: new BorderRadius.circular(12.0),
-                     child: Image.asset( 'images/kiteLibrary.jpg', height: 60, width: 60.0, fit: BoxFit.fill))),
-               Padding(
-                  padding: const EdgeInsets.fromLTRB(12.0, 4.0, 0, 0.0),
-                  child: Text(libraryName, style: TextStyle(fontSize: 12)))])
-         );
-   }
-
-   // XXX mediaquery to appstate
-   GestureDetector makeBookChunk( context, title, author, isbn ) {
-      return GestureDetector(
-         onTap: () { print( "Giggle!" ); },
-         child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-               Container(
-                  color: Colors.lightGreen[100],
-                  height:100,
-                  constraints: BoxConstraints(
-                         maxHeight: 100.0,
-                         minWidth: MediaQuery.of(context).size.width
-                     ),
-                  child: Column(
-                     crossAxisAlignment: CrossAxisAlignment.start,
-                     mainAxisAlignment: MainAxisAlignment.center,
-                     children: <Widget>[
-                        Text(title, style: TextStyle(fontSize: 12)),
-                        Text("By: " + author, style: TextStyle(fontSize: 12)),
-                        Text("ISBN: " + isbn, style: TextStyle(fontSize: 12)),
-                        ])),
-               Container( color: Colors.lightBlue, height:20 ),
-               ]));
-   }
-   
-}
-
-
 
 class BookShareHomePage extends StatefulWidget {
    BookShareHomePage({Key key}) : super(key: key);
@@ -89,6 +33,7 @@ class _BookShareHomeState extends State<BookShareHomePage> {
    TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
    int selectedLibrary = -1;
    bool booksLoaded = true;
+   int myRouteNum;
 
    AppState appState;
    
@@ -96,6 +41,7 @@ class _BookShareHomeState extends State<BookShareHomePage> {
    void initState() {
       print( "HOMEPAGE INIT" );
       super.initState();
+      myRouteNum = -1;
    }
 
    @override
@@ -103,7 +49,7 @@ class _BookShareHomeState extends State<BookShareHomePage> {
       super.dispose();
    }
    
-   updateSelectedLibrary( selectedLib ) async {
+   _updateSelectedLibrary( selectedLib ) async {
       print( "UpdateSelectedLib " + selectedLib.toString() );
       if( !appState.booksInLib.containsKey( "lib"+selectedLib.toString() )) {
          setState(() {
@@ -124,8 +70,86 @@ class _BookShareHomeState extends State<BookShareHomePage> {
             });
       }
    }
+
+   GestureDetector makeLibraryChunk( libraryName, libraryId ) {
+      final imageSize = appState.screenHeight * .1014;
+      return GestureDetector(
+         onTap: () { _updateSelectedLibrary( libraryId ); },
+         child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+               Padding(
+                  padding: const EdgeInsets.fromLTRB(12.0, 12.0, 0, 0.0),
+                  child: ClipRRect(
+                     borderRadius: new BorderRadius.circular(12.0),
+                     child: Image.asset( 'images/kiteLibrary.jpg', height: imageSize, width: imageSize, fit: BoxFit.fill))),
+               Padding(
+                  padding: const EdgeInsets.fromLTRB(12.0, 4.0, 0, 0.0),
+                  child: Text(libraryName, style: TextStyle(fontSize: 12)))])
+         );
+   }
+
+   // Title will wrap if need be, growing row height as needed
+   GestureDetector makeBookChunk( context, title, author, isbn ) {
+      final imageHeight = appState.screenHeight * .169;
+      final imageWidth  = appState.screenWidth * .48;
+      return GestureDetector(
+         onTap: () { print( "Giggle!" ); },
+         child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+               Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget> [
+                     Padding(
+                        padding: const EdgeInsets.fromLTRB(6.0, 6.0, 6.0, 6.0),
+                        child: ClipRRect(
+                           borderRadius: new BorderRadius.circular(12.0),
+                           child: Image.asset( 'images/kush.jpeg', height: imageHeight, width: imageWidth, fit: BoxFit.cover))),
+                     Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                           // Text(title, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis),
+                           Container( width: imageWidth, child: Text(title, softWrap: true, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold))),
+                           Text("By: " + author, style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic)),
+                           Text("ISBN: " + isbn, style: TextStyle(fontSize: 12)),
+                           ])]),
+               Container( color: Colors.lightBlue, height: appState.screenHeight*.0338 ),
+                  ]));
+   }
+
+   /*   
+   GestureDetector makeBookChunk( context, title, author, isbn ) {
+      return GestureDetector(
+         onTap: () { print( "Giggle!" ); },
+         child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+               Container(
+                  color: Colors.lightGreen[100],
+                  constraints: BoxConstraints(
+                     maxHeight: appState.screenHeight * .169,
+                     minWidth:  appState.screenWidth
+                     ),
+                  child: Column(
+                     crossAxisAlignment: CrossAxisAlignment.start,
+                     mainAxisAlignment: MainAxisAlignment.center,
+                     children: <Widget>[
+                        Text(title, style: TextStyle(fontSize: 12)),
+                        Text("By: " + author, style: TextStyle(fontSize: 12)),
+                        Text("ISBN: " + isbn, style: TextStyle(fontSize: 12)),
+                        ])),
+               Container( color: Colors.lightBlue, height: appState.screenHeight*.0338 ),
+               ]));
+   }
+   */
    
-   Widget makeSelectedLib( libId ) {
+   Widget _makeSelectedLib( libId ) {
       // Selected Lib can be uninitialized briefly
       if( appState.myLibraries == null ) { return Container(); }
       print( "makeSelectedLib" );
@@ -143,7 +167,9 @@ class _BookShareHomeState extends State<BookShareHomePage> {
 
       numM += ( numM == "1" ? " member" : " members" );
       numB += ( numB == "1" ? " book" : " books" );
-          
+
+      print( " ... ms: making row" );
+      
       return Padding(
          padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
          child: Row (
@@ -163,20 +189,21 @@ class _BookShareHomeState extends State<BookShareHomePage> {
 
       final container   = AppStateContainer.of(context);
       appState          = container.state;
-      // Keep this here.  Else, on first init after uninstall, initMyLibs may not yet have finished, leading to RSOD
-      final libraryBar  = new LibraryParts( appState.apiBasePath, appState.idToken, updateSelectedLibrary );
 
-      appState.screenHeight = MediaQuery.of(context).size.height;
-      appState.screenWidth = MediaQuery.of(context).size.width;
-
+      // This page may be on routeStack, keep it from being rebuilt while not on top
+      if( !isCurrentRoute( appState, "home", myRouteNum )) {
+         return Container();
+      }
+      print( "Building Home " + myRouteNum.toString() );
+      myRouteNum = getRouteNum( appState ); 
+      
       Widget makeLibraryRow() {
          List<Widget> libChunks = [];
          // NOTE this will be null for a brief flash of time at init
          if( appState.myLibraries == null ) { return Container(); }
          
          assert( appState.myLibraries.length >= 1 );
-         assert( libraryBar != null );
-         appState.myLibraries.forEach((lib) => libChunks.add( libraryBar.makeLibraryChunk( lib.name, lib.id )));
+         appState.myLibraries.forEach((lib) => libChunks.add( makeLibraryChunk( lib.name, lib.id )));
          
          // XXX ListView me
          return SingleChildScrollView(
@@ -198,15 +225,15 @@ class _BookShareHomeState extends State<BookShareHomePage> {
          // first time through, books have not yet been fetched
          if( appState.booksInLib == null || bil == null || bil.length == 0 || !booksLoaded ) {
             return Container(
-               height: 366,
+               height: appState.screenHeight * .618,
                child:  Center(
                   child: Container(
-                     height: 100,
+                     height: appState.screenHeight * .169,
                      child: CircularProgressIndicator() ))
                );
          }
-         
-         bil.forEach((book) => bookChunks.add( libraryBar.makeBookChunk( context, book.title, book.author, book.ISBN )));
+         print( "  mb: going to bil" );
+         bil.forEach((book) => bookChunks.add( makeBookChunk( context, book.title, book.author, book.ISBN )));
          
          return Expanded(
             child: SizedBox(
@@ -221,7 +248,7 @@ class _BookShareHomeState extends State<BookShareHomePage> {
 
             assert( appState.myLibraries != null );
             if( selectedLibrary == -1 ) {
-               updateSelectedLibrary( appState.myLibraries[0].id );  // XXX
+               _updateSelectedLibrary( appState.myLibraries[0].id );  // XXX
             }
             
             return Center(
@@ -232,61 +259,24 @@ class _BookShareHomeState extends State<BookShareHomePage> {
                   children: <Widget>[
                      makeLibraryRow(),
                      Divider( color: Colors.grey[200], thickness: 3.0 ),
-                     makeSelectedLib( selectedLibrary ),
+                     _makeSelectedLib( selectedLibrary ),
                      Divider( color: Colors.grey[200], thickness: 3.0 ),
                      makeBooks( )
                      ]));
-               } else {
+         } else {
             return CircularProgressIndicator();
          }
       }
 
-      print( "Build Homepage, scaffold x,y: " + appState.screenHeight.toString() + " " + appState.screenWidth.toString() );
+      print( "Build Homepage, scaffold x,y: " + appState.screenWidth.toString() + " " + appState.screenHeight.toString() );
       
-      return Scaffold(
-         appBar: makeTopAppBar( context, "Home" ),
-         bottomNavigationBar: makeBotAppBar( context, "Home" ),
-         body: makeBody()
-         );
+      return WillPopScope(
+         onWillPop: () => requestPop(context),   // Future<bool> function()
+         child: Scaffold(
+            appBar: makeTopAppBar( context, "Home" ),
+            bottomNavigationBar: makeBotAppBar( context, "Home" ),
+            body: makeBody()
+            ));
       
    }
 }
-
-   /*
-   // This worked well, with 2 critical flaws.
-   //  1. Build gets called often, which forces this to retrigger, often.  
-   //  2. In order to handle initialization properly, would need to chain these - ugly.
-   // XXX listViewBuilder?
-   Widget makeLibraryRow() {
-      String gatewayURL = apiBasePath + "/find";
-      String data = '{ "Endpoint": "GetLibs" }';
-      List<Widget> libChunks = [];
-
-      return FutureBuilder(
-         future: fetchLibraries( gatewayURL, authToken, data ),
-         builder: (context, snapshotData)
-         {
-            // print( "in Builder" );
-            if (snapshotData.connectionState == ConnectionState.done ) {
-               //print( snapshotData.data );
-               snapshotData.data.forEach((lib) => libChunks.add( _makeLibraryChunk( lib.name, lib.id )));
-
-               // cant set state during build
-               // updateFn( snapshotData.data[0].id );
-               return
-                  SingleChildScrollView(
-                     scrollDirection: Axis.horizontal,
-                     child: Row (
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: libChunks
-                        ));
-            }
-            else {
-               // CircularProgressIndicator
-               return Container();
-            }
-         });
-   }
-   */
-

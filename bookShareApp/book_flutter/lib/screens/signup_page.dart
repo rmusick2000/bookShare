@@ -66,9 +66,9 @@ class _BookShareSignupState extends State<BookShareSignupPage> {
       final confirmSignupButton = makeActionButton( context, "Confirm signup, and Log in", container.onPressWrapper(() async {
                await Cognito.confirmSignUp( appState.usernameController.text, appState.confirmationCodeController.text );
                await Cognito.signIn( appState.usernameController.text, appState.passwordController.text );
-               Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => BookShareHomePage()));
+               MaterialPageRoute newPage = MaterialPageRoute(builder: (context) => BookShareHomePage());
+               manageRouteStack( context, newPage, "home" );
+               Navigator.push( context, newPage );
             }));      
 
       return Scaffold(
