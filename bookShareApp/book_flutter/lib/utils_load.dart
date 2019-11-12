@@ -58,6 +58,44 @@ Future<List<Book>> fetchBooks( appState, postData ) async {
    }
 }
 
+
+Future<Book> fetchISBN( isbn ) async {
+   print( "fetchISBN " + isbn );
+   // Version 1 v1
+   // Note: undocumented varients, different results:   q=isbn#, q=isbn=#, q=isbn<#>, q=ISBN
+   // Note: multiple editions per book, google asks for a primary isbn, then related isbn.
+   //       So, don't use isbn: interface, since you probably don't have the primary.
+   //           do    use the first result back, as google has sorted it by relevance.
+   final gatewayURL = "https://www.googleapis.com/books/v1/volumes?q=isbn=" + isbn;
+   
+   final response =
+      await http.get( gatewayURL);
+   
+   if (response.statusCode == 200) {
+      // print( response.body.toString() );
+      // Possibly, maybe, at some point, offer a variety of results and let user choose.
+      /*
+      Iterable l = (json.decode(response.body))['items'];
+      print( gatewayURL );
+      print( "There are " + l.length.toString() + " that match that ISBN" );
+      List<Book> books = l.map((book)=> Book.bookGoogleFromJson(book, isbn)).toList();
+      */
+      
+      // For now, however, rely on google relevance.
+      var results = (json.decode(response.body))['items'];
+      if( results.length > 0 ) {
+         Book book = Book.bookGoogleFromJson(results[0], isbn);
+         return book;
+      }
+      else { return null; }
+   } else {
+      print( "RESPONSE: " + response.statusCode.toString() + " " + json.decode(response.body).toString());
+      throw Exception('Failed to load books');
+   }
+}
+
+
+
 // Called on signin
 initMyLibraries( appState ) async {
    print( "initMyLibs" );

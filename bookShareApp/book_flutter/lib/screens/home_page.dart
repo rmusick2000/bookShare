@@ -90,37 +90,6 @@ class _BookShareHomeState extends State<BookShareHomePage> {
          );
    }
 
-   // Title will wrap if need be, growing row height as needed
-   GestureDetector makeBookChunk( context, title, author, isbn ) {
-      final imageHeight = appState.screenHeight * .169;
-      final imageWidth  = appState.screenWidth * .48;
-      return GestureDetector(
-         onTap: () { print( "Giggle!" ); },
-         child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-               Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget> [
-                     Padding(
-                        padding: const EdgeInsets.fromLTRB(6.0, 6.0, 6.0, 6.0),
-                        child: ClipRRect(
-                           borderRadius: new BorderRadius.circular(12.0),
-                           child: Image.asset( 'images/kush.jpeg', height: imageHeight, width: imageWidth, fit: BoxFit.cover))),
-                     Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                           // Text(title, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis),
-                           Container( width: imageWidth, child: Text(title, softWrap: true, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold))),
-                           Text("By: " + author, style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic)),
-                           Text("ISBN: " + isbn, style: TextStyle(fontSize: 12)),
-                           ])]),
-               Container( color: Colors.lightBlue, height: appState.screenHeight*.0338 ),
-                  ]));
-   }
 
    /*   
    GestureDetector makeBookChunk( context, title, author, isbn ) {
@@ -233,7 +202,7 @@ class _BookShareHomeState extends State<BookShareHomePage> {
                );
          }
          print( "  mb: going to bil" );
-         bil.forEach((book) => bookChunks.add( makeBookChunk( context, book.title, book.author, book.ISBN )));
+         bil.forEach((book) => bookChunks.add( makeBookChunk( appState, book )));
          
          return Expanded(
             child: SizedBox(

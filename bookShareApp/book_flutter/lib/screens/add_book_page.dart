@@ -1,16 +1,20 @@
+import 'dart:convert';  // json encode/decode
+import 'dart:async';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:barcode_scan/barcode_scan.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:bookShare/screens/my_library_page.dart';
-import 'package:bookShare/screens/loan_page.dart';
-import 'package:bookShare/screens/search_page.dart';
-import 'package:bookShare/screens/home_page.dart';
-import 'package:bookShare/screens/add_book_page.dart';
-import 'package:bookShare/screens/profile_page.dart';
-
 import 'package:bookShare/utils.dart';
+import 'package:bookShare/utils_load.dart';
 import 'package:bookShare/app_state_container.dart';
+
 import 'package:bookShare/models/app_state.dart';
+import 'package:bookShare/models/books.dart';
+
+
 
 
 class BookShareAddBookPage extends StatefulWidget {
@@ -24,13 +28,24 @@ class BookShareAddBookPage extends StatefulWidget {
 class _BookShareAddBookState extends State<BookShareAddBookPage> {
 
    TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
-   String bookState;
+   String barcode;
    int myRouteNum;
+   List<String> scans;
+   TextEditingController target;
+   Book newBook;
 
   @override
       void initState() {
       super.initState();
       myRouteNum = -1;
+      barcode = "";
+      newBook = null;
+
+      target = new TextEditingController();
+      target.text = "0";
+      var s1 = ["9780446610025", "9787219045213", "9780345419088", "9780312858865", "9780060557812"];
+      var s2 = ["9780804172264", "9781594631931", "9780312987022", "9780345427571"];
+      scans = [...s1, ...s2];
    }
 
 
@@ -38,40 +53,104 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
   void dispose() {
     super.dispose();
   }
+
+
+  // XXX tell user primary vs secondary isbn
+  // XXX allow selection + crop of cover art?
+  // XXX apikey:  AIzaSyAaTJBMCp6Pk3SJgCxu_WuiFDywBH8nXgA
+  Widget makeBook( appState, barcode ) {
+     updateNewBook( barcode );
+     if( newBook != null ) { return makeBookChunk( appState, newBook ); }
+     else                  { return Container(); }
+  }
+
+  void updateNewBook( barcode ) async {
+     if( barcode != "" ) { newBook = await fetchISBN( barcode );  }
+  }
+  
   
    @override
    Widget build(BuildContext context) {
 
       final container = AppStateContainer.of(context);
       final appState = container.state;
-
+      
       if( !isCurrentRoute( appState, "add", myRouteNum )) {
          return Container();
       }
       print( "Building AddBook " + myRouteNum.toString() );
       myRouteNum = getRouteNum( appState ); 
+      
+      final targetField = Container(
+         width: 50,
+         child: TextField(
+         decoration: InputDecoration(
+            contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+            hintText: target.text,
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0))),
+         controller: target
+            ));
+      
 
+      
+      final scanButton = RaisedButton(
+         onPressed: () async
+         {
+            String bc = scans[int.parse( target.text )];
+            int newTarget = ( int.parse( target.text ) + 1 ) % scans.length;
+            setState(() {
+                  this.barcode = bc;
+                  this.target.text = newTarget.toString();
+               });
+
+         },
+
+        // Need to put this on the phone.
+         /*
+        onPressed: () async
+        {
+           try{
+              String bc = await BarcodeScanner.scan();
+              setState(() { this.barcode = bc; });
+           } on PlatformException catch(e) {
+              if( e.code == BarcodeScanner.CameraAccessDenied) {
+                 showToast( context, "Camera permission not granted" );
+              } else {
+                 showToast( context, e.toString() );
+              }
+           } on FormatException {
+              showToast( context, "oops - user returned using back button before scanning" );
+           } catch( error, trace ) {
+              showToast( context, error.toString() );
+           }
+        },
+         */
+        child: Text( 'Scan'));
+                        
+      
       return WillPopScope(
-        onWillPop: () => requestPop(context),
+         onWillPop: () => requestPop(context),
          child: Scaffold(
-        appBar: makeTopAppBar( context, "AddBook" ),
-        bottomNavigationBar: makeBotAppBar( context, "AddBook" ),
-        body: Center(
-           child: SingleChildScrollView( 
-              child: Container(
-                 color: Colors.white,
-                 child: Padding(
-                    padding: const EdgeInsets.all(36.0),
-                    child: Column(
-                       crossAxisAlignment: CrossAxisAlignment.center,
-                       mainAxisAlignment: MainAxisAlignment.center,
-                       children: <Widget>[
-                          SizedBox(height: 5.0),
-                          Text( "Add Book", style: TextStyle(fontWeight: FontWeight.bold)),
-                          SizedBox(height: 5.0),
-                          Text( appState.userState?.toString() ?? "UserState here", style: TextStyle(fontStyle: FontStyle.italic))
-                          ])))
-              
-              ))));
+            appBar: makeTopAppBar( context, "AddBook" ),
+            bottomNavigationBar: makeBotAppBar( context, "AddBook" ),
+            body: Column(
+               crossAxisAlignment: CrossAxisAlignment.center,
+               mainAxisAlignment: MainAxisAlignment.center,
+               children: <Widget>[
+                  SizedBox(height: 5.0),
+                  Text( "Add Book", style: TextStyle(fontWeight: FontWeight.bold)),
+                  SizedBox(height: 5.0),
+                  Row(
+                     crossAxisAlignment: CrossAxisAlignment.center,
+                     mainAxisAlignment: MainAxisAlignment.center,
+                     children: <Widget>[
+                        scanButton,
+                        targetField
+                     ]),
+                  SizedBox(height: 5.0),
+                  makeBook( appState, barcode )
+                  ])));
+         
+
    }
 }
