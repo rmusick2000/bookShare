@@ -54,9 +54,8 @@ class _BSSplashPageState extends State<BSSplashPage> {
    @override
    void initState() {
       print( "... Main init state" );
-
-      // XXX excess, unnecessary work.  both this and container are new'd above
-      // super.initState();
+      super.initState();  // XXX   needed?
+      print( "... start timer" );
       startTimer();
    }
 
@@ -66,12 +65,15 @@ class _BSSplashPageState extends State<BSSplashPage> {
   }
 
   void startTimer() {
+     print( "In timer" );
      Timer(Duration(seconds: 3), () {
+           print("after duration" );
            navigateUser();
         });
   }
 
   void navigateUser() async{
+     print( "Weh do i go?" );
      if( appState.userState == UserState.SIGNED_IN ) {
         MaterialPageRoute newPage = MaterialPageRoute(builder: (context) => BookShareHomePage());
         manageRouteStack( context, newPage, "home" );

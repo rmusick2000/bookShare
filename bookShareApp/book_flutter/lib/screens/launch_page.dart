@@ -32,6 +32,8 @@ class _BSLaunchPageState extends State<BSLaunchPage> {
 
     Color color = Theme.of(context).primaryColor;
 
+    print( "start launch page builder" );
+    
     Widget _loginButton = makeActionButton( context, 'Login', (() {
              Navigator.push(
                 context,

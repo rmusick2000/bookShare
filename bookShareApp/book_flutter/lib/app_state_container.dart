@@ -83,7 +83,9 @@ class _AppStateContainerState extends State<AppStateContainer> {
   @override
   void initState() {
      super.initState();
-     
+
+     print("Container init" );
+        
      if (widget.state != null) {
         state = widget.state;
         print( "AppState: already initialized." );
@@ -132,8 +134,10 @@ class _AppStateContainerState extends State<AppStateContainer> {
                     state.idToken = "";
                     state.initAppData();
                  }
+                 print( "container callback setstate done" );
               });
         });
+     print( "Container init over" );
   }
   
   @override

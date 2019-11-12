@@ -11,6 +11,7 @@ import 'package:bookShare/screens/add_book_page.dart';
 import 'package:bookShare/screens/profile_page.dart';
 
 import 'package:bookShare/models/app_state.dart';
+import 'package:bookShare/models/books.dart';
 
 
 void notYetImplemented(BuildContext context) {
@@ -168,6 +169,52 @@ makeBotAppBar( BuildContext context, currentPage ) {
                      ])
                ])));
 }
+
+
+// Title will wrap if need be, growing row height as needed
+GestureDetector makeBookChunk( appState, book ) {
+   // final imageHeight = appState.screenHeight * .169;
+   final imageHeight = appState.screenHeight * .6;
+   final imageWidth  = appState.screenWidth * .48;
+
+   var image;
+   if( book.image != null && book.image != "" ) { image = Image.network( book.image, height: imageHeight, width: imageWidth, fit: BoxFit.contain ); }
+   else                                         { image = Image.asset( 'images/kush.jpeg', height: imageHeight, width: imageWidth, fit: BoxFit.cover); }
+   
+   return GestureDetector(
+      onTap: () { print( "Giggle!" ); },
+      child: Column(
+         crossAxisAlignment: CrossAxisAlignment.center,
+         mainAxisAlignment: MainAxisAlignment.center,
+         children: <Widget>[
+            Row(
+               crossAxisAlignment: CrossAxisAlignment.center,
+               mainAxisAlignment: MainAxisAlignment.start,
+               children: <Widget> [
+                  Padding(
+                     padding: const EdgeInsets.fromLTRB(6.0, 6.0, 6.0, 6.0),
+                     child: ClipRRect(
+                        borderRadius: new BorderRadius.circular(12.0),
+                        //child: Image.asset( 'images/dart.jpeg', height: imageHeight, width: imageWidth, fit: BoxFit.cover))),
+                        child: image )),
+                  Column(
+                     crossAxisAlignment: CrossAxisAlignment.start,
+                     mainAxisAlignment: MainAxisAlignment.center,
+                     children: <Widget>[
+                        // Text(title, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis),
+                        Container( width: imageWidth, child: Text(book.title, softWrap: true, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold))),
+                        Text("By: " + book.author, style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic)),
+                        Text("ISBN: " + book.ISBN, style: TextStyle(fontSize: 12)),
+                        ])]),
+            Container( color: Colors.lightBlue, height: appState.screenHeight*.0338 ),
+            ]));
+}
+
+
+
+
+
+
 
 // Keep a rotating route stack, in a list, to support navigator removeBelowRoute.
 // This helps keep a functioning back button (up to some number), while putting a hard
