@@ -174,6 +174,7 @@ makeBotAppBar( BuildContext context, currentPage ) {
 // Title will wrap if need be, growing row height as needed
 GestureDetector makeBookChunk( appState, book ) {
    // final imageHeight = appState.screenHeight * .169;
+   print( "Book chunk start" );
    final imageHeight = appState.screenHeight * .6;
    final imageWidth  = appState.screenWidth * .48;
 
@@ -181,6 +182,7 @@ GestureDetector makeBookChunk( appState, book ) {
    if( book.image != null && book.image != "" ) { image = Image.network( book.image, height: imageHeight, width: imageWidth, fit: BoxFit.contain ); }
    else                                         { image = Image.asset( 'images/kush.jpeg', height: imageHeight, width: imageWidth, fit: BoxFit.cover); }
    
+   print( "Book chunk returning" );
    return GestureDetector(
       onTap: () { print( "Giggle!" ); },
       child: Column(

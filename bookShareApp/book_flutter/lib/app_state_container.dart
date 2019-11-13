@@ -63,9 +63,11 @@ class _AppStateContainerState extends State<AppStateContainer> {
         List tokenString = (await Cognito.getTokens()).toString().split(" ");
         String accessToken = tokenString[3].split(",")[0];
         String idToken = tokenString[5].split(",")[0];
+        String refreshToken = tokenString[7].split(",")[0];
         setState(() {
               state.accessToken = accessToken;
               state.idToken = idToken;
+              state.refreshToken = refreshToken;
            });
      }
   }

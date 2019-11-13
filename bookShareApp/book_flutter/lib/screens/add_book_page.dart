@@ -43,7 +43,9 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
 
       target = new TextEditingController();
       target.text = "0";
+      //        kush(x),            daughters,        the eight,       prestige,        neverwhere
       var s1 = ["9780446610025", "9787219045213", "9780345419088", "9780312858865", "9780060557812"];
+      //        inferno,         kiterunner,      awakening (X)    glorious cause(x)
       var s2 = ["9780804172264", "9781594631931", "9780312987022", "9780345427571"];
       scans = [...s1, ...s2];
    }
@@ -58,14 +60,16 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
   // XXX tell user primary vs secondary isbn
   // XXX allow selection + crop of cover art?
   // XXX apikey:  AIzaSyAaTJBMCp6Pk3SJgCxu_WuiFDywBH8nXgA
-  Widget makeBook( appState, barcode ) {
-     updateNewBook( barcode );
-     if( newBook != null ) { return makeBookChunk( appState, newBook ); }
-     else                  { return Container(); }
+  Widget makeBook( appState ) {
+     print( "MAKE BOOK START" );
+     if( newBook != null ) { print( "Make book end" ); return makeBookChunk( appState, newBook ); }
+     else                  { print( "Make book end" ); return Container(); }
   }
 
   void updateNewBook( barcode ) async {
+     print( "UPDATE NEW BOOK START" );
      if( barcode != "" ) { newBook = await fetchISBN( barcode );  }
+     print( "UPDATE NEW BOOK END" );
   }
   
   
@@ -96,8 +100,12 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
       final scanButton = RaisedButton(
          onPressed: () async
          {
+            print( "SCAN BUTTON PRESS" );
+            print( "Scans: " + scans.toString() );
+            print( "Target: " + target.text );
             String bc = scans[int.parse( target.text )];
             int newTarget = ( int.parse( target.text ) + 1 ) % scans.length;
+            await updateNewBook( bc );
             setState(() {
                   this.barcode = bc;
                   this.target.text = newTarget.toString();
@@ -148,7 +156,7 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
                         targetField
                      ]),
                   SizedBox(height: 5.0),
-                  makeBook( appState, barcode )
+                  makeBook( appState )
                   ])));
          
 
