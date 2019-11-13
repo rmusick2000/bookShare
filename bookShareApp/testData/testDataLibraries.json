@@ -5,6 +5,7 @@
                 "Item": {
 		    "LibraryId": {"N": "12"},
 		    "LibraryName": {"S": "vsamPrivate"},
+		    "Private": {"BOOL": true},
 		    "Members": {"L": [
 			{ "N": "38785"}
 		    ]}
@@ -14,6 +15,7 @@
                 "Item": {
 		    "LibraryId": {"N": "13"},
 		    "LibraryName": {"S": "aspellPrivate"},
+		    "Private": {"BOOL": true},
 		    "Members": {"L": [
 			{ "N": "38786"}
 		    ]}
@@ -23,6 +25,7 @@
                 "Item": {
 		    "LibraryId": {"N": "14"},
 		    "LibraryName": {"S": "dbasePrivate"},
+		    "Private": {"BOOL": true},
 		    "Members": {"L": [
 			{ "N": "38796"}
 		    ]}
@@ -32,6 +35,7 @@
                 "Item": {
 		    "LibraryId": {"N": "15"},
 		    "LibraryName": {"S": "codeTalkers"},
+		    "Private": {"BOOL": false},
 		    "Members": {"L": [
 			{ "N": "38785"}, { "N": "38786"}
 		    ]}

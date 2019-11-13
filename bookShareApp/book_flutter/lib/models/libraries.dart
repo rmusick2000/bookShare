@@ -1,14 +1,13 @@
 import 'dart:convert';  
 
 class Library {
-   final int          id;
-   final String       name;
-   //final int          imageID;
+   final int       id;
+   final String    name;
+   //final int     imageID;
    final List<int> members;
+   final bool      private;
 
-   //Library({this.id, this.name, this.imageID, this.members});
-   Library({this.id, this.name, this.members});
-   //Library({this.id, this.name});
+   Library({this.id, this.name, this.members, this.private});
    
    factory Library.fromJson(Map<String, dynamic> json) {
       // print( "FROMJSON: " + json.toString() );
@@ -16,39 +15,19 @@ class Library {
       var dynamicMem = json['Members'];
          
       return Library(
-         id: json['LibraryId'],
-         name: json['LibraryName'],
-         //imageID: json['imageID'],
+         id:      json['LibraryId'],
+         name:    json['LibraryName'],
+         private: json['Private' ],
          members: new List<int>.from(dynamicMem)
          );
    }
 
    String toString() {
       String res = "\nLibrary : " + name;
+      res += "\n   private?: " + private.toString();
       res += "\n   id: " + id.toString();
       res += "\n   members: " + members.toString();
       return res;
-   }
-}
-
-class LibrarySketch {
-   final int          id;
-   final String       name;
-   final int          imageID;
-
-   LibrarySketch({this.id, this.name, this.imageID});
-   
-   factory LibrarySketch.fromJson(Map<String, dynamic> json) {
-      print( "in fromjson.. id " + json['id'].toString() + " name: " + json['name'] );
-      return LibrarySketch(
-         id: json['id'],
-         name: json['name'],
-         imageID: json['imageID']
-         );
-   }
-
-   toString() {
-      print( "Library: " + name );
    }
 }
 

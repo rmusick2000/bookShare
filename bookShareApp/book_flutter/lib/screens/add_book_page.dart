@@ -32,7 +32,8 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
    int myRouteNum;
    List<String> scans;
    TextEditingController target;
-   Book newBook;
+   Book  newBook;
+   List<Book> foundBooks;
 
   @override
       void initState() {
@@ -40,6 +41,7 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
       myRouteNum = -1;
       barcode = "";
       newBook = null;
+      foundBooks = [];
 
       target = new TextEditingController();
       target.text = "0";
@@ -59,11 +61,28 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
 
   // XXX tell user primary vs secondary isbn
   // XXX allow selection + crop of cover art?
-  // XXX apikey:  AIzaSyAaTJBMCp6Pk3SJgCxu_WuiFDywBH8nXgA
-  Widget makeBook( appState ) {
+  Widget makeBooks( appState ) {
      print( "MAKE BOOK START" );
-     if( newBook != null ) { print( "Make book end" ); return makeBookChunk( appState, newBook ); }
-     else                  { print( "Make book end" ); return Container(); }
+
+     List<Widget> bookChunks = [];
+
+     // XXX temp
+     if( newBook != null ) { foundBooks.add( newBook ); }
+     var bil = foundBooks;
+     
+     if( bil == null || bil.length == 0 ) { return Container(); }
+
+     bil.forEach((book) => bookChunks.add( makeBookChunkCol( appState, book )));
+     
+     if( newBook != null ) {
+         return Expanded(
+            child: SizedBox(
+               child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: bookChunks
+                  )));
+     }
+     else { return Container(); }
   }
 
   void updateNewBook( barcode ) async {
@@ -144,6 +163,7 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
             body: Column(
                crossAxisAlignment: CrossAxisAlignment.center,
                mainAxisAlignment: MainAxisAlignment.center,
+               mainAxisSize: MainAxisSize.min,    // required for listView child
                children: <Widget>[
                   SizedBox(height: 5.0),
                   Text( "Add Book", style: TextStyle(fontWeight: FontWeight.bold)),
@@ -156,7 +176,7 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
                         targetField
                      ]),
                   SizedBox(height: 5.0),
-                  makeBook( appState )
+                  makeBooks( appState )
                   ])));
          
 
