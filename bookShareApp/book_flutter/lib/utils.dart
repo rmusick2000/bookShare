@@ -56,6 +56,24 @@ makeActionButton( BuildContext context, buttonText, fn ) {
       );
 }
 
+// XXX kill context above
+makeActionButtonSmall( appState, buttonText, fn ) {
+   TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 12.0);
+   return Material(
+      elevation: 5.0,
+      borderRadius: BorderRadius.circular(10.0),
+      color: Color(0xff01A0C7),
+      child: MaterialButton(
+         minWidth: appState.screenWidth * .25,
+         onPressed: fn,
+         child: Text( buttonText,
+                      textAlign: TextAlign.center,
+                      style: style.copyWith(
+                         color: Colors.white, fontWeight: FontWeight.bold)),
+         )
+      );
+}
+
 makeInputField( BuildContext context, hintText, obscure, controller ) {
    TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
    return TextField(
@@ -174,14 +192,12 @@ makeBotAppBar( BuildContext context, currentPage ) {
 // Title will wrap if need be, growing row height as needed
 GestureDetector makeBookChunk( appState, book ) {
    final imageHeight = appState.screenHeight * .169;
-   print( "Book chunk start" );
    final imageWidth  = appState.screenWidth * .48;
 
    var image;
    if( book.image != null && book.image != "" ) { image = Image.network( book.image, height: imageHeight, width: imageWidth, fit: BoxFit.contain ); }
    else                                         { image = Image.asset( 'images/kush.jpeg', height: imageHeight, width: imageWidth, fit: BoxFit.cover); }
    
-   print( "Book chunk returning" );
    return GestureDetector(
       onTap: () { print( "Giggle!" ); },
       child: Column(
@@ -208,44 +224,6 @@ GestureDetector makeBookChunk( appState, book ) {
                         Text("ISBN: " + book.ISBN, style: TextStyle(fontSize: 12)),
                         ])]),
             Container( color: Colors.lightBlue, height: appState.screenHeight*.0338 ),
-            ]));
-}
-
-// Title will wrap if need be, growing row height as needed
-GestureDetector makeBookChunkCol( appState, book ) {
-   print( "Book chunk start" );
-   final imageHeight = appState.screenHeight * .5;
-   final imageWidth  = appState.screenWidth * .48;
-   const inset       = 20.0;
-      
-   var image;
-   if( book.image != null && book.image != "" ) { image = Image.network( book.image, height: imageHeight, width: imageWidth, fit: BoxFit.contain ); }
-   else                                         { image = Image.asset( 'images/kush.jpeg', height: imageHeight, width: imageWidth, fit: BoxFit.cover); }
-   
-   print( "Book chunk returning" );
-   return GestureDetector(
-      onTap: () { print( "Giggle!" ); },
-      child: Column(
-         crossAxisAlignment: CrossAxisAlignment.start,
-         mainAxisAlignment: MainAxisAlignment.center,
-         children: <Widget>[
-            Padding(
-               padding: const EdgeInsets.fromLTRB(6.0, 6.0, 6.0, 6.0),
-               child: ClipRRect(
-                  borderRadius: new BorderRadius.circular(12.0),
-                  child: image )),
-            Padding(
-               padding: const EdgeInsets.fromLTRB(inset, 6, 6, 0),
-               child: Container( width: imageWidth-inset-6, child: Text(book.title, softWrap: true, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)))),
-            Padding(
-               padding: const EdgeInsets.fromLTRB(inset, 0, 6, 0),
-               child: Text("By: " + book.author, style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic))),
-            Padding(
-               padding: const EdgeInsets.fromLTRB(inset, 0, 6, 0),
-               child: Text("ISBN: " + book.ISBN, style: TextStyle(fontSize: 12))),
-            Padding(
-               padding: const EdgeInsets.fromLTRB(inset, 0, 6, 0),
-               child: Container( color: Colors.lightBlue, height: appState.screenHeight*.0338 ))
             ]));
 }
 
@@ -314,6 +292,7 @@ Future<bool> requestPop( context ) {
 }
 
 
+// inkscape
 // XXX This doesn't belong here.
 /// Flutter icons customIcons
 /// Copyright (C) 2019 by original authors @ fluttericon.com, fontello.com

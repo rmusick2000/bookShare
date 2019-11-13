@@ -60,54 +60,38 @@ Future<List<Book>> fetchBooks( appState, postData ) async {
 
 
 // Troublesome: glorious cause 9780345427571
-Future<Book> fetchISBN( isbn ) async {
+// Version 1 v1 of google books api
+// Note: undocumented varients, different results:   q=isbn#, q=isbn=#, q=isbn<#>, q=ISBN
+// Note: multiple editions per book, google asks for a primary isbn, then related isbn.
+Future<List<Book>> fetchISBN( isbn ) async {
    print( "fetchISBN " + isbn );
-   // Version 1 v1
-   // Note: undocumented varients, different results:   q=isbn#, q=isbn=#, q=isbn<#>, q=ISBN
-   // Note: multiple editions per book, google asks for a primary isbn, then related isbn.
-   //       So, don't use isbn: interface, since you probably don't have the primary.
-   //           do    use the first result back, as google has sorted it by relevance.
-   final gatewayURL = "https://www.googleapis.com/books/v1/volumes?q=isbn:" + isbn;
+   final gatewayURLSingle = "https://www.googleapis.com/books/v1/volumes?q=isbn:" + isbn;
+   final gatewayURLMany   = "https://www.googleapis.com/books/v1/volumes?q=isbn=" + isbn;
+   var response = await http.get( gatewayURLSingle);
    
-   final response =
-      await http.get( gatewayURL);
-   
-   if (response.statusCode == 200) {
-      // print( response.body.toString() );
-      // Possibly, maybe, at some point, offer a variety of results and let user choose.
-      /*
-      Iterable l = (json.decode(response.body))['items'];
-      print( gatewayURL );
-      print( "There are " + l.length.toString() + " that match that ISBN" );
-      List<Book> books = l.map((book)=> Book.bookGoogleFromJson(book, isbn)).toList();
-      */
-      var results = (json.decode(response.body))['items'];
-
-      if( results != null ) {
-         if( results.length > 0 ) {
-            Book book = Book.bookGoogleFromJson(results[0], isbn);
-            return book;
-         }}
-      else {
-         print( "Exact method failed, trying best guess" );
-         final gatewayURL = "https://www.googleapis.com/books/v1/volumes?q=isbn=" + isbn;
-         
-         final response =
-            await http.get( gatewayURL);
-         
-         if (response.statusCode == 200) {
-            var results = (json.decode(response.body))['items'];
-            
-            if( results != null ) {
-               if( results.length > 0 ) {
-                  Book book = Book.bookGoogleFromJson(results[0], isbn);
-                  return book;
-               }}
-         }}
-   } else {
-      print( "RESPONSE: " + response.statusCode.toString() + " " + json.decode(response.body).toString());
+   if (response.statusCode != 200) {
+      print( "RESPONSE Single: " + response.statusCode.toString() + " " + json.decode(response.body).toString());
       throw Exception('Failed to load books');
    }
+
+   Iterable results = (json.decode(response.body))['items'];
+
+   if( results == null ) {
+      print( "Exact method failed, get multiple" );
+      response = await http.get( gatewayURLMany);
+
+      if (response.statusCode != 200) {
+         print( "RESPONSE Many: " + response.statusCode.toString() + " " + json.decode(response.body).toString());
+         throw Exception('Failed to load books');
+      }
+      results = (json.decode(response.body))['items'];
+   }
+
+   if( results == null ) { return null; }
+
+   print( "There are " + results.length.toString() + " that match that ISBN" );
+   List<Book> books = results.map((book)=> Book.bookGoogleFromJson(book, isbn)).toList();
+   return books;
 }
 
 
