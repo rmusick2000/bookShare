@@ -37,7 +37,8 @@ class Book {
       // Can't do this, chances are this is not a primary isbn.
       // if( isbn != requestedISBN ) { print( isbn + " doesn't match requested " + requestedISBN + " .. skipping."); return null; }
 
-      print( json['title'] );
+      print( "FOUND " + json['title'] );
+      /*
       print( json['authors'] );
       print( (new List<String>.from(dynamicAuth))[0] );
       print( isbn );
@@ -46,7 +47,7 @@ class Book {
       print( json['publisher'] );
       print( json['pageCount'] );
       print( json['imageLinks'] );
-
+      */
 
       return Book(
          id:     -1,

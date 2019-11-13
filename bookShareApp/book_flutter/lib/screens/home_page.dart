@@ -91,32 +91,6 @@ class _BookShareHomeState extends State<BookShareHomePage> {
    }
 
 
-   /*   
-   GestureDetector makeBookChunk( context, title, author, isbn ) {
-      return GestureDetector(
-         onTap: () { print( "Giggle!" ); },
-         child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-               Container(
-                  color: Colors.lightGreen[100],
-                  constraints: BoxConstraints(
-                     maxHeight: appState.screenHeight * .169,
-                     minWidth:  appState.screenWidth
-                     ),
-                  child: Column(
-                     crossAxisAlignment: CrossAxisAlignment.start,
-                     mainAxisAlignment: MainAxisAlignment.center,
-                     children: <Widget>[
-                        Text(title, style: TextStyle(fontSize: 12)),
-                        Text("By: " + author, style: TextStyle(fontSize: 12)),
-                        Text("ISBN: " + isbn, style: TextStyle(fontSize: 12)),
-                        ])),
-               Container( color: Colors.lightBlue, height: appState.screenHeight*.0338 ),
-               ]));
-   }
-   */
    
    Widget _makeSelectedLib( libId ) {
       // Selected Lib can be uninitialized briefly

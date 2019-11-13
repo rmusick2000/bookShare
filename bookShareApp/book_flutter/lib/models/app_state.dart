@@ -9,10 +9,13 @@ import 'package:bookShare/models/books.dart';
 class AppState {
    bool isLoading;
 
-   var returnValue;
-   UserState userState;
+   // Credentials
    String accessToken;
    String idToken;
+   String refreshToken;
+
+   var returnValue;
+   UserState userState;
    double progress;
    String apiBasePath;
    TextEditingController usernameController;
@@ -51,6 +54,7 @@ class AppState {
       UserState userState = UserState.UNKNOWN;
       accessToken = "";
       idToken = "";
+      refreshToken = "";
       double progress = -1;
       apiBasePath = "";
       usernameController = TextEditingController();
