@@ -112,7 +112,7 @@ initSelectedLibrary( appState ) async {
 
 initLibBooks( appState, selectedLibrary ) async {
    print( "InitLIBBOOKS" );
-   appState.booksInLib["lib"+selectedLibrary.toString()] = await fetchBooks( appState, '{ "Endpoint": "GetBooks", "SelectedLib": $selectedLibrary }' );  
+   appState.booksInLib[selectedLibrary] = await fetchBooks( appState, '{ "Endpoint": "GetBooks", "SelectedLib": "$selectedLibrary" }' );  
 }
      
 

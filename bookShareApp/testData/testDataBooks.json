@@ -3,65 +3,65 @@
         {
             "PutRequest": {
                 "Item": {
-		    "BookId": {"N": "112233"},
+		    "BookId": {"S": "bs112233"},
 		    "Author": {"S": "Bill Blinky"},
 		    "Title": {"S": "The Last Ship"},
 		    "ISBN": {"S": "99098980"},
-		    "Image": {"B": "bla"}
+		    "Image": {"S": "bla"}
 		}}},
         {
             "PutRequest": {
                 "Item": {
-		    "BookId": {"N": "112244"},
+		    "BookId": {"S": "bs112244"},
 		    "Author": {"S": "Dan Brown"},
 		    "Title": {"S": "Digital Fortress"},
 		    "ISBN": {"S": "9734587658"},
-		    "Image": {"B": "bla"}
+		    "Image": {"S": "bla"}
 		}}},
         {
             "PutRequest": {
                 "Item": {
-		    "BookId": {"N": "112255"},
+		    "BookId": {"S": "bs112255"},
 		    "Author": {"S": "Douglas R. Mason"},
 		    "Title": {"S": "Dilation Effect"},
 		    "ISBN": {"S": "98734987656"},
-		    "Image": {"B": "bla"}
+		    "Image": {"S": "bla"}
 		}}},
         {
             "PutRequest": {
                 "Item": {
-		    "BookId": {"N": "112266"},
+		    "BookId": {"S": "bs112266"},
 		    "Author": {"S": "Annie Proulx"},
 		    "Title": {"S": "The Shipping News"},
 		    "ISBN": {"S": "934987656"},
-		    "Image": {"B": "bla"}
+		    "Image": {"S": "bla"}
 		}}},
         {
             "PutRequest": {
                 "Item": {
-		    "BookId": {"N": "112277"},
+		    "BookId": {"S": "bs112277"},
 		    "Author": {"S": "Katherine Neville"},
 		    "Title": {"S": "The Eight"},
 		    "ISBN": {"S": "9873498765"},
-		    "Image": {"B": "bla"}
+		    "Image": {"S": "bla"}
 		}}},
         {
             "PutRequest": {
                 "Item": {
-		    "BookId": {"N": "112299"},
+		    "BookId": {"S": "bs112299"},
 		    "Author": {"S": "James Clavell"},
 		    "Title": {"S": "Shogun"},
 		    "ISBN": {"S": "9873422365"},
-		    "Image": {"B": "bla"}
+		    "Image": {"S": "bla"}
 		}}},
         {
             "PutRequest": {
                 "Item": {
-		    "BookId": {"N": "112288"},
+		    "BookId": {"S": "bs112288"},
 		    "Author": {"S": "Kalid Hosseini"},
 		    "Title": {"S": "Kite Runner"},
 		    "ISBN": {"S": "98738765"},
-		    "Image": {"B": "bla"}
+		    "Image": {"S": "bla"}
 		}}}
     ]
 }

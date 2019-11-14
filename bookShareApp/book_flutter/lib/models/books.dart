@@ -1,18 +1,18 @@
 import 'dart:convert';  
+import 'package:random_string/random_string.dart';
 
 class Book {
-   final int     id;
+   final String  id;
    final String  title;
    final String  author;
    final String  ISBN;
    final String  imageSmall;
    final String  image;
 
-   //Book({this.id, this.title, this.author, this.ISBN});
    Book({this.id, this.title, this.author, this.ISBN, this.image, this.imageSmall});
    
    factory Book.fromJson(Map<String, dynamic> json) {
-      // print( "FROMJSON: " + json.toString() );
+
       return Book(
          id:     json['BookId'],
          title:  json['Title'],
@@ -57,9 +57,10 @@ class Book {
          image      = json['imageLinks']['thumbnail'];
          imageSmall = json['imageLinks']['smallThumbnail'];
       }
-      
+
+      // XXX
       return Book(
-         id:         -1,
+         id:         randomAlpha(10),
          title:      json['title'],
          author:     (new List<String>.from(dynamicAuth))[0],
          ISBN:       isbn,
@@ -67,5 +68,15 @@ class Book {
          imageSmall: imageSmall 
          );
    }
+
+   String toString() {
+      String res = "\nBook : " + title;
+      res += "\n   author: " + author;
+      res += "\n   ISBN: " + ISBN;
+      res += "\n   id: " + id;
+      return res;
+   }
+
+
 }
 
