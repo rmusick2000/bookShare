@@ -31,6 +31,7 @@ exports.handler = (event, context, callback) => {
     if(      endPoint == "FindBook" ) { resultPromise = findBook( requestBody.Title, username ); }
     else if( endPoint == "GetLibs")   { resultPromise = getLibs( username ); }
     else if( endPoint == "GetBooks")  { resultPromise = getBooks( requestBody.SelectedLib, username ); }
+    else if( endPoint == "PutBook")   { resultPromise = putBook( requestBody.SelectedLib, requestBody.NewBook, username ); }
     else {
 	callback( null, errorResponse( "500", "EndPoint request not understood", context.awsRequestId));
 	return;
@@ -45,6 +46,51 @@ exports.handler = (event, context, callback) => {
     });
 
 };
+
+
+// Updates tables: Books, LibraryShares, Ownerships
+function putBook( selectedLib, newBook, username ) {
+    console.log('Put Books!', username, selectedLib, newBook.title );
+
+    // Put book 
+    const paramsPB = {
+        TableName: 'Books',
+	Item: {
+	    "BookId":      newBook.id,
+	    "Author":      newBook.author,
+	    "Title":       newBook.title,
+	    "ISBN":        newBook.ISBN,
+	    "ImageSmall":  newBook.imageSmall,
+	    "Image":       newBook.image
+	}
+    };
+
+    let bookPromise = bsdb.put(paramsPB ).promise();
+    return bookPromise.then(() => {
+	console.log("Success!");
+	return {
+	    statusCode: 201,
+	    body: JSON.stringify( true ),
+	    headers: { 'Access-Control-Allow-Origin': '*' }
+	};
+    });
+
+
+    /*
+    bsdb.put(paramsPB, function(err, data) {
+	if (err) {
+	    console.log("Error", err);
+	} else {
+	    console.log("Success", data);
+	    return {
+		statusCode: 201,
+		body: JSON.stringify( books.Items ),
+		headers: { 'Access-Control-Allow-Origin': '*' }
+	    };
+	}
+    });
+*/
+}
 
 
 // XXX Beware 100 item limit in scan

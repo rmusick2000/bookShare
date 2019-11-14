@@ -94,6 +94,30 @@ Future<List<Book>> fetchISBN( isbn ) async {
    return books;
 }
 
+// AWS has username via cognito signin
+// Update tables: Books, LibraryShares, Ownerships
+Future<bool> putBook( appState, postData ) async {
+   print( "putBook " + postData );
+   final gatewayURL = appState.apiBasePath + "/find"; 
+   
+   final response =
+      await http.post(
+         gatewayURL,
+         headers: {HttpHeaders.authorizationHeader: appState.idToken},
+         body: postData
+         );
+   
+   if (response.statusCode == 201) {
+      print( response.body.toString() );         
+      return true;
+   } else {
+      print( "RESPONSE: " + response.statusCode.toString() + " " + json.decode(response.body).toString());
+      throw Exception('Failed to add book');
+   }
+}
+
+
+
 
 
 // Called on signin

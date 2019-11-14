@@ -10,6 +10,8 @@ class Book {
    final String  image;
 
    Book({this.id, this.title, this.author, this.ISBN, this.image, this.imageSmall});
+
+   dynamic toJson() => {'id': id, 'title': title, 'author': author, 'ISBN': ISBN, 'imageSmall': imageSmall, 'image': image};
    
    factory Book.fromJson(Map<String, dynamic> json) {
 
