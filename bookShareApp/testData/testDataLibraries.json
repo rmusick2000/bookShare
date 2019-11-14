@@ -3,41 +3,41 @@
         {
             "PutRequest": {
                 "Item": {
-		    "LibraryId": {"N": "12"},
+		    "LibraryId": {"S": "bs12"},
 		    "LibraryName": {"S": "vsamPrivate"},
 		    "Private": {"BOOL": true},
 		    "Members": {"L": [
-			{ "N": "38785"}
+			{ "S": "bs38785"}
 		    ]}
 		}}},
         {
             "PutRequest": {
                 "Item": {
-		    "LibraryId": {"N": "13"},
+		    "LibraryId": {"S": "bs13"},
 		    "LibraryName": {"S": "aspellPrivate"},
 		    "Private": {"BOOL": true},
 		    "Members": {"L": [
-			{ "N": "38786"}
+			{ "S": "bs38786"}
 		    ]}
 		}}},
         {
             "PutRequest": {
                 "Item": {
-		    "LibraryId": {"N": "14"},
+		    "LibraryId": {"S": "bs14"},
 		    "LibraryName": {"S": "dbasePrivate"},
 		    "Private": {"BOOL": true},
 		    "Members": {"L": [
-			{ "N": "38796"}
+			{ "S": "bs38796"}
 		    ]}
 		}}},
         {
             "PutRequest": {
                 "Item": {
-		    "LibraryId": {"N": "15"},
+		    "LibraryId": {"S": "bs15"},
 		    "LibraryName": {"S": "codeTalkers"},
 		    "Private": {"BOOL": false},
 		    "Members": {"L": [
-			{ "N": "38785"}, { "N": "38786"}
+			{ "S": "bs38785"}, { "S": "bs38786"}
 		    ]}
 		}}}
     ]}

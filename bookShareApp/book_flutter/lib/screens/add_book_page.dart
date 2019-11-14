@@ -13,6 +13,7 @@ import 'package:bookShare/app_state_container.dart';
 
 import 'package:bookShare/models/app_state.dart';
 import 'package:bookShare/models/books.dart';
+import 'package:bookShare/models/libraries.dart';
 
 
 class BookShareAddBookPage extends StatefulWidget {
@@ -62,6 +63,19 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
     super.dispose();
   }
 
+  void addToLibrary() {
+     print( "Adding " + newBook.toString() + " to private lib" );
+
+     // appState books
+     // myLibraries, bookInLib
+     Library privateLib = getPrivateLib( appState );
+     print( "My private library: " + privateLib.toString() );
+     
+     // aws book, sharing, ownership, random id (earlier)
+     
+  }
+     
+  
   // XXX Moved out of utils to allow proper context for itemNo.  If move to colView, will need to sort this out.
   // Title will wrap if need be, growing row height as needed
   GestureDetector makeBookChunkCol( appState, book, selectedItem, itemNo ) {
@@ -81,7 +95,7 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
      
      // https://medium.com/jlouage/flutter-boxdecoration-cheat-sheet-72cedaa1ba20
      return GestureDetector(
-        onTap:  () => setState(() {print( "chunkfunc " + itemNo.toString() ); selectedNewBook = itemNo;}),
+        onTap:  () => setState(() {selectedNewBook = itemNo;}),
         child: Column(
            crossAxisAlignment: CrossAxisAlignment.start,
            mainAxisAlignment: MainAxisAlignment.center,
@@ -117,7 +131,6 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
   // XXX tell user primary vs secondary isbn
   // XXX allow selection + crop of cover art?
   Widget _makeBooks( ) {
-     print( "MAKE BOOK START" );
      
      var bil = foundBooks;
      List<Widget> bookChunks = [];
@@ -141,9 +154,7 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
   }
 
   void _updateFoundBooks( barcode ) async {
-     print( "UPDATE FOUND BOOKs START" );
      if( barcode != "" ) { foundBooks = await fetchISBN( barcode );  }
-     print( "UPDATE Found BOOKs END" );
   }
   
   Widget _targetField() {
@@ -175,8 +186,13 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
         "Add this,\n scan more", 
         () async
         {
-           print( "Scan" );
-           foundBooks.clear();
+           newBook = foundBooks[selectedNewBook];
+           addToLibrary();
+           
+           setState(() { 
+                 selectedNewBook = 0;
+                 foundBooks.clear();
+              });
         });
   }
 
@@ -194,8 +210,7 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
      return RaisedButton(
         onPressed: () async
         {
-           print( "SCAN BUTTON PRESS" );
-           final EMULATOR = true;
+           final EMULATOR = true;   // XXX 
            String bc = "";
            int newTarget = -1;
            
@@ -257,9 +272,9 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
                Padding(
                   padding: const EdgeInsets.fromLTRB(12, 0, 0, 0),
                   child: Text("Select your book below..", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16))),
-               SizedBox(height: botGap * .75),
+               //SizedBox(height: botGap * .5),
                _makeBooks( ),
-               SizedBox(height: botGap),
+               //SizedBox(height: botGap),
                Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly, 
@@ -268,7 +283,7 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
                      _acceptStayButton(),
                      _refineButton()
                      ]),
-               SizedBox(height: botGap),
+               SizedBox(height: botGap*.3),
                ]);
      }
   }

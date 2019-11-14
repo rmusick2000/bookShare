@@ -31,7 +31,7 @@ class BookShareHomePage extends StatefulWidget {
 class _BookShareHomeState extends State<BookShareHomePage> {
 
    TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
-   int selectedLibrary = -1;
+   String selectedLibrary = "";
    bool booksLoaded = true;
    int myRouteNum;
 
@@ -50,8 +50,8 @@ class _BookShareHomeState extends State<BookShareHomePage> {
    }
    
    _updateSelectedLibrary( selectedLib ) async {
-      print( "UpdateSelectedLib " + selectedLib.toString() );
-      if( !appState.booksInLib.containsKey( "lib"+selectedLib.toString() )) {
+      print( "UpdateSelectedLib " + selectedLib );
+      if( !appState.booksInLib.containsKey( selectedLib )) {
          setState(() {
                selectedLibrary = selectedLib;
                booksLoaded = false;
@@ -63,7 +63,7 @@ class _BookShareHomeState extends State<BookShareHomePage> {
       }
 
       if( !booksLoaded ) {
-         print( "Re-init libBooks for selected: " + selectedLib.toString() );
+         print( "Re-init libBooks for selected: " + selectedLib );
          await initLibBooks( appState, selectedLib );
          setState(() {
                booksLoaded = true;
@@ -160,7 +160,7 @@ class _BookShareHomeState extends State<BookShareHomePage> {
 
       Widget makeBooks( ) {
          List<Widget> bookChunks = [];
-         String libName = "lib" + selectedLibrary.toString();
+         String libName = selectedLibrary;
          print( "makeBooks" );
 
          var bil = appState.booksInLib[libName];
@@ -188,9 +188,9 @@ class _BookShareHomeState extends State<BookShareHomePage> {
 
       Widget makeBody() {
          if( appState.loaded ) {
-
+            print( "AppState Loaded" );
             assert( appState.myLibraries != null );
-            if( selectedLibrary == -1 ) {
+            if( selectedLibrary == "") {
                _updateSelectedLibrary( appState.myLibraries[0].id );  // XXX
             }
             
@@ -207,6 +207,7 @@ class _BookShareHomeState extends State<BookShareHomePage> {
                      makeBooks( )
                      ]));
          } else {
+            print( "AppState not ? Loaded" );
             return CircularProgressIndicator();
          }
       }

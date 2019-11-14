@@ -11,6 +11,7 @@ import 'package:bookShare/screens/add_book_page.dart';
 import 'package:bookShare/screens/profile_page.dart';
 
 import 'package:bookShare/models/app_state.dart';
+import 'package:bookShare/models/libraries.dart';
 import 'package:bookShare/models/books.dart';
 
 
@@ -187,6 +188,17 @@ makeBotAppBar( BuildContext context, currentPage ) {
                      ])
                ])));
 }
+
+// XXX IDs will all have bs in front
+Library getPrivateLib( appState ) {
+   Library result = null;
+   if( appState.myLibraries == null || appState.myLibraries.length < 1 ) { return result; }
+   for( final lib in appState.myLibraries ) {
+      if( lib.private ) { result = lib; break; }
+   }
+   return result;
+}
+
 
 
 // Title will wrap if need be, growing row height as needed
