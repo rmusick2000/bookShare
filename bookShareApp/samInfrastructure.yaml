@@ -79,12 +79,20 @@ Resources:
         Type: String
 
   LibraryShareTable:
-    Type: 'AWS::Serverless::SimpleTable'
+    Type: 'AWS::DynamoDB::Table'
     Properties:
       TableName: LibraryShares
-      PrimaryKey:
-        Name: LibraryShareId
-        Type: String
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions: 
+        - AttributeName: BookId
+          AttributeType: S
+        - AttributeName: PersonId
+          AttributeType: S
+      KeySchema: 
+        - AttributeName: BookId
+          KeyType: HASH
+        - AttributeName: PersonId
+          KeyType: RANGE
 
   LoansTable:
     Type: 'AWS::Serverless::SimpleTable'
@@ -153,7 +161,7 @@ Resources:
     Properties:
       CodeUri: ./lambdaHandlers/
       Handler: bookShare.handler
-      Runtime: nodejs8.10
+      Runtime: nodejs10.x
       Description: Git der
       Events:
         FindAPI:

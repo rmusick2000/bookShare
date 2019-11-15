@@ -3,9 +3,8 @@
         {
             "PutRequest": {
                 "Item": {
-		    "LibraryShareId": {"S": "bs998"},
-		    "PersonId": {"S": "bs38785"},
 		    "BookId": {"S": "bs112255"},
+		    "PersonId": {"S": "bs38785"},
 		    "Libraries": {"L": [
 			{ "S": "bs12"},
 			{ "S": "bs15"}
@@ -14,9 +13,8 @@
 	{
             "PutRequest": {
                 "Item": {
-		    "LibraryShareId": {"S": "bs999"},
-		    "PersonId": {"S": "bs38785"},
 		    "BookId": {"S": "bs112266"},
+		    "PersonId": {"S": "bs38785"},
 		    "Libraries": {"L": [
 			{ "S": "bs12"}
 		    ]}
@@ -24,9 +22,8 @@
 	{
             "PutRequest": {
                 "Item": {
-		    "LibraryShareId": {"S": "bs1000"},
-		    "PersonId": {"S": "bs38785"},
 		    "BookId": {"S": "bs112277"},
+		    "PersonId": {"S": "bs38785"},
 		    "Libraries": {"L": [
 			{ "S": "bs12"},
 			{ "S": "bs15"}
@@ -35,9 +32,8 @@
 	{
             "PutRequest": {
                 "Item": {
-		    "LibraryShareId": {"S": "bs1001"},
-		    "PersonId": {"S": "bs38786"},
 		    "BookId": {"S": "bs112233"},
+		    "PersonId": {"S": "bs38786"},
 		    "Libraries": {"L": [
 			{ "S": "bs13"},
 			{ "S": "bs15"}
@@ -46,9 +42,8 @@
 	{
             "PutRequest": {
                 "Item": {
-		    "LibraryShareId": {"S": "bs1005"},
-		    "PersonId": {"S": "bs38786"},
 		    "BookId": {"S": "bs112299"},
+		    "PersonId": {"S": "bs38786"},
 		    "Libraries": {"L": [
 			{ "S": "bs13"}
 		    ]}
@@ -56,20 +51,8 @@
 	{
             "PutRequest": {
                 "Item": {
-		    "LibraryShareId": {"S": "bs1002"},
-		    "PersonId": {"S": "bs38786"},
 		    "BookId": {"S": "bs112244"},
-		    "Libraries": {"L": [
-			{ "S": "bs13"},
-			{ "S": "bs15"}
-		    ]}
-		}}},
-	{
-            "PutRequest": {
-                "Item": {
-		    "LibraryShareId": {"S": "bs1003"},
 		    "PersonId": {"S": "bs38786"},
-		    "BookId": {"S": "bs112255"},
 		    "Libraries": {"L": [
 			{ "S": "bs13"},
 			{ "S": "bs15"}
@@ -78,9 +61,18 @@
 	{
             "PutRequest": {
                 "Item": {
-		    "LibraryShareId": {"S": "bs1004"},
-		    "PersonId": {"S": "bs38796"},
+		    "BookId": {"S": "bs112255"},
+		    "PersonId": {"S": "bs38786"},
+		    "Libraries": {"L": [
+			{ "S": "bs13"},
+			{ "S": "bs15"}
+		    ]}
+		}}},
+	{
+            "PutRequest": {
+                "Item": {
 		    "BookId": {"S": "bs112288"},
+		    "PersonId": {"S": "bs38796"},
 		    "Libraries": {"L": [
 			{ "S": "bs14"}
 		    ]}

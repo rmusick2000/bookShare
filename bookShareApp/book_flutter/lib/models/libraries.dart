@@ -17,7 +17,7 @@ class Library {
       return Library(
          id:      json['LibraryId'],
          name:    json['LibraryName'],
-         private: json['Private' ],
+         private: json['JustMe' ],
          members: new List<String>.from(dynamicMem)
          );
    }

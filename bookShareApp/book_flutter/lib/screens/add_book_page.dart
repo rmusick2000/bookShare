@@ -63,16 +63,21 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
     super.dispose();
   }
 
-  void addToLibrary() {
+  void addToLibrary() async {
      print( "Adding " + newBook.toString() + " to private lib" );
 
      // appState books
      // myLibraries, bookInLib
      Library privateLib = getPrivateLib( appState );
      print( "My private library: " + privateLib.toString() );
+     showToast( context, "Adding..." );
      
-     // aws book, sharing, ownership, random id (earlier)
-     
+     // AWS has username via cognito signin
+     String libID = privateLib.id;
+     String book = json.encode( newBook ); 
+     String postData = '{ "Endpoint": "PutBook", "SelectedLib": "$libID", "NewBook": $book }';
+     print( postData );
+     await putBook( appState, postData );
   }
      
   
@@ -187,7 +192,7 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
         () async
         {
            newBook = foundBooks[selectedNewBook];
-           addToLibrary();
+           await addToLibrary();
            
            setState(() { 
                  selectedNewBook = 0;

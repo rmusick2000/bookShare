@@ -3,6 +3,7 @@
 const AWS = require('aws-sdk');
 const bsdb = new AWS.DynamoDB.DocumentClient();
 const randomBytes = require('crypto').randomBytes;
+var assert = require('assert');
 
 // Because we're using a Cognito User Pools authorizer, all of the claims
 // included in the authentication token are provided in the request context.
@@ -31,6 +32,7 @@ exports.handler = (event, context, callback) => {
     if(      endPoint == "FindBook" ) { resultPromise = findBook( requestBody.Title, username ); }
     else if( endPoint == "GetLibs")   { resultPromise = getLibs( username ); }
     else if( endPoint == "GetBooks")  { resultPromise = getBooks( requestBody.SelectedLib, username ); }
+    else if( endPoint == "PutBook")   { resultPromise = putBook( requestBody.SelectedLib, requestBody.NewBook, username ); }
     else {
 	callback( null, errorResponse( "500", "EndPoint request not understood", context.awsRequestId));
 	return;
@@ -45,6 +47,101 @@ exports.handler = (event, context, callback) => {
     });
 
 };
+
+// Want some error msgs? https://github.com/aws/aws-sdk-js/issues/2464
+// Updates tables: Books, LibraryShares, Ownerships
+function putBook( selectedLib, newBook, username ) {
+    console.log('Put Books!', username, selectedLib, newBook.title );
+
+    // XXX funcify personID, privLib.. consider adding plib to person
+    // Params to get PersonID from UserName
+    const paramsP = {
+        TableName: 'People',
+        FilterExpression: 'UserName = :uname',
+        ExpressionAttributeValues: { ":uname": username }
+    };
+
+    // Get PersonId
+
+    let personPromise = bsdb.scan( paramsP ).promise();
+    return personPromise.then((persons) => {
+	console.log( "Persons: ", persons );
+	assert(persons.Count == 1 );
+	console.log( "Found person ", persons.Items[0] );
+	return persons.Items[0].PersonId;
+    }).then((personId) => {
+
+	// Params to get Private LibraryId from personId
+	const paramsPL = {
+            TableName: 'Libraries',
+            FilterExpression: 'contains( Members, :pid ) AND JustMe = :true',
+            ExpressionAttributeValues: { ":pid": personId, ":true": true }
+	};
+	
+	// Get Private LibraryId
+	
+	let libraryPromise = bsdb.scan( paramsPL ).promise();
+	return libraryPromise.then((libraries) => {
+	    console.log( "Libraries: ", libraries );
+	    assert(libraries.Count == 1 );
+	    console.log( "Found Private Library ", libraries.Items[0] );
+	    return libraries.Items[0].LibraryId;
+	}).then((libraryId) => {
+	    
+	    // Update ownership.. pkey is same as PersonId
+	    const oEntry = [{ "BookId" : newBook.id, "ShareCount" : 0 }];
+	    const paramsO = {
+		TableName: 'Ownerships',
+		Key: { "OwnershipId": personId },
+		UpdateExpression: 'set Books = list_append(Books, :nb)',
+                ExpressionAttributeValues: {
+                    ':nb':  oEntry
+                }
+	    };
+	    
+	    // Put book 
+	    const paramsPB = {
+		TableName: 'Books',
+		Item: {
+		    "BookId":      newBook.id,
+		    "Author":      newBook.author,
+		    "Title":       newBook.title,
+		    "ISBN":        newBook.ISBN,
+		    "ImageSmall":  newBook.imageSmall,
+		    "Image":       newBook.image
+		}
+	    };
+	    
+	    // Put libshares
+	    const lsEntry = [ libraryId ];
+	    console.log( "libshare entry", lsEntry );
+	    const paramsLS = {
+		TableName: 'LibraryShares',
+		Item: {
+		    "BookId":      newBook.id,
+		    "PersonId":    personId,
+		    "Libraries":   lsEntry,
+		}
+	    };
+	    
+	    let bookPromise = bsdb.transactWrite({
+		TransactItems: [
+		    { Put: paramsPB }, 
+		    { Update: paramsO },
+		    { Put: paramsLS }
+		]}).promise();
+	    
+	    return bookPromise.then(() => {
+		console.log("Success!");
+		return {
+		    statusCode: 201,
+		    body: JSON.stringify( true ),
+		    headers: { 'Access-Control-Allow-Origin': '*' }
+		};
+	    });
+	});
+    });
+}
 
 
 // XXX Beware 100 item limit in scan
@@ -94,7 +191,6 @@ function getBooks( selectedLib, username ) {
 }
 
 function getLibs( username ) {
-    var assert = require('assert');
     console.log('Get Libs! ' + username );
 
     // Params to get PersonID from UserName
@@ -201,19 +297,6 @@ function findBook(bookTitle, username) {
 	};
 	
     });
-}
-
-
-function recordBook(bookId, username, book) {
-    return bsdb.put({
-        TableName: 'Books',
-        Item: {
-            BookId: bookId,
-            User: username,
-            Title: book.title,
-            RequestTime: new Date().toISOString()
-        },
-    }).promise();
 }
 
 function toUrlString(buffer) {
