@@ -3,8 +3,7 @@
         {
             "PutRequest": {
                 "Item": {
-		    "OwnershipId": {"S": "bs12233"},
-		    "PersonId": {"S": "bs38786"},
+		    "OwnershipId": {"S": "bs38786"},
 		    "Books": {"L": [
 			{ "M":{ "BookId": {"S": "bs112233"}, "ShareCount": {"N": "0"}}},
 			{ "M":{ "BookId": {"S": "bs112244"}, "ShareCount": {"N": "0"}}},
@@ -15,8 +14,7 @@
         {
             "PutRequest": {
                 "Item": {
-		    "OwnershipId": {"S": "bs12234"},
-		    "PersonId": {"S": "bs38785"},
+		    "OwnershipId": {"S": "bs38785"},
 		    "Books": {"L": [
 			{ "M":{ "BookId": {"S": "bs112255"}, "ShareCount": {"N": "0"}}},
 			{ "M":{ "BookId": {"S": "bs112266"}, "ShareCount": {"N": "0"}}},
@@ -26,8 +24,7 @@
         {
             "PutRequest": {
                 "Item": {
-		    "OwnershipId": {"S": "bs12235"},
-		    "PersonId": {"S": "bs38796"},
+		    "OwnershipId": {"S": "bs38796"},
 		    "Books": {"L": [
 			{ "M":{ "BookId": {"S": "bs112288"}, "ShareCount": {"N": "0"}}}
 		    ]}
