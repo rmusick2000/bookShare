@@ -33,10 +33,14 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
    int myRouteNum;
    List<String> scans;
    TextEditingController target;
-
+   TextEditingController titleKey;
+   TextEditingController authorKey;
+      
    Book  newBook;
    List<Book> foundBooks;
    int selectedNewBook;
+
+   bool refining;
    
    AppState appState;
    
@@ -50,12 +54,16 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
       foundBooks = [];
       selectedNewBook = 0;
 
+      refining  = false;
+      titleKey  = new TextEditingController();
+      authorKey = new TextEditingController();
+      
       target = new TextEditingController();
       target.text = "0";
-      //        kush(x),            daughters,        the eight,       prestige,        neverwhere
-      var s1 = ["9780446610025", "9787219045213", "9780345419088", "9780312858865", "9780060557812"];
-      //        inferno,         kiterunner,      awakening (X)    glorious cause(x)
-      var s2 = ["9780804172264", "9781594631931", "9780312987022", "9780345427571"];
+      //        glorious cause(x) kush(x),            daughters,        the eight,       prestige,        neverwhere
+      var s1 = ["9780345427571", "9780446610025", "9787219045213", "9780345419088", "9780312858865", "9780060557812"];
+      //        inferno,         kiterunner,      awakening (X)    
+      var s2 = ["9780804172264", "9781594631931", "9780312987022"];
       scans = [...s1, ...s2];
    }
 
@@ -91,10 +99,9 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
         decoration = BoxDecoration( image: DecorationImage( image: AssetImage( 'images/check.png') ));
      }
      
-     // XXX Do better here
      var image;
      if( book.image != null && book.image != "" ) { image = Image.network( book.image, height: imageHeight, width: imageWidth, fit: BoxFit.contain ); }
-     else                                         { image = Image.asset( 'images/check.png', height: imageHeight, width: imageWidth, fit: BoxFit.cover); }
+     else                                         { image = Image.asset( 'images/blankBook.jpeg', height: imageHeight, width: imageWidth, fit: BoxFit.cover); }
      
      // https://medium.com/jlouage/flutter-boxdecoration-cheat-sheet-72cedaa1ba20
      return GestureDetector(
@@ -164,7 +171,8 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
   }
 
   void _updateFoundBooks( barcode ) async {
-     if( barcode != "" ) { foundBooks = await fetchISBN( barcode );  }
+     if( barcode == "keywords" ) { foundBooks = await fetchKeyword( titleKey.text, authorKey.text );  }
+     else if( barcode != "" )    { foundBooks = await fetchISBN( barcode );  }
   }
   
   Widget _targetField() {
@@ -216,13 +224,72 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
         });
   }
 
+  // https://www.googleapis.com/books/v1/volumes?q=intitle:glorious+inauthor:shaara
+  Widget _makeRefineGroup() {
+     final textWidth = appState.screenWidth * .6;
+     final textHeight = appState.screenWidth * .08;
+     return Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly, 
+        children: <Widget> [
+           Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                 Container(
+                    width: textWidth,
+                    height: textHeight,
+                    child: TextField(
+                       decoration: InputDecoration(
+                          contentPadding: EdgeInsets.fromLTRB(2.0, 2.0, 2.0, 2.0),
+                          hintText: "Keyword from title",
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0))),
+                       controller: titleKey
+                       )),
+                 SizedBox(height: 5.0),                 
+                 Container(
+                    width: textWidth,
+                    height: textHeight,
+                    child: TextField(
+                       decoration: InputDecoration(
+                          contentPadding: EdgeInsets.fromLTRB(2.0, 2.0, 2.0, 2.0),
+                          hintText: "Author's last name",
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0))),
+                       controller: authorKey
+                       ))
+                 ]),
+           _searchButton()
+           ]);
+  }
+       
   Widget _refineButton() {
      return makeActionButtonSmall(
         appState,
         "Refine search",
         () async
         {
-           print( "Refine" );
+           setState(() { refining = true; });
+        });
+  }
+  
+  Widget _searchButton() {
+     return makeActionButtonSmall(
+        appState,
+        "Search",
+        () async
+        {
+           if( titleKey.text == "" && authorKey.text == "" ) {
+              showToast( context, "Oops, forgot to enter something" );
+           } else {
+              String bc = "keywords";
+              await _updateFoundBooks( bc );
+              titleKey.clear();
+              authorKey.clear();
+              setState(() {
+                    this.barcode = bc;
+                    refining = false;
+                 });
+           }
         });
   }
   
@@ -262,11 +329,26 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
         },
         child: Text( 'Scan'));
   }
+
+  Widget _makeActionButtons() {
+     if( refining ) {
+        return _makeRefineGroup();
+     } else {
+        return Row(
+           crossAxisAlignment: CrossAxisAlignment.center,
+           mainAxisAlignment: MainAxisAlignment.spaceEvenly, 
+           children: <Widget>[
+              _acceptGotoButton(),
+              _acceptStayButton(),
+              _refineButton()
+              ]);
+     }
+  }
   
   Widget _makeBody() {
      final topGap = appState.screenHeight * .06;
      final botGap = appState.screenHeight * .04;
-     if( foundBooks.length == 0 ) {  // scan
+     if( foundBooks == null || foundBooks.length == 0 ) {  // scan
         return Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -283,28 +365,24 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
                      ])
                ]);
      } else {                       // pick
-        return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,    // required for listView child
-            children: <Widget>[
-               SizedBox(height: topGap),
-               Padding(
-                  padding: const EdgeInsets.fromLTRB(12, 0, 0, 0),
-                  child: Text("Select your book below..", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16))),
-               //SizedBox(height: botGap * .5),
-               _makeBooks( ),
-               //SizedBox(height: botGap),
-               Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly, 
-                  children: <Widget>[
-                     _acceptGotoButton(),
-                     _acceptStayButton(),
-                     _refineButton()
-                     ]),
-               SizedBox(height: botGap*.3),
-               ]);
+        return  SingleChildScrollView(
+           child: Container(
+              height: appState.screenHeight * .85,
+              child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,    // required for listView child
+              children: <Widget>[
+                 SizedBox(height: topGap),
+                 Padding(
+                    padding: const EdgeInsets.fromLTRB(12, 0, 0, 0),
+                    child: Text("Select your book below..", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16))),
+                 //SizedBox(height: botGap * .5),
+                 _makeBooks(),
+                 _makeActionButtons(),
+                 SizedBox(height: botGap*.3),
+                 ])
+              ));
      }
   }
       
