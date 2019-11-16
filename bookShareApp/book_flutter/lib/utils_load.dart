@@ -94,6 +94,30 @@ Future<List<Book>> fetchISBN( isbn ) async {
    return books;
 }
 
+Future<List<Book>> fetchKeyword( titleKey, authorKey ) async {
+   print( "fetchKeyword " + titleKey + " " + authorKey );
+   if( titleKey == "" && authorKey == "" ) { return null; }
+
+   String gatewayURL   = "https://www.googleapis.com/books/v1/volumes?q=";
+
+   if( titleKey  != "" ) { gatewayURL += "intitle:" + titleKey + "+"; }
+   if( authorKey != "" ) { gatewayURL += "inauthor:" + authorKey; }
+   var response = await http.get( gatewayURL);
+   
+   if (response.statusCode != 200) {
+      print( "RESPONSE Single: " + response.statusCode.toString() + " " + json.decode(response.body).toString());
+      throw Exception('Failed to load books');
+   }
+
+   Iterable results = (json.decode(response.body))['items'];
+
+   if( results == null ) { return null; }
+
+   print( "There are " + results.length.toString() + " that match that keywords" );
+   List<Book> books = results.map((book)=> Book.bookGoogleFromJson(book, "keywords")).toList();
+   return books;
+}
+
 // AWS has username via cognito signin
 // Update tables: Books, LibraryShares, Ownerships
 Future<bool> putBook( appState, postData ) async {

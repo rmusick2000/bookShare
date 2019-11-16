@@ -62,11 +62,14 @@ class Book {
          imageSmall = json['imageLinks']['smallThumbnail'];
       }
 
-      // XXX
+      // Some books found by google were published a LONG time ago, authors not recorded
+      String author = "";
+      if( dynamicAuth != null ) { author = (new List<String>.from(dynamicAuth))[0]; }
+      
       return Book(
          id:         randomAlpha(10),
          title:      json['title'],
-         author:     (new List<String>.from(dynamicAuth))[0],
+         author:     author,
          ISBN:       isbn,
          image:      image,
          imageSmall: imageSmall 
