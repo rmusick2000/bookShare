@@ -76,7 +76,6 @@ class _BSSplashPageState extends State<BSSplashPage> {
      print( "Weh do i go?" );
      if( appState.userState == UserState.SIGNED_IN ) {
         MaterialPageRoute newPage = MaterialPageRoute(builder: (context) => BookShareHomePage());
-        manageRouteStack( context, newPage, "home" );
         Navigator.pushReplacement(context, newPage );
      } else {
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => BSLaunchPage()));

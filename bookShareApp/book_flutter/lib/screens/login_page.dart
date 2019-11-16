@@ -48,7 +48,6 @@ class _BookShareLoginState extends State<BookShareLoginPage> {
               try{ 
                  await Cognito.signIn( appState.usernameController.text, appState.passwordController.text );
                  MaterialPageRoute newPage = MaterialPageRoute(builder: (context) => BookShareHomePage());
-                 manageRouteStack( context, newPage, "home" );
                  Navigator.push( context, newPage );
               } catch(e) {
                  if( e.toString().contains("User does not exist") ) {

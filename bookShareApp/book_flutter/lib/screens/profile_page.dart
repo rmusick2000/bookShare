@@ -48,13 +48,6 @@ class _BookShareProfileState extends State<BookShareProfilePage> {
       final container = AppStateContainer.of(context);
       final appState = container.state;
 
-      if( !isCurrentRoute( appState, "profile", myRouteNum )) {
-         return Container();
-      }
-      print( "Building Profile " + myRouteNum.toString() );
-      myRouteNum = getRouteNum( appState ); 
-
-
       final logoutButton = makeActionButton( context, 'Logout', container.onPressWrapper((){
                Cognito.signOut();
                Navigator.pushAndRemoveUntil(
@@ -71,9 +64,7 @@ class _BookShareProfileState extends State<BookShareProfilePage> {
                   });
             }));
       
-     return WillPopScope(
-        onWillPop: () => requestPop(context),
-         child: Scaffold(
+     return Scaffold(
         appBar: makeTopAppBar( context, "Profile" ),
         bottomNavigationBar: makeBotAppBar( context, "Profile" ),
         body: Center(
@@ -92,6 +83,6 @@ class _BookShareProfileState extends State<BookShareProfilePage> {
                           Text( appState.userState?.toString() ?? "UserState here", style: TextStyle(fontStyle: FontStyle.italic))
                           ])))
               
-              ))));
+              )));
    }
 }

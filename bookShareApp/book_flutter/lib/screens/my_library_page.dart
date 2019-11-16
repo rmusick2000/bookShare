@@ -45,15 +45,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
       final container = AppStateContainer.of(context);
       final appState = container.state;
 
-      if( !isCurrentRoute( appState, "mylib", myRouteNum )) {
-         return Container();
-      }
-      print( "Building MyLib " + myRouteNum.toString() );
-      myRouteNum = getRouteNum( appState ); 
-
-     return WillPopScope(
-         onWillPop: () => requestPop(context),   // Future<bool> function()
-         child: Scaffold(
+     return Scaffold(
         appBar: makeTopAppBar( context, "MyLibrary" ),
         bottomNavigationBar: makeBotAppBar( context, "MyLibrary" ),
         body: Center(
@@ -72,6 +64,6 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
                           Text( appState.userState?.toString() ?? "UserState here", style: TextStyle(fontStyle: FontStyle.italic))
                           ])))
               
-              ))));
+              )));
    }
 }

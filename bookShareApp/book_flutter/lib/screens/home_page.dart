@@ -31,8 +31,6 @@ class BookShareHomePage extends StatefulWidget {
 class _BookShareHomeState extends State<BookShareHomePage> {
 
    TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
-   String selectedLibrary = "";
-   bool booksLoaded = true;
    int myRouteNum;
 
    AppState appState;
@@ -48,25 +46,25 @@ class _BookShareHomeState extends State<BookShareHomePage> {
    void dispose() {
       super.dispose();
    }
-   
+
    _updateSelectedLibrary( selectedLib ) async {
       print( "UpdateSelectedLib " + selectedLib );
       if( !appState.booksInLib.containsKey( selectedLib )) {
          setState(() {
-               selectedLibrary = selectedLib;
-               booksLoaded = false;
+               appState.selectedLibrary = selectedLib;
+               appState.booksLoaded = false;
             });
       } else {
          setState(() {
-               selectedLibrary = selectedLib;
+               appState.selectedLibrary = selectedLib;
             });
       }
 
-      if( !booksLoaded ) {
+      if( !appState.booksLoaded ) {
          print( "Re-init libBooks for selected: " + selectedLib );
          await initLibBooks( appState, selectedLib );
          setState(() {
-               booksLoaded = true;
+               appState.booksLoaded = true;
             });
       }
    }
@@ -126,6 +124,42 @@ class _BookShareHomeState extends State<BookShareHomePage> {
             ));
    }   
 
+  /// XXX How much overlap with add_book?
+  // Title will wrap if need be, growing row height as needed
+  GestureDetector makeBookChunkCol( appState, book ) {
+     final imageHeight = appState.screenHeight * .46;
+     final imageWidth  = appState.screenWidth * .42;
+     const inset       = 20.0;
+     
+     var image;
+     if( book.image != "" && book.image != "bla" ) { image = Image.network( book.image, height: imageHeight, width: imageWidth, fit: BoxFit.contain ); }
+     else                                          { image = Image.asset( 'images/blankBook.jpeg', height: imageHeight, width: imageWidth, fit: BoxFit.contain); }
+     
+     return GestureDetector(
+        onTap:  () { print( "I LOVE " + book.title + " .. *giggle*" ); },
+        child: Column(
+           crossAxisAlignment: CrossAxisAlignment.start,
+           mainAxisAlignment: MainAxisAlignment.center,
+           mainAxisSize: MainAxisSize.min,
+           children: <Widget>[
+              Padding(
+                 padding: const EdgeInsets.fromLTRB(6.0, 0, 6.0, 0),
+                 child: ClipRRect(
+                    borderRadius: new BorderRadius.circular(12.0),
+                    child: image )),
+              Padding(
+                 padding: const EdgeInsets.fromLTRB(inset, 6, 6, 0),
+                 child: Container( width: imageWidth-inset-6,
+                                   child: Text(book.title, softWrap: true, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)))),
+              Padding(
+                 padding: const EdgeInsets.fromLTRB(inset, 0, 6, 0),
+                 child: Text("By: " + book.author, style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic))),
+              Padding(
+                 padding: const EdgeInsets.fromLTRB(inset, 0, 6, 0),
+                 child: Text("ISBN: " + book.ISBN, style: TextStyle(fontSize: 12))),
+              Container( color: Colors.lightBlue, height: appState.screenHeight*.0338, width: imageWidth )
+              ]));
+  }
 
    @override
    Widget build(BuildContext context) {
@@ -133,13 +167,6 @@ class _BookShareHomeState extends State<BookShareHomePage> {
       final container   = AppStateContainer.of(context);
       appState          = container.state;
 
-      // This page may be on routeStack, keep it from being rebuilt while not on top
-      if( !isCurrentRoute( appState, "home", myRouteNum )) {
-         return Container();
-      }
-      print( "Building Home " + myRouteNum.toString() );
-      myRouteNum = getRouteNum( appState ); 
-      
       Widget makeLibraryRow() {
          List<Widget> libChunks = [];
          // NOTE this will be null for a brief flash of time at init
@@ -160,13 +187,13 @@ class _BookShareHomeState extends State<BookShareHomePage> {
 
       Widget makeBooks( ) {
          List<Widget> bookChunks = [];
-         String libName = selectedLibrary;
+         String libName = appState.selectedLibrary;
          print( "makeBooks" );
 
          var bil = appState.booksInLib[libName];
 
          // first time through, books have not yet been fetched
-         if( appState.booksInLib == null || bil == null || bil.length == 0 || !booksLoaded ) {
+         if( appState.booksInLib == null || bil == null || bil.length == 0 || !appState.booksLoaded ) {
             return Container(
                height: appState.screenHeight * .618,
                child:  Center(
@@ -176,12 +203,12 @@ class _BookShareHomeState extends State<BookShareHomePage> {
                );
          }
          print( "  mb: going to bil" );
-         bil.forEach((book) => bookChunks.add( makeBookChunk( appState, book )));
+         bil.forEach((book) => bookChunks.add( makeBookChunkCol( appState, book )));
          
          return Expanded(
             child: SizedBox(
                child: ListView(
-                  scrollDirection: Axis.vertical,
+                  scrollDirection: Axis.horizontal,
                   children: bookChunks
                   )));
       }   
@@ -190,8 +217,8 @@ class _BookShareHomeState extends State<BookShareHomePage> {
          if( appState.loaded ) {
             print( "AppState Loaded" );
             assert( appState.myLibraries != null );
-            if( selectedLibrary == "") {
-               _updateSelectedLibrary( appState.myLibraries[0].id );  // XXX
+            if( appState.selectedLibrary == "") {
+               _updateSelectedLibrary( appState.privateLibId ); 
             }
             
             return Center(
@@ -202,7 +229,7 @@ class _BookShareHomeState extends State<BookShareHomePage> {
                   children: <Widget>[
                      makeLibraryRow(),
                      Divider( color: Colors.grey[200], thickness: 3.0 ),
-                     _makeSelectedLib( selectedLibrary ),
+                     _makeSelectedLib( appState.selectedLibrary ),
                      Divider( color: Colors.grey[200], thickness: 3.0 ),
                      makeBooks( )
                      ]));
@@ -214,13 +241,10 @@ class _BookShareHomeState extends State<BookShareHomePage> {
 
       print( "Build Homepage, scaffold x,y: " + appState.screenWidth.toString() + " " + appState.screenHeight.toString() );
       
-      return WillPopScope(
-         onWillPop: () => requestPop(context),   // Future<bool> function()
-         child: Scaffold(
-            appBar: makeTopAppBar( context, "Home" ),
-            bottomNavigationBar: makeBotAppBar( context, "Home" ),
-            body: makeBody()
-            ));
-      
+      return Scaffold(
+         appBar: makeTopAppBar( context, "Home" ),
+         bottomNavigationBar: makeBotAppBar( context, "Home" ),
+         body: makeBody()
+         );
    }
 }

@@ -67,7 +67,6 @@ class _BookShareSignupState extends State<BookShareSignupPage> {
                await Cognito.confirmSignUp( appState.usernameController.text, appState.confirmationCodeController.text );
                await Cognito.signIn( appState.usernameController.text, appState.passwordController.text );
                MaterialPageRoute newPage = MaterialPageRoute(builder: (context) => BookShareHomePage());
-               manageRouteStack( context, newPage, "home" );
                Navigator.push( context, newPage );
             }));      
 

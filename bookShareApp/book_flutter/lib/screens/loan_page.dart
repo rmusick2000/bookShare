@@ -45,15 +45,7 @@ class _BookShareLoanState extends State<BookShareLoanPage> {
       final container = AppStateContainer.of(context);
       final appState = container.state;
 
-      if( !isCurrentRoute( appState, "loan", myRouteNum )) {
-         return Container();
-      }
-      print( "Building Loan " + myRouteNum.toString() );
-      myRouteNum = getRouteNum( appState ); 
-
-     return WillPopScope(
-         onWillPop: () => requestPop(context),   // Future<bool> function()
-         child: Scaffold(
+     return Scaffold(
         appBar: makeTopAppBar( context, "Loan" ),
         bottomNavigationBar: makeBotAppBar( context, "Loan" ),
         body: Center(
@@ -72,6 +64,6 @@ class _BookShareLoanState extends State<BookShareLoanPage> {
                           Text( appState.userState?.toString() ?? "UserState here", style: TextStyle(fontStyle: FontStyle.italic))
                           ])))
               
-              ))));
+              )));
    }
 }

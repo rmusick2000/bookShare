@@ -25,24 +25,25 @@ class AppState {
    double screenHeight;
    double screenWidth;
    
-   // Route-related
-   List<Route> routeStack;
-   List<String> routeName;
-   int stackDepth;
-   int maxDepth;
-   int anchor;
-   
    // App logic
    bool loaded;
-   bool loading; 
+   bool loading;
+   String privateLibId;
    List<Library> myLibraries;
    Map<String, List<Book>> booksInLib;
+
+   String selectedLibrary;
+   bool booksLoaded;
    
    initAppData() {
       loaded = false;
       loading = false;
       myLibraries = null;
+      privateLibId = "";
       booksInLib = new Map<String, List<Book>>();
+
+      selectedLibrary = "";
+      booksLoaded = true;
    }
 
    init() {
@@ -61,13 +62,6 @@ class AppState {
       passwordController = TextEditingController();
       attributeController = TextEditingController();
       confirmationCodeController = TextEditingController();
-
-      // XXX Minor: framework error if the size here grows to 9.  Buut, 6 is fine..
-      maxDepth = 6; 
-      routeStack = new List(maxDepth);
-      routeName = new List(maxDepth);
-      anchor = 0;
-      stackDepth = 0;
 
       initAppData();
    }
