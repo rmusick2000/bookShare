@@ -98,12 +98,6 @@ class _BookShareSearchState extends State<BookShareSearchPage> {
      final appState = container.state;
      Post post;
 
-      if( !isCurrentRoute( appState, "search", myRouteNum )) {
-         return Container();
-      }
-      print( "Building Search " + myRouteNum.toString() );
-      myRouteNum = getRouteNum( appState ); 
-
      final tryMeButton = RaisedButton(
         onPressed: () async
         {
@@ -120,10 +114,7 @@ class _BookShareSearchState extends State<BookShareSearchPage> {
         },
         child: Text( 'Try me!'));
                         
-
-     return WillPopScope(
-         onWillPop: () => requestPop(context),   // Future<bool> function()
-         child: Scaffold(
+     return Scaffold(
         appBar: makeTopAppBar( context, "Search" ),
         bottomNavigationBar: makeBotAppBar( context, "Search" ),
         body: Center(
@@ -143,6 +134,6 @@ class _BookShareSearchState extends State<BookShareSearchPage> {
                           Text( bookState?.toString() ?? "illiterate", style: TextStyle(fontStyle: FontStyle.italic))
                           ])))
               
-              ))));
+              )));
    }
 }

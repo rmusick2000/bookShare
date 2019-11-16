@@ -19,7 +19,9 @@ class Book {
          id:     json['BookId'],
          title:  json['Title'],
          author: json['Author'],
-         ISBN:   json['ISBN']
+         ISBN:   json['ISBN'],
+         image:  json['Image'],
+         imageSmall:  json['ImageSmall'],
          );
    }
 

@@ -11,6 +11,8 @@ import 'package:bookShare/utils.dart';
 import 'package:bookShare/utils_load.dart';
 import 'package:bookShare/app_state_container.dart';
 
+import 'package:bookShare/screens/home_page.dart';
+
 import 'package:bookShare/models/app_state.dart';
 import 'package:bookShare/models/books.dart';
 import 'package:bookShare/models/libraries.dart';
@@ -63,17 +65,13 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
     super.dispose();
   }
 
+
   void addToLibrary() async {
      print( "Adding " + newBook.toString() + " to private lib" );
-
-     // appState books
-     // myLibraries, bookInLib
-     Library privateLib = getPrivateLib( appState );
-     print( "My private library: " + privateLib.toString() );
      showToast( context, "Adding..." );
      
      // AWS has username via cognito signin
-     String libID = privateLib.id;
+     String libID = appState.privateLibId;
      String book = json.encode( newBook ); 
      String postData = '{ "Endpoint": "PutBook", "SelectedLib": "$libID", "NewBook": $book }';
      print( postData );
@@ -132,6 +130,13 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
   }
   
   
+  void makeHomeDirty( appState ) {
+     setState(() { 
+           appState.booksLoaded = false;
+           appState.selectedLibrary = "";
+        });
+  }
+
   
   // XXX tell user primary vs secondary isbn
   // XXX allow selection + crop of cover art?
@@ -174,14 +179,23 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
         ));
   }
 
+  // XXX go to MyPriv, not make home-page dirty
   Widget _acceptGotoButton( ) {
      return makeActionButtonSmall(
         appState,
         "Add this,\n go to MyLib", 
         () async
         {
-           print( "mylib" );
-           foundBooks.clear();
+           newBook = foundBooks[selectedNewBook];
+           await addToLibrary();
+           makeHomeDirty( appState );
+           
+           setState(() { 
+                 selectedNewBook = 0;
+                 foundBooks.clear();
+              });
+           MaterialPageRoute newPage = MaterialPageRoute(builder: (context) => BookShareHomePage());
+           Navigator.pushReplacement(context, newPage );
         });
   }
 
@@ -193,6 +207,7 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
         {
            newBook = foundBooks[selectedNewBook];
            await addToLibrary();
+           makeHomeDirty( appState );
            
            setState(() { 
                  selectedNewBook = 0;
@@ -300,19 +315,10 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
       final container = AppStateContainer.of(context);
       appState = container.state;
 
-      
-      if( !isCurrentRoute( appState, "add", myRouteNum )) {
-         return Container();
-      }
-      print( "Building AddBook " + myRouteNum.toString() );
-      myRouteNum = getRouteNum( appState ); 
-      
-      return WillPopScope(
-         onWillPop: () => requestPop(context),
-         child: Scaffold(
+      return Scaffold(
             appBar: makeTopAppBar( context, "AddBook" ),
             bottomNavigationBar: makeBotAppBar( context, "AddBook" ),
             body: _makeBody()
-            ));
+            );
    }
 }

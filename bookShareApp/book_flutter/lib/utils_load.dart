@@ -124,13 +124,21 @@ Future<bool> putBook( appState, postData ) async {
 initMyLibraries( appState ) async {
    print( "initMyLibs" );
    appState.myLibraries = await fetchLibraries( appState, '{ "Endpoint": "GetLibs" }' );
+   if( appState.myLibraries.length > 0 ) {
+      for( final lib in appState.myLibraries ) {
+         if( lib.private ) {
+            appState.privateLibId = lib.id;
+            break;
+         }
+      }
+   }
    await initSelectedLibrary( appState );
 }
 
 initSelectedLibrary( appState ) async {
    print( "InitSelectedLib" );
    assert( appState.myLibraries.length >= 1 );
-   final selectedLib = appState.myLibraries[0].id;   // XXX XXX XXX
+   final selectedLib = appState.privateLibId;
    await initLibBooks( appState, selectedLib );
 }
 
@@ -139,4 +147,3 @@ initLibBooks( appState, selectedLibrary ) async {
    appState.booksInLib[selectedLibrary] = await fetchBooks( appState, '{ "Endpoint": "GetBooks", "SelectedLib": "$selectedLibrary" }' );  
 }
      
-

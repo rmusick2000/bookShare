@@ -48,12 +48,8 @@ exports.handler = (event, context, callback) => {
 
 };
 
-// Want some error msgs? https://github.com/aws/aws-sdk-js/issues/2464
-// Updates tables: Books, LibraryShares, Ownerships
-function putBook( selectedLib, newBook, username ) {
-    console.log('Put Books!', username, selectedLib, newBook.title );
 
-    // XXX funcify personID, privLib.. consider adding plib to person
+function getPersonId( username ) {
     // Params to get PersonID from UserName
     const paramsP = {
         TableName: 'People',
@@ -61,85 +57,90 @@ function putBook( selectedLib, newBook, username ) {
         ExpressionAttributeValues: { ":uname": username }
     };
 
-    // Get PersonId
-
     let personPromise = bsdb.scan( paramsP ).promise();
     return personPromise.then((persons) => {
 	console.log( "Persons: ", persons );
 	assert(persons.Count == 1 );
 	console.log( "Found person ", persons.Items[0] );
 	return persons.Items[0].PersonId;
-    }).then((personId) => {
+    });
+}
 
-	// Params to get Private LibraryId from personId
-	const paramsPL = {
-            TableName: 'Libraries',
-            FilterExpression: 'contains( Members, :pid ) AND JustMe = :true',
-            ExpressionAttributeValues: { ":pid": personId, ":true": true }
+function getPrivLibId( personId ) {
+    // Params to get Private LibraryId from personId
+    const paramsPL = {
+        TableName: 'Libraries',
+        FilterExpression: 'contains( Members, :pid ) AND JustMe = :true',
+        ExpressionAttributeValues: { ":pid": personId, ":true": true }
+    };
+    
+    let libraryPromise = bsdb.scan( paramsPL ).promise();
+    return libraryPromise.then((libraries) => {
+	console.log( "Libraries: ", libraries );
+	assert(libraries.Count == 1 );
+	console.log( "Found Private Library ", libraries.Items[0] );
+	return libraries.Items[0].LibraryId;
+    });
+}
+
+// Want some error msgs? https://github.com/aws/aws-sdk-js/issues/2464
+// Updates tables: Books, LibraryShares, Ownerships
+async function putBook( selectedLib, newBook, username ) {
+    console.log('Put Books!', username, selectedLib, newBook.title );
+
+    const personId  = await getPersonId( username );
+    const libraryId = await getPrivLibId( personId );
+	
+    // Update ownership.. pkey is same as PersonId
+    const oEntry = [{ "BookId" : newBook.id, "ShareCount" : 0 }];
+    const paramsO = {
+	TableName: 'Ownerships',
+	Key: { "OwnershipId": personId },
+	UpdateExpression: 'set Books = list_append(Books, :nb)',
+        ExpressionAttributeValues: {
+            ':nb':  oEntry
+        }
+    };
+    
+    // Put book 
+    const paramsPB = {
+	TableName: 'Books',
+	Item: {
+	    "BookId":      newBook.id,
+	    "Author":      newBook.author,
+	    "Title":       newBook.title,
+	    "ISBN":        newBook.ISBN,
+	    "ImageSmall":  newBook.imageSmall,
+	    "Image":       newBook.image
+	}
+    };
+    
+    // Put libshares
+    const lsEntry = [ libraryId ];
+    console.log( "libshare entry", lsEntry );
+    const paramsLS = {
+	TableName: 'LibraryShares',
+	Item: {
+	    "BookId":      newBook.id,
+	    "PersonId":    personId,
+	    "Libraries":   lsEntry,
+	}
+    };
+    
+    let bookPromise = bsdb.transactWrite({
+	TransactItems: [
+	    { Put: paramsPB }, 
+	    { Update: paramsO },
+	    { Put: paramsLS }
+	]}).promise();
+    
+    return bookPromise.then(() => {
+	console.log("Success!");
+	return {
+	    statusCode: 201,
+	    body: JSON.stringify( true ),
+	    headers: { 'Access-Control-Allow-Origin': '*' }
 	};
-	
-	// Get Private LibraryId
-	
-	let libraryPromise = bsdb.scan( paramsPL ).promise();
-	return libraryPromise.then((libraries) => {
-	    console.log( "Libraries: ", libraries );
-	    assert(libraries.Count == 1 );
-	    console.log( "Found Private Library ", libraries.Items[0] );
-	    return libraries.Items[0].LibraryId;
-	}).then((libraryId) => {
-	    
-	    // Update ownership.. pkey is same as PersonId
-	    const oEntry = [{ "BookId" : newBook.id, "ShareCount" : 0 }];
-	    const paramsO = {
-		TableName: 'Ownerships',
-		Key: { "OwnershipId": personId },
-		UpdateExpression: 'set Books = list_append(Books, :nb)',
-                ExpressionAttributeValues: {
-                    ':nb':  oEntry
-                }
-	    };
-	    
-	    // Put book 
-	    const paramsPB = {
-		TableName: 'Books',
-		Item: {
-		    "BookId":      newBook.id,
-		    "Author":      newBook.author,
-		    "Title":       newBook.title,
-		    "ISBN":        newBook.ISBN,
-		    "ImageSmall":  newBook.imageSmall,
-		    "Image":       newBook.image
-		}
-	    };
-	    
-	    // Put libshares
-	    const lsEntry = [ libraryId ];
-	    console.log( "libshare entry", lsEntry );
-	    const paramsLS = {
-		TableName: 'LibraryShares',
-		Item: {
-		    "BookId":      newBook.id,
-		    "PersonId":    personId,
-		    "Libraries":   lsEntry,
-		}
-	    };
-	    
-	    let bookPromise = bsdb.transactWrite({
-		TransactItems: [
-		    { Put: paramsPB }, 
-		    { Update: paramsO },
-		    { Put: paramsLS }
-		]}).promise();
-	    
-	    return bookPromise.then(() => {
-		console.log("Success!");
-		return {
-		    statusCode: 201,
-		    body: JSON.stringify( true ),
-		    headers: { 'Access-Control-Allow-Origin': '*' }
-		};
-	    });
-	});
     });
 }
 
@@ -193,51 +194,26 @@ function getBooks( selectedLib, username ) {
 function getLibs( username ) {
     console.log('Get Libs! ' + username );
 
-    // Params to get PersonID from UserName
-    const paramsP = {
-        TableName: 'People',
-        FilterExpression: 'UserName = :uname',
-        ExpressionAttributeValues: { ":uname": username }
+    const personId  = await getPersonId( username );
+
+    // Params to get Libraries that have PersonID in Members
+    const paramsL = {
+        TableName: 'Libraries',
+        FilterExpression: 'contains(Members, :pid)',
+        ExpressionAttributeValues: { ":pid": personId }
     };
-
     
-    // Get PersonId
-
-    let personPromise = bsdb.scan( paramsP ).promise();
-    return personPromise.then((persons) => {
-	console.log( "Persons: ", persons );
-	assert(persons.Count == 1 );
-	// XXX get item 0 only
-	let person = {};
-	persons.Items.forEach(function (element) {
-	    console.log( "Element: ", element );  
-	    person = element;
-	});
-	console.log( "Found person ", person );
-	return person.PersonId;
-    }).then((personId) => {
-
-	// Get Libraries
-
-	// Params to get Libraries that have PersonID in Members
-	const paramsL = {
-            TableName: 'Libraries',
-            FilterExpression: 'contains(Members, :pid)',
-            ExpressionAttributeValues: { ":pid": personId }
-	};
+    console.log( "Working with ", personId );
+    let librariesPromise = bsdb.scan( paramsL ).promise();
+    return librariesPromise.then((libraries) => {
 	
-	console.log( "Working with ", personId );
-	let librariesPromise = bsdb.scan( paramsL ).promise();
-	return librariesPromise.then((libraries) => {
-	    
-	    assert(libraries.Count >= 1 );
-	    console.log( "Result: ", libraries );
-	    return {
-		statusCode: 201,
-		body: JSON.stringify( libraries.Items ),
-		headers: { 'Access-Control-Allow-Origin': '*' }
-	    };
-	});
+	assert(libraries.Count >= 1 );
+	console.log( "Result: ", libraries );
+	return {
+	    statusCode: 201,
+	    body: JSON.stringify( libraries.Items ),
+	    headers: { 'Access-Control-Allow-Origin': '*' }
+	};
     });
 
     /*
