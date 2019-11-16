@@ -1,33 +1,190 @@
 {
-    "Ownerships": [
-        {
-            "PutRequest": {
-                "Item": {
-		    "OwnershipId": {"S": "bs38786"},
-		    "Books": {"L": [
-			{ "M":{ "BookId": {"S": "bs112233"}, "ShareCount": {"N": "0"}}},
-			{ "M":{ "BookId": {"S": "bs112244"}, "ShareCount": {"N": "0"}}},
-			{ "M":{ "BookId": {"S": "bs112299"}, "ShareCount": {"N": "0"}}},
-			{ "M":{ "BookId": {"S": "bs112255"}, "ShareCount": {"N": "0"}}}
-		    ]}
-		}}},
-        {
-            "PutRequest": {
-                "Item": {
-		    "OwnershipId": {"S": "bs38785"},
-		    "Books": {"L": [
-			{ "M":{ "BookId": {"S": "bs112255"}, "ShareCount": {"N": "0"}}},
-			{ "M":{ "BookId": {"S": "bs112266"}, "ShareCount": {"N": "0"}}},
-			{ "M":{ "BookId": {"S": "bs112277"}, "ShareCount": {"N": "0"}}}
-		    ]}
-		}}},
-        {
-            "PutRequest": {
-                "Item": {
-		    "OwnershipId": {"S": "bs38796"},
-		    "Books": {"L": [
-			{ "M":{ "BookId": {"S": "bs112288"}, "ShareCount": {"N": "0"}}}
-		    ]}
-		}}}
-    ]
+  "Ownerships": [
+    {
+      "PutRequest": {
+        "Item": {
+          "OwnershipId": {
+            "S": "bs38785"
+          },
+          "Books": {
+            "L": [
+              {
+                "M": {
+                  "BookId": {
+                    "S": "dtYnXaUxMY"
+                  },
+                  "ShareCount": {
+                    "N": "0"
+                  }
+                }
+              },
+              {
+                "M": {
+                  "BookId": {
+                    "S": "RDKEOQXNST"
+                  },
+                  "ShareCount": {
+                    "N": "0"
+                  }
+                }
+              },
+              {
+                "M": {
+                  "BookId": {
+                    "S": "IBanDJTFKO"
+                  },
+                  "ShareCount": {
+                    "N": "0"
+                  }
+                }
+              },
+              {
+                "M": {
+                  "BookId": {
+                    "S": "MIyutRlasC"
+                  },
+                  "ShareCount": {
+                    "N": "0"
+                  }
+                }
+              },
+              {
+                "M": {
+                  "BookId": {
+                    "S": "MNLLdSLWuV"
+                  },
+                  "ShareCount": {
+                    "N": "0"
+                  }
+                }
+              },
+              {
+                "M": {
+                  "BookId": {
+                    "S": "wmgXuwhdhu"
+                  },
+                  "ShareCount": {
+                    "N": "0"
+                  }
+                }
+              },
+              {
+                "M": {
+                  "BookId": {
+                    "S": "VDckvmKsrm"
+                  },
+                  "ShareCount": {
+                    "N": "0"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "OwnershipId": {
+            "S": "bs38786"
+          },
+          "Books": {
+            "L": [
+              {
+                "M": {
+                  "BookId": {
+                    "S": "JOLKIQFQKY"
+                  },
+                  "ShareCount": {
+                    "N": "0"
+                  }
+                }
+              },
+              {
+                "M": {
+                  "BookId": {
+                    "S": "lchQiiisfc"
+                  },
+                  "ShareCount": {
+                    "N": "0"
+                  }
+                }
+              },
+              {
+                "M": {
+                  "BookId": {
+                    "S": "SWMLWYXUFK"
+                  },
+                  "ShareCount": {
+                    "N": "0"
+                  }
+                }
+              },
+              {
+                "M": {
+                  "BookId": {
+                    "S": "npndeHiifs"
+                  },
+                  "ShareCount": {
+                    "N": "0"
+                  }
+                }
+              },
+              {
+                "M": {
+                  "BookId": {
+                    "S": "MMnGKAJHSR"
+                  },
+                  "ShareCount": {
+                    "N": "0"
+                  }
+                }
+              },
+              {
+                "M": {
+                  "BookId": {
+                    "S": "oakcgblPqo"
+                  },
+                  "ShareCount": {
+                    "N": "0"
+                  }
+                }
+              },
+              {
+                "M": {
+                  "BookId": {
+                    "S": "HGICTUHTST"
+                  },
+                  "ShareCount": {
+                    "N": "0"
+                  }
+                }
+              },
+              {
+                "M": {
+                  "BookId": {
+                    "S": "VeDRAASEMX"
+                  },
+                  "ShareCount": {
+                    "N": "0"
+                  }
+                }
+              },
+              {
+                "M": {
+                  "BookId": {
+                    "S": "nrbNqnMLAD"
+                  },
+                  "ShareCount": {
+                    "N": "0"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
 }

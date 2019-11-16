@@ -1,67 +1,388 @@
 {
-    "Books": [
-        {
-            "PutRequest": {
-                "Item": {
-		    "BookId": {"S": "bs112233"},
-		    "Author": {"S": "Bill Blinky"},
-		    "Title": {"S": "The Last Ship"},
-		    "ISBN": {"S": "99098980"},
-		    "Image": {"S": "bla"}
-		}}},
-        {
-            "PutRequest": {
-                "Item": {
-		    "BookId": {"S": "bs112244"},
-		    "Author": {"S": "Dan Brown"},
-		    "Title": {"S": "Digital Fortress"},
-		    "ISBN": {"S": "9734587658"},
-		    "Image": {"S": "bla"}
-		}}},
-        {
-            "PutRequest": {
-                "Item": {
-		    "BookId": {"S": "bs112255"},
-		    "Author": {"S": "Douglas R. Mason"},
-		    "Title": {"S": "Dilation Effect"},
-		    "ISBN": {"S": "98734987656"},
-		    "Image": {"S": "bla"}
-		}}},
-        {
-            "PutRequest": {
-                "Item": {
-		    "BookId": {"S": "bs112266"},
-		    "Author": {"S": "Annie Proulx"},
-		    "Title": {"S": "The Shipping News"},
-		    "ISBN": {"S": "934987656"},
-		    "Image": {"S": "bla"}
-		}}},
-        {
-            "PutRequest": {
-                "Item": {
-		    "BookId": {"S": "bs112277"},
-		    "Author": {"S": "Katherine Neville"},
-		    "Title": {"S": "The Eight"},
-		    "ISBN": {"S": "9873498765"},
-		    "Image": {"S": "bla"}
-		}}},
-        {
-            "PutRequest": {
-                "Item": {
-		    "BookId": {"S": "bs112299"},
-		    "Author": {"S": "James Clavell"},
-		    "Title": {"S": "Shogun"},
-		    "ISBN": {"S": "9873422365"},
-		    "Image": {"S": "bla"}
-		}}},
-        {
-            "PutRequest": {
-                "Item": {
-		    "BookId": {"S": "bs112288"},
-		    "Author": {"S": "Kalid Hosseini"},
-		    "Title": {"S": "Kite Runner"},
-		    "ISBN": {"S": "98738765"},
-		    "Image": {"S": "bla"}
-		}}}
-    ]
+  "Books": [
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "Dracula"
+          },
+          "BookId": {
+            "S": "VeDRAASEMX"
+          },
+          "Author": {
+            "S": "Bram Stoker"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=ArNnwDGH1fQC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=ArNnwDGH1fQC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9781586174941"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "Seeress of Kell"
+          },
+          "BookId": {
+            "S": "MMnGKAJHSR"
+          },
+          "Author": {
+            "S": "D. Eddings"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=4r2VNAEACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=4r2VNAEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9781407057057"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "Ender's Game"
+          },
+          "BookId": {
+            "S": "npndeHiifs"
+          },
+          "Author": {
+            "S": "Orson Scott Card"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=jaM7DwAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=jaM7DwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9780765394866"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "The Admirals"
+          },
+          "BookId": {
+            "S": "IBanDJTFKO"
+          },
+          "Author": {
+            "S": "Walter R. Borneman"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=ZyjYRvy-sE0C&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=ZyjYRvy-sE0C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9780316202527"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "A Short History of the Civil War"
+          },
+          "BookId": {
+            "S": "wmgXuwhdhu"
+          },
+          "Author": {
+            "S": "James L. Stokesbury"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=ITpEQjA5xNIC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=ITpEQjA5xNIC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9780062064783"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "Lords of Finance"
+          },
+          "BookId": {
+            "S": "dtYnXaUxMY"
+          },
+          "Author": {
+            "S": "Liaquat Ahamed"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=74XNzF_al3MC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=74XNzF_al3MC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9781594201820"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "Heaven's Reach"
+          },
+          "BookId": {
+            "S": "JOLKIQFQKY"
+          },
+          "Author": {
+            "S": "David Brin"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=eq1hzWID-eUC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=eq1hzWID-eUC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9780307573506"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "The Journals of Lewis and Clark"
+          },
+          "BookId": {
+            "S": "VDckvmKsrm"
+          },
+          "Author": {
+            "S": "Meriwether Clark, William Lewis"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=2-FvDwAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=2-FvDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9783734018152"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "A Journey to the Center of the Earth"
+          },
+          "BookId": {
+            "S": "nrbNqnMLAD"
+          },
+          "Author": {
+            "S": "Jules Verne"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=DQXhyrmbvBEC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=DQXhyrmbvBEC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9781101127100"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "An Army at Dawn"
+          },
+          "BookId": {
+            "S": "RDKEOQXNST"
+          },
+          "Author": {
+            "S": "Rick Atkinson"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=d6rRy_SE1bQC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=d6rRy_SE1bQC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9780805087246"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "Glory Season"
+          },
+          "BookId": {
+            "S": "lchQiiisfc"
+          },
+          "Author": {
+            "S": "David Brin"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=uni-WIC4keAC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=uni-WIC4keAC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9780307573469"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "Let the Sea Make a Noise..."
+          },
+          "BookId": {
+            "S": "MIyutRlasC"
+          },
+          "Author": {
+            "S": "Walter A. McDougall"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=n2lR2fKPBh8C&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=n2lR2fKPBh8C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9780060578206"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "White Fang"
+          },
+          "BookId": {
+            "S": "HGICTUHTST"
+          },
+          "Author": {
+            "S": "Pauline Francis"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=9E_M-LCaKW8C&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=9E_M-LCaKW8C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9780237525323"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "The Elder Gods"
+          },
+          "BookId": {
+            "S": "oakcgblPqo"
+          },
+          "Author": {
+            "S": "David Eddings"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=sWAwSrJa7zEC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=sWAwSrJa7zEC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9780759508187"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "The Postman"
+          },
+          "BookId": {
+            "S": "SWMLWYXUFK"
+          },
+          "Author": {
+            "S": "David Brin"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=54x7OjjY5TwC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=54x7OjjY5TwC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9780307575012"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "Empire of the Summer Moon"
+          },
+          "BookId": {
+            "S": "MNLLdSLWuV"
+          },
+          "Author": {
+            "S": "S. C. Gwynne"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=m6VWBwMAox4C&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=m6VWBwMAox4C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9781416597155"
+          }
+        }
+      }
+    }
+  ]
 }

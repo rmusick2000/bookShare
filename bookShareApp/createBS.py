@@ -92,8 +92,8 @@ def getCFStacks( sam ) :
 
 # XXX Add jq to setup script.  (sudo apt install jq)
 # XXX get all tables, named properly, put in test data dir
-def getDynamoData( sam ) :
-    cmd = "aws dynamodb scan --table-name Books | jq '{"Books": [.Items[] | {PutRequest: {Item: .}}]}' > data.json"
+#def getDynamoData( sam ) :
+    #cmd = "aws dynamodb scan --table-name Books | jq '{"Books": [.Items[] | {PutRequest: {Item: .}}]}' > data.json"
     
 
 def createTestDDBEntries( sam ) :
