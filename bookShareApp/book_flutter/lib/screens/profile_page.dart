@@ -28,12 +28,10 @@ class _BookShareProfileState extends State<BookShareProfilePage> {
 
    TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
    String bookState;
-   int myRouteNum;
 
   @override
       void initState() {
       super.initState();
-      myRouteNum = -1;
    }
 
 

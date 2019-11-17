@@ -30,7 +30,6 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
 
    TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
    String barcode;
-   int myRouteNum;
    List<String> scans;
    TextEditingController target;
    TextEditingController titleKey;
@@ -47,7 +46,6 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
   @override
   void initState() {
       super.initState();
-      myRouteNum = -1;
       barcode = "";
 
       newBook = null;

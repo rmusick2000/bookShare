@@ -25,12 +25,10 @@ class _BookShareLoanState extends State<BookShareLoanPage> {
 
    TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
    String bookState;
-   int myRouteNum;
 
   @override
      void initState() {
      super.initState();
-     myRouteNum = -1;
    }
 
 
@@ -45,7 +43,7 @@ class _BookShareLoanState extends State<BookShareLoanPage> {
       final container = AppStateContainer.of(context);
       final appState = container.state;
 
-     return Scaffold(
+      return Scaffold(
         appBar: makeTopAppBar( context, "Loan" ),
         bottomNavigationBar: makeBotAppBar( context, "Loan" ),
         body: Center(

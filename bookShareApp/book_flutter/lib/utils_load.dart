@@ -152,11 +152,22 @@ initMyLibraries( appState ) async {
       for( final lib in appState.myLibraries ) {
          if( lib.private ) {
             appState.privateLibId = lib.id;
+
+            assert( lib.members.length == 1 );
+            appState.userId = lib.members[0]; 
+            
             break;
          }
       }
    }
+   await initExploreLibraries( appState );
    await initSelectedLibrary( appState );
+}
+
+// XXX PAGINATE on aws
+initExploreLibraries( appState ) async {
+   print( "initExploreLibs" );
+   appState.exploreLibraries = await fetchLibraries( appState, '{ "Endpoint": "GetExploreLibs" }' );
 }
 
 initSelectedLibrary( appState ) async {

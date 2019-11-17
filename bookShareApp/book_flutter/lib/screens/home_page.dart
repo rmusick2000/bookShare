@@ -30,16 +30,17 @@ class BookShareHomePage extends StatefulWidget {
 
 class _BookShareHomeState extends State<BookShareHomePage> {
 
+   // XXX make this consistent in appState, and use it
    TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
-   int myRouteNum;
-
+   
+   int currentBookCount;
    AppState appState;
    
    @override
    void initState() {
       print( "HOMEPAGE INIT" );
       super.initState();
-      myRouteNum = -1;
+      currentBookCount = -1;
    }
 
    @override
@@ -57,6 +58,7 @@ class _BookShareHomeState extends State<BookShareHomePage> {
       } else {
          setState(() {
                appState.selectedLibrary = selectedLib;
+               currentBookCount = appState.booksInLib[selectedLib].length;
             });
       }
 
@@ -65,11 +67,12 @@ class _BookShareHomeState extends State<BookShareHomePage> {
          await initLibBooks( appState, selectedLib );
          setState(() {
                appState.booksLoaded = true;
+               currentBookCount = appState.booksInLib[selectedLib].length;
             });
       }
    }
 
-   GestureDetector makeLibraryChunk( libraryName, libraryId ) {
+   GestureDetector _makeLibraryChunk( libraryName, libraryId ) {
       final imageSize = appState.screenHeight * .1014;
       return GestureDetector(
          onTap: () { _updateSelectedLibrary( libraryId ); },
@@ -89,6 +92,25 @@ class _BookShareHomeState extends State<BookShareHomePage> {
    }
 
 
+   GestureDetector _joinText() {
+      return  GestureDetector(
+         onTap: ()  { notYetImplemented(context); },
+         child: Text( "Join",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 14, color: Colors.lightBlue, fontWeight: FontWeight.bold)));
+
+   }
+   Widget _requestText() {
+      Library currentLib = getCurrentLib( appState );
+      if( currentLib == null || currentLib.members.indexOf(appState.userId) == -1 ) {
+         return GestureDetector(
+            onTap: () { notYetImplemented(context); },
+            child: Text( "Request",
+                         textAlign: TextAlign.center,
+                         style: TextStyle(fontSize: 14, color: Colors.lightBlue, fontWeight: FontWeight.bold)));
+      }
+      else { return Container(); }
+   }
    
    Widget _makeSelectedLib( libId ) {
       // Selected Lib can be uninitialized briefly
@@ -101,16 +123,21 @@ class _BookShareHomeState extends State<BookShareHomePage> {
          if( lib.id == libId ) { selectedLib = lib; break; }
       };
 
+      // picked exploreLib
+      if( selectedLib == null ) {
+         for( final lib in appState.exploreLibraries ) {
+            if( lib.id == libId ) { selectedLib = lib; break; }
+         };
+      }
+      
       assert( selectedLib != null );
       var name = selectedLib.name;
       var numM = selectedLib.members.length.toString();
-      var numB = "99";
+      var numB = currentBookCount.toString();
 
       numM += ( numM == "1" ? " member" : " members" );
-      numB += ( numB == "1" ? " book" : " books" );
+      numB += ( currentBookCount == "1" ? " book" : " books" );
 
-      print( " ... ms: making row" );
-      
       return Padding(
          padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
          child: Row (
@@ -119,7 +146,8 @@ class _BookShareHomeState extends State<BookShareHomePage> {
             children: <Widget> [
                Text( name, style: TextStyle(fontSize: 14)),
                Text( numM, style: TextStyle(fontSize: 14)),
-               Text( numB, style: TextStyle(fontSize: 14)) 
+               Text( numB, style: TextStyle(fontSize: 14)),
+               _joinText()
                ]
             ));
    }   
@@ -156,8 +184,7 @@ class _BookShareHomeState extends State<BookShareHomePage> {
                  child: Text("By: " + book.author, style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic))),
               Padding(
                  padding: const EdgeInsets.fromLTRB(inset, 0, 6, 0),
-                 child: Text("ISBN: " + book.ISBN, style: TextStyle(fontSize: 12))),
-              Container( color: Colors.lightBlue, height: appState.screenHeight*.0338, width: imageWidth )
+                 child: _requestText())
               ]));
   }
 
@@ -167,13 +194,18 @@ class _BookShareHomeState extends State<BookShareHomePage> {
       final container   = AppStateContainer.of(context);
       appState          = container.state;
 
-      Widget makeLibraryRow() {
+      Widget _makeLibraryRow() {
          List<Widget> libChunks = [];
          // NOTE this will be null for a brief flash of time at init
          if( appState.myLibraries == null ) { return Container(); }
          
          assert( appState.myLibraries.length >= 1 );
-         appState.myLibraries.forEach((lib) => libChunks.add( makeLibraryChunk( lib.name, lib.id )));
+         appState.myLibraries.forEach((lib) => libChunks.add( _makeLibraryChunk( lib.name, lib.id )));
+
+         if( appState.exploreLibraries != null && appState.exploreLibraries.length >= 1 )
+         {
+            appState.exploreLibraries.forEach((lib) => libChunks.add( _makeLibraryChunk( lib.name, lib.id )));
+         }
          
          // XXX ListView me
          return SingleChildScrollView(
@@ -185,7 +217,7 @@ class _BookShareHomeState extends State<BookShareHomePage> {
                ));
       }
 
-      Widget makeBooks( ) {
+      Widget _makeBooks( ) {
          List<Widget> bookChunks = [];
          String libName = appState.selectedLibrary;
          print( "makeBooks" );
@@ -193,13 +225,21 @@ class _BookShareHomeState extends State<BookShareHomePage> {
          var bil = appState.booksInLib[libName];
 
          // first time through, books have not yet been fetched
-         if( appState.booksInLib == null || bil == null || bil.length == 0 || !appState.booksLoaded ) {
+         if( appState.booksInLib == null || bil == null || !appState.booksLoaded ) {
             return Container(
                height: appState.screenHeight * .618,
                child:  Center(
                   child: Container(
                      height: appState.screenHeight * .169,
                      child: CircularProgressIndicator() ))
+               );
+         } else if ( bil.length == 0 ) {
+            return Container(
+               height: appState.screenHeight * .618,
+               child:  Center(
+                  child: Container(
+                     height: appState.screenHeight * .169,
+                     child: Text("No books yet..", style: TextStyle(fontSize: 16))))
                );
          }
          print( "  mb: going to bil" );
@@ -213,7 +253,7 @@ class _BookShareHomeState extends State<BookShareHomePage> {
                   )));
       }   
 
-      Widget makeBody() {
+      Widget _makeBody() {
          if( appState.loaded ) {
             print( "AppState Loaded" );
             assert( appState.myLibraries != null );
@@ -227,11 +267,11 @@ class _BookShareHomeState extends State<BookShareHomePage> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,    // required for listView child
                   children: <Widget>[
-                     makeLibraryRow(),
+                     _makeLibraryRow(),
                      Divider( color: Colors.grey[200], thickness: 3.0 ),
                      _makeSelectedLib( appState.selectedLibrary ),
                      Divider( color: Colors.grey[200], thickness: 3.0 ),
-                     makeBooks( )
+                     _makeBooks( )
                      ]));
          } else {
             print( "AppState not ? Loaded" );
@@ -244,7 +284,7 @@ class _BookShareHomeState extends State<BookShareHomePage> {
       return Scaffold(
          appBar: makeTopAppBar( context, "Home" ),
          bottomNavigationBar: makeBotAppBar( context, "Home" ),
-         body: makeBody()
+         body: _makeBody()
          );
    }
 }

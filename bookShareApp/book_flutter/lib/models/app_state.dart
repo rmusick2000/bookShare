@@ -28,8 +28,10 @@ class AppState {
    // App logic
    bool loaded;
    bool loading;
+   String userId;
    String privateLibId;
    List<Library> myLibraries;
+   List<Library> exploreLibraries;
    Map<String, List<Book>> booksInLib;
 
    String selectedLibrary;
@@ -39,7 +41,9 @@ class AppState {
       loaded = false;
       loading = false;
       myLibraries = null;
+      exploreLibraries = null;
       privateLibId = "";
+      userId = "";
       booksInLib = new Map<String, List<Book>>();
 
       selectedLibrary = "";

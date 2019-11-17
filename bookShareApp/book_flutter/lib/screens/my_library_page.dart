@@ -25,12 +25,10 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
 
    TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
    String bookState;
-   int myRouteNum;
    
   @override
      void initState() {
      super.initState();
-     myRouteNum = -1;
    }
 
 

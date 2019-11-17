@@ -1,80 +1,320 @@
 {
-    "LibraryShares": [
-        {
-            "PutRequest": {
-                "Item": {
-		    "BookId": {"S": "bs112255"},
-		    "PersonId": {"S": "bs38785"},
-		    "Libraries": {"L": [
-			{ "S": "bs12"},
-			{ "S": "bs15"}
-		    ]}
-		}}},
-	{
-            "PutRequest": {
-                "Item": {
-		    "BookId": {"S": "bs112266"},
-		    "PersonId": {"S": "bs38785"},
-		    "Libraries": {"L": [
-			{ "S": "bs12"}
-		    ]}
-		}}},
-	{
-            "PutRequest": {
-                "Item": {
-		    "BookId": {"S": "bs112277"},
-		    "PersonId": {"S": "bs38785"},
-		    "Libraries": {"L": [
-			{ "S": "bs12"},
-			{ "S": "bs15"}
-		    ]}
-		}}},
-	{
-            "PutRequest": {
-                "Item": {
-		    "BookId": {"S": "bs112233"},
-		    "PersonId": {"S": "bs38786"},
-		    "Libraries": {"L": [
-			{ "S": "bs13"},
-			{ "S": "bs15"}
-		    ]}
-		}}},
-	{
-            "PutRequest": {
-                "Item": {
-		    "BookId": {"S": "bs112299"},
-		    "PersonId": {"S": "bs38786"},
-		    "Libraries": {"L": [
-			{ "S": "bs13"}
-		    ]}
-		}}},
-	{
-            "PutRequest": {
-                "Item": {
-		    "BookId": {"S": "bs112244"},
-		    "PersonId": {"S": "bs38786"},
-		    "Libraries": {"L": [
-			{ "S": "bs13"},
-			{ "S": "bs15"}
-		    ]}
-		}}},
-	{
-            "PutRequest": {
-                "Item": {
-		    "BookId": {"S": "bs112255"},
-		    "PersonId": {"S": "bs38786"},
-		    "Libraries": {"L": [
-			{ "S": "bs13"},
-			{ "S": "bs15"}
-		    ]}
-		}}},
-	{
-            "PutRequest": {
-                "Item": {
-		    "BookId": {"S": "bs112288"},
-		    "PersonId": {"S": "bs38796"},
-		    "Libraries": {"L": [
-			{ "S": "bs14"}
-		    ]}
-		}}}
-    ]}
+  "LibraryShares": [
+    {
+      "PutRequest": {
+        "Item": {
+          "Libraries": {
+            "L": [
+              {
+                "S": "bs13"
+              }
+            ]
+          },
+          "PersonId": {
+            "S": "bs38786"
+          },
+          "BookId": {
+            "S": "VeDRAASEMX"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Libraries": {
+            "L": [
+              {
+                "S": "bs13"
+              }
+            ]
+          },
+          "PersonId": {
+            "S": "bs38786"
+          },
+          "BookId": {
+            "S": "MMnGKAJHSR"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Libraries": {
+            "L": [
+              {
+                "S": "bs13"
+              }
+            ]
+          },
+          "PersonId": {
+            "S": "bs38786"
+          },
+          "BookId": {
+            "S": "npndeHiifs"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Libraries": {
+            "L": [
+              {
+                "S": "bs12"
+              }
+            ]
+          },
+          "PersonId": {
+            "S": "bs38785"
+          },
+          "BookId": {
+            "S": "IBanDJTFKO"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Libraries": {
+            "L": [
+              {
+                "S": "bs12"
+              },
+              {
+                "S": "bs15"
+              }
+            ]
+          },
+          "PersonId": {
+            "S": "bs38785"
+          },
+          "BookId": {
+            "S": "dtYnXaUxMY"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Libraries": {
+            "L": [
+              {
+                "S": "bs13"
+              },
+              {
+                "S": "bs15"
+              },
+              {
+                "S": "bs17"
+              }
+            ]
+          },
+          "PersonId": {
+            "S": "bs38786"
+          },
+          "BookId": {
+            "S": "JOLKIQFQKY"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Libraries": {
+            "L": [
+              {
+                "S": "bs12"
+              }
+            ]
+          },
+          "PersonId": {
+            "S": "bs38785"
+          },
+          "BookId": {
+            "S": "wmgXuwhdhu"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Libraries": {
+            "L": [
+              {
+                "S": "bs12"
+              }
+            ]
+          },
+          "PersonId": {
+            "S": "bs38785"
+          },
+          "BookId": {
+            "S": "VDckvmKsrm"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Libraries": {
+            "L": [
+              {
+                "S": "bs13"
+              }
+            ]
+          },
+          "PersonId": {
+            "S": "bs38786"
+          },
+          "BookId": {
+            "S": "nrbNqnMLAD"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Libraries": {
+            "L": [
+              {
+                "S": "bs12"
+              }
+            ]
+          },
+          "PersonId": {
+            "S": "bs38785"
+          },
+          "BookId": {
+            "S": "RDKEOQXNST"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Libraries": {
+            "L": [
+              {
+                "S": "bs12"
+              }
+            ]
+          },
+          "PersonId": {
+            "S": "bs38785"
+          },
+          "BookId": {
+            "S": "MIyutRlasC"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Libraries": {
+            "L": [
+              {
+                "S": "bs13"
+              }
+            ]
+          },
+          "PersonId": {
+            "S": "bs38786"
+          },
+          "BookId": {
+            "S": "HGICTUHTST"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Libraries": {
+            "L": [
+              {
+                "S": "bs13"
+              },
+              {
+                "S": "bs15"
+              }
+            ]
+          },
+          "PersonId": {
+            "S": "bs38786"
+          },
+          "BookId": {
+            "S": "lchQiiisfc"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Libraries": {
+            "L": [
+              {
+                "S": "bs13"
+              }
+            ]
+          },
+          "PersonId": {
+            "S": "bs38786"
+          },
+          "BookId": {
+            "S": "oakcgblPqo"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Libraries": {
+            "L": [
+              {
+                "S": "bs13"
+              }
+            ]
+          },
+          "PersonId": {
+            "S": "bs38786"
+          },
+          "BookId": {
+            "S": "SWMLWYXUFK"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Libraries": {
+            "L": [
+              {
+                "S": "bs12"
+              }
+            ]
+          },
+          "PersonId": {
+            "S": "bs38785"
+          },
+          "BookId": {
+            "S": "MNLLdSLWuV"
+          }
+        }
+      }
+    }
+  ]
+}
