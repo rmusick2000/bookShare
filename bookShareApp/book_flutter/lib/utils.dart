@@ -75,6 +75,7 @@ makeActionButtonSmall( appState, buttonText, fn ) {
       );
 }
 
+
 makeInputField( BuildContext context, hintText, obscure, controller ) {
    TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
    return TextField(
@@ -188,6 +189,19 @@ Library getPrivateLib( appState ) {
    if( appState.myLibraries == null || appState.myLibraries.length < 1 ) { return result; }
    for( final lib in appState.myLibraries ) {
       if( lib.private ) { result = lib; break; }
+   }
+   return result;
+}
+
+Library getCurrentLib( appState ) {
+   Library result = null;
+   if( appState.myLibraries == null || appState.myLibraries.length < 1 ) { return result; }
+
+   String currentLib = appState.selectedLibrary;
+   if( currentLib == "" ) { currentLib = appState.privateLibId; }
+   
+   for( final lib in appState.myLibraries ) {
+      if( lib.id == currentLib ) { result = lib; break; }
    }
    return result;
 }

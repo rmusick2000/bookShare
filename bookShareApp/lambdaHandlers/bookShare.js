@@ -29,10 +29,11 @@ exports.handler = (event, context, callback) => {
     var endPoint = requestBody.Endpoint;
     var resultPromise;
 
-    if(      endPoint == "FindBook" ) { resultPromise = findBook( requestBody.Title, username ); }
-    else if( endPoint == "GetLibs")   { resultPromise = getLibs( username ); }
-    else if( endPoint == "GetBooks")  { resultPromise = getBooks( requestBody.SelectedLib, username ); }
-    else if( endPoint == "PutBook")   { resultPromise = putBook( requestBody.SelectedLib, requestBody.NewBook, username ); }
+    if(      endPoint == "FindBook" )      { resultPromise = findBook( requestBody.Title, username ); }
+    else if( endPoint == "GetLibs")        { resultPromise = getLibs( username, true); }
+    else if( endPoint == "GetExploreLibs") { resultPromise = getLibs( username, false ); }
+    else if( endPoint == "GetBooks")       { resultPromise = getBooks( requestBody.SelectedLib, username ); }
+    else if( endPoint == "PutBook")        { resultPromise = putBook( requestBody.SelectedLib, requestBody.NewBook, username ); }
     else {
 	callback( null, errorResponse( "500", "EndPoint request not understood", context.awsRequestId));
 	return;
@@ -191,17 +192,26 @@ function getBooks( selectedLib, username ) {
     });
 }
 
-function getLibs( username ) {
-    console.log('Get Libs! ' + username );
+async function getLibs( username, memberLibs ) {
+    console.log('Get Libs!', username, memberLibs  );
 
     const personId  = await getPersonId( username );
 
     // Params to get Libraries that have PersonID in Members
-    const paramsL = {
-        TableName: 'Libraries',
-        FilterExpression: 'contains(Members, :pid)',
-        ExpressionAttributeValues: { ":pid": personId }
-    };
+    var paramsL;
+    if( memberLibs ) {
+	paramsL = {
+            TableName: 'Libraries',
+            FilterExpression: 'contains(Members, :pid)',
+            ExpressionAttributeValues: { ":pid": personId }
+	};
+    } else {
+	paramsL = {
+            TableName: 'Libraries',
+            FilterExpression: 'NOT contains(Members, :pid) AND JustMe = :false',
+            ExpressionAttributeValues: { ":pid": personId, ":false": false }
+	};
+    }
     
     console.log( "Working with ", personId );
     let librariesPromise = bsdb.scan( paramsL ).promise();

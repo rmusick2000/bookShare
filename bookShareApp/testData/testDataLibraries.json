@@ -23,6 +23,26 @@
         {
             "PutRequest": {
                 "Item": {
+		    "LibraryId": {"S": "bs17"},
+		    "LibraryName": {"S": "Tolkien"},
+		    "JustMe": {"BOOL": false},
+		    "Members": {"L": [
+			{ "S": "bs38786"}
+		    ]}
+		}}},
+        {
+            "PutRequest": {
+                "Item": {
+		    "LibraryId": {"S": "bs18"},
+		    "LibraryName": {"S": "Smaug"},
+		    "JustMe": {"BOOL": false},
+		    "Members": {"L": [
+			{ "S": "bs38786"}
+		    ]}
+		}}},
+        {
+            "PutRequest": {
+                "Item": {
 		    "LibraryId": {"S": "bs14"},
 		    "LibraryName": {"S": "dbasePrivate"},
 		    "JustMe": {"BOOL": true},
