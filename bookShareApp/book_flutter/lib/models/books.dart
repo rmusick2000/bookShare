@@ -64,7 +64,14 @@ class Book {
 
       // Some books found by google were published a LONG time ago, authors not recorded
       String author = "";
-      if( dynamicAuth != null ) { author = (new List<String>.from(dynamicAuth))[0]; }
+      if( dynamicAuth != null ) {
+         Iterable lauth = (new List<String>.from(dynamicAuth));
+         if( lauth.length > 0 ) {
+            for( final auth in lauth ) {
+               if( author != "" ) { author += ", "; }
+               author += auth; }
+         }
+      }
       
       return Book(
          id:         randomAlpha(10),

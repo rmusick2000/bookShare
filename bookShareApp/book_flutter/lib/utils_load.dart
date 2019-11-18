@@ -160,6 +160,7 @@ initMyLibraries( appState ) async {
          }
       }
    }
+   appState.myLibraries.sort((a, b) => a.private ? -1 : 1 );
    await initExploreLibraries( appState );
    await initSelectedLibrary( appState );
 }
