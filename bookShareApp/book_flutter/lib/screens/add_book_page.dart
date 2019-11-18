@@ -101,7 +101,8 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
      if( book.image != null && book.image != "" ) { image = Image.network( book.image, height: imageHeight, width: imageWidth, fit: BoxFit.contain ); }
      else                                         { image = Image.asset( 'images/blankBook.jpeg', height: imageHeight, width: imageWidth, fit: BoxFit.cover); }
      
-     // https://medium.com/jlouage/flutter-boxdecoration-cheat-sheet-72cedaa1ba20
+     // Controlling author, title lengths more carefully in lib displays, but
+     // here, single click means choose me, not detail view.  Choose to show somewhat more detail here.
      return GestureDetector(
         onTap:  () => setState(() {selectedNewBook = itemNo;}),
         child: Column(

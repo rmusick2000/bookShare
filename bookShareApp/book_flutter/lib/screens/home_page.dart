@@ -79,6 +79,7 @@ class _BookShareHomeState extends State<BookShareHomePage> {
          child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
             children: <Widget>[
                Padding(
                   padding: const EdgeInsets.fromLTRB(12.0, 12.0, 0, 0.0),
@@ -92,12 +93,16 @@ class _BookShareHomeState extends State<BookShareHomePage> {
    }
 
 
-   GestureDetector _joinText() {
-      return  GestureDetector(
-         onTap: ()  { notYetImplemented(context); },
-         child: Text( "Join",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 14, color: Colors.lightBlue, fontWeight: FontWeight.bold)));
+   Widget _joinText() {
+      Library currentLib = getCurrentLib( appState );
+      if( currentLib == null || currentLib.members.indexOf(appState.userId) == -1 ) {
+         return  GestureDetector(
+            onTap: ()  { notYetImplemented(context); },
+            child: Text( "Join",
+                         textAlign: TextAlign.center,
+                         style: TextStyle(fontSize: 14, color: Colors.lightBlue, fontWeight: FontWeight.bold)));
+      }
+      else { return Container(); }
 
    }
    Widget _requestText() {
@@ -178,16 +183,19 @@ class _BookShareHomeState extends State<BookShareHomePage> {
               Padding(
                  padding: const EdgeInsets.fromLTRB(inset, 6, 6, 0),
                  child: Container( width: imageWidth-inset-6,
-                                   child: Text(book.title, softWrap: true, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)))),
+                                   child: Text(book.title, softWrap: true, maxLines: 2, overflow: TextOverflow.ellipsis,
+                                               style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)))),
               Padding(
                  padding: const EdgeInsets.fromLTRB(inset, 0, 6, 0),
-                 child: Text("By: " + book.author, style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic))),
+                 child: Container( width: imageWidth,
+                                   child: Text("By: " + book.author, softWrap: true, maxLines: 1, overflow: TextOverflow.ellipsis,
+                                               style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic)))),
               Padding(
                  padding: const EdgeInsets.fromLTRB(inset, 0, 6, 0),
                  child: _requestText())
               ]));
   }
-
+  
    @override
    Widget build(BuildContext context) {
 
@@ -196,23 +204,28 @@ class _BookShareHomeState extends State<BookShareHomePage> {
 
       Widget _makeLibraryRow() {
          List<Widget> libChunks = [];
-         // NOTE this will be null for a brief flash of time at init
-         if( appState.myLibraries == null ) { return Container(); }
+         if( appState.myLibraries == null ) { return Container(); }  // null during update
          
          assert( appState.myLibraries.length >= 1 );
          appState.myLibraries.forEach((lib) => libChunks.add( _makeLibraryChunk( lib.name, lib.id )));
 
          if( appState.exploreLibraries != null && appState.exploreLibraries.length >= 1 )
          {
+            libChunks.add( Padding(
+                              padding: const EdgeInsets.fromLTRB(6, 12, 0, 12),
+                              child: VerticalDivider( color: Colors.grey[200], thickness: 3.0 )));
+            
             appState.exploreLibraries.forEach((lib) => libChunks.add( _makeLibraryChunk( lib.name, lib.id )));
          }
          
-         // XXX ListView me
-         return SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row (
-               mainAxisSize: MainAxisSize.max,
-               mainAxisAlignment: MainAxisAlignment.start,
+         // Hmm.. why doesn't a simple SizedBox work here?
+         return ConstrainedBox( 
+            constraints: new BoxConstraints(
+               minHeight: 20.0,
+               maxHeight: appState.screenHeight * .1523
+               ),
+            child: ListView(
+               scrollDirection: Axis.horizontal,
                children: libChunks
                ));
       }
