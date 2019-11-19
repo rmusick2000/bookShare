@@ -4,22 +4,34 @@
       "PutRequest": {
         "Item": {
           "Title": {
-            "S": "Dracula"
+            "S": "The Prestige"
+          },
+          "PageCount": {
+            "S": "404"
           },
           "BookId": {
-            "S": "VeDRAASEMX"
+            "S": "YPRXMOMAPv"
           },
           "Author": {
-            "S": "Bram Stoker"
+            "S": "Christopher Priest"
           },
           "ImageSmall": {
-            "S": "http://books.google.com/books/content?id=ArNnwDGH1fQC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+            "S": "http://books.google.com/books/content?id=660XF5Ew-GkC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
           },
           "Image": {
-            "S": "http://books.google.com/books/content?id=ArNnwDGH1fQC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+            "S": "http://books.google.com/books/content?id=660XF5Ew-GkC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
           },
           "ISBN": {
-            "S": "9781586174941"
+            "S": "9780312858865"
+          },
+          "Publisher": {
+            "S": "Macmillan"
+          },
+          "Description": {
+            "S": "In 1878, two young stage magicians clash in a darkened salon during the course of a fraudulent seance, and from this moment they try to expose and outwit each other at every turn"
+          },
+          "PublishedDate": {
+            "S": "1997-09-15"
           }
         }
       }
@@ -28,22 +40,34 @@
       "PutRequest": {
         "Item": {
           "Title": {
-            "S": "Seeress of Kell"
+            "S": "The Kite Runner"
+          },
+          "PageCount": {
+            "S": "371"
           },
           "BookId": {
-            "S": "MMnGKAJHSR"
+            "S": "MKJKYFIXUN"
           },
           "Author": {
-            "S": "D. Eddings"
+            "S": "Khaled Hosseini"
           },
           "ImageSmall": {
-            "S": "http://books.google.com/books/content?id=4r2VNAEACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api"
+            "S": "http://books.google.com/books/content?id=bUJnkwEACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api"
           },
           "Image": {
-            "S": "http://books.google.com/books/content?id=4r2VNAEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+            "S": "http://books.google.com/books/content?id=bUJnkwEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
           },
           "ISBN": {
-            "S": "9781407057057"
+            "S": "9781594631931"
+          },
+          "Publisher": {
+            "S": "Riverhead Trade (Paperbacks)"
+          },
+          "Description": {
+            "S": "Traces the unlikely friendship of a wealthy Afghan youth and a servant's son, in a tale that spans the final days of Afghanistan's monarchy through the atrocities of the present day."
+          },
+          "PublishedDate": {
+            "S": "2013-03-05"
           }
         }
       }
@@ -52,22 +76,214 @@
       "PutRequest": {
         "Item": {
           "Title": {
-            "S": "Ender's Game"
+            "S": "The Eight"
+          },
+          "PageCount": {
+            "S": "598"
           },
           "BookId": {
-            "S": "npndeHiifs"
+            "S": "pmnnmdKXsc"
           },
           "Author": {
-            "S": "Orson Scott Card"
+            "S": "Katherine Neville"
           },
           "ImageSmall": {
-            "S": "http://books.google.com/books/content?id=jaM7DwAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+            "S": "http://books.google.com/books/content?id=uVSxAAAAIAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api"
           },
           "Image": {
-            "S": "http://books.google.com/books/content?id=jaM7DwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+            "S": "http://books.google.com/books/content?id=uVSxAAAAIAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
           },
           "ISBN": {
-            "S": "9780765394866"
+            "S": "9780345419088"
+          },
+          "Publisher": {
+            "S": "---"
+          },
+          "Description": {
+            "S": "National bestseller."
+          },
+          "PublishedDate": {
+            "S": "1997"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "Kitchen Confidential"
+          },
+          "PageCount": {
+            "S": "320"
+          },
+          "BookId": {
+            "S": "rqbTGwadkm"
+          },
+          "Author": {
+            "S": "Anthony Bourdain"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=cocVLbFkgyQC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=cocVLbFkgyQC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9781596917248"
+          },
+          "Publisher": {
+            "S": "Bloomsbury Publishing USA"
+          },
+          "Description": {
+            "S": "Anthony Bourdain, host of Parts Unknown, reveals \"twenty-five years of sex, drugs, bad behavior and haute cuisine\" in his breakout New York Times bestseller Kitchen Confidential. Bourdain spares no one's appetite when he told all about what happens behind the kitchen door. Bourdain uses the same \"take-no-prisoners\" attitude in his deliciously funny and shockingly delectable book, sure to delight gourmands and philistines alike. From Bourdain's first oyster in the Gironde, to his lowly position as dishwasher in a honky tonk fish restaurant in Provincetown (where he witnesses for the first time the real delights of being a chef); from the kitchen of the Rainbow Room atop Rockefeller Center, to drug dealers in the east village, from Tokyo to Paris and back to New York again, Bourdain's tales of the kitchen are as passionate as they are unpredictable. Kitchen Confidential will make your mouth water while your belly aches with laughter. You'll beg the chef for more, please."
+          },
+          "PublishedDate": {
+            "S": "2008-12-10"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "The Glorious Cause"
+          },
+          "PageCount": {
+            "S": "656"
+          },
+          "BookId": {
+            "S": "OKOJPqWXgA"
+          },
+          "Author": {
+            "S": "Jeff Shaara"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=AVsOZaK3sNgC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=AVsOZaK3sNgC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9780345458681"
+          },
+          "Publisher": {
+            "S": "Ballantine Books"
+          },
+          "Description": {
+            "S": "In Rise to Rebellion, bestselling author Jeff Shaara captured the origins of the American Revolution as brilliantly as he depicted the Civil War in Gods and Generals and The Last Full Measure. Now he continues the amazing saga of how thirteen colonies became a nation, taking the conflict from kingdom and courtroom to the bold and bloody battlefields of war. It was never a war in which the outcome was obvious. Despite their spirit and stamina, the colonists were outmanned and outfought by the brazen British army. General George Washington found his troops trounced in the battles of Brooklyn and Manhattan and retreated toward Pennsylvania. With the future of the colonies at its lowest ebb, Washington made his most fateful decision: to cross the Delaware River and attack the enemy. The stunning victory at Trenton began a saga of victory and defeat that concluded with the British surrender at Yorktown, a moment that changed the history of the world. The despair and triumph of America’s first great army is conveyed in scenes as powerful as any Shaara has written, a story told from the points of view of some of the most memorable characters in American history. There is George Washington, the charismatic leader who held his army together to achieve an unlikely victory; Charles Cornwallis, the no-nonsense British general, more than a match for his colonial counterpart; Nathaniel Greene, who rose from obscurity to become the finest battlefield commander in Washington’s army; The Marquis de Lafayette, the young Frenchman who brought a soldier’s passion to America; and Benjamin Franklin, a brilliant man of science and philosophy who became the finest statesman of his day. From Nathan Hale to Benedict Arnold, William Howe to “Light Horse” Harry Lee, from Trenton and Valley Forge, Brandywine and Yorktown, the American Revolution’s most immortal characters and poignant moments are brought to life in remarkable Shaara style. Yet, The Glorious Cause is more than just a story of the legendary six-year struggle. It is a tribute to an amazing people who turned ideas into action and fought to declare themselves free. Above all, it is a riveting novel that both expands and surpasses its beloved author’s best work."
+          },
+          "PublishedDate": {
+            "S": "2010-12-29"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "1491"
+          },
+          "PageCount": {
+            "S": "541"
+          },
+          "BookId": {
+            "S": "JGiqSMcrVT"
+          },
+          "Author": {
+            "S": "Charles C. Mann"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=KPKMDQAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=KPKMDQAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9781400032051"
+          },
+          "Publisher": {
+            "S": "Vintage"
+          },
+          "Description": {
+            "S": "Describes how recent archaeological research has transformed long-held myths about the Americas, revealing far older and more advanced cultures with a greater population than were previously thought to have existed."
+          },
+          "PublishedDate": {
+            "S": "2006"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "The Shipping News"
+          },
+          "PageCount": {
+            "S": "368"
+          },
+          "BookId": {
+            "S": "skuIdmdAso"
+          },
+          "Author": {
+            "S": "Annie Proulx"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=jHp8VHqgCmQC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=jHp8VHqgCmQC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9780743519809"
+          },
+          "Publisher": {
+            "S": "Simon and Schuster"
+          },
+          "Description": {
+            "S": "Winner of the Pulitzer Prize, Annie Proulx’s The Shipping News is a vigorous, darkly comic, and at times magical portrait of the contemporary North American family. Quoyle, a third-rate newspaper hack, with a “head shaped like a crenshaw, no neck, reddish hair...features as bunched as kissed fingertips,” is wrenched violently out of his workaday life when his two-timing wife meets her just desserts. An aunt convinces Quoyle and his two emotionally disturbed daughters to return with her to the starkly beautiful coastal landscape of their ancestral home in Newfoundland. Here, on desolate Quoyle’s Point, in a house empty except for a few mementos of the family’s unsavory past, the battered members of three generations try to cobble up new lives. Newfoundland is a country of coast and cove where the mercury rarely rises above seventy degrees, the local culinary delicacy is cod cheeks, and it’s easier to travel by boat and snowmobile than on anything with wheels. In this harsh place of cruel storms, a collapsing fishery, and chronic unemployment, the aunt sets up as a yacht upholsterer in nearby Killick-Claw, and Quoyle finds a job reporting the shipping news for the local weekly, the Gammy Bird (a paper that specializes in sexual-abuse stories and grisly photos of car accidents). As the long winter closes its jaws of ice, each of the Quoyles confronts private demons, reels from catastrophe to minor triumph—in the company of the obsequious Mavis Bangs; Diddy Shovel the strongman; drowned Herald Prowse; cane-twirling Beety; Nutbeem, who steals foreign news from the radio; a demented cousin the aunt refuses to recognize; the much-zippered Alvin Yark; silent Wavey; and old Billy Pretty, with his bag of secrets. By the time of the spring storms Quoyle has learned how to gut cod, to escape from a pickle jar, and to tie a true lover’s knot."
+          },
+          "PublishedDate": {
+            "S": "2008-01-01"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "Kushiel's Scion"
+          },
+          "PageCount": {
+            "S": "504"
+          },
+          "BookId": {
+            "S": "ewyiocnAsf"
+          },
+          "Author": {
+            "S": "Jacqueline Carey"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=RcHfoQEACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=RcHfoQEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9780446594257"
+          },
+          "Publisher": {
+            "S": "Warner Books (NY)"
+          },
+          "Description": {
+            "S": "\"The saga of Imriel de al Courcel, born third in line for the throne of Terre d'Ange, and gifted with the ability to deliver pain and to exploit others' faults\"--Provided by the publisher."
+          },
+          "PublishedDate": {
+            "S": "2014-07-01"
           }
         }
       }
@@ -78,8 +294,11 @@
           "Title": {
             "S": "The Admirals"
           },
+          "PageCount": {
+            "S": "576"
+          },
           "BookId": {
-            "S": "IBanDJTFKO"
+            "S": "CBTRKMIUBV"
           },
           "Author": {
             "S": "Walter R. Borneman"
@@ -92,6 +311,15 @@
           },
           "ISBN": {
             "S": "9780316202527"
+          },
+          "Publisher": {
+            "S": "Little, Brown"
+          },
+          "Description": {
+            "S": "How history's only five-star admirals triumphed in World War II and made the United States the world's dominant sea power. Only four men in American history have been promoted to the five-star rank of Admiral of the Fleet: William Leahy, Ernest King, Chester Nimitz, and William Halsey. These four men were the best and the brightest the navy produced, and together they led the U.S. navy to victory in World War II, establishing the United States as the world's greatest fleet. In THE ADMIRALS, award-winning historian Walter R. Borneman tells their story in full detail for the first time. Drawing upon journals, ship logs, and other primary sources, he brings an incredible historical moment to life, showing us how the four admirals revolutionized naval warfare forever with submarines and aircraft carriers, and how these men-who were both friends and rivals-worked together to ensure that the Axis fleets lay destroyed on the ocean floor at the end of World War II."
+          },
+          "PublishedDate": {
+            "S": "2012-05-01"
           }
         }
       }
@@ -100,22 +328,34 @@
       "PutRequest": {
         "Item": {
           "Title": {
-            "S": "A Short History of the Civil War"
+            "S": "Neverwhere"
+          },
+          "PageCount": {
+            "S": "400"
           },
           "BookId": {
-            "S": "wmgXuwhdhu"
+            "S": "CSQNHWUHRv"
           },
           "Author": {
-            "S": "James L. Stokesbury"
+            "S": "Neil Gaiman"
           },
           "ImageSmall": {
-            "S": "http://books.google.com/books/content?id=ITpEQjA5xNIC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+            "S": "http://books.google.com/books/content?id=yuCUZ3km3qIC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
           },
           "Image": {
-            "S": "http://books.google.com/books/content?id=ITpEQjA5xNIC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+            "S": "http://books.google.com/books/content?id=yuCUZ3km3qIC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
           },
           "ISBN": {
-            "S": "9780062064783"
+            "S": "9780060557812"
+          },
+          "Publisher": {
+            "S": "Harper Collins"
+          },
+          "Description": {
+            "S": "Richard Mayhew is a young man with a good heart and an ordinarylife, which is changed forever when he stops to help a girl he finds bleeding on a London sidewalk. His small act of kindness propels him into a world he never dreamed existed. There are people who fall through the cracks, and Richard has become one of them. And he must learn to survive in this city of shadows and darkness, monsters and saints, murderers and angels, if he is ever to return to the London that he knew."
+          },
+          "PublishedDate": {
+            "S": "2003-09-02"
           }
         }
       }
@@ -124,22 +364,34 @@
       "PutRequest": {
         "Item": {
           "Title": {
-            "S": "Lords of Finance"
+            "S": "Inferno"
+          },
+          "PageCount": {
+            "S": "560"
           },
           "BookId": {
-            "S": "dtYnXaUxMY"
+            "S": "hJromdatwh"
           },
           "Author": {
-            "S": "Liaquat Ahamed"
+            "S": "Dan Brown"
           },
           "ImageSmall": {
-            "S": "http://books.google.com/books/content?id=74XNzF_al3MC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+            "S": "http://books.google.com/books/content?id=bveKDQAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
           },
           "Image": {
-            "S": "http://books.google.com/books/content?id=74XNzF_al3MC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+            "S": "http://books.google.com/books/content?id=bveKDQAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
           },
           "ISBN": {
-            "S": "9781594201820"
+            "S": "9780804172264"
+          },
+          "Publisher": {
+            "S": "Anchor Books"
+          },
+          "Description": {
+            "S": "In the heart of Italy, Harvard professor of symbology Robert Langdon is drawn into a harrowing world centered on one of history's most enduring and mysterious literary masterpieces--Dante's \"Inferno\"--as he battles a chilling adversary and grapples with an ingenious riddle--"
+          },
+          "PublishedDate": {
+            "S": "2014"
           }
         }
       }
@@ -148,22 +400,34 @@
       "PutRequest": {
         "Item": {
           "Title": {
-            "S": "Heaven's Reach"
+            "S": "The Two Koreas"
+          },
+          "PageCount": {
+            "S": "512"
           },
           "BookId": {
-            "S": "JOLKIQFQKY"
+            "S": "XcJHIAKAVD"
           },
           "Author": {
-            "S": "David Brin"
+            "S": "Don Oberdorfer, Robert Carlin"
           },
           "ImageSmall": {
-            "S": "http://books.google.com/books/content?id=eq1hzWID-eUC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+            "S": "http://books.google.com/books/content?id=ScVWAAAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
           },
           "Image": {
-            "S": "http://books.google.com/books/content?id=eq1hzWID-eUC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+            "S": "http://books.google.com/books/content?id=ScVWAAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
           },
           "ISBN": {
-            "S": "9780307573506"
+            "S": "9780465050888"
+          },
+          "Publisher": {
+            "S": "Basic Books"
+          },
+          "Description": {
+            "S": "Ever since Korea was first divided at the end of World War II, the tension between its northern and southern halves has riveted—and threatened to embroil—the rest of the world. In this landmark history, now thoroughly revised and updated in conjunction with Korea expert Robert Carlin, veteran journalist Don Oberdorfer grippingly describes how a historically homogenous people became locked in a perpetual struggle for supremacy—and how they might yet be reconciled."
+          },
+          "PublishedDate": {
+            "S": "2013-12-10"
           }
         }
       }
@@ -172,22 +436,34 @@
       "PutRequest": {
         "Item": {
           "Title": {
-            "S": "The Journals of Lewis and Clark"
+            "S": "The Awakening"
+          },
+          "PageCount": {
+            "S": "272"
           },
           "BookId": {
-            "S": "VDckvmKsrm"
+            "S": "OjRsRifnNb"
           },
           "Author": {
-            "S": "Meriwether Clark, William Lewis"
+            "S": "L. A. Banks"
           },
           "ImageSmall": {
-            "S": "http://books.google.com/books/content?id=2-FvDwAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+            "S": "http://books.google.com/books/content?id=UKLvi0EWtPMC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
           },
           "Image": {
-            "S": "http://books.google.com/books/content?id=2-FvDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+            "S": "http://books.google.com/books/content?id=UKLvi0EWtPMC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
           },
           "ISBN": {
-            "S": "9783734018152"
+            "S": "9781429994439"
+          },
+          "Publisher": {
+            "S": "St. Martin's Griffin"
+          },
+          "Description": {
+            "S": "There is a vampire war brewing in the underworld and at the center of it all is Damali Richards, spoken word artist and Vampire Huntress. But she is not just any Vampire Huntress, she is the millenium Neteru. A woman so potentially powerful that the vampire world is about to invoke a bloody battle that threatens to spill over onto her streets in order to posses her. It's just a matter of who will get to her first. Fallon Nuit, a rogue vampire, is one of the most powerful Damali has ever encountered and he has allied himself with the deadly Amanrath demons in order to claim her. But the Vampire Council has plans for her as well. And now an unlikely variable has entered into the equation, an ex-lover now turned vampire with an agenda of his own. And she must risk trusting him once more if they are to survive."
+          },
+          "PublishedDate": {
+            "S": "2004-01-21"
           }
         }
       }
@@ -196,70 +472,34 @@
       "PutRequest": {
         "Item": {
           "Title": {
-            "S": "A Journey to the Center of the Earth"
+            "S": "Daughter of Shanghai"
+          },
+          "PageCount": {
+            "S": "328"
           },
           "BookId": {
-            "S": "nrbNqnMLAD"
+            "S": "afGGPgwTEa"
           },
           "Author": {
-            "S": "Jules Verne"
+            "S": "釆芹"
           },
           "ImageSmall": {
-            "S": "http://books.google.com/books/content?id=DQXhyrmbvBEC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+            "S": "http://books.google.com/books/content?id=-wB-AAAAIAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api"
           },
           "Image": {
-            "S": "http://books.google.com/books/content?id=DQXhyrmbvBEC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+            "S": "http://books.google.com/books/content?id=-wB-AAAAIAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
           },
           "ISBN": {
-            "S": "9781101127100"
-          }
-        }
-      }
-    },
-    {
-      "PutRequest": {
-        "Item": {
-          "Title": {
-            "S": "An Army at Dawn"
+            "S": "9787219045213"
           },
-          "BookId": {
-            "S": "RDKEOQXNST"
+          "Publisher": {
+            "S": "---"
           },
-          "Author": {
-            "S": "Rick Atkinson"
+          "Description": {
+            "S": "本书是京剧大师周信芳的女儿周采芹的自传。诞生于巡演途中,流浪似乎就是她的命运,于是她十七岁便开始在海外闯荡。你亲给她一个戏剧的梦,母亲给她独立的意志,而她自己则带着天生的激情和桀傲的个性,在东西方文化的碰撞中吸取生养的活力,给自己创造了一种充满奇彩的生活。"
           },
-          "ImageSmall": {
-            "S": "http://books.google.com/books/content?id=d6rRy_SE1bQC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
-          },
-          "Image": {
-            "S": "http://books.google.com/books/content?id=d6rRy_SE1bQC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
-          },
-          "ISBN": {
-            "S": "9780805087246"
-          }
-        }
-      }
-    },
-    {
-      "PutRequest": {
-        "Item": {
-          "Title": {
-            "S": "Glory Season"
-          },
-          "BookId": {
-            "S": "lchQiiisfc"
-          },
-          "Author": {
-            "S": "David Brin"
-          },
-          "ImageSmall": {
-            "S": "http://books.google.com/books/content?id=uni-WIC4keAC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
-          },
-          "Image": {
-            "S": "http://books.google.com/books/content?id=uni-WIC4keAC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
-          },
-          "ISBN": {
-            "S": "9780307573469"
+          "PublishedDate": {
+            "S": "2002"
           }
         }
       }
@@ -270,8 +510,11 @@
           "Title": {
             "S": "Let the Sea Make a Noise..."
           },
+          "PageCount": {
+            "S": "793"
+          },
           "BookId": {
-            "S": "MIyutRlasC"
+            "S": "VCBuUiMDMO"
           },
           "Author": {
             "S": "Walter A. McDougall"
@@ -284,102 +527,15 @@
           },
           "ISBN": {
             "S": "9780060578206"
-          }
-        }
-      }
-    },
-    {
-      "PutRequest": {
-        "Item": {
-          "Title": {
-            "S": "White Fang"
           },
-          "BookId": {
-            "S": "HGICTUHTST"
+          "Publisher": {
+            "S": "Harper Collins"
           },
-          "Author": {
-            "S": "Pauline Francis"
+          "Description": {
+            "S": "A sweeping, action-filled saga that depicts the rise and fall of empires in the North Pacific details the four-hundred-year history of Hawaii, Japan, Siberia, California, and more. By the Pulitzer Prize-winning author of The Heavens and the Earth. Reprint"
           },
-          "ImageSmall": {
-            "S": "http://books.google.com/books/content?id=9E_M-LCaKW8C&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
-          },
-          "Image": {
-            "S": "http://books.google.com/books/content?id=9E_M-LCaKW8C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
-          },
-          "ISBN": {
-            "S": "9780237525323"
-          }
-        }
-      }
-    },
-    {
-      "PutRequest": {
-        "Item": {
-          "Title": {
-            "S": "The Elder Gods"
-          },
-          "BookId": {
-            "S": "oakcgblPqo"
-          },
-          "Author": {
-            "S": "David Eddings"
-          },
-          "ImageSmall": {
-            "S": "http://books.google.com/books/content?id=sWAwSrJa7zEC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
-          },
-          "Image": {
-            "S": "http://books.google.com/books/content?id=sWAwSrJa7zEC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
-          },
-          "ISBN": {
-            "S": "9780759508187"
-          }
-        }
-      }
-    },
-    {
-      "PutRequest": {
-        "Item": {
-          "Title": {
-            "S": "The Postman"
-          },
-          "BookId": {
-            "S": "SWMLWYXUFK"
-          },
-          "Author": {
-            "S": "David Brin"
-          },
-          "ImageSmall": {
-            "S": "http://books.google.com/books/content?id=54x7OjjY5TwC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
-          },
-          "Image": {
-            "S": "http://books.google.com/books/content?id=54x7OjjY5TwC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
-          },
-          "ISBN": {
-            "S": "9780307575012"
-          }
-        }
-      }
-    },
-    {
-      "PutRequest": {
-        "Item": {
-          "Title": {
-            "S": "Empire of the Summer Moon"
-          },
-          "BookId": {
-            "S": "MNLLdSLWuV"
-          },
-          "Author": {
-            "S": "S. C. Gwynne"
-          },
-          "ImageSmall": {
-            "S": "http://books.google.com/books/content?id=m6VWBwMAox4C&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
-          },
-          "Image": {
-            "S": "http://books.google.com/books/content?id=m6VWBwMAox4C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
-          },
-          "ISBN": {
-            "S": "9781416597155"
+          "PublishedDate": {
+            "S": "2004-03-30"
           }
         }
       }
