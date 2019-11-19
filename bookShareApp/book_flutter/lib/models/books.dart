@@ -6,31 +6,49 @@ class Book {
    final String  title;
    final String  author;
    final String  ISBN;
+   final String  publisher;
+   final String  publishedDate;
+   final String  pageCount;
+   final String  description;  
    final String  imageSmall;
    final String  image;
 
-   Book({this.id, this.title, this.author, this.ISBN, this.image, this.imageSmall});
+   Book({this.id, this.title, this.author, this.ISBN, this.publisher, this.publishedDate, this.pageCount, this.description, this.imageSmall, this.image});
 
-   dynamic toJson() => {'id': id, 'title': title, 'author': author, 'ISBN': ISBN, 'imageSmall': imageSmall, 'image': image};
+   dynamic toJson() => {'id': id, 'title': title, 'author': author, 'ISBN': ISBN, 
+                           'imageSmall': imageSmall, 'image': image, 'publisher': publisher, 
+                           'publishedDate': publishedDate, 'pageCount': pageCount, 'description': description
+   };
    
    factory Book.fromJson(Map<String, dynamic> json) {
 
+      // DynamoDB is not camelCase
+      // All fields here have values, else something is broken in load
       return Book(
-         id:     json['BookId'],
-         title:  json['Title'],
-         author: json['Author'],
-         ISBN:   json['ISBN'],
-         image:  json['Image'],
-         imageSmall:  json['ImageSmall'],
+         id:            json['BookId'],
+         title:         json['Title'],
+         author:        json['Author'],
+         ISBN:          json['ISBN'],
+         publisher:     json['Publisher'],     
+         publishedDate: json['PublishedDate'],
+         pageCount:     json['PageCount'],
+         description:   json['Description'],
+         image:         json['Image'],
+         imageSmall:    json['ImageSmall'],
          );
    }
 
+   // DynamoDB won't store empty strings.  Grack.
    factory Book.bookGoogleFromJson(Map<String, dynamic> jsonV, requestedISBN) {
       var json = jsonV['volumeInfo'];
       
-      var dynamicAuth = json['authors'];
-      String isbn = "";
-      
+      String isbn = "---";
+      String image = "---";
+      String imageSmall = "---";
+      String author = "";
+
+      print( "FOUND " + json['title'] );
+
       // 978 in front == ISBN_13 10 is shorter
       final dynamicIden = json['industryIdentifiers'];
       if( dynamicIden != null ) {
@@ -40,30 +58,13 @@ class Book {
          };
       }
 
-      // Can't do this, chances are this is not a primary isbn.
-      // if( isbn != requestedISBN ) { print( isbn + " doesn't match requested " + requestedISBN + " .. skipping."); return null; }
-
-      print( "FOUND " + json['title'] );
-      /*
-      print( json['authors'] );
-      print( (new List<String>.from(dynamicAuth))[0] );
-      print( isbn );
-      print( json['description'] );
-      print( json['publishedDate'] );
-      print( json['publisher'] );
-      print( json['pageCount'] );
-      print( json['imageLinks'] );
-      */
-      String image = "";
-      String imageSmall = "";
-      
       if( json['imageLinks'] != null ) {
          image      = json['imageLinks']['thumbnail'];
          imageSmall = json['imageLinks']['smallThumbnail'];
       }
 
       // Some books found by google were published a LONG time ago, authors not recorded
-      String author = "";
+      var dynamicAuth = json['authors'];
       if( dynamicAuth != null ) {
          Iterable lauth = (new List<String>.from(dynamicAuth));
          if( lauth.length > 0 ) {
@@ -72,22 +73,43 @@ class Book {
                author += auth; }
          }
       }
-      
+      if( author == "" ) { author = "---"; }
+
+      String pc = json['pageCount']?.toString();   // call toString if not null
+      pc ??= "---";                                   // assign if not null
+
+      assert( pc != null );
+      print( "page: " + pc );
+      print( json['publisher'] ?? "---" );
+
+      // Google is camelCase
       return Book(
-         id:         randomAlpha(10),
-         title:      json['title'],
-         author:     author,
-         ISBN:       isbn,
-         image:      image,
-         imageSmall: imageSmall 
+         id:            randomAlpha(10),
+         title:         json['title'] ?? "---",
+         author:        author,
+         ISBN:          isbn,
+         publisher:     json['publisher'] ?? "---",     
+         publishedDate: json['publishedDate'] ?? "---",
+         pageCount:     pc,
+         description:   json['description'] ?? "---",
+         image:         image,
+         imageSmall:    imageSmall 
          );
    }
 
+   
    String toString() {
+      print( "Book: " + title );
+      print( "pub: " + publisher );
+
       String res = "\nBook : " + title;
       res += "\n   author: " + author;
       res += "\n   ISBN: " + ISBN;
       res += "\n   id: " + id;
+      res += "\n   pub: " + publisher;
+      res += "\n   pages: " + pageCount;
+      res += "\n   pub date: " + publishedDate;
+      res += "\n   description: " + description;
       return res;
    }
 

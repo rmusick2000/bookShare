@@ -25,11 +25,14 @@ Future<List<Library>> fetchLibraries( appState, postData ) async {
    if (response.statusCode == 201) {
       print( "JSON RESPONSE BODY: " + response.body.toString() );         
       
-      Iterable l = json.decode(response.body);
+      Iterable l = json.decode(utf8.decode(response.bodyBytes));
       List<Library> libs = l.map((sketch)=> Library.fromJson(sketch)).toList();
       return libs;
+   } else if (response.statusCode == 204) {
+      print( "No content.");
+      return null;
    } else {
-      print( "RESPONSE: " + response.statusCode.toString() + " " + json.decode(response.body).toString());
+      print( "RESPONSE: " + response.statusCode.toString() + " " + json.decode(utf8.decode(response.bodyBytes)).toString());
       throw Exception('Failed to load library');
    }
 }
@@ -49,17 +52,36 @@ Future<List<Book>> fetchBooks( appState, postData ) async {
    if (response.statusCode == 201) {
       print( response.body.toString() );         
       
-      Iterable l = json.decode(response.body);
+      Iterable l = json.decode(utf8.decode(response.bodyBytes));
       List<Book> books = l.map((sketch)=> Book.fromJson(sketch)).toList();
       return books;
    } else {
-      print( "RESPONSE: " + response.statusCode.toString() + " " + json.decode(response.body).toString());
+      print( "RESPONSE: " + response.statusCode.toString() + " " + json.decode(utf8.decode(response.bodyBytes)).toString());
       throw Exception('Failed to load books');
    }
 }
 
+Future<bool> initOwnership( appState, postData ) async {
+   print( "initOwnership" + postData );
+   final gatewayURL = appState.apiBasePath + "/find"; 
+   
+   final response =
+      await http.post(
+         gatewayURL,
+         headers: {HttpHeaders.authorizationHeader: appState.idToken},
+         body: postData
+         );
+   
+   if (response.statusCode == 201) {
+      print( "JSON RESPONSE BODY: " + response.body.toString() );         
+      return true;
+   } else {
+      print( "RESPONSE: " + response.statusCode.toString() + " " + json.decode(utf8.decode(response.bodyBytes)).toString());
+      throw Exception('Failed to load library');
+   }
+}
 
-// Troublesome: glorious cause 9780345427571
+
 // Version 1 v1 of google books api
 // Note: undocumented varients, different results:   q=isbn#, q=isbn=#, q=isbn<#>, q=ISBN
 // Note: multiple editions per book, google asks for a primary isbn, then related isbn.
@@ -70,21 +92,21 @@ Future<List<Book>> fetchISBN( isbn ) async {
    var response = await http.get( gatewayURLSingle);
    
    if (response.statusCode != 200) {
-      print( "RESPONSE Single: " + response.statusCode.toString() + " " + json.decode(response.body).toString());
+      print( "RESPONSE Single: " + response.statusCode.toString() + " " + json.decode(utf8.decode(response.bodyBytes)).toString());
       throw Exception('Failed to load books');
    }
 
-   Iterable results = (json.decode(response.body))['items'];
+   Iterable results = (json.decode(utf8.decode(response.bodyBytes)))['items'];
 
    if( results == null ) {
       print( "Exact method failed, get multiple" );
       response = await http.get( gatewayURLMany);
 
       if (response.statusCode != 200) {
-         print( "RESPONSE Many: " + response.statusCode.toString() + " " + json.decode(response.body).toString());
+         print( "RESPONSE Many: " + response.statusCode.toString() + " " + json.decode(utf8.decode(response.bodyBytes)).toString());
          throw Exception('Failed to load books');
       }
-      results = (json.decode(response.body))['items'];
+      results = (json.decode(utf8.decode(response.bodyBytes)))['items'];
    }
 
    if( results == null ) { return null; }
@@ -105,11 +127,11 @@ Future<List<Book>> fetchKeyword( titleKey, authorKey ) async {
    var response = await http.get( gatewayURL);
    
    if (response.statusCode != 200) {
-      print( "RESPONSE Single: " + response.statusCode.toString() + " " + json.decode(response.body).toString());
+      print( "RESPONSE Single: " + response.statusCode.toString() + " " + json.decode(utf8.decode(response.bodyBytes)).toString());
       throw Exception('Failed to load books');
    }
 
-   Iterable results = (json.decode(response.body))['items'];
+   Iterable results = (json.decode(utf8.decode(response.bodyBytes)))['items'];
 
    if( results == null ) { return null; }
 
@@ -135,7 +157,7 @@ Future<bool> putBook( appState, postData ) async {
       print( response.body.toString() );         
       return true;
    } else {
-      print( "RESPONSE: " + response.statusCode.toString() + " " + json.decode(response.body).toString());
+      print( "RESPONSE: " + response.statusCode.toString() + " " + json.decode(utf8.decode(response.bodyBytes)).toString());
       throw Exception('Failed to add book');
    }
 }
@@ -180,6 +202,11 @@ initSelectedLibrary( appState ) async {
 
 initLibBooks( appState, selectedLibrary ) async {
    print( "InitLIBBOOKS" );
-   appState.booksInLib[selectedLibrary] = await fetchBooks( appState, '{ "Endpoint": "GetBooks", "SelectedLib": "$selectedLibrary" }' );  
+   appState.booksInLib[selectedLibrary] = await fetchBooks( appState, '{ "Endpoint": "GetBooks", "SelectedLib": "$selectedLibrary" }' );
+
+   // new private lib needs some initialization
+   if( selectedLibrary == appState.privateLibId && appState.booksInLib[selectedLibrary].length == 0 ) {
+      await initOwnership( appState, '{ "Endpoint": "InitOwnership" }' );
+   }
 }
      

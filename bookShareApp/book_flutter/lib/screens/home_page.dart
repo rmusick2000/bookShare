@@ -12,6 +12,7 @@ import 'package:bookShare/screens/search_page.dart';
 import 'package:bookShare/screens/home_page.dart';
 import 'package:bookShare/screens/add_book_page.dart';
 import 'package:bookShare/screens/profile_page.dart';
+import 'package:bookShare/screens/book_detail_page.dart';
 
 import 'package:bookShare/utils.dart';
 import 'package:bookShare/utils_load.dart';
@@ -169,7 +170,11 @@ class _BookShareHomeState extends State<BookShareHomePage> {
      else                                          { image = Image.asset( 'images/blankBook.jpeg', height: imageHeight, width: imageWidth, fit: BoxFit.contain); }
      
      return GestureDetector(
-        onTap:  () { print( "I LOVE " + book.title + " .. *giggle*" ); },
+        onTap:  ()
+        {
+           setState(() { appState.detailBook = book; });
+           Navigator.push( context, MaterialPageRoute(builder: (context) => BookShareBookDetailPage()));
+        },
         child: Column(
            crossAxisAlignment: CrossAxisAlignment.start,
            mainAxisAlignment: MainAxisAlignment.center,

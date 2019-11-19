@@ -98,7 +98,7 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
      }
      
      var image;
-     if( book.image != null && book.image != "" ) { image = Image.network( book.image, height: imageHeight, width: imageWidth, fit: BoxFit.contain ); }
+     if( book.image != null && book.image != "---" ) { image = Image.network( book.image, height: imageHeight, width: imageWidth, fit: BoxFit.contain ); }
      else                                         { image = Image.asset( 'images/blankBook.jpeg', height: imageHeight, width: imageWidth, fit: BoxFit.cover); }
      
      // Controlling author, title lengths more carefully in lib displays, but

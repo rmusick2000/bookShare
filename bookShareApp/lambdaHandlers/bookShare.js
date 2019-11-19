@@ -34,6 +34,7 @@ exports.handler = (event, context, callback) => {
     else if( endPoint == "GetExploreLibs") { resultPromise = getLibs( username, false ); }
     else if( endPoint == "GetBooks")       { resultPromise = getBooks( requestBody.SelectedLib, username ); }
     else if( endPoint == "PutBook")        { resultPromise = putBook( requestBody.SelectedLib, requestBody.NewBook, username ); }
+    else if( endPoint == "InitOwnership")  { resultPromise = initOwn( username ); }
     else {
 	callback( null, errorResponse( "500", "EndPoint request not understood", context.awsRequestId));
 	return;
@@ -84,10 +85,41 @@ function getPrivLibId( personId ) {
     });
 }
 
+
+async function initOwn( username ) {
+    console.log('init ownership', username );
+
+    const personId  = await getPersonId( username );
+	
+    // Update ownership.. pkey is same as PersonId
+    const paramsO = {
+	TableName:     'Ownerships',
+	Item: {
+	    "OwnershipId": personId, 
+	    "Books":       []
+	}
+    };
+
+    let initPromise = bsdb.transactWrite({
+	TransactItems: [
+	    { Put: paramsO }
+	]}).promise();
+    
+    return initPromise.then(() => {
+	console.log("Success!");
+	return {
+	    statusCode: 201,
+	    body: JSON.stringify( true ),
+	    headers: { 'Access-Control-Allow-Origin': '*' }
+	};
+    });
+    
+}    
+
 // Want some error msgs? https://github.com/aws/aws-sdk-js/issues/2464
 // Updates tables: Books, LibraryShares, Ownerships
 async function putBook( selectedLib, newBook, username ) {
-    console.log('Put Books!', username, selectedLib, newBook.title );
+    console.log('Put Book!', username, selectedLib, newBook.title );
 
     const personId  = await getPersonId( username );
     const libraryId = await getPrivLibId( personId );
@@ -111,8 +143,12 @@ async function putBook( selectedLib, newBook, username ) {
 	    "Author":      newBook.author,
 	    "Title":       newBook.title,
 	    "ISBN":        newBook.ISBN,
+	    "Publisher":   newBook.publisher,
+	    "PublishedDate": newBook.publishedDate,
+	    "PageCount":   newBook.pageCount,
+	    "Description": newBook.description,
 	    "ImageSmall":  newBook.imageSmall,
-	    "Image":       newBook.image
+	    "Image":       newBook.image            
 	}
     };
     
@@ -216,14 +252,24 @@ async function getLibs( username, memberLibs ) {
     console.log( "Working with ", personId );
     let librariesPromise = bsdb.scan( paramsL ).promise();
     return librariesPromise.then((libraries) => {
-	
-	assert(libraries.Count >= 1 );
-	console.log( "Result: ", libraries );
-	return {
-	    statusCode: 201,
-	    body: JSON.stringify( libraries.Items ),
-	    headers: { 'Access-Control-Allow-Origin': '*' }
-	};
+
+	// exploring, can have 0 libs
+	if( libraries.Count >= 1 ) {
+	    console.log( "Result: ", libraries );
+	    return {
+		statusCode: 201,
+		body: JSON.stringify( libraries.Items ),
+		headers: { 'Access-Control-Allow-Origin': '*' }
+	    };
+	} else
+	{
+	    console.log( "Result: no libs" );
+	    return {
+		statusCode: 204,
+		body: JSON.stringify( "---" ),
+		headers: { 'Access-Control-Allow-Origin': '*' }
+	    };
+	}
     });
 
     /*
@@ -247,8 +293,6 @@ async function getLibs( username, memberLibs ) {
 function findBook(bookTitle, username) {
     console.log('Finding book for ', bookTitle ); 
 
-    const bookId = toUrlString(randomBytes(16));
-
     // Title must be :bookTitle, where :bookTitle = bookTitle.  grack.
     const params = {
         TableName: 'Books',
@@ -267,19 +311,12 @@ function findBook(bookTitle, username) {
 	    console.log( "Element: ", element );  
 	    book = element;
 	});
-	console.log( "About to create JSON response, ", book );
+
+	console.log( "Result: ", book );
 	return {
             statusCode: 201,
-            body: JSON.stringify({
-                BookId: bookId,
-                Title: book.Title,
-		Author: book.Author,
-		MagicCookie: book.ISBN,
-                User: username
-            }),
-            headers: {
-                'Access-Control-Allow-Origin': '*',
-            }
+            body: JSON.stringify( book ),
+            headers: { 'Access-Control-Allow-Origin': '*' }
 	};
 	
     });

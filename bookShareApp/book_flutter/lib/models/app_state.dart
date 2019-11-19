@@ -33,6 +33,7 @@ class AppState {
    List<Library> myLibraries;
    List<Library> exploreLibraries;
    Map<String, List<Book>> booksInLib;
+   Book detailBook;
 
    String selectedLibrary;
    bool booksLoaded;
@@ -46,6 +47,7 @@ class AppState {
       userId = "";
       booksInLib = new Map<String, List<Book>>();
 
+      detailBook = null;
       selectedLibrary = "";
       booksLoaded = true;
    }
