@@ -77,6 +77,7 @@ class _BookShareSearchState extends State<BookShareSearchPage> {
 
    TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
    String bookState;
+   AppState appState;
 
   @override
       void initState() {
@@ -93,7 +94,7 @@ class _BookShareSearchState extends State<BookShareSearchPage> {
   Widget build(BuildContext context) {
 
      final container = AppStateContainer.of(context);
-     final appState = container.state;
+     appState = container.state;
      Post post;
 
      final tryMeButton = RaisedButton(

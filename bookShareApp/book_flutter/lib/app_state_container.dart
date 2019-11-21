@@ -28,8 +28,7 @@ class AppStateContainer extends StatefulWidget {
 
 
 class _AppStateContainerState extends State<AppStateContainer> {
-  AppState state;   // passing the state through so we don't have to manipulate it with widget.state.
-
+  AppState state;  
 
   // init Cognito
   Future<void> doLoad() async {
@@ -57,9 +56,9 @@ class _AppStateContainerState extends State<AppStateContainer> {
         });
   }
   
-  void getAuthTokens() async {
+  void getAuthTokens( override ) async {
      print( "GAT, with " + state.idToken );
-     if( state.accessToken == "" || state.idToken == "" ) {
+     if( state.accessToken == "" || state.idToken == "" || override == true) {
         List tokenString = (await Cognito.getTokens()).toString().split(" ");
         String accessToken = tokenString[3].split(",")[0];
         String idToken = tokenString[5].split(",")[0];
@@ -112,12 +111,13 @@ class _AppStateContainerState extends State<AppStateContainer> {
               {
                  state.loading = true;
                  print( "SIGNED IN CALLBACK" );
-                 await getAuthTokens();
+                 await getAuthTokens( false );
                  
                  // Libraries and books
                  await getAPIBasePath();
                  
-                 await initMyLibraries( state );
+                 // await initMyLibraries( this );
+                 await initMyLibraries( context, this );
                  stateLoaded = true;
                  state.loading = false;
                  print ("CALLBACK, loaded TRUE" );
@@ -131,6 +131,7 @@ class _AppStateContainerState extends State<AppStateContainer> {
            setState(() {
                  state.userState = value;
                  state.loaded = stateLoaded;
+                 state.authRetryCount = 0;
                  if( !stateLoaded ) {
                     state.accessToken = "";
                     state.idToken = "";

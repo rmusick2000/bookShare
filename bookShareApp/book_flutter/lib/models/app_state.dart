@@ -13,10 +13,11 @@ class AppState {
    String accessToken;
    String idToken;
    String refreshToken;
-
+   int authRetryCount;
    var returnValue;
    UserState userState;
    double progress;
+
    String apiBasePath;
    TextEditingController usernameController;
    TextEditingController passwordController;
@@ -58,6 +59,7 @@ class AppState {
       screenWidth = -1;
       
       // Cognito values
+      authRetryCount = 0;
       UserState userState = UserState.UNKNOWN;
       accessToken = "";
       idToken = "";

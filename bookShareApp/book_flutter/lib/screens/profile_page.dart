@@ -21,12 +21,14 @@ class BookShareProfilePage extends StatefulWidget {
 
   @override
   _BookShareProfileState createState() => _BookShareProfileState();
+
 }
 
 
 class _BookShareProfileState extends State<BookShareProfilePage> {
 
    TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
+   AppState appState; 
    String bookState;
 
   @override
@@ -39,14 +41,15 @@ class _BookShareProfileState extends State<BookShareProfilePage> {
   void dispose() {
     super.dispose();
   }
+
   
    @override
    Widget build(BuildContext context) {
 
       final container = AppStateContainer.of(context);
-      final appState = container.state;
+      appState = container.state;
 
-      final logoutButton = makeActionButton( context, 'Logout', container.onPressWrapper((){
+      final logoutButton = makeActionButton( context, 'Logout',  container.onPressWrapper((){
                Cognito.signOut();
                Navigator.pushAndRemoveUntil(
                   context, 
@@ -61,8 +64,10 @@ class _BookShareProfileState extends State<BookShareProfilePage> {
                      appState.confirmationCodeController.clear();
                   });
             }));
+
+
       
-     return Scaffold(
+   return Scaffold(
         appBar: makeTopAppBar( context, "Profile" ),
         bottomNavigationBar: makeBotAppBar( context, "Profile" ),
         body: Center(

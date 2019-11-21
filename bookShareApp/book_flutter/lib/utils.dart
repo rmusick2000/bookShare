@@ -15,6 +15,8 @@ import 'package:bookShare/models/libraries.dart';
 import 'package:bookShare/models/books.dart';
 
 
+
+
 void notYetImplemented(BuildContext context) {
    Fluttertoast.showToast(
       msg: "Future feature",
@@ -184,6 +186,26 @@ makeBotAppBar( BuildContext context, currentPage ) {
                ])));
 }
 
+Widget makeLibraryChunk( appState, libraryName, libraryId ) {
+   final imageSize = appState.screenHeight * .1014;
+   return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+         Padding(
+            padding: const EdgeInsets.fromLTRB(12.0, 12.0, 0, 0.0),
+            child: ClipRRect(
+               borderRadius: new BorderRadius.circular(12.0),
+               child: Image.asset( 'images/kiteLibrary.jpg', height: imageSize, width: imageSize, fit: BoxFit.fill))),
+         Padding(
+            padding: const EdgeInsets.fromLTRB(12.0, 4.0, 0, 0.0),
+            child: Text(libraryName, style: TextStyle(fontSize: 12)))]
+      );
+}
+
+
+
 Library getPrivateLib( appState ) {
    Library result = null;
    if( appState.myLibraries == null || appState.myLibraries.length < 1 ) { return result; }
@@ -193,6 +215,7 @@ Library getPrivateLib( appState ) {
    return result;
 }
 
+// XXX home_page state.  namespace issues..
 Library getCurrentLib( appState ) {
    Library result = null;
    if( appState.myLibraries == null || appState.myLibraries.length < 1 ) { return result; }

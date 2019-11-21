@@ -24,7 +24,7 @@ class BookShareLoanPage extends StatefulWidget {
 class _BookShareLoanState extends State<BookShareLoanPage> {
 
    TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
-   String bookState;
+   AppState appState;
 
   @override
      void initState() {
@@ -41,7 +41,7 @@ class _BookShareLoanState extends State<BookShareLoanPage> {
    Widget build(BuildContext context) {
 
       final container = AppStateContainer.of(context);
-      final appState = container.state;
+      appState = container.state;
 
       return Scaffold(
         appBar: makeTopAppBar( context, "Loan" ),

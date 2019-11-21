@@ -40,7 +40,8 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
    int selectedNewBook;
 
    bool refining;
-   
+
+   var container;
    AppState appState;
    
   @override
@@ -81,7 +82,7 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
      String book = json.encode( newBook ); 
      String postData = '{ "Endpoint": "PutBook", "SelectedLib": "$libID", "NewBook": $book }';
      print( postData );
-     await putBook( appState, postData );
+     await putBook( context, container, postData );
   }
      
   
@@ -389,7 +390,7 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
    @override
    Widget build(BuildContext context) {
 
-      final container = AppStateContainer.of(context);
+      container = AppStateContainer.of(context);
       appState = container.state;
 
       return Scaffold(

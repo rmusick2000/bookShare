@@ -2,17 +2,64 @@ import 'dart:convert';  // json encode/decode
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
+import 'package:flutter_cognito_plugin/flutter_cognito_plugin.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:bookShare/utils.dart';
+
+import 'package:bookShare/screens/launch_page.dart';
+
 import 'package:bookShare/models/app_state.dart';
 import 'package:bookShare/models/libraries.dart';
 import 'package:bookShare/models/books.dart';
 
 
+// XXX profile page should use this 
+logout( context, container, appState ) {
+   container.onPressWrapper((){
+         Cognito.signOut();
 
-Future<List<Library>> fetchLibraries( appState, postData ) async {
+         // Rebuilding page below, don't need to setState (which isn't available here). 
+         appState.usernameController.clear();
+         appState.passwordController.clear();
+         appState.attributeController.clear();
+         appState.confirmationCodeController.clear();
+         Navigator.pushAndRemoveUntil(
+            context, 
+            MaterialPageRoute(builder: (context) => BSLaunchPage()),
+            ModalRoute.withName("BSSplashPage")
+            );
+      });
+}      
+
+
+bool checkReauth( context, container ) {
+   final appState  = container.state;
+
+   print (" !!! !!! !!!" );
+   print (" !!! !!!" );
+   print (" !!!" );
+   print( "Refreshing tokens.." );
+   print (" !!!" );
+   print (" !!! !!!" );
+   print (" !!! !!! !!!" );
+
+   appState.authRetryCount += 1; 
+   if( appState.authRetryCount > 100 ) {
+      print( "Too many reauthorizations, please sign in again" );
+      logout( context, container, appState );
+      showToast( context, "Your cloud authorization has expired.  Please re-login." ); 
+      return false;
+   }
+   else { return true; }
+}
+
+
+Future<List<Library>> fetchLibraries( context, container, postData ) async {
    print( "fetchLibrary " + postData );
+   final appState  = container.state;
+
    final gatewayURL = appState.apiBasePath + "/find"; 
    
    final response =
@@ -31,14 +78,21 @@ Future<List<Library>> fetchLibraries( appState, postData ) async {
    } else if (response.statusCode == 204) {
       print( "No content.");
       return null;
-   } else {
+   } else if (response.statusCode == 401 ) {
+      if( checkReauth( context, container ) ) {
+         await container.getAuthTokens( true );
+         return await fetchLibraries( context, container, postData );
+      }
+   }
+   else {
       print( "RESPONSE: " + response.statusCode.toString() + " " + json.decode(utf8.decode(response.bodyBytes)).toString());
       throw Exception('Failed to load library');
    }
 }
 
 // XXX 1 func for all here?  
-Future<List<Book>> fetchBooks( appState, postData ) async {
+Future<List<Book>> fetchBooks( context, container, postData ) async {
+   final appState  = container.state;
    print( "fetchBook " + postData );
    final gatewayURL = appState.apiBasePath + "/find"; 
    
@@ -55,14 +109,20 @@ Future<List<Book>> fetchBooks( appState, postData ) async {
       Iterable l = json.decode(utf8.decode(response.bodyBytes));
       List<Book> books = l.map((sketch)=> Book.fromJson(sketch)).toList();
       return books;
+   } else if (response.statusCode == 401 ) {
+      if( checkReauth( context, container ) ) {
+         await container.getAuthTokens( true );
+         return await fetchBooks( context, container, postData );
+      }
    } else {
       print( "RESPONSE: " + response.statusCode.toString() + " " + json.decode(utf8.decode(response.bodyBytes)).toString());
       throw Exception('Failed to load books');
    }
 }
 
-Future<bool> initOwnership( appState, postData ) async {
+Future<bool> initOwnership( context, container, postData ) async {
    print( "initOwnership" + postData );
+   final appState  = container.state;
    final gatewayURL = appState.apiBasePath + "/find"; 
    
    final response =
@@ -75,6 +135,11 @@ Future<bool> initOwnership( appState, postData ) async {
    if (response.statusCode == 201) {
       print( "JSON RESPONSE BODY: " + response.body.toString() );         
       return true;
+   } else if (response.statusCode == 401 ) {
+      if( checkReauth( context, container ) ) {
+         await container.getAuthTokens( true );
+         return await initOwnership( context, container, postData );
+      }
    } else {
       print( "RESPONSE: " + response.statusCode.toString() + " " + json.decode(utf8.decode(response.bodyBytes)).toString());
       throw Exception('Failed to load library');
@@ -142,8 +207,9 @@ Future<List<Book>> fetchKeyword( titleKey, authorKey ) async {
 
 // AWS has username via cognito signin
 // Update tables: Books, LibraryShares, Ownerships
-Future<bool> putBook( appState, postData ) async {
+Future<bool> putBook( context, container, postData ) async {
    print( "putBook " + postData );
+   final appState  = container.state;
    final gatewayURL = appState.apiBasePath + "/find"; 
    
    final response =
@@ -156,6 +222,11 @@ Future<bool> putBook( appState, postData ) async {
    if (response.statusCode == 201) {
       print( response.body.toString() );         
       return true;
+   } else if (response.statusCode == 401 ) {
+      if( checkReauth( context, container ) ) {
+         await container.getAuthTokens( true );
+         return await putBook( context, container, postData );
+      }
    } else {
       print( "RESPONSE: " + response.statusCode.toString() + " " + json.decode(utf8.decode(response.bodyBytes)).toString());
       throw Exception('Failed to add book');
@@ -165,11 +236,12 @@ Future<bool> putBook( appState, postData ) async {
 
 
 
-
 // Called on signin
-initMyLibraries( appState ) async {
+initMyLibraries( context, container ) async {
    print( "initMyLibs" );
-   appState.myLibraries = await fetchLibraries( appState, '{ "Endpoint": "GetLibs" }' );
+   final appState  = container.state;
+
+   appState.myLibraries = await fetchLibraries( context, container, '{ "Endpoint": "GetLibs" }' );
    if( appState.myLibraries.length > 0 ) {
       for( final lib in appState.myLibraries ) {
          if( lib.private ) {
@@ -183,30 +255,33 @@ initMyLibraries( appState ) async {
       }
    }
    appState.myLibraries.sort((a, b) => a.private ? -1 : 1 );
-   await initExploreLibraries( appState );
-   await initSelectedLibrary( appState );
+   await initExploreLibraries( context, container );
+   await initSelectedLibrary( context, container );
 }
 
 // XXX PAGINATE on aws
-initExploreLibraries( appState ) async {
+initExploreLibraries( context, container ) async {
    print( "initExploreLibs" );
-   appState.exploreLibraries = await fetchLibraries( appState, '{ "Endpoint": "GetExploreLibs" }' );
+   final appState  = container.state;
+   appState.exploreLibraries = await fetchLibraries( context, container, '{ "Endpoint": "GetExploreLibs" }' );
 }
 
-initSelectedLibrary( appState ) async {
+initSelectedLibrary( context, container ) async {
    print( "InitSelectedLib" );
+   final appState  = container.state;
    assert( appState.myLibraries.length >= 1 );
    final selectedLib = appState.privateLibId;
-   await initLibBooks( appState, selectedLib );
+   await initLibBooks( context, container, selectedLib );
 }
 
-initLibBooks( appState, selectedLibrary ) async {
+initLibBooks( context, container, selectedLibrary ) async {
    print( "InitLIBBOOKS" );
-   appState.booksInLib[selectedLibrary] = await fetchBooks( appState, '{ "Endpoint": "GetBooks", "SelectedLib": "$selectedLibrary" }' );
+   final appState  = container.state;
+   appState.booksInLib[selectedLibrary] = await fetchBooks( context, container, '{ "Endpoint": "GetBooks", "SelectedLib": "$selectedLibrary" }' );
 
    // new private lib needs some initialization
    if( selectedLibrary == appState.privateLibId && appState.booksInLib[selectedLibrary].length == 0 ) {
-      await initOwnership( appState, '{ "Endpoint": "InitOwnership" }' );
+      await initOwnership( context, container, '{ "Endpoint": "InitOwnership" }' );
    }
 }
      
