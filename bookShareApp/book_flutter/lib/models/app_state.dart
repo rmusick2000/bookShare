@@ -25,8 +25,9 @@ class AppState {
    TextEditingController confirmationCodeController;
    double screenHeight;
    double screenWidth;
-   
-   // App logic
+
+   // XXX comments
+   // App logic   
    bool loaded;
    bool loading;
    String userId;
@@ -38,6 +39,10 @@ class AppState {
 
    String selectedLibrary;
    bool booksLoaded;
+
+   bool sharesLoaded;                               // my_library_page  shares.   is libraryShares dirty?
+   Map<String, Map<String, bool>> libraryShares;    // my_library_page: shares.   {bookId: {libraryId: bool}}
+   
    
    initAppData() {
       loaded = false;
@@ -47,10 +52,12 @@ class AppState {
       privateLibId = "";
       userId = "";
       booksInLib = new Map<String, List<Book>>();
-
       detailBook = null;
+
       selectedLibrary = "";
       booksLoaded = true;
+      sharesLoaded = false;   
+      libraryShares = new Map<String, Map<String,bool>>();
    }
 
    init() {

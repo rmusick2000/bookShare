@@ -78,6 +78,22 @@ makeActionButtonSmall( appState, buttonText, fn ) {
 }
 
 
+makeTitleText( title, width, wrap, lines ) {
+   return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 6, 6, 0),
+      child: Container( width: width, 
+                        child: Text(title, softWrap: wrap, maxLines: lines, overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold))));
+}
+
+makeAuthorText( author, width, wrap, lines ) {
+   return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 0, 6, 0),
+      child: Container( width: width,
+                        child: Text("By: " + author, softWrap: wrap, maxLines: lines, overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic))));
+}
+      
 makeInputField( BuildContext context, hintText, obscure, controller ) {
    TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
    return TextField(
@@ -203,7 +219,6 @@ Widget makeLibraryChunk( appState, libraryName, libraryId ) {
             child: Text(libraryName, style: TextStyle(fontSize: 12)))]
       );
 }
-
 
 
 Library getPrivateLib( appState ) {

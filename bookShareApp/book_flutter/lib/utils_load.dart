@@ -13,13 +13,13 @@ import 'package:bookShare/screens/launch_page.dart';
 import 'package:bookShare/models/app_state.dart';
 import 'package:bookShare/models/libraries.dart';
 import 'package:bookShare/models/books.dart';
+import 'package:bookShare/models/shares.dart';
 
 
-// XXX profile page should use this 
 logout( context, container, appState ) {
-   container.onPressWrapper((){
+   final wrapper = container.onPressWrapper((){
          Cognito.signOut();
-
+         
          // Rebuilding page below, don't need to setState (which isn't available here). 
          appState.usernameController.clear();
          appState.passwordController.clear();
@@ -31,12 +31,15 @@ logout( context, container, appState ) {
             ModalRoute.withName("BSSplashPage")
             );
       });
+   wrapper();
 }      
 
 
 bool checkReauth( context, container ) {
    final appState  = container.state;
-
+   print( "" );
+   print( "" );
+   print( "" );
    print (" !!! !!! !!!" );
    print (" !!! !!!" );
    print (" !!!" );
@@ -44,6 +47,9 @@ bool checkReauth( context, container ) {
    print (" !!!" );
    print (" !!! !!!" );
    print (" !!! !!! !!!" );
+   print( "" );
+   print( "" );
+   print( "" );
 
    appState.authRetryCount += 1; 
    if( appState.authRetryCount > 100 ) {
@@ -117,6 +123,37 @@ Future<List<Book>> fetchBooks( context, container, postData ) async {
    } else {
       print( "RESPONSE: " + response.statusCode.toString() + " " + json.decode(utf8.decode(response.bodyBytes)).toString());
       throw Exception('Failed to load books');
+   }
+}
+
+// XXX wrap all fetch.  pass in 201 and 401 responses
+Future<Map<String,Map<String,bool>>> fetchShares( context, container, postData ) async {
+   final appState  = container.state;
+   print( "fetchShares " + postData );
+   final gatewayURL = appState.apiBasePath + "/find"; 
+   
+   final response =
+      await http.post(
+         gatewayURL,
+         headers: {HttpHeaders.authorizationHeader: appState.idToken},
+         body: postData
+         );
+   
+   if (response.statusCode == 201) {
+      print( response.body.toString() );         
+      
+      Iterable l = json.decode(utf8.decode(response.bodyBytes));
+      Iterable s = l.map((sketch)=> Share.fromJson(sketch));
+      Map<String, Map<String,bool>> shares = new Map.fromIterable( s, key: (item) => item.bookId, value: (item) => item.libraries );
+      return shares;
+   } else if (response.statusCode == 401 ) {
+      if( checkReauth( context, container ) ) {
+         await container.getAuthTokens( true );
+         return await fetchShares( context, container, postData );
+      }
+   } else {
+      print( "RESPONSE: " + response.statusCode.toString() + " " + json.decode(utf8.decode(response.bodyBytes)).toString());
+      throw Exception('Failed to load library shares');
    }
 }
 
@@ -233,6 +270,32 @@ Future<bool> putBook( context, container, postData ) async {
    }
 }
 
+Future<bool> putShare( context, container, postData ) async {
+   print( "putShare " + postData );
+   final appState  = container.state;
+   final gatewayURL = appState.apiBasePath + "/find"; 
+   
+   final response =
+      await http.post(
+         gatewayURL,
+         headers: {HttpHeaders.authorizationHeader: appState.idToken},
+         body: postData
+         );
+   
+   if (response.statusCode == 201) {
+      print( response.body.toString() );         
+      return true;
+   } else if (response.statusCode == 401 ) {
+      if( checkReauth( context, container ) ) {
+         await container.getAuthTokens( true );
+         return await putShare( context, container, postData );
+      }
+   } else {
+      print( "RESPONSE: " + response.statusCode.toString() + " " + json.decode(utf8.decode(response.bodyBytes)).toString());
+      throw Exception('Failed to add share');
+   }
+}
+
 
 
 
@@ -285,3 +348,21 @@ initLibBooks( context, container, selectedLibrary ) async {
    }
 }
      
+initLibShares( context, container ) async {
+   print( "InitLIBSHARES" );
+   final appState  = container.state;
+   String uid = appState.userId;
+   appState.libraryShares = await fetchShares( context, container, '{ "Endpoint": "GetShares", "PersonId": "$uid" }' );
+}
+
+setLibShare( context, container, bookId, libId, newValue ) async {
+   print( "setLIBSHARES" );
+   showToast( context, "Updating sharing data" );
+   final appState  = container.state;
+
+   String uid = appState.userId;
+   String share = newValue.toString();
+   String postData = '{ "Endpoint": "UpdateShare", "BookId": "$bookId", "PersonId": "$uid", "LibId": "$libId", "Value": "$share" }';
+   await putShare( context, container, postData );
+}
+

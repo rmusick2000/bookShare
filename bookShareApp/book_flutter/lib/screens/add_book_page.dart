@@ -72,7 +72,7 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
     super.dispose();
   }
 
-
+  // XXX why only this not in utils_load?
   void addToLibrary() async {
      print( "Adding " + newBook.toString() + " to private lib" );
      showToast( context, "Adding..." );

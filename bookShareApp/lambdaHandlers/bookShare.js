@@ -34,6 +34,8 @@ exports.handler = (event, context, callback) => {
     else if( endPoint == "GetExploreLibs") { resultPromise = getLibs( username, false ); }
     else if( endPoint == "GetBooks")       { resultPromise = getBooks( requestBody.SelectedLib, username ); }
     else if( endPoint == "PutBook")        { resultPromise = putBook( requestBody.SelectedLib, requestBody.NewBook, username ); }
+    else if( endPoint == "GetShares")      { resultPromise = getShares( requestBody.PersonId ); }
+    else if( endPoint == "UpdateShare")    { resultPromise = updateShare( requestBody.BookId, requestBody.PersonId, requestBody.LibId, requestBody.Value ); }
     else if( endPoint == "InitOwnership")  { resultPromise = initOwn( username ); }
     else {
 	callback( null, errorResponse( "500", "EndPoint request not understood", context.awsRequestId));
@@ -82,6 +84,22 @@ function getPrivLibId( personId ) {
 	assert(libraries.Count == 1 );
 	console.log( "Found Private Library ", libraries.Items[0] );
 	return libraries.Items[0].LibraryId;
+    });
+}
+
+function getShareLibs( bookId, personId ) {
+    // Params to get a shares
+    const paramsS = {
+        TableName: 'LibraryShares',
+        FilterExpression: 'BookId = :bid AND PersonId = :pid',
+        ExpressionAttributeValues: { ":bid": bookId, ":pid": personId }
+    };
+    
+    let sharePromise = bsdb.scan( paramsS ).promise();
+    return sharePromise.then((shares) => {
+	console.log( "shares: ", shares );
+	assert(shares.Count == 1 );
+	return shares.Items[0].Libraries;
     });
 }
 
@@ -225,6 +243,69 @@ function getBooks( selectedLib, username ) {
 	    };
 	});
 	
+    });
+}
+
+// XXX Beware 100 item limit in scan
+function getShares( personId ) {
+    console.log('Get shares! ', personId );
+
+    // Get Shares
+    
+    // Params to get shares for personId
+    const paramsS = {
+        TableName: 'LibraryShares',
+        FilterExpression: 'PersonId = :uid',
+        ExpressionAttributeValues: { ":uid": personId }
+    };
+    
+    let sharesPromise = bsdb.scan( paramsS ).promise();
+    return sharesPromise.then((shares) => {
+	
+	return {
+	    statusCode: 201,
+	    body: JSON.stringify( shares.Items ),
+	    headers: { 'Access-Control-Allow-Origin': '*' }
+	};
+    });
+}
+
+
+
+
+// 1. At this point, share has been added for private lib.  update with append, or remove.
+// 2. list_append exists, but there is no list_delete.
+//    data volume is tiny, put is overwrite... so just grab, rebuild and put
+async function updateShare( bookId, personId, libId, value ) {
+
+    var libraries = await getShareLibs( bookId, personId );
+    console.log('Put share, current libs:', libraries );
+
+    if( value == "true" ) {
+	libraries.push( libId );
+    } else {
+	var index = libraries.indexOf( libId );
+	assert( index > -1 );
+	libraries.splice( index, 1 );
+    }
+    
+    // Params to put share
+    const paramsS = {
+        TableName: 'LibraryShares',
+	Item: {
+	    "BookId":    bookId,
+	    "PersonId":  personId,
+	    "Libraries": libraries
+	}};
+    
+    let sharesPromise = bsdb.put( paramsS ).promise();
+    return sharesPromise.then((shares) => {
+	console.log( "Success!" );
+	return {
+	    statusCode: 201,
+	    body: JSON.stringify( true ),
+	    headers: { 'Access-Control-Allow-Origin': '*' }
+	};
     });
 }
 

@@ -50,6 +50,7 @@ class _BookShareHomeState extends State<BookShareHomePage> {
       super.dispose();
    }
 
+
    _updateSelectedLibrary( selectedLib ) async {
       print( "UpdateSelectedLib " + selectedLib );
       if( !appState.booksInLib.containsKey( selectedLib )) {
@@ -74,6 +75,7 @@ class _BookShareHomeState extends State<BookShareHomePage> {
       }
    }
 
+   
    Widget _makeLibraryChunk( libraryName, libraryId ) {
       return GestureDetector(
          onTap: () { _updateSelectedLibrary( libraryId ); },
@@ -182,16 +184,8 @@ class _BookShareHomeState extends State<BookShareHomePage> {
                  child: ClipRRect(
                     borderRadius: new BorderRadius.circular(12.0),
                     child: image )),
-              Padding(
-                 padding: const EdgeInsets.fromLTRB(inset, 6, 6, 0),
-                 child: Container( width: imageWidth-inset-6,
-                                   child: Text(book.title, softWrap: true, maxLines: 2, overflow: TextOverflow.ellipsis,
-                                               style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)))),
-              Padding(
-                 padding: const EdgeInsets.fromLTRB(inset, 0, 6, 0),
-                 child: Container( width: imageWidth,
-                                   child: Text("By: " + book.author, softWrap: true, maxLines: 1, overflow: TextOverflow.ellipsis,
-                                               style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic)))),
+              makeTitleText( book.title, imageWidth-inset-6, true, 2 ),
+              makeAuthorText( book.author, imageWidth, true, 1 ),
               Padding(
                  padding: const EdgeInsets.fromLTRB(inset, 0, 6, 0),
                  child: _requestText( book.id ))

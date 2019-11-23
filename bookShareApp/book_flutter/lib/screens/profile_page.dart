@@ -12,6 +12,7 @@ import 'package:bookShare/screens/add_book_page.dart';
 import 'package:bookShare/screens/profile_page.dart';
 
 import 'package:bookShare/utils.dart';
+import 'package:bookShare/utils_load.dart';
 import 'package:bookShare/app_state_container.dart';
 import 'package:bookShare/models/app_state.dart';
 
@@ -43,28 +44,23 @@ class _BookShareProfileState extends State<BookShareProfilePage> {
   }
 
   
-   @override
-   Widget build(BuildContext context) {
+  _logout( context, container, appState) {
+     wrapper() async { 
+        setState(() => bookState = "illiterate" );
+        logout( context, container, appState );
+     }
+     return wrapper;
+  }
+         
+  @override
+  Widget build(BuildContext context) {
 
       final container = AppStateContainer.of(context);
       appState = container.state;
 
-      final logoutButton = makeActionButton( context, 'Logout',  container.onPressWrapper((){
-               Cognito.signOut();
-               Navigator.pushAndRemoveUntil(
-                  context, 
-                  MaterialPageRoute(builder: (context) => BSLaunchPage()),
-                  ModalRoute.withName("BSSplashPage")
-                  );
-               setState(() {
-                     bookState = "illiterate";
-                     appState.usernameController.clear();
-                     appState.passwordController.clear();
-                     appState.attributeController.clear();
-                     appState.confirmationCodeController.clear();
-                  });
-            }));
-
+      makeLogoutButton() {
+         return makeActionButton( context, 'Logout', _logout( context, container, appState) );
+      }
 
       
    return Scaffold(
@@ -81,7 +77,7 @@ class _BookShareProfileState extends State<BookShareProfilePage> {
                        mainAxisAlignment: MainAxisAlignment.center,
                        children: <Widget>[
                           SizedBox(height: 5.0),
-                          logoutButton,
+                          makeLogoutButton(),
                           SizedBox(height: 5.0),
                           Text( appState.userState?.toString() ?? "UserState here", style: TextStyle(fontStyle: FontStyle.italic))
                           ])))
