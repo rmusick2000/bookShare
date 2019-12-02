@@ -233,6 +233,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
             }
             // _updateSelectedLibrary( newVal );
             setState(() {
+                  shareAll = false;
                   shareLibrary = newVal;
                });
          },
@@ -251,6 +252,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
    Widget _makeBookShare( book ) {
       final textWidth = appState.screenWidth * .7;
       assert( shareLibrary != "" && shareLibrary != appState.privateLibId );
+      // print( "Making bookshare for lib " + shareLibrary + " " + book.id );
       final shares = appState.ownerships[shareLibrary];
       
       checkVal() {
@@ -341,6 +343,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
       setState(() {
             print( "... set loaded true, force rebuild" );
             appState.sharesLoaded = true;
+            shareAll = false;
          });
    }
 
@@ -349,7 +352,8 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
 
       appState.sharesLoaded = false;
 
-      if( newValue ) { appState.ownerships[libId] = appState.ownerships[appState.privateLibId];  }
+      // avoid copy by reference  .. icky bugs
+      if( newValue ) { appState.ownerships[libId] = new Set<String>.from( appState.ownerships[appState.privateLibId] );  }
       else           { appState.ownerships[libId].clear();   }
       
       await setAllShares( context, container, libId, newValue );
