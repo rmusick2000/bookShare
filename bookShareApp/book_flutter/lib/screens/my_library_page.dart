@@ -30,24 +30,28 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
    var container;
    AppState appState;
    String contentView;
-   String selectedLib;   // XXX
+   // String selectedLib;   
 
    // Dropdown
    bool dirtyLibChunks;
    List<String> shareLibs;
    Map<String,Widget> libChunks;
    String shareLibrary;
+
+   // shares
+   bool shareAll; 
    
    @override
    void initState() {
       super.initState();
       contentView = "grid";
-      selectedLib = "";
+      // selectedLib = "";
 
       dirtyLibChunks = true;
       libChunks = new Map<String,Widget>();
       shareLibs = [];
       shareLibrary = "";
+      shareAll = false;
 
    }
    
@@ -224,6 +228,9 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
          elevation: 5,
          onChanged: (String newVal) 
          {
+            if( !appState.ownerships.containsKey( newVal ) ) {
+               appState.ownerships[newVal] = new Set<String>();
+            }
             // _updateSelectedLibrary( newVal );
             setState(() {
                   shareLibrary = newVal;
@@ -241,16 +248,16 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
          );
    }
 
-
-   // XXX account for current shares
-   // XXX update on the fly... 3 phase  uncheck, color, check
    Widget _makeBookShare( book ) {
       final textWidth = appState.screenWidth * .7;
       assert( shareLibrary != "" && shareLibrary != appState.privateLibId );
+      final shares = appState.ownerships[shareLibrary];
+      
       checkVal() {
-         if( appState.sharesLoaded ) { return appState.libraryShares[book.id].containsKey(shareLibrary); }
-         else                        { return false; }  // XXX set box color here.. changing  (or tristate?)
+         if( shares == null ) { return false; }
+         return shares.contains(book.id);
       }
+         
       return Row(
          crossAxisAlignment: CrossAxisAlignment.center,
          mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -268,7 +275,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
                   value: checkVal(),
                   onChanged: (bool value)
                   {
-                     _updateLibraryShares( book.id, shareLibrary, value );
+                     _updateOwnerships( book.id, shareLibrary, value );
                   }))
             ]);
    }
@@ -300,10 +307,10 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
                             Padding(
                                padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
                                child: Checkbox(
-                                  value: false,   // XXX me me me
+                                  value: shareAll,
                                   onChanged: (bool value)
                                   {
-                                     print( "should setState val here" );
+                                     _updateAllOwnerships( shareLibrary, value );
                                   }))
                             ]));
       bookShares.add( _makeHDivider( appState.screenWidth * .8, 0.0, appState.screenWidth * .1 ));
@@ -324,21 +331,38 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
             ));
    }
 
-   _updateLibraryShares( bookId, libId, newValue ) async {
-      print( "updating LibShares" );
+   _updateOwnerships( bookId, libId, newValue ) async {
+      print( "updating Share" );
+      // setState here would force a reload that you do not want, at least not without going to tristate.
+      appState.sharesLoaded = false;
+      if( newValue ) { appState.ownerships[libId].add( bookId ); }
+      else {           appState.ownerships[libId].remove( bookId );   }
+      await setShare( context, container, bookId, libId, newValue );
       setState(() {
-            appState.sharesLoaded = false;
+            print( "... set loaded true, force rebuild" );
+            appState.sharesLoaded = true;
          });
-      appState.libraryShares[bookId][libId] = newValue;
-      await setLibShare( context, container, bookId, libId, newValue );
+   }
+
+   _updateAllOwnerships( libId, newValue ) async {
+      print( "updating all all shares" + newValue.toString() );
+
+      appState.sharesLoaded = false;
+
+      if( newValue ) { appState.ownerships[libId] = appState.ownerships[appState.privateLibId];  }
+      else           { appState.ownerships[libId].clear();   }
+      
+      await setAllShares( context, container, libId, newValue );
+
       setState(() {
+            shareAll = newValue;
             appState.sharesLoaded = true;
          });
    }
    
-   _initLibraryShares() async {
-      print( "loading LibShares" );
-      await initLibShares( context, container );
+   _initOwnerships() async {
+      print( "loading Ownerships" );
+      await initOwnerships( context, container );
       setState(() {
             appState.sharesLoaded = true;
          });
@@ -350,7 +374,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
       String shareText = "Book shares for: ";
       if( libChunks.length == 0 ) { shareText = "Share books from your private library on this page, once you've joined another library."; }
       if( !appState.sharesLoaded ) {
-         _initLibraryShares(); 
+         _initOwnerships(); 
       }
       
       return Column(

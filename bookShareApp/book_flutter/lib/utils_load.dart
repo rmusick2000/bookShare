@@ -13,7 +13,7 @@ import 'package:bookShare/screens/launch_page.dart';
 import 'package:bookShare/models/app_state.dart';
 import 'package:bookShare/models/libraries.dart';
 import 'package:bookShare/models/books.dart';
-import 'package:bookShare/models/shares.dart';
+import 'package:bookShare/models/ownerships.dart';
 
 
 logout( context, container, appState ) {
@@ -127,9 +127,9 @@ Future<List<Book>> fetchBooks( context, container, postData ) async {
 }
 
 // XXX wrap all fetch.  pass in 201 and 401 responses
-Future<Map<String,Map<String,bool>>> fetchShares( context, container, postData ) async {
+Future<Map<String,Set>> fetchOwnerships( context, container, postData ) async {
    final appState  = container.state;
-   print( "fetchShares " + postData );
+   print( "fetchOwnerships " + postData );
    final gatewayURL = appState.apiBasePath + "/find"; 
    
    final response =
@@ -141,15 +141,13 @@ Future<Map<String,Map<String,bool>>> fetchShares( context, container, postData )
    
    if (response.statusCode == 201) {
       print( response.body.toString() );         
-      
-      Iterable l = json.decode(utf8.decode(response.bodyBytes));
-      Iterable s = l.map((sketch)=> Share.fromJson(sketch));
-      Map<String, Map<String,bool>> shares = new Map.fromIterable( s, key: (item) => item.bookId, value: (item) => item.libraries );
-      return shares;
+      final o = json.decode(utf8.decode(response.bodyBytes));
+      final ownership = Ownership.fromJson(o);
+      return ownership.shares;
    } else if (response.statusCode == 401 ) {
       if( checkReauth( context, container ) ) {
          await container.getAuthTokens( true );
-         return await fetchShares( context, container, postData );
+         return await fetchOwnerships( context, container, postData );
       }
    } else {
       print( "RESPONSE: " + response.statusCode.toString() + " " + json.decode(utf8.decode(response.bodyBytes)).toString());
@@ -243,7 +241,7 @@ Future<List<Book>> fetchKeyword( titleKey, authorKey ) async {
 }
 
 // AWS has username via cognito signin
-// Update tables: Books, LibraryShares, Ownerships
+// Update tables: Books, Ownerships
 Future<bool> putBook( context, container, postData ) async {
    print( "putBook " + postData );
    final appState  = container.state;
@@ -270,8 +268,8 @@ Future<bool> putBook( context, container, postData ) async {
    }
 }
 
-Future<bool> putShare( context, container, postData ) async {
-   print( "putShare " + postData );
+Future<bool> putShares( context, container, postData ) async {
+   print( "putShares " + postData );
    final appState  = container.state;
    final gatewayURL = appState.apiBasePath + "/find"; 
    
@@ -288,15 +286,13 @@ Future<bool> putShare( context, container, postData ) async {
    } else if (response.statusCode == 401 ) {
       if( checkReauth( context, container ) ) {
          await container.getAuthTokens( true );
-         return await putShare( context, container, postData );
+         return await putShares( context, container, postData );
       }
    } else {
       print( "RESPONSE: " + response.statusCode.toString() + " " + json.decode(utf8.decode(response.bodyBytes)).toString());
       throw Exception('Failed to add share');
    }
 }
-
-
 
 
 // Called on signin
@@ -338,31 +334,45 @@ initSelectedLibrary( context, container ) async {
 }
 
 initLibBooks( context, container, selectedLibrary ) async {
-   print( "InitLIBBOOKS" );
+   print( "InitLIBBOOKS " + selectedLibrary);
    final appState  = container.state;
    appState.booksInLib[selectedLibrary] = await fetchBooks( context, container, '{ "Endpoint": "GetBooks", "SelectedLib": "$selectedLibrary" }' );
 
    // new private lib needs some initialization
    if( selectedLibrary == appState.privateLibId && appState.booksInLib[selectedLibrary].length == 0 ) {
-      await initOwnership( context, container, '{ "Endpoint": "InitOwnership" }' );
+      String mylib = appState.privateLibId;
+      await initOwnership( context, container, '{ "Endpoint": "InitOwnership", "PrivLibId": "$mylib" }' );
    }
 }
-     
-initLibShares( context, container ) async {
-   print( "InitLIBSHARES" );
+
+
+initOwnerships( context, container ) async {
+   print( "InitOwnerships" );
    final appState  = container.state;
    String uid = appState.userId;
-   appState.libraryShares = await fetchShares( context, container, '{ "Endpoint": "GetShares", "PersonId": "$uid" }' );
+   appState.ownerships = await fetchOwnerships( context, container, '{ "Endpoint": "GetOwnerships", "PersonId": "$uid" }' );
 }
 
-setLibShare( context, container, bookId, libId, newValue ) async {
-   print( "setLIBSHARES" );
+setShare( context, container, bookId, libId, newValue ) async {
+   print( "setSHARES" );
+   final appState  = container.state;
+
+   String uid = appState.userId;
+   String plib = appState.privateLibId;
+   String share = newValue.toString();
+   String postData = '{ "Endpoint": "UpdateShare", "BookId": "$bookId", "PersonId": "$uid", "LibId": "$libId", "PLibId": "$plib", "All": "false", "Value": "$share" }';
+   await putShares( context, container, postData );
+}
+
+setAllShares( context, container, libId, newValue ) async {
+   print( "setAllSHARES" );
    showToast( context, "Updating sharing data" );
    final appState  = container.state;
 
    String uid = appState.userId;
+   String plib = appState.privateLibId;
    String share = newValue.toString();
-   String postData = '{ "Endpoint": "UpdateShare", "BookId": "$bookId", "PersonId": "$uid", "LibId": "$libId", "Value": "$share" }';
-   await putShare( context, container, postData );
+   String postData = '{ "Endpoint": "UpdateShare", "BookId": "", "PersonId": "$uid", "LibId": "$libId", "PLibId": "$plib", "All": "true", "Value": "$share" }';
+   await putShares( context, container, postData );
 }
 

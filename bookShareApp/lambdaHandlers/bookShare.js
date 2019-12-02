@@ -5,6 +5,9 @@ const bsdb = new AWS.DynamoDB.DocumentClient();
 const randomBytes = require('crypto').randomBytes;
 var assert = require('assert');
 
+// sigh.  thanks dynamodb.  
+const EMPTY = "---EMPTY---";  
+
 // Because we're using a Cognito User Pools authorizer, all of the claims
 // included in the authentication token are provided in the request context.
 // This includes the username as well as other attributes.
@@ -24,19 +27,19 @@ exports.handler = (event, context, callback) => {
     console.log('Received event: ', event);
 
     const username = event.requestContext.authorizer.claims['cognito:username'];
-    const requestBody = JSON.parse(event.body);
+    const rb = JSON.parse(event.body);
 
-    var endPoint = requestBody.Endpoint;
+    var endPoint = rb.Endpoint;
     var resultPromise;
 
-    if(      endPoint == "FindBook" )      { resultPromise = findBook( requestBody.Title, username ); }
+    if(      endPoint == "FindBook" )      { resultPromise = findBook( rb.Title, username ); }
     else if( endPoint == "GetLibs")        { resultPromise = getLibs( username, true); }
     else if( endPoint == "GetExploreLibs") { resultPromise = getLibs( username, false ); }
-    else if( endPoint == "GetBooks")       { resultPromise = getBooks( requestBody.SelectedLib, username ); }
-    else if( endPoint == "PutBook")        { resultPromise = putBook( requestBody.SelectedLib, requestBody.NewBook, username ); }
-    else if( endPoint == "GetShares")      { resultPromise = getShares( requestBody.PersonId ); }
-    else if( endPoint == "UpdateShare")    { resultPromise = updateShare( requestBody.BookId, requestBody.PersonId, requestBody.LibId, requestBody.Value ); }
-    else if( endPoint == "InitOwnership")  { resultPromise = initOwn( username ); }
+    else if( endPoint == "GetBooks")       { resultPromise = getBooks( rb.SelectedLib ); }
+    else if( endPoint == "PutBook")        { resultPromise = putBook( rb.SelectedLib, rb.NewBook, username ); }
+    else if( endPoint == "GetOwnerships")  { resultPromise = getOwnerships( rb.PersonId ); }
+    else if( endPoint == "UpdateShare")    { resultPromise = updateShare( rb.BookId, rb.PersonId, rb.LibId, rb.PLibId, rb.All, rb.Value ); }
+    else if( endPoint == "InitOwnership")  { resultPromise = initOwn( username, rb.PrivLibId ); }
     else {
 	callback( null, errorResponse( "500", "EndPoint request not understood", context.awsRequestId));
 	return;
@@ -87,24 +90,25 @@ function getPrivLibId( personId ) {
     });
 }
 
-function getShareLibs( bookId, personId ) {
-    // Params to get a shares
-    const paramsS = {
-        TableName: 'LibraryShares',
-        FilterExpression: 'BookId = :bid AND PersonId = :pid',
-        ExpressionAttributeValues: { ":bid": bookId, ":pid": personId }
+function lookupOwnerships( personId ) {
+    console.log('Get shares! ', personId );
+
+    const paramsO = {
+        TableName: 'Ownerships',
+        FilterExpression: 'OwnershipId = :uid',
+        ExpressionAttributeValues: { ":uid": personId }
     };
     
-    let sharePromise = bsdb.scan( paramsS ).promise();
-    return sharePromise.then((shares) => {
-	console.log( "shares: ", shares );
-	assert(shares.Count == 1 );
-	return shares.Items[0].Libraries;
+    let ownershipsPromise = bsdb.scan( paramsO ).promise();
+    return ownershipsPromise.then((ownerships) => {
+	assert( ownerships.Count == 1 );
+	
+	return ownerships.Items[0];
     });
 }
 
 
-async function initOwn( username ) {
+async function initOwn( username, privLib ) {
     console.log('init ownership', username );
 
     const personId  = await getPersonId( username );
@@ -114,7 +118,8 @@ async function initOwn( username ) {
 	TableName:     'Ownerships',
 	Item: {
 	    "OwnershipId": personId, 
-	    "Books":       []
+	    "Books":       [],
+	    "Shares":      {}
 	}
     };
 
@@ -135,21 +140,25 @@ async function initOwn( username ) {
 }    
 
 // Want some error msgs? https://github.com/aws/aws-sdk-js/issues/2464
-// Updates tables: Books, LibraryShares, Ownerships
+// Updates tables: Books, Ownerships
 async function putBook( selectedLib, newBook, username ) {
     console.log('Put Book!', username, selectedLib, newBook.title );
 
-    const personId  = await getPersonId( username );
-    const libraryId = await getPrivLibId( personId );
-	
+    const personId   = await getPersonId( username );
+    const libraryId  = await getPrivLibId( personId );
+    const ownerships = await lookupOwnerships( personId );
+    
     // Update ownership.. pkey is same as PersonId
-    const oEntry = [{ "BookId" : newBook.id, "ShareCount" : 0 }];
+    const oEntry =    [{ "BookId" : newBook.id, "ShareCount" : 0 }];
+    // XXX update this!
+    let   newShares = ownerships.shares[libraryId];
+    newShares.add( newBook.id );
     const paramsO = {
 	TableName: 'Ownerships',
 	Key: { "OwnershipId": personId },
-	UpdateExpression: 'set Books = list_append(Books, :nb)',
+	UpdateExpression: 'set Books = list_append(Books, :nb), Shares = :newShares',
         ExpressionAttributeValues: {
-            ':nb':  oEntry
+            ':nb':  oEntry, ':newShares': newShares
         }
     };
     
@@ -170,23 +179,10 @@ async function putBook( selectedLib, newBook, username ) {
 	}
     };
     
-    // Put libshares
-    const lsEntry = [ libraryId ];
-    console.log( "libshare entry", lsEntry );
-    const paramsLS = {
-	TableName: 'LibraryShares',
-	Item: {
-	    "BookId":      newBook.id,
-	    "PersonId":    personId,
-	    "Libraries":   lsEntry,
-	}
-    };
-    
     let bookPromise = bsdb.transactWrite({
 	TransactItems: [
 	    { Put: paramsPB }, 
 	    { Update: paramsO },
-	    { Put: paramsLS }
 	]}).promise();
     
     return bookPromise.then(() => {
@@ -199,27 +195,26 @@ async function putBook( selectedLib, newBook, username ) {
     });
 }
 
-
 // XXX Beware 100 item limit in scan
-function getBooks( selectedLib, username ) {
-    console.log('Get Books! ' + username + selectedLib );
+function getBooks( selectedLib ) {
+    console.log('Get Books!', selectedLib );
 
-    // Get Shares
-    
-    // Params to get shares that have selectedLib in Libraries
-    const paramsS = {
-        TableName: 'LibraryShares',
-        FilterExpression: 'contains(Libraries, :lid)',
-        ExpressionAttributeValues: { ":lid": selectedLib }
+    // Note the # instead of : for attribute name, not value
+    // Params to get ownerships that have selectedLib in shares
+    const paramsO = {
+        TableName: 'Ownerships',
+        FilterExpression: 'attribute_exists(Shares.#lid)',
+        ExpressionAttributeNames: { "#lid": selectedLib }
     };
     
-    let sharesPromise = bsdb.scan( paramsS ).promise();
-    return sharesPromise.then((shares) => {
-	console.log( "Shares: ", shares );
+    let ownershipsPromise = bsdb.scan( paramsO ).promise();
+    return ownershipsPromise.then((ownerships) => {
 	var books = [];
-	shares.Items.forEach(function(share) {
-	    books.push( share.BookId );
-	});
+	if( ownerships.Count > 0 ) {
+	    ownerships.Items.forEach(function(ownership) {
+		books = books.concat( Array.from( ownership.Shares[selectedLib].values ) );
+	    });
+	}
 	return books;
     }).then((books) => {
 
@@ -246,60 +241,62 @@ function getBooks( selectedLib, username ) {
     });
 }
 
-// XXX Beware 100 item limit in scan
-function getShares( personId ) {
-    console.log('Get shares! ', personId );
 
-    // Get Shares
-    
-    // Params to get shares for personId
-    const paramsS = {
-        TableName: 'LibraryShares',
-        FilterExpression: 'PersonId = :uid',
-        ExpressionAttributeValues: { ":uid": personId }
+async function getOwnerships( personId ) {
+    console.log('Get ownerships! ', personId );
+    const ownerships = await lookupOwnerships( personId );
+
+    return {
+	statusCode: 201,
+	body: JSON.stringify( ownerships ),
+	headers: { 'Access-Control-Allow-Origin': '*' }
     };
-    
-    let sharesPromise = bsdb.scan( paramsS ).promise();
-    return sharesPromise.then((shares) => {
-	
-	return {
-	    statusCode: 201,
-	    body: JSON.stringify( shares.Items ),
-	    headers: { 'Access-Control-Allow-Origin': '*' }
-	};
-    });
 }
 
+// XXX test dbase for initOwn
+// data volume is tiny, put is overwrite... so just grab, rebuild and put
+async function updateShare( bookId, personId, libId, plibId, all, value ) {
+    console.log('Put share(s) for', libId, personId, "all?", all );
 
+    const ownerships = await lookupOwnerships( personId );
+    var shares = ownerships.Shares;
 
-
-// 1. At this point, share has been added for private lib.  update with append, or remove.
-// 2. list_append exists, but there is no list_delete.
-//    data volume is tiny, put is overwrite... so just grab, rebuild and put
-async function updateShare( bookId, personId, libId, value ) {
-
-    var libraries = await getShareLibs( bookId, personId );
-    console.log('Put share, current libs:', libraries );
-
-    if( value == "true" ) {
-	libraries.push( libId );
-    } else {
-	var index = libraries.indexOf( libId );
-	assert( index > -1 );
-	libraries.splice( index, 1 );
+    // dynamodb unmarshalling in order to use as a set.  shares is not a map, but still has [] method
+    var sharesSet;
+    if( shares[libId] != null ) { sharesSet = new Set( shares[libId].values ); }
+    else {
+	// initialize set from one we know exists.  this is an odd dynamodb object
+	shares[libId] = Object.assign( {}, shares[plibId] );
+	console.log( shares[libId], shares[plibId] );
+	sharesSet = new Set();
     }
+    const booksSet  = new Set( shares[plibId].values );
     
-    // Params to put share
-    const paramsS = {
-        TableName: 'LibraryShares',
+    if( value == "true" ) {
+	if( all == "true" ) { sharesSet = booksSet;    }
+	else                { sharesSet.add( bookId ); }
+    }
+    else {
+	if( all == "true" ) { sharesSet.clear(); }
+	else                { sharesSet.delete( bookId ); }
+
+	// Libraries can't have empty set
+	if( sharesSet.size == 0 ) { sharesSet.add( EMPTY ); }
+	
+    }
+    assert( sharesSet.size > 0 );
+    shares[libId].values = Array.from( sharesSet ); 
+    
+    const paramsO = {
+        TableName: 'Ownerships',
 	Item: {
-	    "BookId":    bookId,
-	    "PersonId":  personId,
-	    "Libraries": libraries
+	    "OwnershipId":  personId,
+	    "Books":        ownerships.Books,
+	    "Shares":       shares
 	}};
     
-    let sharesPromise = bsdb.put( paramsS ).promise();
-    return sharesPromise.then((shares) => {
+    let ownershipsPromise = bsdb.put( paramsO ).promise();
+    return ownershipsPromise.then((ownership) => {
 	console.log( "Success!" );
 	return {
 	    statusCode: 201,
@@ -308,6 +305,7 @@ async function updateShare( bookId, personId, libId, value ) {
 	};
     });
 }
+
 
 async function getLibs( username, memberLibs ) {
     console.log('Get Libs!', username, memberLibs  );
@@ -352,21 +350,6 @@ async function getLibs( username, memberLibs ) {
 	    };
 	}
     });
-
-    /*
-    return new Promise((resolve, reject) => {
-	resolve(  {
-        statusCode: 201,
-        body: JSON.stringify([{
-            id: 3,
-            name: "MoJo Moomin",
-	    imageID: 234
-        }]),
-        headers: {
-            'Access-Control-Allow-Origin': '*',
-        }});
-    });
-    */
 }
 
 
@@ -403,13 +386,6 @@ function findBook(bookTitle, username) {
     });
 }
 
-function toUrlString(buffer) {
-    return buffer.toString('base64')
-        .replace(/\+/g, '-')
-        .replace(/\//g, '_')
-        .replace(/=/g, '');
-}
-
 function errorResponse(status, errorMessage, awsRequestId) {
     return {
 	statusCode: status, 
@@ -420,3 +396,19 @@ function errorResponse(status, errorMessage, awsRequestId) {
 	headers: { 'Access-Control-Allow-Origin': '*' }
     };
 }
+
+
+    /*
+    return new Promise((resolve, reject) => {
+	resolve(  {
+        statusCode: 201,
+        body: JSON.stringify([{
+            id: 3,
+            name: "MoJo Moomin",
+	    imageID: 234
+        }]),
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+        }});
+    });
+    */

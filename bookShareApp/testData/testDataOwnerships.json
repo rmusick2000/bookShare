@@ -3,9 +3,6 @@
     {
       "PutRequest": {
         "Item": {
-          "OwnershipId": {
-            "S": "bs38785"
-          },
           "Books": {
             "L": [
               {
@@ -99,6 +96,31 @@
                 }
               }
             ]
+          },
+          "Shares": {
+            "M": {
+              "bs12": {
+                "SS": [
+                  "OKOJPqWXgA",
+                  "ewyiocnAsf",
+ 	          "afGGPgwTEa",
+		  "pmnnmdKXsc",
+		  "YPRXMOMAPv",
+		  "CSQNHWUHRv",
+		  "hJromdatwh",
+		  "MKJKYFIXUN",
+		  "OjRsRifnNb"
+                ]
+              },
+              "bs15": {
+                "SS": [
+                  "afGGPgwTEa"
+                ]
+              }
+            }
+          },
+          "OwnershipId": {
+            "S": "bs38785"
           }
         }
       }
@@ -172,8 +194,27 @@
                 }
               }
             ]
-          }
-        }
+          },
+         "Shares": {
+            "M": {
+              "bs13": {
+                "SS": [
+                    "skuIdmdAso",
+		    "rqbTGwadkm",
+		    "VCBuUiMDMO",
+		    "CBTRKMIUBV",
+		    "XcJHIAKAVD",
+		    "JGiqSMcrVT"
+                ]
+              },
+              "bs15": {
+                "SS": [
+		    "JGiqSMcrVT"
+                ]
+              }
+            }
+         }
+	}
       }
     }
   ]

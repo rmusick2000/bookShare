@@ -40,8 +40,8 @@ class AppState {
    String selectedLibrary;
    bool booksLoaded;
 
-   bool sharesLoaded;                               // my_library_page  shares.   is libraryShares dirty?
-   Map<String, Map<String, bool>> libraryShares;    // my_library_page: shares.   {bookId: {libraryId: bool}}
+   bool sharesLoaded;              // my_library_page  shares.   is libraryShares dirty?
+   Map<String, Set> ownerships;    // my_library_page: shares.   {libraryId: ["books"]}
    
    
    initAppData() {
@@ -57,7 +57,7 @@ class AppState {
       selectedLibrary = "";
       booksLoaded = true;
       sharesLoaded = false;   
-      libraryShares = new Map<String, Map<String,bool>>();
+      ownerships = new Map<String, Set>();
    }
 
    init() {
