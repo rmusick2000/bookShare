@@ -12,6 +12,7 @@ import 'package:bookShare/screens/add_book_page.dart';
 import 'package:bookShare/screens/profile_page.dart';
 
 import 'package:bookShare/utils.dart';
+import 'package:bookShare/utils_load.dart';
 import 'package:bookShare/app_state_container.dart';
 import 'package:bookShare/models/app_state.dart';
 
@@ -21,12 +22,14 @@ class BookShareProfilePage extends StatefulWidget {
 
   @override
   _BookShareProfileState createState() => _BookShareProfileState();
+
 }
 
 
 class _BookShareProfileState extends State<BookShareProfilePage> {
 
    TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
+   AppState appState; 
    String bookState;
 
   @override
@@ -39,30 +42,28 @@ class _BookShareProfileState extends State<BookShareProfilePage> {
   void dispose() {
     super.dispose();
   }
+
   
-   @override
-   Widget build(BuildContext context) {
+  _logout( context, container, appState) {
+     wrapper() async { 
+        setState(() => bookState = "illiterate" );
+        logout( context, container, appState );
+     }
+     return wrapper;
+  }
+         
+  @override
+  Widget build(BuildContext context) {
 
       final container = AppStateContainer.of(context);
-      final appState = container.state;
+      appState = container.state;
 
-      final logoutButton = makeActionButton( context, 'Logout', container.onPressWrapper((){
-               Cognito.signOut();
-               Navigator.pushAndRemoveUntil(
-                  context, 
-                  MaterialPageRoute(builder: (context) => BSLaunchPage()),
-                  ModalRoute.withName("BSSplashPage")
-                  );
-               setState(() {
-                     bookState = "illiterate";
-                     appState.usernameController.clear();
-                     appState.passwordController.clear();
-                     appState.attributeController.clear();
-                     appState.confirmationCodeController.clear();
-                  });
-            }));
+      makeLogoutButton() {
+         return makeActionButton( context, 'Logout', _logout( context, container, appState) );
+      }
+
       
-     return Scaffold(
+   return Scaffold(
         appBar: makeTopAppBar( context, "Profile" ),
         bottomNavigationBar: makeBotAppBar( context, "Profile" ),
         body: Center(
@@ -76,7 +77,7 @@ class _BookShareProfileState extends State<BookShareProfilePage> {
                        mainAxisAlignment: MainAxisAlignment.center,
                        children: <Widget>[
                           SizedBox(height: 5.0),
-                          logoutButton,
+                          makeLogoutButton(),
                           SizedBox(height: 5.0),
                           Text( appState.userState?.toString() ?? "UserState here", style: TextStyle(fontStyle: FontStyle.italic))
                           ])))

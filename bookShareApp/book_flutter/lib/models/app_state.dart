@@ -13,10 +13,11 @@ class AppState {
    String accessToken;
    String idToken;
    String refreshToken;
-
+   int authRetryCount;
    var returnValue;
    UserState userState;
    double progress;
+
    String apiBasePath;
    TextEditingController usernameController;
    TextEditingController passwordController;
@@ -24,8 +25,9 @@ class AppState {
    TextEditingController confirmationCodeController;
    double screenHeight;
    double screenWidth;
-   
-   // App logic
+
+   // XXX comments
+   // App logic   
    bool loaded;
    bool loading;
    String userId;
@@ -37,6 +39,10 @@ class AppState {
 
    String selectedLibrary;
    bool booksLoaded;
+
+   bool sharesLoaded;              // my_library_page  shares.   is libraryShares dirty?
+   Map<String, Set> ownerships;    // my_library_page: shares.   {libraryId: ["books"]}
+   
    
    initAppData() {
       loaded = false;
@@ -46,10 +52,12 @@ class AppState {
       privateLibId = "";
       userId = "";
       booksInLib = new Map<String, List<Book>>();
-
       detailBook = null;
+
       selectedLibrary = "";
       booksLoaded = true;
+      sharesLoaded = false;   
+      ownerships = new Map<String, Set>();
    }
 
    init() {
@@ -58,6 +66,7 @@ class AppState {
       screenWidth = -1;
       
       // Cognito values
+      authRetryCount = 0;
       UserState userState = UserState.UNKNOWN;
       accessToken = "";
       idToken = "";

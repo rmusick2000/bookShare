@@ -20,23 +20,6 @@ class BookShareBookDetailPage extends StatelessWidget {
 
       final book = appState.detailBook;
 
-      /*
-      // XXX hmmmmmm.....
-      // no font in pubspec, no style mod, characters below show.  utf encoding?
-      TextStyle descStyle = TextStyle(fontFamily: 'Montserrat', fontSize: 14);
-      if( book.title == "Daughter of Shanghai" ) {
-         print( "NOTOXXXXXXXX" );
-         //descStyle = TextStyle(fontFamily: 'NotoSansCJK', fontSize: 14);
-         //book.description = "中国 汉语";
-         //print( "DESC: " + book.description );
-      }
-      // pubspec
-     - family: NotoSansCJK
-       fonts:
-        - asset: fonts/NotoSansCJK-Regular.ttc
-
-      */
-      
       var image;
       if( book.image != null && book.image != "" ) { image = Image.network( book.image, height: imageHeight, width: imageWidth, fit: BoxFit.contain ); }
       else                                         { image = Image.asset( 'images/blankBook.jpeg', height: imageHeight, width: imageWidth, fit: BoxFit.cover); }

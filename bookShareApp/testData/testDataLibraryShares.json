@@ -4,13 +4,9 @@
       "PutRequest": {
         "Item": {
           "Libraries": {
-            "L": [
-              {
-                "S": "bs12"
-              },
-              {
-                "S": "bs15"
-              }
+            "SS": [
+                "bs12",
+                "bs15"
             ]
           },
           "PersonId": {
@@ -26,10 +22,8 @@
       "PutRequest": {
         "Item": {
           "Libraries": {
-            "L": [
-              {
-                "S": "bs12"
-              }
+            "SS": [
+                "bs12"
             ]
           },
           "PersonId": {
@@ -45,10 +39,8 @@
       "PutRequest": {
         "Item": {
           "Libraries": {
-            "L": [
-              {
-                "S": "bs12"
-              }
+            "SS": [
+                "bs12"
             ]
           },
           "PersonId": {
@@ -64,16 +56,10 @@
       "PutRequest": {
         "Item": {
           "Libraries": {
-            "L": [
-              {
-                "S": "bs13"
-              },
-              {
-                "S": "bs15"
-              },
-              {
-                "S": "bs17"
-              }
+            "SS": [
+                "bs13",
+                "bs15",
+                "bs17"
             ]
           },
           "PersonId": {
@@ -89,10 +75,8 @@
       "PutRequest": {
         "Item": {
           "Libraries": {
-            "L": [
-              {
-                "S": "bs12"
-              }
+            "SS": [
+                "bs12"
             ]
           },
           "PersonId": {
@@ -108,13 +92,9 @@
       "PutRequest": {
         "Item": {
           "Libraries": {
-            "L": [
-              {
-                "S": "bs13"
-              },
-              {
-                "S": "bs15"
-              }
+            "SS": [
+                "bs13",
+                "bs15"
             ]
           },
           "PersonId": {
@@ -130,10 +110,8 @@
       "PutRequest": {
         "Item": {
           "Libraries": {
-            "L": [
-              {
-                "S": "bs13"
-              }
+            "SS": [
+                "bs13"
             ]
           },
           "PersonId": {
@@ -149,10 +127,8 @@
       "PutRequest": {
         "Item": {
           "Libraries": {
-            "L": [
-              {
-                "S": "bs12"
-              }
+            "SS": [
+                "bs12"
             ]
           },
           "PersonId": {
@@ -168,10 +144,8 @@
       "PutRequest": {
         "Item": {
           "Libraries": {
-            "L": [
-              {
-                "S": "bs13"
-              }
+            "SS": [
+                "bs13"
             ]
           },
           "PersonId": {
@@ -187,10 +161,8 @@
       "PutRequest": {
         "Item": {
           "Libraries": {
-            "L": [
-              {
-                "S": "bs12"
-              }
+            "SS": [
+                "bs12"
             ]
           },
           "PersonId": {
@@ -206,10 +178,8 @@
       "PutRequest": {
         "Item": {
           "Libraries": {
-            "L": [
-              {
-                "S": "bs12"
-              }
+            "SS": [
+                "bs12"
             ]
           },
           "PersonId": {
@@ -225,10 +195,8 @@
       "PutRequest": {
         "Item": {
           "Libraries": {
-            "L": [
-              {
-                "S": "bs13"
-              }
+            "SS": [
+                "bs13"
             ]
           },
           "PersonId": {
@@ -244,10 +212,8 @@
       "PutRequest": {
         "Item": {
           "Libraries": {
-            "L": [
-              {
-                "S": "bs12"
-              }
+            "SS": [
+                "bs12"
             ]
           },
           "PersonId": {
@@ -263,10 +229,8 @@
       "PutRequest": {
         "Item": {
           "Libraries": {
-            "L": [
-              {
-                "S": "bs12"
-              }
+            "SS": [
+                "bs12"
             ]
           },
           "PersonId": {
@@ -282,10 +246,8 @@
       "PutRequest": {
         "Item": {
           "Libraries": {
-            "L": [
-              {
-                "S": "bs13"
-              }
+            "SS": [
+                "bs13"
             ]
           },
           "PersonId": {

@@ -35,6 +35,7 @@ class _BookShareHomeState extends State<BookShareHomePage> {
    TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
    
    int currentBookCount;
+   var container;
    AppState appState;
    
    @override
@@ -48,6 +49,7 @@ class _BookShareHomeState extends State<BookShareHomePage> {
    void dispose() {
       super.dispose();
    }
+
 
    _updateSelectedLibrary( selectedLib ) async {
       print( "UpdateSelectedLib " + selectedLib );
@@ -65,7 +67,7 @@ class _BookShareHomeState extends State<BookShareHomePage> {
 
       if( !appState.booksLoaded ) {
          print( "Re-init libBooks for selected: " + selectedLib );
-         await initLibBooks( appState, selectedLib );
+         await initLibBooks( context, container, selectedLib );
          setState(() {
                appState.booksLoaded = true;
                currentBookCount = appState.booksInLib[selectedLib].length;
@@ -73,23 +75,11 @@ class _BookShareHomeState extends State<BookShareHomePage> {
       }
    }
 
-   GestureDetector _makeLibraryChunk( libraryName, libraryId ) {
-      final imageSize = appState.screenHeight * .1014;
+   
+   Widget _makeLibraryChunk( libraryName, libraryId ) {
       return GestureDetector(
          onTap: () { _updateSelectedLibrary( libraryId ); },
-         child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-               Padding(
-                  padding: const EdgeInsets.fromLTRB(12.0, 12.0, 0, 0.0),
-                  child: ClipRRect(
-                     borderRadius: new BorderRadius.circular(12.0),
-                     child: Image.asset( 'images/kiteLibrary.jpg', height: imageSize, width: imageSize, fit: BoxFit.fill))),
-               Padding(
-                  padding: const EdgeInsets.fromLTRB(12.0, 4.0, 0, 0.0),
-                  child: Text(libraryName, style: TextStyle(fontSize: 12)))])
+         child: makeLibraryChunk( appState, libraryName, libraryId ) 
          );
    }
 
@@ -106,9 +96,19 @@ class _BookShareHomeState extends State<BookShareHomePage> {
       else { return Container(); }
 
    }
-   Widget _requestText() {
+   Widget _requestText( bookId ) {
       Library currentLib = getCurrentLib( appState );
-      if( currentLib == null || currentLib.members.indexOf(appState.userId) == -1 ) {
+      final bil = appState.booksInLib;
+      bool myBook =  false;
+
+      // XXX Slow.. good thing it's lazy
+      if( bil != null && bil[appState.privateLibId] != null ) {
+         for( final book in bil[appState.privateLibId] ) {
+            if( book.id == bookId ) { myBook = true; break; }
+         }
+      }
+
+      if( currentLib != null && currentLib.members.indexOf(appState.userId) != -1 && !myBook ) {
          return GestureDetector(
             onTap: () { notYetImplemented(context); },
             child: Text( "Request",
@@ -121,7 +121,6 @@ class _BookShareHomeState extends State<BookShareHomePage> {
    Widget _makeSelectedLib( libId ) {
       // Selected Lib can be uninitialized briefly
       if( appState.myLibraries == null ) { return Container(); }
-      print( "makeSelectedLib" );
       
       Library selectedLib;
       assert( appState.myLibraries.length >= 1 );
@@ -166,8 +165,8 @@ class _BookShareHomeState extends State<BookShareHomePage> {
      const inset       = 20.0;
      
      var image;
-     if( book.image != "" && book.image != "bla" ) { image = Image.network( book.image, height: imageHeight, width: imageWidth, fit: BoxFit.contain ); }
-     else                                          { image = Image.asset( 'images/blankBook.jpeg', height: imageHeight, width: imageWidth, fit: BoxFit.contain); }
+     if( book.image != "---" ) { image = Image.network( book.image, height: imageHeight, width: imageWidth, fit: BoxFit.contain ); }
+     else                      { image = Image.asset( 'images/blankBook.jpeg', height: imageHeight, width: imageWidth, fit: BoxFit.contain); }
      
      return GestureDetector(
         onTap:  ()
@@ -185,27 +184,19 @@ class _BookShareHomeState extends State<BookShareHomePage> {
                  child: ClipRRect(
                     borderRadius: new BorderRadius.circular(12.0),
                     child: image )),
-              Padding(
-                 padding: const EdgeInsets.fromLTRB(inset, 6, 6, 0),
-                 child: Container( width: imageWidth-inset-6,
-                                   child: Text(book.title, softWrap: true, maxLines: 2, overflow: TextOverflow.ellipsis,
-                                               style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)))),
+              makeTitleText( book.title, imageWidth-inset-6, true, 2 ),
+              makeAuthorText( book.author, imageWidth, true, 1 ),
               Padding(
                  padding: const EdgeInsets.fromLTRB(inset, 0, 6, 0),
-                 child: Container( width: imageWidth,
-                                   child: Text("By: " + book.author, softWrap: true, maxLines: 1, overflow: TextOverflow.ellipsis,
-                                               style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic)))),
-              Padding(
-                 padding: const EdgeInsets.fromLTRB(inset, 0, 6, 0),
-                 child: _requestText())
+                 child: _requestText( book.id ))
               ]));
   }
   
    @override
    Widget build(BuildContext context) {
 
-      final container   = AppStateContainer.of(context);
-      appState          = container.state;
+      container   = AppStateContainer.of(context);
+      appState    = container.state;
 
       Widget _makeLibraryRow() {
          List<Widget> libChunks = [];
@@ -238,7 +229,6 @@ class _BookShareHomeState extends State<BookShareHomePage> {
       Widget _makeBooks( ) {
          List<Widget> bookChunks = [];
          String libName = appState.selectedLibrary;
-         print( "makeBooks" );
 
          var bil = appState.booksInLib[libName];
 
@@ -260,7 +250,7 @@ class _BookShareHomeState extends State<BookShareHomePage> {
                      child: Text("No books yet..", style: TextStyle(fontSize: 16))))
                );
          }
-         print( "  mb: going to bil" );
+
          bil.forEach((book) => bookChunks.add( makeBookChunkCol( appState, book )));
          
          return Expanded(
@@ -273,7 +263,7 @@ class _BookShareHomeState extends State<BookShareHomePage> {
 
       Widget _makeBody() {
          if( appState.loaded ) {
-            print( "AppState Loaded" );
+            // print( "AppState Loaded" );
             assert( appState.myLibraries != null );
             if( appState.selectedLibrary == "") {
                _updateSelectedLibrary( appState.privateLibId ); 

@@ -109,7 +109,7 @@ class Book {
       res += "\n   pub: " + publisher;
       res += "\n   pages: " + pageCount;
       res += "\n   pub date: " + publishedDate;
-      res += "\n   description: " + description;
+      // res += "\n   description: " + description;
       return res;
    }
 
