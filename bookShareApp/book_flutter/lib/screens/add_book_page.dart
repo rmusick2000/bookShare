@@ -82,7 +82,11 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
      String book = json.encode( newBook ); 
      String postData = '{ "Endpoint": "PutBook", "SelectedLib": "$libID", "NewBook": $book }';
      print( postData );
-     await putBook( context, container, postData );
+     bool success = await putBook( context, container, postData );
+     // XXX could, maybe, avoid call by adding newbook?  but would need to make sure it's not already there.. maybe?
+     if( success ) {
+        initLibBooks( context, container, libID );        
+     }
   }
      
   
@@ -137,14 +141,6 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
   }
   
   
-  void makeHomeDirty( appState ) {
-     setState(() { 
-           appState.booksLoaded = false;
-           appState.selectedLibrary = "";
-        });
-  }
-
-  
   // XXX tell user primary vs secondary isbn
   // XXX allow selection + crop of cover art?
   Widget _makeBooks( ) {
@@ -196,7 +192,6 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
         {
            newBook = foundBooks[selectedNewBook];
            await addToLibrary();
-           makeHomeDirty( appState );
            
            setState(() { 
                  selectedNewBook = 0;
@@ -215,7 +210,6 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
         {
            newBook = foundBooks[selectedNewBook];
            await addToLibrary();
-           makeHomeDirty( appState );
            
            setState(() { 
                  selectedNewBook = 0;

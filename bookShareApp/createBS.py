@@ -112,8 +112,6 @@ def createTestDDBEntries( sam ) :
     cmd = "aws dynamodb batch-write-item --request-items file://testData/testDataLibraries.json"
     if( call(cmd, shell=True) != 0 ) : logging.warning( "Failed to write test data: Libraries " )
 
-    cmd = "aws dynamodb batch-write-item --request-items file://testData/testDataLibraryShares.json"
-    if( call(cmd, shell=True) != 0 ) : logging.warning( "Failed to write test data: LibraryShares " )
 
 
 

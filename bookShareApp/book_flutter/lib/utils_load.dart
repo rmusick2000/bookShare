@@ -110,8 +110,6 @@ Future<List<Book>> fetchBooks( context, container, postData ) async {
          );
    
    if (response.statusCode == 201) {
-      print( response.body.toString() );         
-      
       Iterable l = json.decode(utf8.decode(response.bodyBytes));
       List<Book> books = l.map((sketch)=> Book.fromJson(sketch)).toList();
       return books;
