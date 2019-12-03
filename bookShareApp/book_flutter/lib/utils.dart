@@ -167,6 +167,7 @@ makeBotAppBar( BuildContext context, currentPage ) {
                   onPressed: ()
                   {
                      if( currentPage == "Home" ) { return; }
+                     appState.selectedLibrary = appState.privateLibId;
                      MaterialPageRoute newPage = MaterialPageRoute(builder: (context) => BookShareHomePage());
                      Navigator.push( context, newPage );
                   },

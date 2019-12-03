@@ -194,24 +194,6 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
    }
 
 
-   // No need to setState.. add is a different page, will rebuild all.
-   // Note.. privateLibId books are shared, to this selected lib.
-   //        those books are loaded at homescreen or addbook - nothing to load here.
-   /*
-   _updateSelectedLibrary( selectedLib ) async {
-      final container   = AppStateContainer.of(context);
-      print( "UpdateSelectedLib " + selectedLib );
-      if( !appState.booksInLib.containsKey( selectedLib )) {
-         appState.shareBooksLoaded = false;
-      }
-
-      if( !appState.shareBooksLoaded ) {
-         print( "Re-init libBooks for selected: " + selectedLib );
-         await initLibBooks( context, container, selectedLib );
-         appState.shareBooksLoaded = true;
-      }
-   }
-   */
 
    // Dropdown button selects strings, then uses a map to find pre-built libchunk for display.  cool beans.
    Widget _makeDropLib() {
@@ -219,7 +201,6 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
       if( shareLibs.length == 0 ) { return Container(); }
       if( shareLibrary == "" )  {
          shareLibrary = shareLibs[0];
-         // _updateSelectedLibrary( shareLibrary );
       }
 
       return DropdownButton<String>(
@@ -231,7 +212,6 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
             if( !appState.ownerships.containsKey( newVal ) ) {
                appState.ownerships[newVal] = new Set<String>();
             }
-            // _updateSelectedLibrary( newVal );
             setState(() {
                   shareAll = false;
                   shareLibrary = newVal;
@@ -277,7 +257,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
                   value: checkVal(),
                   onChanged: (bool value)
                   {
-                     _updateOwnerships( book.id, shareLibrary, value );
+                     _updateOwnerships( book.id, shareLibrary, value, false );
                   }))
             ]);
    }
@@ -312,7 +292,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
                                   value: shareAll,
                                   onChanged: (bool value)
                                   {
-                                     _updateAllOwnerships( shareLibrary, value );
+                                     _updateOwnerships( "", shareLibrary, value, true );
                                   }))
                             ]));
       bookShares.add( _makeHDivider( appState.screenWidth * .8, 0.0, appState.screenWidth * .1 ));
@@ -333,37 +313,31 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
             ));
    }
 
-   _updateOwnerships( bookId, libId, newValue ) async {
-      print( "updating Share" );
+   _updateOwnerships( bookId, libId, newValue, setAll ) async {
+      print( "updating Share, all? " + setAll.toString() );
       // setState here would force a reload that you do not want, at least not without going to tristate.
       appState.sharesLoaded = false;
-      if( newValue ) { appState.ownerships[libId].add( bookId ); }
-      else {           appState.ownerships[libId].remove( bookId );   }
-      await setShare( context, container, bookId, libId, newValue );
-      setState(() {
-            print( "... set loaded true, force rebuild" );
-            appState.sharesLoaded = true;
-            shareAll = false;
-         });
-   }
 
-   _updateAllOwnerships( libId, newValue ) async {
-      print( "updating all all shares" + newValue.toString() );
+      if( setAll ) {
+         if( newValue ) { appState.ownerships[libId] = new Set<String>.from( appState.ownerships[appState.privateLibId] );  }
+         else           { appState.ownerships[libId].clear();   }
+         await setAllShares( context, container, libId, newValue );
+      } else {
+         if( newValue ) { appState.ownerships[libId].add( bookId ); }
+         else {           appState.ownerships[libId].remove( bookId );   }
+         await setShare( context, container, bookId, libId, newValue );
+      }
 
-      appState.sharesLoaded = false;
-
-      // avoid copy by reference  .. icky bugs
-      if( newValue ) { appState.ownerships[libId] = new Set<String>.from( appState.ownerships[appState.privateLibId] );  }
-      else           { appState.ownerships[libId].clear();   }
+      // No need to wait for this one..  ensure homepage consistency
+      if( appState.booksInLib.containsKey( libId ) ) { appState.booksInLib[libId].clear(); }
+      initLibBooks( context, container, libId );
       
-      await setAllShares( context, container, libId, newValue );
-
       setState(() {
-            shareAll = newValue;
             appState.sharesLoaded = true;
+            shareAll = newValue && setAll;
          });
    }
-   
+
    _initOwnerships() async {
       print( "loading Ownerships" );
       await initOwnerships( context, container );

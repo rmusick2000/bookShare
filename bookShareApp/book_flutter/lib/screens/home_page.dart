@@ -134,7 +134,12 @@ class _BookShareHomeState extends State<BookShareHomePage> {
             if( lib.id == libId ) { selectedLib = lib; break; }
          };
       }
-      
+
+      // when navigate to home page, privateLib will be on top, and updateSelLib has not been called.
+      if( currentBookCount == -1 && libId == appState.privateLibId ) {
+         currentBookCount = appState.booksInLib[appState.privateLibId].length;
+      }
+
       assert( selectedLib != null );
       var name = selectedLib.name;
       var numM = selectedLib.members.length.toString();

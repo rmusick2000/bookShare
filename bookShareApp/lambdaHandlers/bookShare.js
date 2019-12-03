@@ -150,9 +150,14 @@ async function putBook( selectedLib, newBook, username ) {
     
     // Update ownership.. pkey is same as PersonId
     const oEntry =    [{ "BookId" : newBook.id, "ShareCount" : 0 }];
-    // XXX update this!
-    let   newShares = ownerships.shares[libraryId];
-    newShares.add( newBook.id );
+
+    // Deal with dynamodb set object.. grr
+    let   newShares = ownerships.Shares;
+    // newShares.add( newBook.id );
+    var sharesSet = new Set( newShares[libraryId].values );
+    sharesSet.add( newBook.id );
+    newShares[libraryId].values = Array.from( sharesSet );
+
     const paramsO = {
 	TableName: 'Ownerships',
 	Key: { "OwnershipId": personId },
