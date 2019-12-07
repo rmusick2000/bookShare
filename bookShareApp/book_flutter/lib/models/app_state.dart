@@ -14,10 +14,11 @@ class AppState {
    String idToken;
    String refreshToken;
    int authRetryCount;
-   var returnValue;
+   var returnValue;       // XXX ???
    UserState userState;
-   double progress;
-
+   double progress;       // XXX ??? this could not have been working - was re-declared in init
+   bool gatOverride;
+   
    String apiBasePath;
    TextEditingController usernameController;
    TextEditingController passwordController;
@@ -71,7 +72,9 @@ class AppState {
       accessToken = "";
       idToken = "";
       refreshToken = "";
-      double progress = -1;
+      progress = -1;
+      gatOverride = false;
+      
       apiBasePath = "";
       usernameController = TextEditingController();
       passwordController = TextEditingController();

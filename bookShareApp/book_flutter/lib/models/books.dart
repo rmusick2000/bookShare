@@ -61,8 +61,14 @@ class Book {
       if( json['imageLinks'] != null ) {
          image      = json['imageLinks']['thumbnail'];
          imageSmall = json['imageLinks']['smallThumbnail'];
+
+         // book details default to using image
+         if( image == null && imageSmall != null ) {
+            image = imageSmall;
+         }
       }
 
+      
       // Some books found by google were published a LONG time ago, authors not recorded
       var dynamicAuth = json['authors'];
       if( dynamicAuth != null ) {

@@ -8,6 +8,7 @@ import 'package:bookShare/screens/home_page.dart';
 import 'package:bookShare/screens/add_book_page.dart';
 import 'package:bookShare/screens/profile_page.dart';
 import 'package:bookShare/screens/book_detail_page.dart';
+import 'package:bookShare/screens/image_page.dart';
 
 import 'package:bookShare/utils.dart';
 import 'package:bookShare/utils_load.dart';
@@ -30,13 +31,13 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
    var container;
    AppState appState;
    String contentView;
-   // String selectedLib;   
 
    // Dropdown
    bool dirtyLibChunks;
    List<String> shareLibs;
    Map<String,Widget> libChunks;
-   String shareLibrary;
+   String shareLibrary;              // selected lib for assigning book shares
+   String editLibrary;               // selected lib that is under edit or being created
 
    // shares
    bool shareAll; 
@@ -45,12 +46,12 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
    void initState() {
       super.initState();
       contentView = "grid";
-      // selectedLib = "";
 
       dirtyLibChunks = true;
       libChunks = new Map<String,Widget>();
       shareLibs = [];
       shareLibrary = "";
+      editLibrary = "";
       shareAll = false;
 
    }
@@ -93,7 +94,6 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
                      child: GestureDetector( 
                         onTap:  ()
                         {
-                           notYetImplemented( context );
                            setState(() { contentView = "create"; });
                         },
                         child: Icon( Icons.fiber_new )
@@ -126,7 +126,6 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
                            child: GestureDetector( 
                               onTap:  ()
                               {
-                                 notYetImplemented( context );
                                  setState(() { contentView = "list"; });
                               },
                               child: Icon( Icons.list )
@@ -175,6 +174,31 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
          );
    }
 
+   Widget _listView( bil ) {
+      List<Widget> bookList = [];
+      // bookList.add( Container( height: appState.screenHeight * .03 ));
+      for( final book in bil ) {
+         bookList.add( _makeBookList( book ));
+         bookList.add( _makeHDivider( appState.screenWidth * .8, 0.0, appState.screenWidth * .1 ));
+      }
+
+      return ConstrainedBox( 
+         constraints: new BoxConstraints(
+            minHeight: 20.0,
+            maxHeight: appState.screenHeight * .9
+            ),
+         child: ListView(
+            scrollDirection: Axis.vertical,
+            children: bookList
+            ));
+   }
+
+
+   // XXX Why repeat view in homepage?  Probably unneeded, wasteful.  see if this icon will go away.
+   Widget _fullView( bookChunks ) {
+      return Container(); 
+         }
+
    _updateLibChunks() {
       if( dirtyLibChunks )
       {
@@ -203,32 +227,66 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
          shareLibrary = shareLibs[0];
       }
 
-      return DropdownButton<String>(
-         value: shareLibrary,
-         itemHeight: appState.screenHeight * .16,
-         elevation: 5,
-         onChanged: (String newVal) 
-         {
-            if( !appState.ownerships.containsKey( newVal ) ) {
-               appState.ownerships[newVal] = new Set<String>();
-            }
-            setState(() {
-                  shareAll = false;
-                  shareLibrary = newVal;
-               });
-         },
-         underline:  Container( height: 0, color: Colors.white ),
-         items: shareLibs
-         .map<DropdownMenuItem<String>>((String value) {
-               return DropdownMenuItem<String>(
-                  value: value,
-                  child: libChunks[value]
-                  );
-            })
-         .toList()
-         );
+      return Theme(
+         data: Theme.of(context).copyWith( canvasColor: Colors.grey[200] ),
+         child: DropdownButton<String>(
+            value: shareLibrary,
+            itemHeight: appState.screenHeight * .16,
+            elevation: 5,
+            onChanged: (String newVal) 
+            {
+               if( !appState.ownerships.containsKey( newVal ) ) {
+                  appState.ownerships[newVal] = new Set<String>();
+               }
+               setState(() {
+                     shareAll = false;
+                     shareLibrary = newVal;
+                  });
+            },
+            underline:  Container( height: 0, color: Colors.white ),
+            items: shareLibs
+            .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                     value: value,
+                     child: libChunks[value]
+                     );
+               })
+            .toList()
+            ));
    }
 
+   Widget _makeBookList( book ) {
+      final textWidth = appState.screenWidth * .7;
+      final imageHeight = appState.screenHeight * .06;
+      final imageWidth  = imageHeight;
+      
+     var image;
+     if( book.image != "---" ) { image = Image.network( book.image, height: imageHeight, width: imageWidth, fit: BoxFit.contain ); }
+     else                      { image = Image.asset( 'images/blankBook.jpeg', height: imageHeight, width: imageWidth, fit: BoxFit.contain); }
+     
+     return GestureDetector(
+        onTap:  ()
+        {
+           setState(() { appState.detailBook = book; });
+           Navigator.push( context, MaterialPageRoute(builder: (context) => BookShareBookDetailPage()));
+        },
+        child: Row(
+           crossAxisAlignment: CrossAxisAlignment.center,
+           mainAxisAlignment: MainAxisAlignment.spaceAround,
+           children: <Widget>[
+              ClipRRect( borderRadius: new BorderRadius.circular(12.0), child: image ),
+              Column(
+                 crossAxisAlignment: CrossAxisAlignment.start,
+                 mainAxisAlignment: MainAxisAlignment.center,
+                 children: <Widget>[
+                    makeTitleText( book.title, textWidth, false, 1 ),
+                    makeAuthorText( book.author, textWidth, false, 1 )
+                    ])
+              ])
+        );
+   }
+
+   
    Widget _makeBookShare( book ) {
       final textWidth = appState.screenWidth * .7;
       assert( shareLibrary != "" && shareLibrary != appState.privateLibId );
@@ -373,16 +431,115 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
             ]);
    }
 
+
+   _editLibrary( libraryId ) {
+      setState(() => editLibrary = libraryId );
+   }
+      
+
+   Widget _makeLibraryChunk( libraryName, libraryId ) {
+      return GestureDetector(
+         onTap: () { _editLibrary( libraryId ); },
+         child: makeLibraryChunk( appState, libraryName, libraryId ) 
+         );
+   }
+
+   Widget _makeNewLib() {
+      final imageSize = appState.screenHeight * .1014;
+      return GestureDetector(
+         onTap: () { _editLibrary( "new" ); },
+         child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+               Padding(
+                  padding: const EdgeInsets.fromLTRB(12.0, 12.0, 0, 0.0),
+                  child: Icon( Icons.fullscreen, size: imageSize, color: Colors.pinkAccent )),
+               Padding(
+                  padding: const EdgeInsets.fromLTRB(12.0, 4.0, 0, 0.0),
+                  child: Text("< CREATE >", style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic)))
+               ])
+         );
+   }
+      
+   // XXX title, description, 'share books', save/cancel
+   // XXX libID, picture, keeper adds to libs if 'save'
+   // XXX all are imagelinks, just that i've picked a few
+   Widget _makeLibraryRow() {
+      List<Widget> libChunks = [];
+
+      if( appState.myLibraries == null ) { return Container(); }  // null during update
+      libChunks.add( _makeNewLib() );
+      assert( appState.myLibraries.length >= 1 );
+      appState.myLibraries.forEach((lib) => libChunks.add( _makeLibraryChunk( lib.name, lib.id )));
+
+      return ConstrainedBox( 
+         constraints: new BoxConstraints(
+            minHeight: 20.0,
+            maxHeight: appState.screenHeight * .1523
+            ),
+         child: ListView(
+            scrollDirection: Axis.horizontal,
+            children: libChunks
+            ));
+   }
+
+   Widget _makePixButton( ) {
+     return makeActionButtonSmall(
+        appState,
+        "Choose Image", 
+        ()
+        {
+           Navigator.push( context, MaterialPageRoute(
+                              builder: (context) => BookShareImagePage(),
+                              settings: RouteSettings( arguments: editLibrary )));
+        });
+   }
+
+   
+   Widget _makeEditLibBody() {
+      final width = appState.screenWidth;
+      if( editLibrary == "" ) {
+         return Padding(
+            padding: EdgeInsets.fromLTRB( width * .1, 0.0, 0, 0.0),
+            child: Text("Select a Library to edit...", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)));
+      }
+      else {
+         return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+               _makePixButton()
+               ]);
+      }
+   }
+   
+   Widget _createView() {
+      final height = appState.screenHeight;
+
+      return Column(
+         crossAxisAlignment: CrossAxisAlignment.start,
+         mainAxisAlignment: MainAxisAlignment.start,
+         children: <Widget>[
+            _makeLibraryRow(),
+            Divider( color: Colors.grey[200], thickness: 3.0 ),
+            Container( height: height * .05 ),
+            _makeEditLibBody(),
+            ]);
+   }
+
    
    Widget _makeContent() {
       List<Widget> bookChunks = [];
-
+      List<Book> bil = []; 
+      
       print( contentView );
       
       if( contentView == "grid" || contentView == "list" || contentView == "full" )
       {
          if( appState.booksInLib == null ) { return Container(); }
-         final bil = appState.booksInLib[appState.privateLibId];
+         bil = appState.booksInLib[appState.privateLibId];
          if( bil == null ) { return Container(); }
 
          bil.forEach((book) => bookChunks.add( _makeBookChunkSmall( book )));
@@ -390,6 +547,9 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
          
       Widget content;
       if( contentView == "grid" )       { content = _gridView( bookChunks ); }
+      else if( contentView == "list" )  { content = _listView( bil ); }
+      else if( contentView == "full" )  { content = _fullView( bookChunks ); }
+      else if( contentView == "create") { content = _createView(); }
       else if( contentView == "share" ) { content = _shareView(); }
       else                              { content = Container(); }
       
