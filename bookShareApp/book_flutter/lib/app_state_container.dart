@@ -58,11 +58,13 @@ class _AppStateContainerState extends State<AppStateContainer> {
   
   void getAuthTokens( override ) async {
      print( "GAT, with " + state.idToken );
+     state.gatOverride = override;
      if( state.accessToken == "" || state.idToken == "" || override == true) {
         List tokenString = (await Cognito.getTokens()).toString().split(" ");
         String accessToken = tokenString[3].split(",")[0];
         String idToken = tokenString[5].split(",")[0];
         String refreshToken = tokenString[7].split(",")[0];
+        print( "GAT, with new token " + idToken );
         setState(() {
               state.accessToken = accessToken;
               state.idToken = idToken;
@@ -104,6 +106,7 @@ class _AppStateContainerState extends State<AppStateContainer> {
            
            if( value == UserState.SIGNED_IN )
            {
+              print( "Cog callback signed in user " + state.loading.toString() + " " + state.loaded.toString() + " " + stateLoaded.toString());
 
               // This callback can get executed several times on startup.  
               // Callbacks can run back to back, before awaits below finish)
@@ -122,22 +125,28 @@ class _AppStateContainerState extends State<AppStateContainer> {
                  state.loading = false;
                  print ("CALLBACK, loaded TRUE" );
               }
+              // commented out R1019 to avoid race condition
               // stateLoaded = true;
               // state.loading = false;
            }
 
-
+           // set stateLoaded if reauth-inspired gatOverride, avoiding above race
+           if( state.loaded && state.gatOverride ) {
+              stateLoaded = true;
+              print( "callback set SL true" );
+           }
+           
            // If this becomes async, build is not predictably triggered on state change
            setState(() {
                  state.userState = value;
                  state.loaded = stateLoaded;
-                 state.authRetryCount = 0;
+                 state.authRetryCount += 1;
                  if( !stateLoaded ) {
                     state.accessToken = "";
                     state.idToken = "";
                     state.initAppData();
                  }
-                 print( "container callback setstate done" );
+                 print( "container callback setstate done, retries " + state.authRetryCount.toString() );
               });
         });
      print( "Container init over" );

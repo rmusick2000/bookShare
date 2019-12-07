@@ -50,12 +50,13 @@ bool checkReauth( context, container ) {
    print( "" );
    print( "" );
    print( "" );
-
+   showToast( context, "Cloud tokens expired, reauthorizing.." );
+   
    appState.authRetryCount += 1; 
    if( appState.authRetryCount > 100 ) {
       print( "Too many reauthorizations, please sign in again" );
       logout( context, container, appState );
-      showToast( context, "Your cloud authorization has expired.  Please re-login." ); 
+      showToast( context, "Reauthorizing failed - your cloud authorization has expired.  Please re-login." ); 
       return false;
    }
    else { return true; }
