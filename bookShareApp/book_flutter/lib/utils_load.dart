@@ -267,6 +267,32 @@ Future<bool> putBook( context, container, postData ) async {
    }
 }
 
+Future<bool> putLib( context, container, postData ) async {
+   print( "putLib " );
+   final appState  = container.state;
+   final gatewayURL = appState.apiBasePath + "/find"; 
+   
+   final response =
+      await http.post(
+         gatewayURL,
+         headers: {HttpHeaders.authorizationHeader: appState.idToken},
+         body: postData
+         );
+   
+   if (response.statusCode == 201) {
+      // print( response.body.toString() );         
+      return true;
+   } else if (response.statusCode == 401 ) {
+      if( checkReauth( context, container ) ) {
+         await container.getAuthTokens( true );
+         return await putLib( context, container, postData );
+      }
+   } else {
+      print( "RESPONSE: " + response.statusCode.toString() + " " + json.decode(utf8.decode(response.bodyBytes)).toString());
+      throw Exception('Failed to update library');
+   }
+}
+
 Future<bool> putShares( context, container, postData ) async {
    print( "putShares " + postData );
    final appState  = container.state;

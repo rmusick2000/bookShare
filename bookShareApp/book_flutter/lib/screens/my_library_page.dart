@@ -208,7 +208,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
          assert( appState.myLibraries.length >= 1 );
          for( final lib in appState.myLibraries ) {
             if( lib.id != appState.privateLibId ) {
-               libChunks[lib.id] = makeLibraryChunk( appState, lib.name, lib.id );
+               libChunks[lib.id] = makeLibraryChunk( lib, appState.screenHeight );
                shareLibs.add( lib.id );
                print( " ... added " + lib.name + " " + shareLibs.length.toString() );
             }
@@ -436,11 +436,10 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
       setState(() => editLibrary = libraryId );
    }
       
-
-   Widget _makeLibraryChunk( libraryName, libraryId ) {
+   Widget _makeLibraryChunk( lib ) {
       return GestureDetector(
-         onTap: () { _editLibrary( libraryId ); },
-         child: makeLibraryChunk( appState, libraryName, libraryId ) 
+         onTap: () { _editLibrary( lib.id ); },
+         child: makeLibraryChunk( lib, appState.screenHeight ) 
          );
    }
 
@@ -466,14 +465,19 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
    // XXX title, description, 'share books', save/cancel
    // XXX libID, picture, keeper adds to libs if 'save'
    // XXX all are imagelinks, just that i've picked a few
+   // Don't need to update elsewhere - this page must be on the stack to edit, and edits here mod other pages via appState
    Widget _makeLibraryRow() {
       List<Widget> libChunks = [];
-
       if( appState.myLibraries == null ) { return Container(); }  // null during update
-      libChunks.add( _makeNewLib() );
-      assert( appState.myLibraries.length >= 1 );
-      appState.myLibraries.forEach((lib) => libChunks.add( _makeLibraryChunk( lib.name, lib.id )));
 
+      if( appState.updateLibs || libChunks.length == 0 ) {
+         print( "myLib updating libs" );
+         libChunks.add( _makeNewLib() );
+         assert( appState.myLibraries.length >= 1 );
+         appState.myLibraries.forEach((lib) => libChunks.add( _makeLibraryChunk( lib )));
+         appState.updateLibs = false;
+      }
+      
       return ConstrainedBox( 
          constraints: new BoxConstraints(
             minHeight: 20.0,

@@ -76,10 +76,10 @@ class _BookShareHomeState extends State<BookShareHomePage> {
    }
 
    
-   Widget _makeLibraryChunk( libraryName, libraryId ) {
+   Widget _makeLibraryChunk( lib ) {
       return GestureDetector(
-         onTap: () { _updateSelectedLibrary( libraryId ); },
-         child: makeLibraryChunk( appState, libraryName, libraryId ) 
+         onTap: () { _updateSelectedLibrary( lib.id ); },
+         child: makeLibraryChunk( lib, appState.screenHeight ) 
          );
    }
 
@@ -208,7 +208,7 @@ class _BookShareHomeState extends State<BookShareHomePage> {
          if( appState.myLibraries == null ) { return Container(); }  // null during update
          
          assert( appState.myLibraries.length >= 1 );
-         appState.myLibraries.forEach((lib) => libChunks.add( _makeLibraryChunk( lib.name, lib.id )));
+         appState.myLibraries.forEach((lib) => libChunks.add( _makeLibraryChunk( lib )));
 
          if( appState.exploreLibraries != null && appState.exploreLibraries.length >= 1 )
          {
@@ -216,7 +216,7 @@ class _BookShareHomeState extends State<BookShareHomePage> {
                               padding: const EdgeInsets.fromLTRB(6, 12, 0, 12),
                               child: VerticalDivider( color: Colors.grey[200], thickness: 3.0 )));
             
-            appState.exploreLibraries.forEach((lib) => libChunks.add( _makeLibraryChunk( lib.name, lib.id )));
+            appState.exploreLibraries.forEach((lib) => libChunks.add( _makeLibraryChunk( lib )));
          }
          
          // Hmm.. why doesn't a simple SizedBox work here?

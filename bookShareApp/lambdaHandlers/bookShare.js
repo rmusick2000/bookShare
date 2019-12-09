@@ -37,6 +37,7 @@ exports.handler = (event, context, callback) => {
     else if( endPoint == "GetExploreLibs") { resultPromise = getLibs( username, false ); }
     else if( endPoint == "GetBooks")       { resultPromise = getBooks( rb.SelectedLib ); }
     else if( endPoint == "PutBook")        { resultPromise = putBook( rb.SelectedLib, rb.NewBook, username ); }
+    else if( endPoint == "PutLib")         { resultPromise = putLib( rb.NewLib, rb.Update ); }
     else if( endPoint == "GetOwnerships")  { resultPromise = getOwnerships( rb.PersonId ); }
     else if( endPoint == "UpdateShare")    { resultPromise = updateShare( rb.BookId, rb.PersonId, rb.LibId, rb.PLibId, rb.All, rb.Value ); }
     else if( endPoint == "InitOwnership")  { resultPromise = initOwn( username, rb.PrivLibId ); }
@@ -191,6 +192,31 @@ async function putBook( selectedLib, newBook, username ) {
 	]}).promise();
     
     return bookPromise.then(() => {
+	console.log("Success!");
+	return {
+	    statusCode: 201,
+	    body: JSON.stringify( true ),
+	    headers: { 'Access-Control-Allow-Origin': '*' }
+	};
+    });
+}
+
+async function putLib( newLib, update ) {
+    console.log('Put Lib!', newLib.name );
+
+    const paramsPL = {
+	TableName: 'Libraries',
+	Item: {
+	    "LibraryId":   newLib.id,
+	    "JustMe":      newLib.private,
+	    "LibraryName": newLib.name,
+	    "Members":     newLib.members,
+	    "ImagePng":    newLib.imagePng            
+	}
+    };
+    
+    let libPromise = bsdb.put( paramsPL ).promise();
+    return libPromise.then(() => {
 	console.log("Success!");
 	return {
 	    statusCode: 201,

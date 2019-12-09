@@ -1,24 +1,47 @@
+import 'dart:typed_data';                   // ByteData
 import 'dart:convert';  
 
-// Dynamodb serializes primary key before using it... so...
-class Library {
-   final String       id;
-   final String       name;
-   final List<String> members;
-   final bool         private;
+import 'package:flutter/material.dart';
 
-   Library({this.id, this.name, this.members, this.private});
+// Dynamodb serializes primary key before using it... so...
+// https://stackoverflow.com/questions/47124945/how-to-read-bytes-of-a-local-image-file-in-dart-flutter
+class Library {
+   final String id;
+   String       name;
+   List<String> members;
+   Uint8List    imagePng;
+   Image        image;
+   final bool   private;
+
+   Library({this.id, this.name, this.members, this.imagePng, this.image, this.private});
    
+   dynamic toJson() => {
+   'id': id, 'name': name, 'private': private, 'members': members,
+      'imagePng': String.fromCharCodes( imagePng )
+   };
+
    factory Library.fromJson(Map<String, dynamic> json) {
 
-      // Extra step needed to convert from List<dynamic> to List<int>
       var dynamicMem = json['Members'];
-         
+
+      var imagePng = null;
+      var image    = null;
+      final dynamicImage = json['ImagePng'];   // string rep of bytes
+      if( dynamicImage != null ) {
+         imagePng =  Uint8List.fromList( dynamicImage.codeUnits );   // codeUnits gets Uint16List
+         image = Image.memory( imagePng );
+      }
+
+      bool priv = false;
+      if( json['JustMe' ] == true || json['JustMe' ] == "true" ) { priv = true; }
+      
       return Library(
          id:      json['LibraryId'],
          name:    json['LibraryName'],
-         private: json['JustMe' ],
-         members: new List<String>.from(dynamicMem)
+         private: priv,
+         members: new List<String>.from(dynamicMem),
+         imagePng: imagePng,
+         image:   image
          );
    }
 
@@ -27,6 +50,8 @@ class Library {
       res += "\n   id: " + id;
       res += "\n   private?: " + private.toString();
       res += "\n   members: " + members.toString();
+      if( image != null ) { res += "\n   there is an image"; }
+
       return res;
    }
 }
