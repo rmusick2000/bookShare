@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -203,8 +204,14 @@ makeBotAppBar( BuildContext context, currentPage ) {
                ])));
 }
 
-Widget makeLibraryChunk( appState, libraryName, libraryId ) {
-   final imageSize = appState.screenHeight * .1014;
+Widget makeLibraryChunk( lib, screenHeight ) {
+   final imageSize   = screenHeight * .1014;
+   final libraryName = lib.name;
+   final libraryId   = lib.id;
+
+   var image = lib.image;
+   if( image == null ) { image = Image.asset( 'images/kiteLibrary.jpg', height: imageSize, width: imageSize, fit: BoxFit.fill); }
+   
    return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -214,13 +221,20 @@ Widget makeLibraryChunk( appState, libraryName, libraryId ) {
             padding: const EdgeInsets.fromLTRB(12.0, 12.0, 0, 0.0),
             child: ClipRRect(
                borderRadius: new BorderRadius.circular(12.0),
-               child: Image.asset( 'images/kiteLibrary.jpg', height: imageSize, width: imageSize, fit: BoxFit.fill))),
+               child: image )),
          Padding(
             padding: const EdgeInsets.fromLTRB(12.0, 4.0, 0, 0.0),
             child: Text(libraryName, style: TextStyle(fontSize: 12)))]
       );
 }
 
+// Future<dynamic>   hmmmmm... maybe either write, or save to libchunk here, don't pass back.
+makePngBytes( appState, picture, width, height ) async {
+   final img      = await picture.toImage( width, height );
+   final pngBytes = await img.toByteData(format: ImageByteFormat.png);
+   appState.currentPng = pngBytes.buffer.asUint8List();
+   return pngBytes;
+}
 
 Library getPrivateLib( appState ) {
    Library result = null;

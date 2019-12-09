@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:ui' as ui;
 import 'dart:math';
+import 'dart:convert'; 
 
 import 'package:image_crop/image_crop.dart';
 
@@ -10,75 +11,90 @@ import 'package:bookShare/models/app_state.dart';
 import 'package:bookShare/app_state_container.dart';
 
 import 'package:bookShare/utils.dart';
+import 'package:bookShare/utils_load.dart';
 import 'package:bookShare/models/books.dart';
+import 'package:bookShare/models/libraries.dart';
 
-// image is the original network image... after scaling up to screen-size?
-// I am converting from ? network image screensized -> crop -> previewsize
-// Looks like image is result of cropping.  so  crop -> previewsize
+// NOTE incoming scale is crop area / image area.  So, at max crop, if image is rectangular, scale will be < 1.  no work here.
+// NOTE area represents original request, not resulting crop zone.  So, need to rectify values outside [0,1]
+// NOTE area is in percentages, so no need to understand original cropping Container size.  work from convertedNI directly.
+// image is the original network image, not the post-scaled one.  crop percentages applied here, then scaled to dstSize
 class libPainter extends CustomPainter {
    final ui.Image image;
    final Rect     area;
    final double   scale;
    final double   dstSize;
+   AppState appState;
    
-  libPainter({this.image, this.area, this.scale, this.dstSize});
+   libPainter({this.image, this.area, this.scale, this.dstSize, this.appState});
 
-  @override
-  void paint(Canvas canvas, Size size) {
+   @override
+   void paint(Canvas canvas, Size size) {
 
-     // print( "paint.  image(w,h): " + image.width.toString() + " " + image.height.toString() );
-     // print( "paint.  scale, dstSize " + scale.toString() + " " + dstSize.toString() );
-
-     // NOTE incoming scale is crop area / image area.  So, at max crop, if image is rectangular, scale will be < 1.  no work here.
-     // NOTE area represents original request, not resulting crop zone.  So, need to rectify values outside [0,1]
-     // NOTE area is in percentages, so no need to understand original cropping Container size.  work from convertedNI directly.
-
-     double left  = area.left;
-     double right = area.right;
-     double top   = area.top;
-     double bot   = area.bottom;
-     if( left < 0 ) {
-        right = min( 1.0, right - left);   // crop bounce back
-        left = 0.0;
-     }
-     if( right > 1.0 ) {
-        left = max( 0.0, left - (right - 1.0));   
-        right = 1.0;
-     }
-     if( top < 0 ) {
-        bot = min( 1.0, bot - top);
-        top = 0.0;
-     }
-     if( bot > 1.0 ) {
-        top = max( 0.0, top - ( bot - 1.0));
-        bot = 1.0;
-     }
+      double left  = area.left;
+      double right = area.right;
+      double top   = area.top;
+      double bot   = area.bottom;
+      // Rectify for rebounding crop zone
+      if( left < 0 ) {
+         right = min( 1.0, right - left);   // crop bounce back
+         left = 0.0;
+      }
+      if( right > 1.0 ) {
+         left = max( 0.0, left - (right - 1.0));   
+         right = 1.0;
+      }
+      if( top < 0 ) {
+         bot = min( 1.0, bot - top);
+         top = 0.0;
+      }
+      if( bot > 1.0 ) {
+         top = max( 0.0, top - ( bot - 1.0));
+         bot = 1.0;
+      }
         
-     // Create source rect
-     final leftPix  = left * image.width;
-     final rightPix = right * image.width;
-     final topPix   = top * image.height;
-     final botPix   = bot * image.height;
+      // Create source rect
+      final leftPix  = left * image.width;
+      final rightPix = right * image.width;
+      final topPix   = top * image.height;
+      final botPix   = bot * image.height;
 
-     canvas.drawAtlas(
-        image,
-        [
-          RSTransform.fromComponents(
-              rotation: 0.0,
-              scale: dstSize / (rightPix - leftPix),
-              anchorX: 0.0,
-              anchorY: 0.0,
-              translateX: 0.0,
-              translateY: 0.0)
-        ],
-        [
-           // the source rectangle within the image 
-           Rect.fromLTRB(leftPix, topPix, rightPix, botPix )
-        ],
-        [], // colors
-        BlendMode.src, // blend   required, or assert fail in packages
-        null,  // cullRect
-        Paint());
+      _drawCanvas( canvas ) {
+         final List<Color> colors = [];
+         canvas.drawAtlas(
+            image,
+            [
+               RSTransform.fromComponents(
+                  rotation: 0.0,
+                  scale: dstSize / (rightPix - leftPix),
+                  anchorX: 0.0,
+                  anchorY: 0.0,
+                  translateX: 0.0,
+                  translateY: 0.0)
+               ],
+            [
+               // the source rectangle within the image 
+               Rect.fromLTRB(leftPix, topPix, rightPix, botPix )
+               ],
+            colors, 
+            BlendMode.src, 
+            null,  // cullRect
+            Paint());
+      }
+
+     _drawCanvas( canvas );
+
+     // 'Record' current canvas to image.
+     // Note: Paint gets called 5-10x per crop.  just do this once.
+     if( appState.makeLibPng ) {
+        print( "Making png data" );
+        ui.PictureRecorder recorder = ui.PictureRecorder();
+        Canvas canvasRec = Canvas(recorder);
+        _drawCanvas( canvasRec );
+        final picture  = recorder.endRecording();
+        makePngBytes( appState, picture, dstSize.floor(), dstSize.floor() );
+        appState.makeLibPng = false;
+     }
   }
 
   @override
@@ -108,12 +124,12 @@ class _BookShareImagePageState extends State<BookShareImagePage> {
    bool newSelection;           // used to force cropping, avoiding a race condition with first preview
 
    bool imageConverted;         // true once selected network image has converted to ui.image
-   ui.Image convertedNI;             // converted networkImage
+   ui.Image convertedNI;        // converted networkImage
    
    var croppedImage;            // i b croppy 
    var cropKey;                 // the main access point to crop data
    bool updatePreview;          // is it time to update the preview image?  very brief lifespan
-   Widget preview;              // save the current preview
+   Widget preview;              // the current preview
    
    @override
    void initState() {
@@ -213,11 +229,11 @@ class _BookShareImagePageState extends State<BookShareImagePage> {
    _updatePreview( PointerEvent details ) {
       if( cropKey != null && cropKey.currentState != null ) {
          setState(() => updatePreview = true );
+         appState.makeLibPng = true;
       } 
    }
 
    
-   // https://stackoverflow.com/questions/47147973/networkimage-cannot-be-assigned-to-type-widget
    Widget _makePreview() {
       final previewHeight = appState.screenHeight * .1014;
 
@@ -240,7 +256,8 @@ class _BookShareImagePageState extends State<BookShareImagePage> {
                      image: convertedNI,
                      area: area,
                      scale: scale,
-                     dstSize: previewHeight
+                     dstSize: previewHeight,
+                     appState: appState
                      )
                   ));
             updatePreview = false;
@@ -250,7 +267,6 @@ class _BookShareImagePageState extends State<BookShareImagePage> {
       return preview;
    }
    
-   // XXX use makeLibChunk   print types.  image.network is returning a widget..
    Widget _makeImageView( imageHeight ) {
       final imageWidth = appState.screenWidth * .8;
 
@@ -364,16 +380,32 @@ class _BookShareImagePageState extends State<BookShareImagePage> {
       else                 { return Divider( color: Colors.grey[200], thickness: 3.0 ); }
    }
    
+
+   // Save the image to dynamo, pop back
    _acceptCrop() async {
 
       final crop = cropKey.currentState;
       if( !newSelection ) {
-         final scale = crop.scale;
-         final area = crop.area;
-         print( "Accepted crop.  " + scale.toString() + " " + area.toString() );
-         print( "keytype " + cropKey.runtimeType.toString() + " cropType: " + crop.runtimeType.toString() );
+         // Save image  
+         assert( appState.currentPng != null );
+
+         // Can't edit libs that I'm not a member of.  
+         for( final lib in appState.myLibraries ) {
+            if( editLib == lib.id ) {
+               print( "Set image, imagePng for lib: " + lib.id );
+               lib.imagePng = appState.currentPng;
+               lib.image    = Image.memory( appState.currentPng );
+
+               String newLib = json.encode( lib );
+               // XXX may not need update arg
+               String postData = '{ "Endpoint": "PutLib", "NewLib": $newLib, "Update": "true" }';               
+               putLib( context, container, postData );
+               
+               setState(() => appState.updateLibs = true );
+               break;
+            }
+         }
          
-         // setState(() => croppedImage = crop );  
          Navigator.pop(context);
       } else {
          showToast( context, "Oops, forgot to crop image" );

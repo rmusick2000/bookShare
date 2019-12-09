@@ -1,3 +1,4 @@
+import 'dart:typed_data';                   // ByteData
 import 'package:flutter/material.dart';
 
 // Note - this requires state here: android/app/src/main/res/raw/awsconfiguration.json
@@ -35,6 +36,7 @@ class AppState {
    String privateLibId;
    List<Library> myLibraries;
    List<Library> exploreLibraries;
+   bool updateLibs;               // time to update libs.  e.g. new image, or other edits
    Map<String, List<Book>> booksInLib;
    Book detailBook;
 
@@ -43,13 +45,17 @@ class AppState {
 
    bool sharesLoaded;              // my_library_page  shares.   is libraryShares dirty?
    Map<String, Set> ownerships;    // my_library_page: shares.   {libraryId: ["books"]}
-   
+
+   bool makeLibPng;                // image_page: it is time to convert canvas to png data
+   Uint8List currentPng;           // image_page: current converted png data
    
    initAppData() {
       loaded = false;
       loading = false;
       myLibraries = null;
       exploreLibraries = null;
+      updateLibs = true;
+      
       privateLibId = "";
       userId = "";
       booksInLib = new Map<String, List<Book>>();
@@ -59,6 +65,9 @@ class AppState {
       booksLoaded = true;
       sharesLoaded = false;   
       ownerships = new Map<String, Set>();
+
+      makeLibPng = false;
+      currentPng = null;
    }
 
    init() {
