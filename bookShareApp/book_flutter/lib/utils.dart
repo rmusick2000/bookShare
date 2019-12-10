@@ -108,6 +108,7 @@ makeInputField( BuildContext context, hintText, obscure, controller ) {
       );
 }
 
+
 makeTopAppBar( BuildContext context, currentPage ) {
    final container   = AppStateContainer.of(context);
    final appState    = container.state;
@@ -204,13 +205,35 @@ makeBotAppBar( BuildContext context, currentPage ) {
                ])));
 }
 
-Widget makeLibraryChunk( lib, screenHeight ) {
+
+Widget makeLibraryChunk( lib, screenHeight, highlight ) {
    final imageSize   = screenHeight * .1014;
    final libraryName = lib.name;
    final libraryId   = lib.id;
 
    var image = lib.image;
    if( image == null ) { image = Image.asset( 'images/kiteLibrary.jpg', height: imageSize, width: imageSize, fit: BoxFit.fill); }
+
+   Text nameTxt = Text(libraryName, style: TextStyle(fontSize: 12));
+
+   /*  Ugly.  there is 0 gap between text and underline.
+   if( highlight ) {
+      nameTxt = Text(libraryName,
+                     style: TextStyle( fontSize: 12,
+                                       decoration: TextDecoration.underline,
+                                       decorationThickness: 6.0,
+                                       decorationColor: Colors.pinkAccent,
+                                       // decorationStyle: TextDecorationStyle.wavy
+                        ));      
+   }
+   */
+
+   Widget underline = Container();
+   if( highlight ) {
+      underline = Padding( 
+         padding: const EdgeInsets.fromLTRB(12.0, 1.0, 0, 0.0),
+         child: Container( height: 5.0, width: imageSize, color: Colors.pinkAccent ));
+   }
    
    return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -224,8 +247,9 @@ Widget makeLibraryChunk( lib, screenHeight ) {
                child: image )),
          Padding(
             padding: const EdgeInsets.fromLTRB(12.0, 4.0, 0, 0.0),
-            child: Text(libraryName, style: TextStyle(fontSize: 12)))]
-      );
+            child: nameTxt),
+         underline
+         ]);
 }
 
 // Future<dynamic>   hmmmmm... maybe either write, or save to libchunk here, don't pass back.

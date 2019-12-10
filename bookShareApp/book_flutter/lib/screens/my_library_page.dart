@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -37,7 +39,9 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
    List<String> shareLibs;
    Map<String,Widget> libChunks;
    String shareLibrary;              // selected lib for assigning book shares
-   String editLibrary;               // selected lib that is under edit or being created
+
+   String editLibId;                 // selected lib ID that is under edit or being created
+   Library editLibrary;              // the selected lib
 
    // shares
    bool shareAll; 
@@ -51,7 +55,8 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
       libChunks = new Map<String,Widget>();
       shareLibs = [];
       shareLibrary = "";
-      editLibrary = "";
+      editLibId = "";
+      editLibrary = null;
       shareAll = false;
 
    }
@@ -208,7 +213,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
          assert( appState.myLibraries.length >= 1 );
          for( final lib in appState.myLibraries ) {
             if( lib.id != appState.privateLibId ) {
-               libChunks[lib.id] = makeLibraryChunk( lib, appState.screenHeight );
+               libChunks[lib.id] = makeLibraryChunk( lib, appState.screenHeight, false );
                shareLibs.add( lib.id );
                print( " ... added " + lib.name + " " + shareLibs.length.toString() );
             }
@@ -432,21 +437,32 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
    }
 
 
-   _editLibrary( libraryId ) {
-      setState(() => editLibrary = libraryId );
+   _editLibrary( libraryId, lib ) {
+      editLibrary = lib;
+      setState(() => editLibId = libraryId );
    }
       
    Widget _makeLibraryChunk( lib ) {
+      bool highlight = ( lib.id == editLibId );
       return GestureDetector(
-         onTap: () { _editLibrary( lib.id ); },
-         child: makeLibraryChunk( lib, appState.screenHeight ) 
+         onTap: () { _editLibrary( lib.id, lib ); },
+         child: makeLibraryChunk( lib, appState.screenHeight, highlight ) 
          );
    }
 
    Widget _makeNewLib() {
       final imageSize = appState.screenHeight * .1014;
+      bool highlight = ( editLibId == "new" );
+
+      Widget underline = Container();
+      if( highlight ) {
+         underline = Padding( 
+            padding: const EdgeInsets.fromLTRB(12.0, 1.0, 0, 0.0),
+            child: Container( height: 5.0, width: imageSize, color: Colors.pinkAccent ));
+      }
+      
       return GestureDetector(
-         onTap: () { _editLibrary( "new" ); },
+         onTap: () { _editLibrary( "new", null ); },
          child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -457,14 +473,12 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
                   child: Icon( Icons.fullscreen, size: imageSize, color: Colors.pinkAccent )),
                Padding(
                   padding: const EdgeInsets.fromLTRB(12.0, 4.0, 0, 0.0),
-                  child: Text("< CREATE >", style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic)))
+                  child: Text("< CREATE >", style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic))),
+               underline
                ])
          );
    }
       
-   // XXX title, description, 'share books', save/cancel
-   // XXX libID, picture, keeper adds to libs if 'save'
-   // XXX all are imagelinks, just that i've picked a few
    // Don't need to update elsewhere - this page must be on the stack to edit, and edits here mod other pages via appState
    Widget _makeLibraryRow() {
       List<Widget> libChunks = [];
@@ -481,7 +495,8 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
       return ConstrainedBox( 
          constraints: new BoxConstraints(
             minHeight: 20.0,
-            maxHeight: appState.screenHeight * .1523
+            // XXXX maxHeight: appState.screenHeight * .1523
+            maxHeight: appState.screenHeight * .167
             ),
          child: ListView(
             scrollDirection: Axis.horizontal,
@@ -491,22 +506,102 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
 
    Widget _makePixButton( ) {
      return makeActionButtonSmall(
-        appState,
-        "Choose Image", 
-        ()
-        {
-           Navigator.push( context, MaterialPageRoute(
-                              builder: (context) => BookShareImagePage(),
-                              settings: RouteSettings( arguments: editLibrary )));
-        });
+           appState,
+           "Choose Image", 
+           ()
+           {
+              Navigator.push( context, MaterialPageRoute(
+                                 builder: (context) => BookShareImagePage(),
+                                 settings: RouteSettings( arguments: editLibId )));
+           });
    }
 
+
+   // XXX no hint text - actually set controller text with name
+   // XXX size the sizedbox to available space under libChunk.
+   Widget _makeSmallInputField( txt, controller ) {
+      return TextField(
+         obscureText: false,
+         style: TextStyle(fontSize: 18),
+         maxLines: 1,
+         maxLength: 11,
+         autofocus: false,
+         decoration: InputDecoration(
+            contentPadding: EdgeInsets.fromLTRB(8,8,8,8),
+            counterText: '',
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0)),
+            hintText: txt ),
+         controller: controller
+         );
+   }
+
+   Widget _makeLargeInputField( txt, controller ) {
+      return TextField(
+         obscureText: false,
+         style: TextStyle(fontSize: 18),
+         autofocus: false,
+         maxLines: 3,
+         decoration: InputDecoration(
+            contentPadding: EdgeInsets.fromLTRB(8,8,8,8),
+            counterText: '',
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0)),
+            hintText: txt ),
+         controller: controller
+         );
+   }
+
+
+   /* 
+beginBatchEdit on inactive InputConnection
+i solved by USING 'searchEditor.clear();' inside Future.delayed Because when we call FocusScope.of(context).unfocus(); for closing keyboard it take some microseconds for close that's why it show this WANRING i.e. getTextBeforeCursor on inactive InputConnection to overcome i called searchEditor.clear(); method after some microseconds 
+    */
    
+   // XXX Would love to have dict access to libChunks... should probably do so to avoid lots of updates, like copy here
    Widget _makeEditLibBody() {
       final width = appState.screenWidth;
-      if( editLibrary == "" ) {
+      final height = appState.screenHeight;
+      TextEditingController nameController = new TextEditingController();
+      TextEditingController descController = new TextEditingController();
+
+      if( editLibrary != null ) {
+         if( editLibrary.description == null || editLibrary.description == "---EMPTY---" ) { editLibrary.description = ""; }
+         nameController.text = editLibrary.name;
+         descController.text = editLibrary.description;
+      }
+
+      Function _acceptEdit() {
+         // dynamo policy.. grrr
+         if( editLibrary.description == "" ) { editLibrary.description = "---EMPTY---"; }
+         editLibrary.name = nameController.text;
+         editLibrary.description = descController.text;
+         String newLib = json.encode( editLibrary );
+         String postData = '{ "Endpoint": "PutLib", "NewLib": $newLib }';               
+         putLib( context, container, postData );
+         setState(() => appState.updateLibs = true );
+      }
+      
+      Function _rejectEdit() {
+         if( editLibId != "new" && editLibId != "" ) {
+            nameController.text = editLibrary.name;
+            descController.text = editLibrary.description;
+         } else {
+            nameController.clear();
+            descController.clear();
+         }
+      }
+
+      
+      Widget libChunk;
+      if( editLibrary == null ) {
+         libChunk = _makeNewLib();
+         editLibrary = new Library( id: "bs123", name: "no name", private: false, members: [], imagePng: null, image: null );
+      } else {
+         libChunk = _makeLibraryChunk( editLibrary );
+      }
+                        
+      if( editLibId == "" ) {
          return Padding(
-            padding: EdgeInsets.fromLTRB( width * .1, 0.0, 0, 0.0),
+            padding: EdgeInsets.fromLTRB( width * .1, height * .05, 0, 0.0),
             child: Text("Select a Library to edit...", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)));
       }
       else {
@@ -514,9 +609,63 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-               _makePixButton()
+               Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                     Padding(
+                        padding: EdgeInsets.fromLTRB( 0, 0.0, width * .05, 0.0),
+                        child: Text( "Editing " + editLibrary.name + " Library" , style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold ))),
+                     ]),
+               _makeHDivider( appState.screenWidth * .7, appState.screenWidth * .15, appState.screenWidth * .15 ),
+               Container( height: height * .05 ),
+
+               Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                     Padding(
+                        padding: EdgeInsets.fromLTRB( width * .05, 0, width * .025, 0.0),
+                        child: Text( "Library name: ", style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold))),
+                     Padding(
+                        padding: EdgeInsets.fromLTRB( 0,0,0, 0.0),
+                        child: SizedBox( width: width * .32, height: height * .05, child: _makeSmallInputField( editLibrary.name, nameController ))),
+                     ]),
+               Container( height: height * .03 ),
+
+               Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                     Padding(
+                        padding: EdgeInsets.fromLTRB( width * .05, height * .01, width * .07, height * .03),
+                        child: Text( "Description", style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold))),
+                     SizedBox( width: width * .65, height: height * .13, child: _makeLargeInputField( editLibrary.description, descController )),
+                     ]),
+
+               Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                     Padding(
+                        padding: EdgeInsets.fromLTRB( width * .1, height * .03, width * .04, height * .03),
+                        child: _makePixButton() )
+                     ]),
+               Container( height: appState.screenHeight * .03 ),
+               //    XXXX           Container( height: appState.screenHeight * .05 ),
+               Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                     Padding(
+                        padding: EdgeInsets.fromLTRB( width * .1, 0, width * .05, 0.0),
+                        child: makeActionButtonSmall( appState, "Accept", () async { _acceptEdit(); })),
+                     Padding(
+                        padding: EdgeInsets.fromLTRB( 0, 0, width * .04, 0.0),
+                        child: makeActionButtonSmall( appState, "Cancel", () async { _rejectEdit(); }))
+                     ])
                ]);
-      }
+            }
    }
    
    Widget _createView() {
@@ -528,7 +677,6 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
          children: <Widget>[
             _makeLibraryRow(),
             Divider( color: Colors.grey[200], thickness: 3.0 ),
-            Container( height: height * .05 ),
             _makeEditLibBody(),
             ]);
    }
@@ -589,7 +737,10 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
       return Scaffold(
          appBar: makeTopAppBar( context, "MyLibrary" ),
          bottomNavigationBar: makeBotAppBar( context, "MyLibrary" ),
-         body: _makeBody()
+         body: SingleChildScrollView(
+            child: GestureDetector(
+               onTap: () { FocusScope.of(context).requestFocus(new FocusNode()); },  // keyboard mgmt
+               child: _makeBody() ))
          );
    }
 }

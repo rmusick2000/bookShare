@@ -79,7 +79,7 @@ class _BookShareHomeState extends State<BookShareHomePage> {
    Widget _makeLibraryChunk( lib ) {
       return GestureDetector(
          onTap: () { _updateSelectedLibrary( lib.id ); },
-         child: makeLibraryChunk( lib, appState.screenHeight ) 
+         child: makeLibraryChunk( lib, appState.screenHeight, false ) 
          );
    }
 

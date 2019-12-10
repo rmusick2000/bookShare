@@ -92,6 +92,8 @@ def getCFStacks( sam ) :
 
 # XXX Add jq to setup script.  (sudo apt install jq)
 # XXX get all tables, named properly, put in test data dir
+# XXX get size of table: aws dynamodb describe-table --table-name Libraries
+
 #def getDynamoData( sam ) :
     #cmd = "aws dynamodb scan --table-name Books | jq '{"Books": [.Items[] | {PutRequest: {Item: .}}]}' > testData/testDataBooks.json"
     #cmd = "aws dynamodb scan --table-name Ownerships | jq '{"Ownerships": [.Items[] | {PutRequest: {Item: .}}]}' > testData/testDataOwnerships.json"
