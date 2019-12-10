@@ -37,7 +37,7 @@ exports.handler = (event, context, callback) => {
     else if( endPoint == "GetExploreLibs") { resultPromise = getLibs( username, false ); }
     else if( endPoint == "GetBooks")       { resultPromise = getBooks( rb.SelectedLib ); }
     else if( endPoint == "PutBook")        { resultPromise = putBook( rb.SelectedLib, rb.NewBook, username ); }
-    else if( endPoint == "PutLib")         { resultPromise = putLib( rb.NewLib, rb.Update ); }
+    else if( endPoint == "PutLib")         { resultPromise = putLib( rb.NewLib ); }
     else if( endPoint == "GetOwnerships")  { resultPromise = getOwnerships( rb.PersonId ); }
     else if( endPoint == "UpdateShare")    { resultPromise = updateShare( rb.BookId, rb.PersonId, rb.LibId, rb.PLibId, rb.All, rb.Value ); }
     else if( endPoint == "InitOwnership")  { resultPromise = initOwn( username, rb.PrivLibId ); }
@@ -201,7 +201,7 @@ async function putBook( selectedLib, newBook, username ) {
     });
 }
 
-async function putLib( newLib, update ) {
+async function putLib( newLib ) {
     console.log('Put Lib!', newLib.name );
 
     const paramsPL = {
@@ -211,6 +211,7 @@ async function putLib( newLib, update ) {
 	    "JustMe":      newLib.private,
 	    "LibraryName": newLib.name,
 	    "Members":     newLib.members,
+	    "Description": newLib.description,
 	    "ImagePng":    newLib.imagePng            
 	}
     };

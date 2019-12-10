@@ -77,7 +77,7 @@ Future<List<Library>> fetchLibraries( context, container, postData ) async {
          );
    
    if (response.statusCode == 201) {
-      print( "JSON RESPONSE BODY: " + response.body.toString() );         
+      // print( "JSON RESPONSE BODY: " + response.body.toString() );         
       
       Iterable l = json.decode(utf8.decode(response.bodyBytes));
       List<Library> libs = l.map((sketch)=> Library.fromJson(sketch)).toList();

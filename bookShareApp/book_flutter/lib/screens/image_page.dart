@@ -397,8 +397,7 @@ class _BookShareImagePageState extends State<BookShareImagePage> {
                lib.image    = Image.memory( appState.currentPng );
 
                String newLib = json.encode( lib );
-               // XXX may not need update arg
-               String postData = '{ "Endpoint": "PutLib", "NewLib": $newLib, "Update": "true" }';               
+               String postData = '{ "Endpoint": "PutLib", "NewLib": $newLib }';               
                putLib( context, container, postData );
                
                setState(() => appState.updateLibs = true );

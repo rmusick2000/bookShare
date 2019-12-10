@@ -8,15 +8,16 @@ import 'package:flutter/material.dart';
 class Library {
    final String id;
    String       name;
+   String       description;
    List<String> members;
    Uint8List    imagePng;
    Image        image;
    final bool   private;
 
-   Library({this.id, this.name, this.members, this.imagePng, this.image, this.private});
+   Library({this.id, this.name, this.description, this.members, this.imagePng, this.image, this.private});
    
    dynamic toJson() => {
-   'id': id, 'name': name, 'private': private, 'members': members,
+   'id': id, 'name': name, 'description': description, 'private': private, 'members': members,
       'imagePng': String.fromCharCodes( imagePng )
    };
 
@@ -36,17 +37,19 @@ class Library {
       if( json['JustMe' ] == true || json['JustMe' ] == "true" ) { priv = true; }
       
       return Library(
-         id:      json['LibraryId'],
-         name:    json['LibraryName'],
-         private: priv,
-         members: new List<String>.from(dynamicMem),
-         imagePng: imagePng,
-         image:   image
+         id:          json['LibraryId'],
+         name:        json['LibraryName'],
+         description: json['Description'],
+         private:     priv,
+         members:     new List<String>.from(dynamicMem),
+         imagePng:    imagePng,
+         image:       image
          );
    }
 
    String toString() {
       String res = "\nLibrary : " + name;
+      res += "\n   description: " + description;
       res += "\n   id: " + id;
       res += "\n   private?: " + private.toString();
       res += "\n   members: " + members.toString();
