@@ -114,7 +114,7 @@ class BookShareImagePage extends StatefulWidget {
 class _BookShareImagePageState extends State<BookShareImagePage> {
 
    // Parameter passed along in navigator
-   String editLib; 
+   Library editLibrary; 
    var container;
    AppState appState;
 
@@ -172,6 +172,7 @@ class _BookShareImagePageState extends State<BookShareImagePage> {
       var tmp = await getImage( selectedImage );
 
       convertedNI = tmp;
+      print( "SETSTATE getImage imageConverted" );
       setState(() => imageConverted = true );
    }
    
@@ -197,6 +198,7 @@ class _BookShareImagePageState extends State<BookShareImagePage> {
             selectedImage = book.image;
             selectedType  = "network";
             await _getImage( selectedImage );
+            print( "SETSTATE CoverChunkTap selector" );
             setState(() => selector = "image" );
          },
          child: ClipRRect( borderRadius: new BorderRadius.circular(12.0), child: image )
@@ -228,6 +230,7 @@ class _BookShareImagePageState extends State<BookShareImagePage> {
    //      show negative, even though rebounded crop is back to L = 0
    _updatePreview( PointerEvent details ) {
       if( cropKey != null && cropKey.currentState != null ) {
+         print( "SETSTATE updatePreview updatePreview" );
          setState(() => updatePreview = true );
          appState.makeLibPng = true;
       } 
@@ -330,7 +333,8 @@ class _BookShareImagePageState extends State<BookShareImagePage> {
                      child: GestureDetector( 
                         onTap:  ()
                         {
-                           print( "Open camera " + editLib);
+                           print( "Open camera " + editLibrary.id);
+                           print( "SETSTATE makeSourceRow selector" );
                            setState(() => selector = "camera" );
 
                         },
@@ -341,7 +345,8 @@ class _BookShareImagePageState extends State<BookShareImagePage> {
                      child: GestureDetector( 
                         onTap:  ()
                         {
-                           print( "Open gallery " + editLib);
+                           print( "Open gallery " + editLibrary.id);
+                           print( "SETSTATE makeSourceRow selector" );
                            setState(() => selector = "gallery" );
                         },
                         child: Icon( Icons.collections, size: iconHeight )
@@ -351,7 +356,8 @@ class _BookShareImagePageState extends State<BookShareImagePage> {
                      child: GestureDetector( 
                         onTap:  ()
                         {
-                           print( "Open bookgrid " + editLib);
+                           print( "Open bookgrid " + editLibrary.id);
+                           print( "SETSTATE makeSourceRow selector" );
                            setState(() => selector = "covers" );
                         },
                         child: Icon( Icons.local_library, size: iconHeight )
@@ -389,22 +395,12 @@ class _BookShareImagePageState extends State<BookShareImagePage> {
          // Save image  
          assert( appState.currentPng != null );
 
-         // Can't edit libs that I'm not a member of.  
-         for( final lib in appState.myLibraries ) {
-            if( editLib == lib.id ) {
-               print( "Set image, imagePng for lib: " + lib.id );
-               lib.imagePng = appState.currentPng;
-               lib.image    = Image.memory( appState.currentPng );
-
-               String newLib = json.encode( lib );
-               String postData = '{ "Endpoint": "PutLib", "NewLib": $newLib }';               
-               putLib( context, container, postData );
-               
-               setState(() => appState.updateLibs = true );
-               break;
-            }
-         }
+         print( "Set image, imagePng for lib: " + editLibrary.id );
+         editLibrary.imagePng = appState.currentPng;
+         editLibrary.image    = Image.memory( appState.currentPng );
          
+         print( "SETSTATE acceptCrop updateLibs" );
+         setState(() => appState.updateLibs = true );
          Navigator.pop(context);
       } else {
          showToast( context, "Oops, forgot to crop image" );
@@ -437,16 +433,16 @@ class _BookShareImagePageState extends State<BookShareImagePage> {
    @override
    Widget build(BuildContext context) {
    
-      editLib     = ModalRoute.of(context).settings.arguments;
+      editLibrary = ModalRoute.of(context).settings.arguments;
       container   = AppStateContainer.of(context);
       appState    = container.state;
 
       final imageHeight = appState.screenHeight * .73;
       final imageWidth  = imageHeight * .913;
 
-      assert( editLib != null );
+      assert( editLibrary != null );
 
-      print( "build" );
+      print( "build image page" );
 
       return Scaffold(
          appBar: PreferredSize(
