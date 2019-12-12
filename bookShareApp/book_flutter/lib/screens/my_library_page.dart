@@ -537,7 +537,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
       if( appState.myLibraries == null ) { return Container(); }  // null during update
 
       if( appState.updateLibs || libChunks.length == 0 ) {
-         // print( "myLib updating libs" );
+         print( "myLib updating libs" );
          libChunks.add( _makeNewLib() );
          if( updateProspect ) { libChunks.add( _makeProspect() ); }
          else if( editLibrary != null && editLibrary.prospect ) { libChunks.add( _makeLibraryChunk( editLibrary )); }
@@ -601,10 +601,59 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
          );
    }
 
+   Function _rejectEdit() {
+      if( editLibrary.prospect ) {
+         prospectActive = false;
+         editLibrary = null;
+         editLibId = "";
+         updateProspect = false;
+         print( "SETSTATE reject updateLibs" );
+         setState(() => appState.updateLibs = true );   // force rebuild of lib row bar, without prospect
+      } else if( editLibId != "" ) {
+         // Go back to current selected lib
+         nameController.text = editLibrary.name;
+         descController.text = editLibrary.description;
+         editLibrary.image = origImage;   // reversed, since tmp state is stored in the lib!
+         setState(() => appState.updateLibs = true );   // force rebuild of lib row bar, with orig image
+      } else {
+         print( "??? XXX ??? how? " );
+         nameController.clear();
+         descController.clear();
+         origImage = null;
+      }
+   }
+
    Widget _makeEditLibBody() {
       final width = appState.screenWidth;
       final height = appState.screenHeight;
+
+      // NOTE this does not remove in-app ownership state, but it's invisible, harmless, and temporary til next load
+      void _deleteConfirmed() {
+         if( editLibrary.prospect ) { _rejectEdit(); }
+         else if( editLibrary.members.length > 1 ) { notYetImplemented( context ); } 
+         else {
+            String libId = editLibId;
+            String uid = appState.userId;
+            String postData = '{ "Endpoint": "DelLib", "LibId": "$libId", "PersonId": "$uid" }';               
+            deleteLib( context, container, postData );
+            
+            appState.myLibraries.remove( editLibrary );
+            editLibrary = null;
+            editLibId = "";
+            
+            setState(() {
+                  appState.updateLibs = true;  // force rebuild of lib row bar, removing deleted
+                  dirtyLibChunks = true;       // update sharing droplib
+               });
+         }
+         Navigator.of( context ).pop(); 
+      }
       
+      Function _deleteLib() {
+         confirm( context, "Confirm delete", "This action can not be undone.  Press Continue to proceed.",
+                  _deleteConfirmed, () => Navigator.of( context ).pop() );
+      }
+
       Function _acceptEdit() {
          // dynamo policy.. grrr
          editLibrary.name        = nameController.text;
@@ -630,27 +679,6 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
             });
       }
 
-      Function _rejectEdit() {
-         if( editLibrary.prospect ) {
-            prospectActive = false;
-            editLibrary = null;
-            editLibId = "";
-            updateProspect = false;
-            print( "SETSTATE reject updateLibs" );
-            setState(() => appState.updateLibs = true );   // force rebuild of lib row bar, without prospect
-         } else if( editLibId != "" ) {
-            // Go back to current selected lib
-            nameController.text = editLibrary.name;
-            descController.text = editLibrary.description;
-            editLibrary.image = origImage;   // reversed, since tmp state is stored in the lib!
-            setState(() => appState.updateLibs = true );   // force rebuild of lib row bar, with orig image
-         } else {
-            print( "??? XXX ??? how? " );
-            nameController.clear();
-            descController.clear();
-            origImage = null;
-         }
-      }
                         
       if( editLibId == "" ) {
          return Padding(
@@ -710,7 +738,10 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
                      Padding(
-                        padding: EdgeInsets.fromLTRB( width * .1, 0, width * .05, 0.0),
+                        padding: EdgeInsets.fromLTRB( 0,0,width * .02,0),
+                        child: makeActionButtonSmall( appState, "Delete", () async { _deleteLib(); })),
+                     Padding(
+                        padding: EdgeInsets.fromLTRB( 0,0,width * .02,0),
                         child: makeActionButtonSmall( appState, "Accept", () async { _acceptEdit(); })),
                      Padding(
                         padding: EdgeInsets.fromLTRB( 0, 0, width * .04, 0.0),

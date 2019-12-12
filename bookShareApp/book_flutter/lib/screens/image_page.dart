@@ -6,6 +6,7 @@ import 'dart:math';
 import 'dart:convert'; 
 
 import 'package:image_crop/image_crop.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'package:bookShare/models/app_state.dart';
 import 'package:bookShare/app_state_container.dart';
@@ -130,6 +131,9 @@ class _BookShareImagePageState extends State<BookShareImagePage> {
    var cropKey;                 // the main access point to crop data
    bool updatePreview;          // is it time to update the preview image?  very brief lifespan
    Widget preview;              // the current preview
+
+   File pickerImage;            // image file from gallery/camera
+   bool activePickerImage;      // currently processing gallery/camera?  don't show picker
    
    @override
    void initState() {
@@ -148,6 +152,9 @@ class _BookShareImagePageState extends State<BookShareImagePage> {
 
       updatePreview = false;
       preview = Container();
+
+      pickerImage = null;
+      activePickerImage = false;
    }
 
    @override
@@ -155,7 +162,27 @@ class _BookShareImagePageState extends State<BookShareImagePage> {
       super.dispose();
    }
 
-   // Try converting network image to image
+   // Try converting file image to image
+   _getImageFromFile( anImage ) async {
+
+      Completer<ImageInfo> completer = Completer();
+
+      Future<ui.Image> getImage(anImage) async {
+         var img = new FileImage(anImage);
+         img.resolve(ImageConfiguration()).addListener(ImageStreamListener((ImageInfo info,bool _){
+                  completer.complete(info);
+               }));
+         ImageInfo imageInfo = await completer.future;
+         return imageInfo.image;
+      }
+      var tmp = await getImage( anImage );
+
+      convertedNI = tmp;
+      print( "SETSTATE getImage imageConverted" );
+      setState(() => imageConverted = true );
+   }
+
+   // convert network image to image
    // XXX just do this with future, remove completer.
    _getImage( selectedImage ) async {
 
@@ -176,7 +203,7 @@ class _BookShareImagePageState extends State<BookShareImagePage> {
       setState(() => imageConverted = true );
    }
    
-
+   // Which book cover to crop from?
    Widget _makeCoverChunk( book ) {
       final imageHeight = appState.screenHeight * .36;
       final imageWidth  = imageHeight;
@@ -207,6 +234,9 @@ class _BookShareImagePageState extends State<BookShareImagePage> {
 
    Widget _cropImage( image, imageHeight, imageWidth ) {
       cropKey = GlobalKey<CropState>();
+      var image;
+      if     ( selectedType == "network" ) { image = new NetworkImage( selectedImage ); }
+      else if( selectedType == "file" )    { image = new FileImage( selectedImage ); }
       Widget _buildCropImage() {
          return Container(
             color: Colors.black,
@@ -215,7 +245,7 @@ class _BookShareImagePageState extends State<BookShareImagePage> {
             padding: const EdgeInsets.all(0.0),
             child: Crop(
                key: cropKey,
-               image: new NetworkImage( selectedImage ),
+               image: image,
                aspectRatio: 1.0 / 1.0,
                ));
       }
@@ -276,7 +306,8 @@ class _BookShareImagePageState extends State<BookShareImagePage> {
       // avoid unhelpful crop reset
       if( !(updatePreview && cropKey != null && cropKey.currentState != null )) {
          var image;
-         if( selectedType == "network" ) { image = Image.network( selectedImage, height: imageHeight, width: imageWidth, fit: BoxFit.contain ); }
+         if     ( selectedType == "network" ) { image = Image.network( selectedImage, height: imageHeight, width: imageWidth, fit: BoxFit.contain ); }
+         else if( selectedType == "file" )    { image = Image.file( selectedImage, height: imageHeight, width: imageWidth, fit: BoxFit.contain ); }
 
          print( "makeImageView, about to crop" );
          Widget cropper = _cropImage( image, imageHeight, imageWidth );
@@ -292,8 +323,47 @@ class _BookShareImagePageState extends State<BookShareImagePage> {
             ]);
    }
 
-   Widget _makeGridView( ) {
+   void _getImageFile( source ) async {
+      activePickerImage = true;
+      var image = await ImagePicker.pickImage( source: source );
+      print( "SETSTATE imagePage pickerImage" );
+      setState(() => pickerImage = image );       // force picker image into cropzone
+   }
 
+
+   // Combines grid view, makeCoverChunk plus tap thanks to imagePicker
+   void _makeGalleryView( source ) async {
+      print( "image pick?" );
+
+      // Don't restart picker if still processing
+      if( !activePickerImage ) {
+         if( source == "gallery" )     { _getImageFile( ImageSource.gallery ); }
+         else if( source == "camera" ) { _getImageFile( ImageSource.camera ); }
+      }
+      
+      if( pickerImage == null ) { return; }
+      print( "MAKE GALLERY yes." );
+      var image = Image.file( pickerImage); 
+      
+      // re-init cropper data for new image
+      newSelection = true;
+      imageConverted = false;
+      if( cropKey != null ) { cropKey.currentState = null; }
+      convertedNI = null;
+      croppedImage = null;
+      
+      selectedType  = "file";
+      selectedImage = pickerImage;
+      await _getImageFromFile( pickerImage );
+      print( "SETSTATE  selector image" );
+      // allow picker to become active again
+      activePickerImage = false;
+      pickerImage = null;
+      setState(() => selector = "image" );      // initiates cropper
+   }
+
+
+   Widget _makeGridView( ) {
       List<Widget> coverChunks = [];
       if( appState.booksInLib == null ) { return Container(); }
       
@@ -368,10 +438,12 @@ class _BookShareImagePageState extends State<BookShareImagePage> {
    }
 
    Widget _makeContent( imageHeight ) {
-      Widget content;
-      if( selector == "covers" )     { content = _makeGridView(); }
-      else if( selector == "image" ) { content = _makeImageView( imageHeight ); }
-      else                           { content = Container();  imageHeight = .001*imageHeight;   }
+      Widget content = Container();
+      if     ( selector == "image" )   { content = _makeImageView( imageHeight ); }   // I'm shared by all choices
+      else if( selector == "covers" )  { content = _makeGridView(); }
+      else if( selector == "gallery" ) {           _makeGalleryView( "gallery"); }
+      else if( selector == "camera" )  {           _makeGalleryView( "camera"); }
+      else                             { imageHeight = .001*imageHeight;   }
 
       return SizedBox( height: imageHeight, child: content );
    }
@@ -395,7 +467,7 @@ class _BookShareImagePageState extends State<BookShareImagePage> {
          // Save image  
          assert( appState.currentPng != null );
 
-         print( "Set image, imagePng for lib: " + editLibrary.id );
+         print( "Set image, imagePng for lib: " + editLibrary.id + " " + appState.currentPng.length.toString() );
          editLibrary.imagePng = appState.currentPng;
          editLibrary.image    = Image.memory( appState.currentPng );
          
