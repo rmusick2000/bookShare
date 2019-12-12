@@ -40,6 +40,25 @@ void showToast(BuildContext context, msg) {
       );
 }
 
+void confirm( BuildContext context, confirmHeader, confirmBody, okFunc, cancelFunc ) {
+   showDialog(
+      context: context,
+      builder: (BuildContext context) {
+                 return AlertDialog(
+                    title: new Text( confirmHeader ),
+                    content: new Text( confirmBody ),
+                    actions: <Widget>[
+                       new FlatButton(
+                          child: new Text("Continue"),
+                          onPressed: okFunc ),
+                       new FlatButton(
+                          child: new Text("Cancel"),
+                          onPressed: cancelFunc )
+                       ]);
+              });
+}
+
+
 makeActionButton( BuildContext context, buttonText, fn ) {
    TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 14.0);
    final container   = AppStateContainer.of(context);

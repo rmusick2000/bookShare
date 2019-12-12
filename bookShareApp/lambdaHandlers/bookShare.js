@@ -2,7 +2,6 @@
 
 const AWS = require('aws-sdk');
 const bsdb = new AWS.DynamoDB.DocumentClient();
-const randomBytes = require('crypto').randomBytes;
 var assert = require('assert');
 
 // sigh.  thanks dynamodb.  
@@ -38,6 +37,7 @@ exports.handler = (event, context, callback) => {
     else if( endPoint == "GetBooks")       { resultPromise = getBooks( rb.SelectedLib ); }
     else if( endPoint == "PutBook")        { resultPromise = putBook( rb.SelectedLib, rb.NewBook, username ); }
     else if( endPoint == "PutLib")         { resultPromise = putLib( rb.NewLib ); }
+    else if( endPoint == "DelLib")         { resultPromise = delLib( rb.LibId, rb.PersonId ); }
     else if( endPoint == "GetOwnerships")  { resultPromise = getOwnerships( rb.PersonId ); }
     else if( endPoint == "UpdateShare")    { resultPromise = updateShare( rb.BookId, rb.PersonId, rb.LibId, rb.PLibId, rb.All, rb.Value ); }
     else if( endPoint == "InitOwnership")  { resultPromise = initOwn( username, rb.PrivLibId ); }
@@ -108,6 +108,30 @@ function lookupOwnerships( personId ) {
     });
 }
 
+function lookupLibraries( personId, memberLibs ) {
+    console.log('LookupLibs!', personId, memberLibs  );
+
+    var paramsL;
+    if( memberLibs ) {
+	paramsL = {
+            TableName: 'Libraries',
+            FilterExpression: 'contains(Members, :pid)',
+            ExpressionAttributeValues: { ":pid": personId }
+	};
+    } else {
+	paramsL = {
+            TableName: 'Libraries',
+            FilterExpression: 'NOT contains(Members, :pid) AND JustMe = :false',
+            ExpressionAttributeValues: { ":pid": personId, ":false": false }
+	};
+    }
+    
+    let librariesPromise = bsdb.scan( paramsL ).promise();
+    return librariesPromise.then((libraries) => {
+	console.log( libraries );
+	return libraries;
+    });
+}
 
 async function initOwn( username, privLib ) {
     console.log('init ownership', username );
@@ -217,6 +241,48 @@ async function putLib( newLib ) {
     };
     
     let libPromise = bsdb.put( paramsPL ).promise();
+    return libPromise.then(() => {
+	console.log("Success!");
+	return {
+	    statusCode: 201,
+	    body: JSON.stringify( true ),
+	    headers: { 'Access-Control-Allow-Origin': '*' }
+	};
+    });
+}
+
+
+async function delLib( libId, personId ) {
+    console.log('Kill Lib!', libId, personId );
+
+    const ownerships = await lookupOwnerships( personId );
+    const myLibs = await lookupLibraries( personId, true );
+    var shares = ownerships.Shares;
+    
+    var newShares = new Map();
+
+    // Can't seem to create the easy way.. rebuild from scratch
+    if( shares[libId] != null ) {
+	myLibs.Items.forEach( function(lib) { if( lib.LibraryId != libId ) { newShares[lib.LibraryId] = shares[lib.LibraryId]; } });
+    }
+
+    const paramsO = {
+        TableName: 'Ownerships',
+	Key: {"OwnershipId": personId},
+	UpdateExpression: 'set Books = :books, Shares = :newShares',
+	ExpressionAttributeValues: { ':books': ownerships.Books, ':newShares': newShares }};
+    
+    const paramsPL = {
+	TableName: 'Libraries',
+	Key: {"LibraryId": libId }};
+    
+    // Allow re-update of ownership even if no change.
+    let libPromise = bsdb.transactWrite({
+	TransactItems: [
+	    { Delete: paramsPL },
+	    { Update: paramsO },
+	]}).promise();
+    
     return libPromise.then(() => {
 	console.log("Success!");
 	return {
@@ -338,52 +404,29 @@ async function updateShare( bookId, personId, libId, plibId, all, value ) {
     });
 }
 
+async function getLibs( userName, memberLibs ) {
 
-async function getLibs( username, memberLibs ) {
-    console.log('Get Libs!', username, memberLibs  );
-
-    const personId  = await getPersonId( username );
-
-    // Params to get Libraries that have PersonID in Members
-    var paramsL;
-    if( memberLibs ) {
-	paramsL = {
-            TableName: 'Libraries',
-            FilterExpression: 'contains(Members, :pid)',
-            ExpressionAttributeValues: { ":pid": personId }
+    const personId  = await getPersonId( userName );
+    const libraries = await lookupLibraries( personId, memberLibs );
+    
+    // exploring, can have 0 libs
+    if( libraries.Count >= 1 ) {
+	console.log( "Result: ", libraries.Count );
+	return {
+	    statusCode: 201,
+	    body: JSON.stringify( libraries.Items ),
+	    headers: { 'Access-Control-Allow-Origin': '*' }
 	};
-    } else {
-	paramsL = {
-            TableName: 'Libraries',
-            FilterExpression: 'NOT contains(Members, :pid) AND JustMe = :false',
-            ExpressionAttributeValues: { ":pid": personId, ":false": false }
+    } else
+    {
+	console.log( "Result: no libs" );
+	return {
+	    statusCode: 204,
+	    body: JSON.stringify( "---" ),
+	    headers: { 'Access-Control-Allow-Origin': '*' }
 	};
     }
-    
-    console.log( "Working with ", personId );
-    let librariesPromise = bsdb.scan( paramsL ).promise();
-    return librariesPromise.then((libraries) => {
-
-	// exploring, can have 0 libs
-	if( libraries.Count >= 1 ) {
-	    console.log( "Result: ", libraries );
-	    return {
-		statusCode: 201,
-		body: JSON.stringify( libraries.Items ),
-		headers: { 'Access-Control-Allow-Origin': '*' }
-	    };
-	} else
-	{
-	    console.log( "Result: no libs" );
-	    return {
-		statusCode: 204,
-		body: JSON.stringify( "---" ),
-		headers: { 'Access-Control-Allow-Origin': '*' }
-	    };
-	}
-    });
 }
-
 
 
 function findBook(bookTitle, username) {

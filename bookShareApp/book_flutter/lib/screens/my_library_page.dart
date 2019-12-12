@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:random_string/random_string.dart';
 
 import 'package:bookShare/screens/my_library_page.dart';
 import 'package:bookShare/screens/loan_page.dart';
@@ -40,11 +41,17 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
    Map<String,Widget> libChunks;
    String shareLibrary;              // selected lib for assigning book shares
 
-   String editLibId;                 // selected lib ID that is under edit or being created
+   String  editLibId;                // selected lib ID that is under edit or being created
    Library editLibrary;              // the selected lib
-
+   bool    updateProspect;           // time to create a new prospect
+   bool    prospectActive;           // active prospect on the library row bar
+   
    // shares
    bool shareAll; 
+
+   TextEditingController nameController;  // edit state.  don't want these overwritten on return from chooseImage
+   TextEditingController descController;
+   Image                 origImage;       // orig state.
    
    @override
    void initState() {
@@ -57,8 +64,15 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
       shareLibrary = "";
       editLibId = "";
       editLibrary = null;
+      updateProspect = false;
+      prospectActive = false;
       shareAll = false;
 
+      nameController = new TextEditingController();   
+      descController = new TextEditingController();
+      nameController.text = "";
+      descController.text = "";
+      origImage = null;
    }
    
    
@@ -99,6 +113,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
                      child: GestureDetector( 
                         onTap:  ()
                         {
+                           print( "SETSTATE makeContextMenu icon" );
                            setState(() { contentView = "create"; });
                         },
                         child: Icon( Icons.fiber_new )
@@ -108,6 +123,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
                      child: GestureDetector( 
                         onTap:  ()
                         {
+                           print( "SETSTATE makeContextMenu icon" );
                            setState(() { contentView = "share"; });
                         },
                         child: Icon( Icons.create )
@@ -122,6 +138,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
                            child: GestureDetector( 
                               onTap:  ()
                               {
+                                 print( "SETSTATE makeContextMenu icon" );
                                  setState(() { contentView = "grid"; });
                               },
                               child: Icon( Icons.apps )
@@ -131,6 +148,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
                            child: GestureDetector( 
                               onTap:  ()
                               {
+                                 print( "SETSTATE makeContextMenu icon" );
                                  setState(() { contentView = "list"; });
                               },
                               child: Icon( Icons.list )
@@ -141,6 +159,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
                               onTap:  ()
                               {
                                  notYetImplemented( context );
+                                 print( "SETSTATE makeContextMenu icon" );
                                  setState(() { contentView = "full"; });
                               },
                               child: Icon( Icons.fullscreen )
@@ -159,6 +178,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
      return GestureDetector(
            onTap:  ()
            {
+              print( "SETSTATE makeBookChunk tap" );
               setState(() { appState.detailBook = book; });
               Navigator.push( context, MaterialPageRoute(builder: (context) => BookShareBookDetailPage()));
            },
@@ -244,6 +264,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
                   appState.ownerships[newVal] = new Set<String>();
                }
                setState(() {
+                     print( "SETSTATE makeDroplib change" );
                      shareAll = false;
                      shareLibrary = newVal;
                   });
@@ -272,6 +293,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
      return GestureDetector(
         onTap:  ()
         {
+           print( "SETSTATE makeBookList tap" );
            setState(() { appState.detailBook = book; });
            Navigator.push( context, MaterialPageRoute(builder: (context) => BookShareBookDetailPage()));
         },
@@ -395,6 +417,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
       if( appState.booksInLib.containsKey( libId ) ) { appState.booksInLib[libId].clear(); }
       initLibBooks( context, container, libId );
       
+      print( "SETSTATE updateOwnership share" );
       setState(() {
             appState.sharesLoaded = true;
             shareAll = newValue && setAll;
@@ -404,6 +427,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
    _initOwnerships() async {
       print( "loading Ownerships" );
       await initOwnerships( context, container );
+      print( "SETSTATE initOwnership init" );
       setState(() {
             appState.sharesLoaded = true;
          });
@@ -436,10 +460,31 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
             ]);
    }
 
-
-   _editLibrary( libraryId, lib ) {
+   Function setNewEditLib( lib ) {
       editLibrary = lib;
-      setState(() => editLibId = libraryId );
+      if( editLibrary != null ) {
+         // print( editLibrary.toString() );
+         if( editLibrary.description == null || editLibrary.description == "---EMPTY---" ) { editLibrary.description = ""; }
+         nameController.text = editLibrary.name;
+         descController.text = editLibrary.description;
+         origImage = editLibrary.image;
+      }
+   }
+
+   // XXX Confirm choice of new lib if editLib != null (will lose edits)
+   _editLibrary( libraryId, lib ) {
+      if( lib == null ) {
+         if( prospectActive ) { showToast( context, "Just one new lib at a time." ); }
+         else {
+            print( "SETSTATE editLIb updateProspect" );
+            setState(() => updateProspect = true );
+         }
+      } else {
+         prospectActive = false;
+         setNewEditLib( lib );
+         print( "SETSTATE editLIb editLibId" );
+         setState(() => editLibId = libraryId );
+      }
    }
       
    Widget _makeLibraryChunk( lib ) {
@@ -450,17 +495,24 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
          );
    }
 
+   Widget _makeProspect() {
+      bool highlight = true;
+      print( "make new lib" );
+      editLibId = randomAlpha(10);
+      List<String> meme = new List<String>();
+      meme.add( appState.userId );
+      editLibrary = new Library( id: editLibId, name: "new", private: false, members: meme, imagePng: null, image: null, prospect: true );
+      updateProspect = false;
+      prospectActive = true;
+      setNewEditLib( editLibrary );
+      return GestureDetector(
+         onTap: () { _editLibrary( editLibId, editLibrary); },
+         child: makeLibraryChunk( editLibrary, appState.screenHeight, highlight ) 
+         );
+   }
+   
    Widget _makeNewLib() {
       final imageSize = appState.screenHeight * .1014;
-      bool highlight = ( editLibId == "new" );
-
-      Widget underline = Container();
-      if( highlight ) {
-         underline = Padding( 
-            padding: const EdgeInsets.fromLTRB(12.0, 1.0, 0, 0.0),
-            child: Container( height: 5.0, width: imageSize, color: Colors.pinkAccent ));
-      }
-      
       return GestureDetector(
          onTap: () { _editLibrary( "new", null ); },
          child: Column(
@@ -473,13 +525,13 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
                   child: Icon( Icons.fullscreen, size: imageSize, color: Colors.pinkAccent )),
                Padding(
                   padding: const EdgeInsets.fromLTRB(12.0, 4.0, 0, 0.0),
-                  child: Text("< CREATE >", style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic))),
-               underline
+                  child: Text("< CREATE >", style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic)))
                ])
          );
    }
       
    // Don't need to update elsewhere - this page must be on the stack to edit, and edits here mod other pages via appState
+   // XXX libChunks should be stateful?
    Widget _makeLibraryRow() {
       List<Widget> libChunks = [];
       if( appState.myLibraries == null ) { return Container(); }  // null during update
@@ -487,6 +539,8 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
       if( appState.updateLibs || libChunks.length == 0 ) {
          print( "myLib updating libs" );
          libChunks.add( _makeNewLib() );
+         if( updateProspect ) { libChunks.add( _makeProspect() ); }
+         else if( editLibrary != null && editLibrary.prospect ) { libChunks.add( _makeLibraryChunk( editLibrary )); }
          assert( appState.myLibraries.length >= 1 );
          appState.myLibraries.forEach((lib) => libChunks.add( _makeLibraryChunk( lib )));
          appState.updateLibs = false;
@@ -495,7 +549,6 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
       return ConstrainedBox( 
          constraints: new BoxConstraints(
             minHeight: 20.0,
-            // XXXX maxHeight: appState.screenHeight * .1523
             maxHeight: appState.screenHeight * .167
             ),
          child: ListView(
@@ -505,20 +558,18 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
    }
 
    Widget _makePixButton( ) {
-     return makeActionButtonSmall(
-           appState,
-           "Choose Image", 
-           ()
-           {
-              Navigator.push( context, MaterialPageRoute(
-                                 builder: (context) => BookShareImagePage(),
-                                 settings: RouteSettings( arguments: editLibId )));
-           });
+      return makeActionButtonSmall(
+            appState,
+            "Choose Image", 
+            ()
+            {
+               Navigator.push( context, MaterialPageRoute(
+                                  builder: (context) => BookShareImagePage(),
+                                  settings: RouteSettings( arguments: editLibrary )));
+            });
    }
 
 
-   // XXX no hint text - actually set controller text with name
-   // XXX size the sizedbox to available space under libChunk.
    Widget _makeSmallInputField( txt, controller ) {
       return TextField(
          obscureText: false,
@@ -550,54 +601,84 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
          );
    }
 
+   Function _rejectEdit() {
+      if( editLibrary.prospect ) {
+         prospectActive = false;
+         editLibrary = null;
+         editLibId = "";
+         updateProspect = false;
+         print( "SETSTATE reject updateLibs" );
+         setState(() => appState.updateLibs = true );   // force rebuild of lib row bar, without prospect
+      } else if( editLibId != "" ) {
+         // Go back to current selected lib
+         nameController.text = editLibrary.name;
+         descController.text = editLibrary.description;
+         editLibrary.image = origImage;   // reversed, since tmp state is stored in the lib!
+         setState(() => appState.updateLibs = true );   // force rebuild of lib row bar, with orig image
+      } else {
+         print( "??? XXX ??? how? " );
+         nameController.clear();
+         descController.clear();
+         origImage = null;
+      }
+   }
 
-   /* 
-beginBatchEdit on inactive InputConnection
-i solved by USING 'searchEditor.clear();' inside Future.delayed Because when we call FocusScope.of(context).unfocus(); for closing keyboard it take some microseconds for close that's why it show this WANRING i.e. getTextBeforeCursor on inactive InputConnection to overcome i called searchEditor.clear(); method after some microseconds 
-    */
-   
-   // XXX Would love to have dict access to libChunks... should probably do so to avoid lots of updates, like copy here
    Widget _makeEditLibBody() {
       final width = appState.screenWidth;
       final height = appState.screenHeight;
-      TextEditingController nameController = new TextEditingController();
-      TextEditingController descController = new TextEditingController();
 
-      if( editLibrary != null ) {
-         if( editLibrary.description == null || editLibrary.description == "---EMPTY---" ) { editLibrary.description = ""; }
-         nameController.text = editLibrary.name;
-         descController.text = editLibrary.description;
+      // NOTE this does not remove in-app ownership state, but it's invisible, harmless, and temporary til next load
+      void _deleteConfirmed() {
+         if( editLibrary.prospect ) { _rejectEdit(); }
+         else if( editLibrary.members.length > 1 ) { notYetImplemented( context ); } 
+         else {
+            String libId = editLibId;
+            String uid = appState.userId;
+            String postData = '{ "Endpoint": "DelLib", "LibId": "$libId", "PersonId": "$uid" }';               
+            deleteLib( context, container, postData );
+            
+            appState.myLibraries.remove( editLibrary );
+            editLibrary = null;
+            editLibId = "";
+            
+            setState(() {
+                  appState.updateLibs = true;  // force rebuild of lib row bar, removing deleted
+                  dirtyLibChunks = true;       // update sharing droplib
+               });
+         }
+         Navigator.of( context ).pop(); 
+      }
+      
+      Function _deleteLib() {
+         confirm( context, "Confirm delete", "This action can not be undone.  Press Continue to proceed.",
+                  _deleteConfirmed, () => Navigator.of( context ).pop() );
       }
 
       Function _acceptEdit() {
          // dynamo policy.. grrr
-         if( editLibrary.description == "" ) { editLibrary.description = "---EMPTY---"; }
-         editLibrary.name = nameController.text;
+         editLibrary.name        = nameController.text;
          editLibrary.description = descController.text;
+         if( editLibrary.description == "" ) { editLibrary.description = "---EMPTY---"; }
+
+         // thanks geppetto
+         if( editLibrary.prospect ) {      
+            editLibrary.prospect = false;
+            prospectActive = false;
+            appState.myLibraries.add( editLibrary );
+         }
+         
          String newLib = json.encode( editLibrary );
          String postData = '{ "Endpoint": "PutLib", "NewLib": $newLib }';               
          putLib( context, container, postData );
-         setState(() => appState.updateLibs = true );
-      }
-      
-      Function _rejectEdit() {
-         if( editLibId != "new" && editLibId != "" ) {
-            nameController.text = editLibrary.name;
-            descController.text = editLibrary.description;
-         } else {
-            nameController.clear();
-            descController.clear();
-         }
+
+         if( editLibrary.description == "---EMPTY---" ) { editLibrary.description = ""; }
+         print( "SETSTATE makeeditLibBody updateLibs" );
+         setState(() {
+               appState.updateLibs = true;  // force rebuild of lib row bar, showing new stuff
+               dirtyLibChunks = true;       // update sharing droplib
+            });
       }
 
-      
-      Widget libChunk;
-      if( editLibrary == null ) {
-         libChunk = _makeNewLib();
-         editLibrary = new Library( id: "bs123", name: "no name", private: false, members: [], imagePng: null, image: null );
-      } else {
-         libChunk = _makeLibraryChunk( editLibrary );
-      }
                         
       if( editLibId == "" ) {
          return Padding(
@@ -652,13 +733,15 @@ i solved by USING 'searchEditor.clear();' inside Future.delayed Because when we 
                         child: _makePixButton() )
                      ]),
                Container( height: appState.screenHeight * .03 ),
-               //    XXXX           Container( height: appState.screenHeight * .05 ),
                Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
                      Padding(
-                        padding: EdgeInsets.fromLTRB( width * .1, 0, width * .05, 0.0),
+                        padding: EdgeInsets.fromLTRB( 0,0,width * .02,0),
+                        child: makeActionButtonSmall( appState, "Delete", () async { _deleteLib(); })),
+                     Padding(
+                        padding: EdgeInsets.fromLTRB( 0,0,width * .02,0),
                         child: makeActionButtonSmall( appState, "Accept", () async { _acceptEdit(); })),
                      Padding(
                         padding: EdgeInsets.fromLTRB( 0, 0, width * .04, 0.0),

@@ -100,6 +100,8 @@ class _BookShareSearchState extends State<BookShareSearchPage> {
      final tryMeButton = RaisedButton(
         onPressed: () async
         {
+           notYetImplemented( context );
+           /*
            String data = '{ "Endpoint": "FindBook", "Title": "Digital Fortress" }';
            String lambdaAddr = appState.apiBasePath + "/find";
            try{ 
@@ -109,6 +111,7 @@ class _BookShareSearchState extends State<BookShareSearchPage> {
            } catch( error, trace ) {
               showToast( context, error.toString() );
            }
+           */
 
         },
         child: Text( 'Try me!'));

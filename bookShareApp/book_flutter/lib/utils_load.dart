@@ -293,6 +293,33 @@ Future<bool> putLib( context, container, postData ) async {
    }
 }
 
+// XXX LOTS of overlap in these functions.
+Future<bool> deleteLib( context, container, postData ) async {
+   print( "deleteLib " );
+   final appState  = container.state;
+   final gatewayURL = appState.apiBasePath + "/find"; 
+   
+   final response =
+      await http.post(
+         gatewayURL,
+         headers: {HttpHeaders.authorizationHeader: appState.idToken},
+         body: postData
+         );
+   
+   if (response.statusCode == 201) {
+      // print( response.body.toString() );         
+      return true;
+   } else if (response.statusCode == 401 ) {
+      if( checkReauth( context, container ) ) {
+         await container.getAuthTokens( true );
+         return await deleteLib( context, container, postData );
+      }
+   } else {
+      print( "RESPONSE: " + response.statusCode.toString() + " " + json.decode(utf8.decode(response.bodyBytes)).toString());
+      throw Exception('Failed to update library');
+   }
+}
+
 Future<bool> putShares( context, container, postData ) async {
    print( "putShares " + postData );
    final appState  = container.state;
@@ -325,7 +352,9 @@ initMyLibraries( context, container ) async {
    print( "initMyLibs" );
    final appState  = container.state;
 
+   // NOTE personID not yet set
    appState.myLibraries = await fetchLibraries( context, container, '{ "Endpoint": "GetLibs" }' );
+   assert( appState.myLibraries != null );
    if( appState.myLibraries.length > 0 ) {
       for( final lib in appState.myLibraries ) {
          if( lib.private ) {
