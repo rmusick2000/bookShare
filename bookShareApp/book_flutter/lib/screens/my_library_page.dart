@@ -739,10 +739,10 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
                   children: <Widget>[
                      Padding(
                         padding: EdgeInsets.fromLTRB( 0,0,width * .02,0),
-                        child: makeActionButtonSmall( appState, "Delete", () async { _deleteLib(); })),
+                        child: makeActionButtonSmall( appState, "Accept", () async { _acceptEdit(); })),
                      Padding(
                         padding: EdgeInsets.fromLTRB( 0,0,width * .02,0),
-                        child: makeActionButtonSmall( appState, "Accept", () async { _acceptEdit(); })),
+                        child: makeActionButtonSmall( appState, "Delete", () async { _deleteLib(); })),
                      Padding(
                         padding: EdgeInsets.fromLTRB( 0, 0, width * .04, 0.0),
                         child: makeActionButtonSmall( appState, "Cancel", () async { _rejectEdit(); }))

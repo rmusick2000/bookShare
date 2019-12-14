@@ -17,7 +17,7 @@ class AppState {
    int authRetryCount;
    var returnValue;       // XXX ???
    UserState userState;
-   double progress;       // XXX ??? this could not have been working - was re-declared in init
+   bool cogInitDone;         // main: sometimes cog init is slow.  Timer refires until this is true
    bool gatOverride;
    
    String apiBasePath;
@@ -81,7 +81,7 @@ class AppState {
       accessToken = "";
       idToken = "";
       refreshToken = "";
-      progress = -1;
+      cogInitDone = false;
       gatOverride = false;
       
       apiBasePath = "";

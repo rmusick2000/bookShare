@@ -37,12 +37,14 @@ class _BookShareHomeState extends State<BookShareHomePage> {
    int currentBookCount;
    var container;
    AppState appState;
+   bool updateLibRow;                    // to allow joining a lib to show up 
    
    @override
    void initState() {
       print( "HOMEPAGE INIT" );
       super.initState();
       currentBookCount = -1;
+      updateLibRow = true;
    }
 
    @override
@@ -85,19 +87,71 @@ class _BookShareHomeState extends State<BookShareHomePage> {
 
 
    Widget _joinText() {
-      Library currentLib = getCurrentLib( appState );
-      if( currentLib == null || currentLib.members.indexOf(appState.userId) == -1 ) {
-         return  GestureDetector(
-            onTap: ()  { notYetImplemented(context); },
-            child: Text( "Join",
-                         textAlign: TextAlign.center,
-                         style: TextStyle(fontSize: 14, color: Colors.lightBlue, fontWeight: FontWeight.bold)));
-      }
-      else { return Container(); }
-
+      return  GestureDetector(
+         onTap: ()
+         {
+            updateLibRow = false;
+            Library currentLib = null;
+            appState.exploreLibraries.forEach((lib) { if( lib.id == appState.selectedLibrary ) { currentLib = lib; } });
+            print( "JOINING LIB " + currentLib.name + " " + currentLib.id );
+            
+            // move from exploreLibraries to myLibraries
+            bool removed = appState.exploreLibraries.remove( currentLib );
+            assert( removed );
+            currentLib.members.add( appState.userId );
+            appState.myLibraries.add( currentLib );
+            
+            // update dynamo
+            String newLib = json.encode( currentLib );
+            String postData = '{ "Endpoint": "PutLib", "NewLib": $newLib }';               
+            putLib( context, container, postData );
+            
+            print( "SET STATE hompage updatelibrow" );
+            setState(() => updateLibRow = true );         // redraw libraryRow
+         },
+         child: Text( "Join",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 14, color: Colors.lightBlue, fontWeight: FontWeight.bold)));
    }
+
+   Widget _leaveText() {
+      return  GestureDetector(
+         onTap: ()
+         {
+            updateLibRow = false;
+            Library currentLib = null;
+            appState.myLibraries.forEach((lib) { if( lib.id == appState.selectedLibrary ) { currentLib = lib; } });
+            print( "LEAVING LIB " + currentLib.name + " " + currentLib.id );
+            
+            // move from  myLibraries to exploreLibraries
+            bool removed = appState.myLibraries.remove( currentLib );
+            assert( removed );
+            currentLib.members.remove( appState.userId );
+            appState.exploreLibraries.add( currentLib );
+            
+            // update dynamo
+            String newLib = json.encode( currentLib );
+            String postData = '{ "Endpoint": "PutLib", "NewLib": $newLib }';               
+            putLib( context, container, postData );
+            
+            print( "SET STATE hompage updatelibrow" );
+            setState(() => updateLibRow = true );         // redraw libraryRow
+         },
+         child: Text( "Leave",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 14, color: Colors.lightBlue, fontWeight: FontWeight.bold)));
+   }
+
+   Widget _memberText() {
+      // null if exploreLib, or during early init
+      Library currentLib = getLib( appState );  
+      if( currentLib.members.indexOf(appState.userId) == -1 ) { return _joinText(); }   // join if not member
+      else if( currentLib.members.length > 1 )                { return _leaveText(); }  // exit if more members than 1
+      else                                                    { return Container(); } 
+   }
+
    Widget _requestText( bookId ) {
-      Library currentLib = getCurrentLib( appState );
+      Library currentLib = getMemberLib( appState );
       final bil = appState.booksInLib;
       bool myBook =  false;
 
@@ -157,7 +211,7 @@ class _BookShareHomeState extends State<BookShareHomePage> {
                Text( name, style: TextStyle(fontSize: 14)),
                Text( numM, style: TextStyle(fontSize: 14)),
                Text( numB, style: TextStyle(fontSize: 14)),
-               _joinText()
+               _memberText()
                ]
             ));
    }   
@@ -165,7 +219,7 @@ class _BookShareHomeState extends State<BookShareHomePage> {
   /// XXX How much overlap with add_book?
   // Title will wrap if need be, growing row height as needed
   GestureDetector makeBookChunkCol( appState, book ) {
-     final imageHeight = appState.screenHeight * .46;
+     final imageHeight = appState.screenHeight * .45;
      final imageWidth  = appState.screenWidth * .42;
      const inset       = 20.0;
      
@@ -205,8 +259,8 @@ class _BookShareHomeState extends State<BookShareHomePage> {
 
       Widget _makeLibraryRow() {
          List<Widget> libChunks = [];
-         if( appState.myLibraries == null ) { return Container(); }  // null during update
-         
+         if( appState.myLibraries == null || !updateLibRow ) { return Container(); }  // null during update
+            
          assert( appState.myLibraries.length >= 1 );
          appState.myLibraries.forEach((lib) => libChunks.add( _makeLibraryChunk( lib )));
 
@@ -223,7 +277,8 @@ class _BookShareHomeState extends State<BookShareHomePage> {
          return ConstrainedBox( 
             constraints: new BoxConstraints(
                minHeight: 20.0,
-               maxHeight: appState.screenHeight * .1523
+               //maxHeight: appState.screenHeight * .1523
+               maxHeight: appState.screenHeight * .159
                ),
             child: ListView(
                scrollDirection: Axis.horizontal,
@@ -240,7 +295,7 @@ class _BookShareHomeState extends State<BookShareHomePage> {
          // first time through, books have not yet been fetched
          if( appState.booksInLib == null || bil == null || !appState.booksLoaded ) {
             return Container(
-               height: appState.screenHeight * .618,
+               height: appState.screenHeight * .60,
                child:  Center(
                   child: Container(
                      height: appState.screenHeight * .169,
@@ -248,7 +303,7 @@ class _BookShareHomeState extends State<BookShareHomePage> {
                );
          } else if ( bil.length == 0 ) {
             return Container(
-               height: appState.screenHeight * .618,
+               height: appState.screenHeight * .60,
                child:  Center(
                   child: Container(
                      height: appState.screenHeight * .169,
@@ -268,7 +323,6 @@ class _BookShareHomeState extends State<BookShareHomePage> {
 
       Widget _makeBody() {
          if( appState.loaded ) {
-            // print( "AppState Loaded" );
             assert( appState.myLibraries != null );
             if( appState.selectedLibrary == "") {
                _updateSelectedLibrary( appState.privateLibId ); 

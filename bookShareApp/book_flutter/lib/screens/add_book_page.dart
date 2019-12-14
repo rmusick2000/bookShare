@@ -31,7 +31,6 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
    TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
    String barcode;
    List<String> scans;
-   TextEditingController target;
    TextEditingController titleKey;
    TextEditingController authorKey;
       
@@ -57,13 +56,6 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
       titleKey  = new TextEditingController();
       authorKey = new TextEditingController();
       
-      target = new TextEditingController();
-      target.text = "0";
-      //        glorious cause(x) kush(x),            daughters,        the eight,       prestige,        neverwhere
-      var s1 = ["9780345427571", "9780446610025", "9787219045213", "9780345419088", "9780312858865", "9780060557812"];
-      //        inferno,         kiterunner,      awakening (X)    
-      var s2 = ["9780804172264", "9781594631931", "9780312987022"];
-      scans = [...s1, ...s2];
    }
 
 
@@ -168,19 +160,11 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
 
   void _updateFoundBooks( barcode ) async {
      if( barcode == "keywords" ) { foundBooks = await fetchKeyword( titleKey.text, authorKey.text );  }
-     else if( barcode != "" )    { foundBooks = await fetchISBN( barcode );  }
-  }
-  
-  Widget _targetField() {
-     return Container(
-     width: 50,
-     child: TextField(
-        decoration: InputDecoration(
-           contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-           hintText: target.text,
-           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0))),
-        controller: target
-        ));
+     else if( barcode != "" )
+     {
+        foundBooks = await fetchISBN( barcode );
+        if( foundBooks == null || foundBooks.length == 0 ) { showToast( context, "No good results..  Try refining your search." ); }
+     }
   }
 
   // XXX go to MyPriv, not make home-page dirty
@@ -291,43 +275,33 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
      return RaisedButton(
         onPressed: () async
         {
-           final EMULATOR = true;   // XXX 
+
            String bc = "";
-           int newTarget = -1;
-           
-           if( EMULATOR ) { 
-              bc = scans[int.parse( target.text )];
-              newTarget = ( int.parse( target.text ) + 1 ) % scans.length;
-           }
-           else {
-              try {
-                 bc = await BarcodeScanner.scan();
-              } on PlatformException catch(e) {
-                 if( e.code == BarcodeScanner.CameraAccessDenied) {
-                    showToast( context, "Camera permission not granted" );
-                 } else {
-                    showToast( context, e.toString() );
-                 }
-              } on FormatException {
-                 showToast( context, "oops - user returned using back button before scanning" );
-              } catch( error, trace ) {
-                 showToast( context, error.toString() );
+           try {
+              bc = await BarcodeScanner.scan();
+           } on PlatformException catch(e) {
+              if( e.code == BarcodeScanner.CameraAccessDenied) {
+                 showToast( context, "Camera permission not granted" );
+              } else {
+                 showToast( context, e.toString() );
               }
+           } on FormatException {
+              showToast( context, "oops - user returned using back button before scanning" );
+           } catch( error, trace ) {
+              showToast( context, error.toString() );
            }
            
            await _updateFoundBooks( bc );
-           setState(() {
-                 this.barcode = bc;
-                 this.target.text = newTarget.toString();
-              });
+           setState(() => this.barcode = bc );
         },
         child: Text( 'Scan'));
   }
 
-  Widget _makeActionButtons() {
+  Widget _makeActionButtons( gotStuff ) {
+     final width = appState.screenWidth;
      if( refining ) {
         return _makeRefineGroup();
-     } else {
+     } else if( gotStuff ) {
         return Row(
            crossAxisAlignment: CrossAxisAlignment.center,
            mainAxisAlignment: MainAxisAlignment.spaceEvenly, 
@@ -337,27 +311,29 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
               _refineButton()
               ]);
      }
+     else {
+        return paddedLTRB( _refineButton(), width*.6, 0, 0, 0);
+     }
   }
   
   Widget _makeBody() {
-     final topGap = appState.screenHeight * .06;
-     final botGap = appState.screenHeight * .04;
+     final height = appState.screenHeight;
+
+     final topGap = height * .06;
+     final botGap = height * .04;
      if( foundBooks == null || foundBooks.length == 0 ) {  // scan
-        return Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-               SizedBox(height: 5.0),
-               Text( "ISBN search", style: TextStyle(fontWeight: FontWeight.bold)),
-               SizedBox(height: 5.0),
-               Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                     _scanButton(),
-                     _targetField()
-                     ])
-               ]);
+        return SingleChildScrollView(
+           child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                 SizedBox(height: height*.25),
+                 Text( "ISBN search", style: TextStyle(fontWeight: FontWeight.bold)),
+                 SizedBox(height: 5.0),
+                 Center( child: _scanButton() ),
+                 SizedBox(height: height * .35 ),
+                 _makeActionButtons( false )
+                 ]));
      } else {                       // pick
         return  SingleChildScrollView(
            child: Container(
@@ -373,7 +349,7 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
                     child: Text("Select your book below..", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16))),
                  //SizedBox(height: botGap * .5),
                  _makeBooks(),
-                 _makeActionButtons(),
+                 _makeActionButtons( true ),
                  SizedBox(height: botGap*.3),
                  ])
               ));

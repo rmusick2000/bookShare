@@ -43,15 +43,15 @@ class _AppStateContainerState extends State<AppStateContainer> {
         if (!mounted) return;
         setState(() {
               state.returnValue = e;
-              state.progress = -1;
            });
         
         return;
      }
      
      if (!mounted) return;
+     print( "... Cognito doload returning mounted with " + value.toString() );
      setState(() {
-           state.progress = -1;
+           state.cogInitDone = true;
            state.userState = value;
         });
   }
@@ -119,7 +119,6 @@ class _AppStateContainerState extends State<AppStateContainer> {
                  // Libraries and books
                  await getAPIBasePath();
                  
-                 // await initMyLibraries( this );
                  await initMyLibraries( context, this );
                  stateLoaded = true;
                  state.loading = false;
@@ -164,28 +163,28 @@ class _AppStateContainerState extends State<AppStateContainer> {
 
   // Cognito button-press wrapper
   onPressWrapper(fn) {
-    wrapper() async {
-      setState(() {
-        state.progress = null;
-      });
-
-      String value;
-      try {
-        value = (await fn()).toString();
-      } catch (e, stacktrace) {
-        print(e);
-        print(stacktrace);
-        setState(() => value = e.toString());
-      } finally {
+     wrapper() async {
         setState(() {
-          state.progress = -1;
-        });
-      }
-
-      setState(() => state.returnValue = value);
-    }
-
-    return wrapper;
+              //state.progress = null;
+           });
+        
+        String value;
+        try {
+           value = (await fn()).toString();
+        } catch (e, stacktrace) {
+           print(e);
+           print(stacktrace);
+           setState(() => value = e.toString());
+        } finally {
+           setState(() {
+                 //state.progress = -1;
+              });
+        }
+        
+        setState(() => state.returnValue = value);
+     }
+     
+     return wrapper;
   }
 
   

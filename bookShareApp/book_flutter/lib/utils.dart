@@ -58,6 +58,11 @@ void confirm( BuildContext context, confirmHeader, confirmBody, okFunc, cancelFu
               });
 }
 
+paddedLTRB( child, double L, double T, double R, double B ) {
+   return Padding(
+      padding: EdgeInsets.fromLTRB(L,T,R,B),
+      child: child );
+}
 
 makeActionButton( BuildContext context, buttonText, fn ) {
    TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 14.0);
@@ -227,6 +232,7 @@ makeBotAppBar( BuildContext context, currentPage ) {
 
 Widget makeLibraryChunk( lib, screenHeight, highlight ) {
    final imageSize   = screenHeight * .1014;
+   //final imageSize   = screenHeight * .08;
    final libraryName = lib.name;
    final libraryId   = lib.id;
 
@@ -235,18 +241,7 @@ Widget makeLibraryChunk( lib, screenHeight, highlight ) {
 
    Text nameTxt = Text(libraryName, style: TextStyle(fontSize: 12));
 
-   /*  Ugly.  there is 0 gap between text and underline.
-   if( highlight ) {
-      nameTxt = Text(libraryName,
-                     style: TextStyle( fontSize: 12,
-                                       decoration: TextDecoration.underline,
-                                       decorationThickness: 6.0,
-                                       decorationColor: Colors.pinkAccent,
-                                       // decorationStyle: TextDecorationStyle.wavy
-                        ));      
-   }
-   */
-
+   //  Nicer.  Actual underline has 0 gap between text and underline.
    Widget underline = Container();
    if( highlight ) {
       underline = Padding( 
@@ -289,7 +284,7 @@ Library getPrivateLib( appState ) {
 }
 
 // XXX home_page state.  namespace issues..
-Library getCurrentLib( appState ) {
+Library getMemberLib( appState ) {
    Library result = null;
    if( appState.myLibraries == null || appState.myLibraries.length < 1 ) { return result; }
 
@@ -299,6 +294,32 @@ Library getCurrentLib( appState ) {
    for( final lib in appState.myLibraries ) {
       if( lib.id == currentLib ) { result = lib; break; }
    }
+   return result;
+}
+
+Library getLib( appState ) {
+   Library result = null;
+   if( appState.myLibraries == null || appState.myLibraries.length < 1 ) { return result; }
+
+   String currentLib = appState.selectedLibrary;
+   if( currentLib == "" ) { currentLib = appState.privateLibId; }
+
+   bool found = false;
+   for( final lib in appState.myLibraries ) {
+      if( lib.id == currentLib ) {
+         result = lib; break;
+         found = true;
+      }
+   }
+   
+   if( !found ) {
+      for( final lib in appState.exploreLibraries ) {
+         if( lib.id == currentLib ) {
+            result = lib; break;
+         }
+      }
+   }
+      
    return result;
 }
 
