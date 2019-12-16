@@ -2,6 +2,7 @@ import 'dart:convert';  // json encode/decode
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter_cognito_plugin/flutter_cognito_plugin.dart';
+import 'package:flutter/services.dart';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -245,9 +246,7 @@ class _BookShareHomeState extends State<BookShareHomePage> {
                     child: image )),
               makeTitleText( book.title, imageWidth-inset-6, true, 2 ),
               makeAuthorText( book.author, imageWidth, true, 1 ),
-              Padding(
-                 padding: const EdgeInsets.fromLTRB(inset, 0, 6, 0),
-                 child: _requestText( book.id ))
+              paddedLTRB( _requestText( book.id ), inset, 0, 6, 0 )
               ]));
   }
   
@@ -257,6 +256,9 @@ class _BookShareHomeState extends State<BookShareHomePage> {
       container   = AppStateContainer.of(context);
       appState    = container.state;
 
+      // ListView horizontal messes with singleChildScroll (to prevent overflow on orientation change). only on this page.
+      SystemChrome.setPreferredOrientations([ DeviceOrientation.portraitUp, DeviceOrientation.portraitDown ]);
+      
       Widget _makeLibraryRow() {
          List<Widget> libChunks = [];
          if( appState.myLibraries == null || !updateLibRow ) { return Container(); }  // null during update
@@ -266,10 +268,7 @@ class _BookShareHomeState extends State<BookShareHomePage> {
 
          if( appState.exploreLibraries != null && appState.exploreLibraries.length >= 1 )
          {
-            libChunks.add( Padding(
-                              padding: const EdgeInsets.fromLTRB(6, 12, 0, 12),
-                              child: VerticalDivider( color: Colors.grey[200], thickness: 3.0 )));
-            
+            libChunks.add( paddedLTRB( VerticalDivider( color: Colors.grey[200], thickness: 3.0 ), 6, 12, 0, 12));
             appState.exploreLibraries.forEach((lib) => libChunks.add( _makeLibraryChunk( lib )));
          }
          

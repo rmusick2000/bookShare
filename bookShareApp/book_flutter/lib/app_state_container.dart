@@ -85,7 +85,6 @@ class _AppStateContainerState extends State<AppStateContainer> {
 
   void newUserBasics() async {
      assert( state.newUser );
-     print( "Cog New User" );
      await getAuthTokens( false );
      await getAPIBasePath();
   }

@@ -499,8 +499,6 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
    Widget _makeProspect() {
       bool highlight = true;
 
-      // XXX two places 1 new lib  .. signup page
-      print( "make new lib" );
       editLibId = randomAlpha(10);
       List<String> meme = new List<String>();
       meme.add( appState.userId );
@@ -731,24 +729,16 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
-                     Padding(
-                        padding: EdgeInsets.fromLTRB( width * .1, height * .03, width * .04, height * .03),
-                        child: _makePixButton() )
+                     paddedLTRB( _makePixButton(), width * .1, height * .03, width * .04, height * .03)
                      ]),
                Container( height: appState.screenHeight * .03 ),
                Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
-                     Padding(
-                        padding: EdgeInsets.fromLTRB( 0,0,width * .02,0),
-                        child: makeActionButtonSmall( appState, "Accept", () async { _acceptEdit(); })),
-                     Padding(
-                        padding: EdgeInsets.fromLTRB( 0,0,width * .02,0),
-                        child: makeActionButtonSmall( appState, "Delete", () async { _deleteLib(); })),
-                     Padding(
-                        padding: EdgeInsets.fromLTRB( 0, 0, width * .04, 0.0),
-                        child: makeActionButtonSmall( appState, "Cancel", () async { _rejectEdit(); }))
+                     paddedLTRB( makeActionButtonSmall( appState, "Accept", () async { _acceptEdit(); }), 0,0,width * .02,0 ),
+                     paddedLTRB( makeActionButtonSmall( appState, "Delete", () async { _deleteLib(); }),  0,0,width * .02,0 ),
+                     paddedLTRB( makeActionButtonSmall( appState, "Cancel", () async { _rejectEdit(); }), 0,0,width * .04,0 )
                      ])
                ]);
             }
