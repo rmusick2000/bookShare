@@ -73,7 +73,6 @@ class _BookShareLoginState extends State<BookShareLoginPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
 
-                     Container( child: Image.asset( 'images/bookShare.jpeg', height: 40.0,  fit: BoxFit.contain)),
                      SizedBox(height: 5.0),
                      usernameField,
                      SizedBox(height: 5.0),

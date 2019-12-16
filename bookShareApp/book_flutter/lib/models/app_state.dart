@@ -18,6 +18,7 @@ class AppState {
    var returnValue;       // XXX ???
    UserState userState;
    bool cogInitDone;         // main: sometimes cog init is slow.  Timer refires until this is true
+   bool newUser;             // signup: newuser creating a login has some special requirements during setup
    bool gatOverride;
    
    String apiBasePath;
@@ -83,6 +84,7 @@ class AppState {
       refreshToken = "";
       cogInitDone = false;
       gatOverride = false;
+      newUser = false;
       
       apiBasePath = "";
       usernameController = TextEditingController();

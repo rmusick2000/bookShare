@@ -83,6 +83,13 @@ class _AppStateContainerState extends State<AppStateContainer> {
      }
   }
 
+  void newUserBasics() async {
+     assert( state.newUser );
+     print( "Cog New User" );
+     await getAuthTokens( false );
+     await getAPIBasePath();
+  }
+  
   @override
   void initState() {
      super.initState();
@@ -104,50 +111,46 @@ class _AppStateContainerState extends State<AppStateContainer> {
            if( state.loading ) return;  // do nothing if callback already in progress
            bool stateLoaded = false;
            
-           if( value == UserState.SIGNED_IN )
-           {
-              print( "Cog callback signed in user " + state.loading.toString() + " " + state.loaded.toString() + " " + stateLoaded.toString());
-
-              // This callback can get executed several times on startup.  
-              // Callbacks can run back to back, before awaits below finish)
-              if( !state.loading && !state.loaded )
+           if( ! state.newUser ) {
+              if( value == UserState.SIGNED_IN )
               {
-                 state.loading = true;
-                 print( "SIGNED IN CALLBACK" );
-                 await getAuthTokens( false );
+                 print( "Cog callback signed in user " + state.loading.toString() + " " + state.loaded.toString() + " " + stateLoaded.toString());
                  
-                 // Libraries and books
-                 await getAPIBasePath();
-                 
-                 await initMyLibraries( context, this );
-                 stateLoaded = true;
-                 state.loading = false;
-                 print ("CALLBACK, loaded TRUE" );
-              }
-              // commented out R1019 to avoid race condition
-              // stateLoaded = true;
-              // state.loading = false;
-           }
-
-           // set stateLoaded if reauth-inspired gatOverride, avoiding above race
-           if( state.loaded && state.gatOverride ) {
-              stateLoaded = true;
-              print( "callback set SL true" );
-           }
-           
-           // If this becomes async, build is not predictably triggered on state change
-           setState(() {
-                 state.userState = value;
-                 state.loaded = stateLoaded;
-                 state.authRetryCount += 1;
-                 if( !stateLoaded ) {
-                    state.accessToken = "";
-                    state.idToken = "";
-                    state.initAppData();
+                 // This callback can get executed several times on startup.  
+                 // Callbacks can run back to back, before awaits below finish)
+                 if( !state.loading && !state.loaded )
+                 {
+                    state.loading = true;
+                    await getAuthTokens( false );
+                    
+                    // Libraries and books
+                    await getAPIBasePath();
+                    
+                    await initMyLibraries( context, this );
+                    stateLoaded = true;
+                    state.loading = false;
+                    print ("CALLBACK, loaded TRUE" );
                  }
-                 print( "container callback setstate done, retries " + state.authRetryCount.toString() );
-              });
-        });
+              }
+              
+              // set stateLoaded if reauth-inspired gatOverride, avoiding above race
+              if( state.loaded && state.gatOverride ) {
+                 stateLoaded = true;
+              }
+              
+              // If this becomes async, build is not predictably triggered on state change
+              setState(() {
+                    state.userState = value;
+                    state.loaded = stateLoaded;
+                    state.authRetryCount += 1;
+                    if( !stateLoaded ) {
+                       state.accessToken = "";
+                       state.idToken = "";
+                       state.initAppData();
+                    }
+                    print( "container callback setstate done, retries " + state.authRetryCount.toString() );
+                 });
+           }});
      print( "Container init over" );
   }
   
