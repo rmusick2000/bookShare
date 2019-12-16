@@ -452,7 +452,8 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
                children: <Widget>[
                   Padding(
                      padding: EdgeInsets.fromLTRB( 12, height, 0, 0),
-                     child: Text( shareText , style: TextStyle(fontSize: 18, fontStyle: FontStyle.italic))),
+                     child: Container( width: width - 20,
+                                       child: Text( shareText, softWrap: true, style: TextStyle(fontSize: 18, fontStyle: FontStyle.italic)))),
                   _makeDropLib(),
                   Container()
                   ]),
@@ -497,6 +498,8 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
 
    Widget _makeProspect() {
       bool highlight = true;
+
+      // XXX two places 1 new lib  .. signup page
       print( "make new lib" );
       editLibId = randomAlpha(10);
       List<String> meme = new List<String>();
@@ -739,10 +742,10 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
                   children: <Widget>[
                      Padding(
                         padding: EdgeInsets.fromLTRB( 0,0,width * .02,0),
-                        child: makeActionButtonSmall( appState, "Delete", () async { _deleteLib(); })),
+                        child: makeActionButtonSmall( appState, "Accept", () async { _acceptEdit(); })),
                      Padding(
                         padding: EdgeInsets.fromLTRB( 0,0,width * .02,0),
-                        child: makeActionButtonSmall( appState, "Accept", () async { _acceptEdit(); })),
+                        child: makeActionButtonSmall( appState, "Delete", () async { _deleteLib(); })),
                      Padding(
                         padding: EdgeInsets.fromLTRB( 0, 0, width * .04, 0.0),
                         child: makeActionButtonSmall( appState, "Cancel", () async { _rejectEdit(); }))

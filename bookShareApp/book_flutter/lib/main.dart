@@ -54,9 +54,8 @@ class _BSSplashPageState extends State<BSSplashPage> {
    @override
    void initState() {
       print( "... Main init state" );
-      super.initState();  // XXX   needed?
-      print( "... start timer" );
-      startTimer();
+      super.initState();  
+      startTimer( 0 );
    }
 
   @override
@@ -64,14 +63,45 @@ class _BSSplashPageState extends State<BSSplashPage> {
      super.dispose();
   }
 
+  void startTimer( attempts ) {
+     int duration = attempts == 0 ? 3 : 1; 
+     print( "In timer, attempt " + attempts.toString() + " next duration " + duration.toString() );
+
+     if( attempts > 15 ) {
+        showToast( context, "AWS token initialization is slow.  Is your wifi on?" );
+        navigateUser(); 
+     } else { 
+        Timer(Duration(seconds: duration), () {
+              print("after duration, checking cogDone" );
+              if( !appState.cogInitDone ) {
+                 startTimer( attempts + 1 );
+              } else {
+                 navigateUser();
+              }
+           });
+     }
+  }
+
+  /*
   void startTimer() {
      print( "In timer" );
      Timer(Duration(seconds: 3), () {
-           print("after duration" );
-           navigateUser();
+           print("after duration, checking cogDone" );
+           if( !appState.cogInitDone ) {
+              Timer(Duration(seconds: 4), () {
+                    print("Second duration, checking cogDone" );
+                    if( !appState.cogInitDone ) {
+                       showToast( context, "AWS token initialization is slow.  Is your wifi on?" );
+                    } 
+                    navigateUser();
+                 }); 
+           } else {
+              navigateUser();
+           }
         });
   }
-
+  */
+  
   void navigateUser() async{
      print( "Weh do i go?" );
      if( appState.userState == UserState.SIGNED_IN ) {

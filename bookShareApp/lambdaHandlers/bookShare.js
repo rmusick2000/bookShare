@@ -36,6 +36,7 @@ exports.handler = (event, context, callback) => {
     else if( endPoint == "GetExploreLibs") { resultPromise = getLibs( username, false ); }
     else if( endPoint == "GetBooks")       { resultPromise = getBooks( rb.SelectedLib ); }
     else if( endPoint == "PutBook")        { resultPromise = putBook( rb.SelectedLib, rb.NewBook, username ); }
+    else if( endPoint == "PutPerson")      { resultPromise = putPerson( rb.NewPerson ); }
     else if( endPoint == "PutLib")         { resultPromise = putLib( rb.NewLib ); }
     else if( endPoint == "DelLib")         { resultPromise = delLib( rb.LibId, rb.PersonId ); }
     else if( endPoint == "GetOwnerships")  { resultPromise = getOwnerships( rb.PersonId ); }
@@ -216,6 +217,32 @@ async function putBook( selectedLib, newBook, username ) {
 	]}).promise();
     
     return bookPromise.then(() => {
+	console.log("Success!");
+	return {
+	    statusCode: 201,
+	    body: JSON.stringify( true ),
+	    headers: { 'Access-Control-Allow-Origin': '*' }
+	};
+    });
+}
+
+async function putPerson( newPerson ) {
+    console.log('Put Person!', newPerson.firstName );
+
+    const paramsPP = {
+	TableName: 'People',
+	Item: {
+	    "PersonId": newPerson.id,
+	    "First":    newPerson.firstName,
+	    "Last":     newPerson.lastName,
+	    "UserName": newPerson.userName,
+	    "Email":    newPerson.email,
+	    "ImagePng": newPerson.imagePng            
+	}
+    };
+    
+    let personPromise = bsdb.put( paramsPP ).promise();
+    return personPromise.then(() => {
 	console.log("Success!");
 	return {
 	    statusCode: 201,

@@ -5,10 +5,14 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_cognito_plugin/flutter_cognito_plugin.dart';
+import 'package:random_string/random_string.dart';
 
 import 'package:bookShare/utils.dart';
+import 'package:bookShare/utils_load.dart';
 import 'package:bookShare/app_state_container.dart';
 import 'package:bookShare/models/app_state.dart';
+import 'package:bookShare/models/people.dart';
+import 'package:bookShare/models/libraries.dart';
 import 'package:bookShare/screens/home_page.dart';
 
 class BookShareSignupPage extends StatefulWidget {
@@ -47,6 +51,7 @@ class _BookShareSignupState extends State<BookShareSignupPage> {
       final passwordField = makeInputField( context, "password", true, appState.passwordController );
       final emailField    = makeInputField( context, "email address", false, appState.attributeController );
       final confirmationCodeField = makeInputField( context, "confirmation code", false, appState.confirmationCodeController );
+
       final signupButton = makeActionButton( context, "Send confirmation code", container.onPressWrapper(() async {
                final email = {'email' : appState.attributeController.text };
                try{
@@ -61,14 +66,65 @@ class _BookShareSignupState extends State<BookShareSignupPage> {
                   } else {
                      showToast( context, e.toString() );
                   }}
-                  
             }));
+
       final confirmSignupButton = makeActionButton( context, "Confirm signup, and Log in", container.onPressWrapper(() async {
                await Cognito.confirmSignUp( appState.usernameController.text, appState.confirmationCodeController.text );
+
+               print( "XXX  signup start" );
+               appState.newUser = true;
                await Cognito.signIn( appState.usernameController.text, appState.passwordController.text );
+               bool signedIn = await Cognito.isSignedIn();
+               if( signedIn ) { appState.userState = UserState.SIGNED_IN; }
+
+               if( appState.userState != UserState.SIGNED_IN ) {
+                  showToast( context, "Signin failed.  Incorrect confirmation code?" );
+                  return;
+               }
+               await container.newUserBasics();
+               print( "XXX  signup end" );
+
+               // Person and private lib must exist before signin
+               String pid = randomAlpha(10);
+               String editLibId = randomAlpha(10);
+               appState.userId = pid;
+
+               // XXX two spots - myLib
+               print( "make new lib" );
+               List<String> meme = new List<String>();
+               meme.add( appState.userId );
+               Library editLibrary = new Library( id: editLibId, name: "My Books", private: true, members: meme, imagePng: null, image: null,
+                                                  prospect: false );
+
+               String newLib = json.encode( editLibrary );
+               String lpostData = '{ "Endpoint": "PutLib", "NewLib": $newLib }';
+               print( "Creating myPrivateLib " + newLib );
+               await putLib( context, container, lpostData );
+               print( "    ..... done mpl");
+
+               Person user = new Person( id: pid, firstName: "Marion", lastName: "Star", userName: appState.usernameController.text,
+                                         email: appState.attributeController.text, imagePng: null, image: null );
+
+               String newUser = json.encode( user );
+               String ppostData = '{ "Endpoint": "PutPerson", "NewPerson": $newUser }';
+               print( "Creating person " + newUser );
+               await putPerson( context, container, ppostData );
+               print( "    ..... done person");
+
+               appState.newUser = false;
+
+               print( "XXX  start fetchlib to init container state" );
+               appState.loading = true;
+               await initMyLibraries( context, container );
+               appState.loading = false;
+               appState.loaded = true;
+               print( "XXX  end fetchlib to init container state" );
+               
                MaterialPageRoute newPage = MaterialPageRoute(builder: (context) => BookShareHomePage());
                Navigator.push( context, newPage );
             }));      
+
+      // final devWidth = MediaQuery.of(context).size.width;
 
       return Scaffold(
          body: Center(
@@ -83,7 +139,6 @@ class _BookShareSignupState extends State<BookShareSignupPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                            
-                           Container( child: Image.asset( 'images/bookShare.jpeg', height: 40.0,  fit: BoxFit.contain)),
                            SizedBox(height: 5.0),
                            usernameField,
                            SizedBox(height: 5.0),
