@@ -71,7 +71,6 @@ class _BookShareSignupState extends State<BookShareSignupPage> {
       final confirmSignupButton = makeActionButton( context, "Confirm signup, and Log in", container.onPressWrapper(() async {
                await Cognito.confirmSignUp( appState.usernameController.text, appState.confirmationCodeController.text );
 
-               print( "XXX  signup start" );
                appState.newUser = true;
                await Cognito.signIn( appState.usernameController.text, appState.passwordController.text );
                bool signedIn = await Cognito.isSignedIn();
@@ -82,15 +81,13 @@ class _BookShareSignupState extends State<BookShareSignupPage> {
                   return;
                }
                await container.newUserBasics();
-               print( "XXX  signup end" );
 
+               
                // Person and private lib must exist before signin
                String pid = randomAlpha(10);
                String editLibId = randomAlpha(10);
                appState.userId = pid;
 
-               // XXX two spots - myLib
-               print( "make new lib" );
                List<String> meme = new List<String>();
                meme.add( appState.userId );
                Library editLibrary = new Library( id: editLibId, name: "My Books", private: true, members: meme, imagePng: null, image: null,
@@ -98,33 +95,25 @@ class _BookShareSignupState extends State<BookShareSignupPage> {
 
                String newLib = json.encode( editLibrary );
                String lpostData = '{ "Endpoint": "PutLib", "NewLib": $newLib }';
-               print( "Creating myPrivateLib " + newLib );
                await putLib( context, container, lpostData );
-               print( "    ..... done mpl");
 
+               
                Person user = new Person( id: pid, firstName: "Marion", lastName: "Star", userName: appState.usernameController.text,
                                          email: appState.attributeController.text, imagePng: null, image: null );
 
                String newUser = json.encode( user );
                String ppostData = '{ "Endpoint": "PutPerson", "NewPerson": $newUser }';
-               print( "Creating person " + newUser );
                await putPerson( context, container, ppostData );
-               print( "    ..... done person");
 
                appState.newUser = false;
-
-               print( "XXX  start fetchlib to init container state" );
                appState.loading = true;
                await initMyLibraries( context, container );
                appState.loading = false;
                appState.loaded = true;
-               print( "XXX  end fetchlib to init container state" );
                
                MaterialPageRoute newPage = MaterialPageRoute(builder: (context) => BookShareHomePage());
                Navigator.push( context, newPage );
             }));      
-
-      // final devWidth = MediaQuery.of(context).size.width;
 
       return Scaffold(
          body: Center(
