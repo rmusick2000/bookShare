@@ -17,6 +17,9 @@ import 'package:bookShare/models/books.dart';
 
 
 
+int testIncrement( val ) {
+   return val + 1;
+}
 
 void notYetImplemented(BuildContext context) {
    Fluttertoast.showToast(
@@ -311,7 +314,8 @@ Library getLib( appState ) {
          found = true;
       }
    }
-   
+
+   if( appState.exploreLibraries == null ) { return result; }
    if( !found ) {
       for( final lib in appState.exploreLibraries ) {
          if( lib.id == currentLib ) {

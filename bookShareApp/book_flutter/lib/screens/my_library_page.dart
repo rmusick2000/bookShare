@@ -403,6 +403,12 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
       // setState here would force a reload that you do not want, at least not without going to tristate.
       appState.sharesLoaded = false;
 
+      // Might have just joined
+      if( !appState.ownerships.containsKey( libId ) ) {
+         print( "Updating shares to add entry for " + libId );
+         appState.ownerships[libId] = new Set<String>(); 
+      }
+      
       if( setAll ) {
          if( newValue ) { appState.ownerships[libId] = new Set<String>.from( appState.ownerships[appState.privateLibId] );  }
          else           { appState.ownerships[libId].clear();   }
@@ -437,7 +443,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
       final width = appState.screenWidth; 
       final height = appState.screenHeight * .08;
       String shareText = "Book shares for: ";
-      if( libChunks.length == 0 ) { shareText = "Share books from your private library on this page, once you've joined another library."; }
+      if( libChunks.length == 0 ) { shareText = "Share books from your private library on this page, once you've created or joined another library."; }
       if( !appState.sharesLoaded ) {
          _initOwnerships(); 
       }
@@ -452,7 +458,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
                children: <Widget>[
                   Padding(
                      padding: EdgeInsets.fromLTRB( 12, height, 0, 0),
-                     child: Container( width: width - 20,
+                     child: Container( width: width * .6,
                                        child: Text( shareText, softWrap: true, style: TextStyle(fontSize: 18, fontStyle: FontStyle.italic)))),
                   _makeDropLib(),
                   Container()

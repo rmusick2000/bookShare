@@ -165,6 +165,7 @@ async function initOwn( username, privLib ) {
     
 }    
 
+// XXX kill selectedLib
 // Want some error msgs? https://github.com/aws/aws-sdk-js/issues/2464
 // Updates tables: Books, Ownerships
 async function putBook( selectedLib, newBook, username ) {
@@ -177,10 +178,17 @@ async function putBook( selectedLib, newBook, username ) {
     // Update ownership.. pkey is same as PersonId
     const oEntry =    [{ "BookId" : newBook.id, "ShareCount" : 0 }];
 
-    // Deal with dynamodb set object.. grr
+    // Deal with dynamodb set object.. grr  can't just newShares.add( newBook.id );
     let   newShares = ownerships.Shares;
-    // newShares.add( newBook.id );
-    var sharesSet = new Set( newShares[libraryId].values );
+    var sharesSet;
+    if( newShares[libraryId] != null ) { sharesSet = new Set( newShares[libraryId].values ); }
+    else {
+	newShares[libraryId] = new Set();
+	newShares[libraryId].wrapperName = 'Set';
+	newShares[libraryId].type = 'String';
+	sharesSet = new Set();
+    }
+
     sharesSet.add( newBook.id );
     newShares[libraryId].values = Array.from( sharesSet );
 
