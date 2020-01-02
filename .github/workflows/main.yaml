@@ -5,8 +5,8 @@ jobs:
     name: Build APK
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout
-    - uses: subosito/flutter-action
+    - uses: actions/checkout@v1
+    - uses: subosito/flutter-action@v1
       with:
         flutter-version: '^1.13.6'
     - run: flutter pub get
