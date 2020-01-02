@@ -12,5 +12,11 @@ jobs:
     - uses: subosito/flutter-action@v1
       with:
         channel: 'stable'
-    - run: flutter pub get
-    - run: flutter test
+    
+    - name: Get flutter
+      working-directory: ./bookshareApp/book_flutter
+      run: flutter pub get
+    
+    - name: Run tests
+      working-directory: ./bookshareApp/book_flutter
+      run: flutter test
