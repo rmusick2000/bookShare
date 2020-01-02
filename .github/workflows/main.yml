@@ -12,18 +12,15 @@ jobs:
     - uses: subosito/flutter-action@v1
       with:
         channel: 'stable'
-    
-    - name: Where are we
-      run: ls -la
-    
-    - name: Where is working dir
-      working-directory: ${{ github.workspace }}
+   
+    - name: right spot ma
+      working-directory: ./bookShareApp/book_flutter
       run: ls -la
     
     - name: Get flutter
-      working-directory: ./bookshareApp/book_flutter
+      working-directory: ./bookShareApp/book_flutter
       run: flutter pub get
     
     - name: Run tests
-      working-directory: ./bookshareApp/book_flutter
+      working-directory: ./bookShareApp/book_flutter
       run: flutter test
