@@ -76,6 +76,7 @@ makeActionButton( BuildContext context, buttonText, fn ) {
       borderRadius: BorderRadius.circular(10.0),
       color: Color(0xff01A0C7),
       child: MaterialButton(
+         // key: Key( buttonText ),
          minWidth: appState.screenWidth - 30,
          padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
          onPressed: fn,
