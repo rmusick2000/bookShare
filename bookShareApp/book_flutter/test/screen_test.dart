@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 
-//import 'package:test/test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:bookShare/utils.dart';
 import 'package:bookShare/main.dart';
 import 'package:bookShare/app_state_container.dart';
 
 void main() {
 
-   group('Basics', () {
+   group('Screen Basics', () {
 
          testWidgets('Launch page', (WidgetTester tester) async {
                
@@ -24,7 +22,7 @@ void main() {
                expect(find.text('Login'), findsOneWidget);
                
                // Tap login and build page
-               // bah.. just with driver.
+               // bah.. just with driver.   instead, iterate looking for login
                // await tester.tap(find.byValueKey( 'Login' ) );
                await tester.tap( find.byType( MaterialButton ).last );
                await tester.pumpAndSettle();
@@ -36,10 +34,5 @@ void main() {
                
             });
          
-         test('Simple increment test', () {
-               
-               final val = testIncrement(13);
-               expect(val, 14);
-            });
       });
 }
