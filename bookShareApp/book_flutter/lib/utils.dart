@@ -76,7 +76,7 @@ makeActionButton( BuildContext context, buttonText, fn ) {
       borderRadius: BorderRadius.circular(10.0),
       color: Color(0xff01A0C7),
       child: MaterialButton(
-         // key: Key( buttonText ),
+         key: Key( buttonText ),
          minWidth: appState.screenWidth - 30,
          padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
          onPressed: fn,
@@ -126,6 +126,7 @@ makeAuthorText( author, width, wrap, lines ) {
 makeInputField( BuildContext context, hintText, obscure, controller ) {
    TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
    return TextField(
+      key: Key( hintText ),
       obscureText: obscure,
       style: style,
       decoration: InputDecoration(
@@ -146,6 +147,7 @@ makeTopAppBar( BuildContext context, currentPage ) {
       child: AppBar(
          leading: IconButton(
             icon: currentPage == "MyLibrary" ? Icon(customIcons.book_shelf_here) : Icon(customIcons.book_shelf),
+            key: currentPage == "MyLibrary"  ? Key( "myLibraryHereIcon" ) : Key( "myLibraryIcon" ),
             onPressed: ()
             {
                if( currentPage == "MyLibrary" ) { return; }
@@ -159,6 +161,7 @@ makeTopAppBar( BuildContext context, currentPage ) {
          actions: <Widget>[
             IconButton(
                icon: currentPage == "Loan" ? Icon(customIcons.loan_here) : Icon(customIcons.loan),
+               key:  currentPage == "Loan" ? Key( "loanHereIcon" ) : Key( "loanIcon" ),
                onPressed: ()
                {
                   if( currentPage == "Loan" ) { return; }
@@ -169,6 +172,7 @@ makeTopAppBar( BuildContext context, currentPage ) {
                ),
             IconButton(
                icon: currentPage == "Search" ? Icon(customIcons.search_here) : Icon(customIcons.search),
+               key:  currentPage == "Search" ? Key( "searchHereIcon" ) : Key( "searchIcon" ),
                onPressed: ()
                {
                   if( currentPage == "Search" ) { return; }
@@ -194,6 +198,7 @@ makeBotAppBar( BuildContext context, currentPage ) {
             children: <Widget>[
                IconButton(
                   icon: currentPage == "Home" ? Icon(customIcons.home_here) : Icon(customIcons.home),
+                  key:  currentPage == "Home" ? Key( "homeHereIcon" ) : Key( "homeIcon" ),
                   onPressed: ()
                   {
                      if( currentPage == "Home" ) { return; }
@@ -209,6 +214,7 @@ makeBotAppBar( BuildContext context, currentPage ) {
                   children: [
                      IconButton(
                         icon: currentPage == "AddBook" ? Icon(customIcons.add_book_here) : Icon(customIcons.add_book),
+                        key:  currentPage == "AddBook" ? Key( "addBookHereIcon" ) : Key( "addBookIcon" ),
                         onPressed: ()
                         {
                            if( currentPage == "AddBook" ) { return; }
@@ -220,6 +226,7 @@ makeBotAppBar( BuildContext context, currentPage ) {
                         ),
                      IconButton(
                         icon: currentPage == "Profile" ? Icon(customIcons.profile_here) : Icon(customIcons.profile),
+                        key:  currentPage == "Profile" ?  Key( "profileHereIcon" ) : Key( "profileIcon" ),
                         onPressed: ()
                         {
                            if( currentPage == "Profile" ) { return; }
