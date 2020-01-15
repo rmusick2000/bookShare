@@ -3,7 +3,7 @@ import 'package:test/test.dart';
 import '../test_driver/utils.dart';
 
 void main() {
-  group('Login group, bad user', () {
+  group('BookShare Test Group, bad user', () {
 
         FlutterDriver driver;
 
@@ -30,6 +30,7 @@ void main() {
               await enterText( driver, userName, "" );
               print( "reset passwd" );
               await enterText( driver, password, "" );
+
 
               // Can't (yet) find system back button from within driver, nor can you pop a route.
               // Can't (yet) restart (waiting for https://github.com/tomaszpolanski/fast_flutter_driver

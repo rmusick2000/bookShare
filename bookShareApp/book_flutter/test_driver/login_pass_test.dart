@@ -13,7 +13,7 @@ import '../test_driver/utils.dart';
 
 void main() {
 
-  group('Login group, good user', () {
+  group('BookShare Test Group, good user', () {
 
         FlutterDriver driver;
 
@@ -42,7 +42,6 @@ void main() {
               bool known = true;
               await login( driver, known );
            });
-
 
      });
   
