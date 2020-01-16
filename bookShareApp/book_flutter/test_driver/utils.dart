@@ -80,11 +80,8 @@ Future<bool> login( FlutterDriver driver, known ) async {
       await driver.waitFor( loginButton );
    }
 
-
-
    return true;
 }
-
 
 Future<bool> logout( FlutterDriver driver ) async {
 
@@ -108,3 +105,66 @@ Future<bool> logout( FlutterDriver driver ) async {
 
    return true;
 }
+
+Future<bool> gotoAddBook( FlutterDriver driver ) async {
+   SerializableFinder addBookIcon = find.byValueKey( 'addBookIcon' );
+   SerializableFinder addBookHereIcon = find.byValueKey( 'addBookHereIcon' );
+
+   expect( await isPresent( driver, addBookIcon ), true );
+   expect( await isPresent( driver, addBookHereIcon ), false );
+
+   await driver.tap( addBookIcon );
+
+   expect( await isPresent( driver, addBookIcon ), false );
+   expect( await isPresent( driver, addBookHereIcon ), true );
+
+   return true;
+}
+
+Future<bool> refineAdd( FlutterDriver driver, titleKey, authorKey, bookChoice, closeOut, [bool checkScan = true] ) async {
+   SerializableFinder refineSearch = find.byValueKey( 'Refine search' );
+
+   print( "RefineAdd: " + titleKey + " " + authorKey );
+   
+   // If got here from hitting refine search in a list of books, scan button is not present.
+   // Hmmmm.... same with home...
+   if( checkScan ) {
+      expect( await isPresent( driver, find.text( 'Scan' ) ), true );
+      expect( await isPresent( driver, refineSearch ), true );
+      
+      await driver.tap( refineSearch );
+   }
+
+   // verify
+   SerializableFinder title  = find.byValueKey( 'Keyword from title' );   
+   SerializableFinder author = find.byValueKey( 'Author\'s last name' );   
+   expect( await isPresent( driver, title ), true );
+   expect( await isPresent( driver, author ), true );
+
+   // search 
+   if( titleKey != "" ) { await enterText( driver, title, titleKey );  }
+   if( authorKey != "") { await enterText( driver, author, authorKey );  }
+   SerializableFinder search  = find.byValueKey( 'Search' );      
+   expect( await isPresent( driver, search ), true );
+   await driver.tap( search );
+
+   // choose a result
+   SerializableFinder theList   = find.byValueKey('searchedBooks');
+   SerializableFinder theChoice = find.byValueKey('bookChunk${bookChoice}');
+   await driver.scrollUntilVisible( theList, theChoice, dxScroll: -200.0 );
+   await driver.tap( theChoice );
+
+   // Add it and go...
+   SerializableFinder scanMore = find.byValueKey('Add this,\n scan more');      
+   SerializableFinder goHome   = find.byValueKey('Add this,\n go to MyLib');      
+   expect( await isPresent( driver, scanMore ), true );      
+   expect( await isPresent( driver, goHome ), true );      
+   expect( await isPresent( driver, refineSearch ), true );      
+   if( closeOut == "more" )        { await driver.tap( scanMore ); }
+   else if( closeOut == "home" )   { await driver.tap( goHome ); }
+   else if( closeOut == "refine" ) { await driver.tap( refineSearch ); }
+   else { return false; }
+
+   return true;
+}
+

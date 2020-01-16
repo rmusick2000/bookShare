@@ -64,7 +64,7 @@ def collect( fname ):
 
 def runTest( testName, noBuild = True ):
     logging.info( "" )
-    logging.info( "Running" + testName + " file..." );
+    logging.info( "Running " + testName + " file..." );
     fileName = 'rawTestOutput.txt'
 
     cmd = "flutter drive "
@@ -88,6 +88,15 @@ def runTests():
     resultsSum = ""
 
 
+    tbulk, tsum = runTest( "content.dart", False )
+    resultsBulk += tbulk
+    resultsSum  += tsum
+
+    """
+    #tbulk, tsum = runTest( "sharing.dart", False )
+    #resultsBulk += tbulk
+    #resultsSum  += tsum
+
     tbulk, tsum = runTest( "login_pass.dart", False )
     resultsBulk += tbulk
     resultsSum  += tsum
@@ -95,6 +104,7 @@ def runTests():
     tbulk, tsum = runTest( "login_fail.dart", False )
     resultsBulk += tbulk
     resultsSum  += tsum
+    """
 
     
     logging.info( "" );

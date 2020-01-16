@@ -96,6 +96,7 @@ makeActionButtonSmall( appState, buttonText, fn ) {
       borderRadius: BorderRadius.circular(10.0),
       color: Color(0xff01A0C7),
       child: MaterialButton(
+         key: Key( buttonText ),
          minWidth: appState.screenWidth * .25,
          onPressed: fn,
          child: Text( buttonText,

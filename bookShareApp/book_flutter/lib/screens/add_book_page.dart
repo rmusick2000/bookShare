@@ -110,6 +110,7 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
               Padding(
                  padding: const EdgeInsets.fromLTRB(6.0, 0, 6.0, 0),
                  child: ClipRRect(
+                    key: Key( 'bookChunk${itemNo}' ),
                     borderRadius: new BorderRadius.circular(12.0),
                     child: image )),
               Container(
@@ -151,6 +152,7 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
          return Expanded(
             child: SizedBox(
                child: ListView(
+                  key: Key( "searchedBooks" ),
                   scrollDirection: Axis.horizontal,
                   children: bookChunks
                   )));
@@ -218,6 +220,7 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
                     width: textWidth,
                     height: textHeight,
                     child: TextField(
+                       key: Key("Keyword from title"),
                        decoration: InputDecoration(
                           contentPadding: EdgeInsets.fromLTRB(2.0, 2.0, 2.0, 2.0),
                           hintText: "Keyword from title",
@@ -229,6 +232,7 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
                     width: textWidth,
                     height: textHeight,
                     child: TextField(
+                       key: Key( "Author's last name" ),
                        decoration: InputDecoration(
                           contentPadding: EdgeInsets.fromLTRB(2.0, 2.0, 2.0, 2.0),
                           hintText: "Author's last name",
@@ -273,6 +277,7 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
   
   Widget _scanButton() {
      return RaisedButton(
+        key: Key( 'Scan' ),
         onPressed: () async
         {
 
