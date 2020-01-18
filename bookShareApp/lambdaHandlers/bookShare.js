@@ -39,6 +39,7 @@ exports.handler = (event, context, callback) => {
     else if( endPoint == "PutPerson")      { resultPromise = putPerson( rb.NewPerson ); }
     else if( endPoint == "PutLib")         { resultPromise = putLib( rb.NewLib ); }
     else if( endPoint == "DelLib")         { resultPromise = delLib( rb.LibId, rb.PersonId ); }
+    else if( endPoint == "DelBook")        { resultPromise = delBook( rb.BookId, rb.PersonId ); }
     else if( endPoint == "GetOwnerships")  { resultPromise = getOwnerships( rb.PersonId ); }
     else if( endPoint == "UpdateShare")    { resultPromise = updateShare( rb.BookId, rb.PersonId, rb.LibId, rb.PLibId, rb.All, rb.Value ); }
     else if( endPoint == "InitOwnership")  { resultPromise = initOwn( username, rb.PrivLibId ); }
@@ -92,6 +93,11 @@ function getPrivLibId( personId ) {
     });
 }
 
+// XXX
+// ownershipId == personId
+// books: list <map<bookid, sharecount>> (actually, not)  -->
+// books: map<bookid, list<int>>   list: sharecount, ?, ?
+// shares: map<libid, stringset<bookid> >
 function lookupOwnerships( personId ) {
     console.log('Get shares! ', personId );
 
@@ -144,7 +150,7 @@ async function initOwn( username, privLib ) {
 	TableName:     'Ownerships',
 	Item: {
 	    "OwnershipId": personId, 
-	    "Books":       [],
+	    "Books":       {},
 	    "Shares":      {}
 	}
     };
@@ -175,9 +181,11 @@ async function putBook( selectedLib, newBook, username ) {
     const libraryId  = await getPrivLibId( personId );
     const ownerships = await lookupOwnerships( personId );
     
-    // Update ownership.. pkey is same as PersonId
-    const oEntry =    [{ "BookId" : newBook.id, "ShareCount" : 0 }];
-
+    // Books is map<string, list>  id: attributes
+    let newBooks = ownerships.Books;
+    let oEntry = [0];
+    newBooks[newBook.id] = oEntry;
+    
     // Deal with dynamodb set object.. grr  can't just newShares.add( newBook.id );
     let   newShares = ownerships.Shares;
     var sharesSet;
@@ -195,9 +203,9 @@ async function putBook( selectedLib, newBook, username ) {
     const paramsO = {
 	TableName: 'Ownerships',
 	Key: { "OwnershipId": personId },
-	UpdateExpression: 'set Books = list_append(Books, :nb), Shares = :newShares',
+	UpdateExpression: 'set Books = :newBooks, Shares = :newShares',
         ExpressionAttributeValues: {
-            ':nb':  oEntry, ':newShares': newShares
+            ':newBooks':  newBooks, ':newShares': newShares
         }
     };
     
@@ -296,7 +304,7 @@ async function delLib( libId, personId ) {
     
     var newShares = new Map();
 
-    // Can't seem to create the easy way.. rebuild from scratch
+    // XXX Can't seem to create the easy way.. rebuild from scratch
     if( shares[libId] != null ) {
 	myLibs.Items.forEach( function(lib) { if( lib.LibraryId != libId ) { newShares[lib.LibraryId] = shares[lib.LibraryId]; } });
     }
@@ -318,6 +326,51 @@ async function delLib( libId, personId ) {
 	    { Update: paramsO },
 	]}).promise();
     
+    return libPromise.then(() => {
+	console.log("Success!");
+	return {
+	    statusCode: 201,
+	    body: JSON.stringify( true ),
+	    headers: { 'Access-Control-Allow-Origin': '*' }
+	};
+    });
+}
+
+// XXX Books table is unaltered.  Just the ownership of the book.  Desired behavior?
+async function delBook( bookId, personId ) {
+    console.log('Del book!', bookId, personId );
+
+    const ownerships = await lookupOwnerships( personId );
+    var books  = ownerships.Books;
+    var shares = ownerships.Shares;
+
+    // XXX Slow with many books.  There must be a more sensible way.  books.delete fails - books is iterable but does not have delete.
+    //     if try creating as newBooks = new Map( Object.entries( books )), 
+    //     creates some type of ... procedural map:  Books post-del Map { 'TAXJLUCDRK' => [ 0 ], 'vlSfhriyvh' => [ 0 ] }
+    //     which dynamo can't load back in.  
+    var newBooks = new Map();
+    for( var bid in books ) { if( bid != bookId ) { newBooks[bid] = books[bid]; }}
+    
+    for (var libid in shares) {
+	var bookSet = new Set( shares[libid].values );
+	bookSet.delete( bookId );
+	// stringsets can't have empty set
+	if( bookSet.size == 0 ) { bookSet.add( EMPTY ); }
+	shares[libid].values = Array.from( bookSet );
+    }
+    
+    const paramsO = {
+        TableName: 'Ownerships',
+	Key: {"OwnershipId": personId},
+	UpdateExpression: 'set Books = :books, Shares = :shares',
+	ExpressionAttributeValues: { ':books': newBooks, ':shares': shares }};
+    
+
+    let libPromise = bsdb.transactWrite({
+	TransactItems: [
+	    { Update: paramsO },
+	]}).promise();
+
     return libPromise.then(() => {
 	console.log("Success!");
 	return {
