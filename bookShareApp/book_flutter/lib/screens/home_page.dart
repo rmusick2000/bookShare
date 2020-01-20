@@ -128,7 +128,8 @@ class _BookShareHomeState extends State<BookShareHomePage> {
             bool removed = appState.myLibraries.remove( currentLib );
             assert( removed );
             currentLib.members.remove( appState.userId );
-            appState.exploreLibraries.add( currentLib );
+            if( appState.exploreLibraries == null ) { appState.exploreLibraries =  [ currentLib ]; }
+            else                                    { appState.exploreLibraries.add( currentLib ); }
             
             // update dynamo
             String newLib = json.encode( currentLib );

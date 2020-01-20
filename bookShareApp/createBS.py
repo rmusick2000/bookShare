@@ -97,9 +97,11 @@ def getCFStacks( sam ) :
 #def getDynamoData( sam ) :
     #cmd = "aws dynamodb scan --table-name Books | jq '{"Books": [.Items[] | {PutRequest: {Item: .}}]}' > testData/testDataBooks.json"
     #cmd = "aws dynamodb scan --table-name Ownerships | jq '{"Ownerships": [.Items[] | {PutRequest: {Item: .}}]}' > testData/testDataOwnerships.json"
-    #cmd = "aws dynamodb scan --table-name LibraryShares | jq '{"LibraryShares": [.Items[] | {PutRequest: {Item: .}}]}' > testData/testDataLibraryShares.json"
+    #cmd = "aws dynamodb scan --table-name Libraries | jq '{"Libraries": [.Items[] | {PutRequest: {Item: .}}]}' > testData/testDataLibraries.json"
+    #cmd = "aws dynamodb scan --table-name People | jq '{"People": [.Items[] | {PutRequest: {Item: .}}]}' > testData/testDataPeople.json"
     
 
+# CAREFUL.  This writes to dynamo
 def createTestDDBEntries( sam ) :
 
     cmd = "aws dynamodb batch-write-item --request-items file://testData/testDataPeople.json"

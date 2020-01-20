@@ -64,9 +64,8 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
     super.dispose();
   }
 
-  // XXX why only this not in utils_load?
   void addToLibrary() async {
-     print( "Adding " + newBook.toString() + " to private lib" );
+     print( "Adding " + newBook.title + " to private lib" );
      showToast( context, "Adding..." );
      
      // AWS has username via cognito signin
@@ -77,7 +76,7 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
      bool success = await putBook( context, container, postData );
      // XXX could, maybe, avoid call by adding newbook?  but would need to make sure it's not already there.. maybe?
      if( success ) {
-        initLibBooks( context, container, libID );        
+        await initLibBooks( context, container, libID );        
      }
   }
      
@@ -123,7 +122,8 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
                        Padding(
                           padding: const EdgeInsets.fromLTRB(inset, 6, 6, 0),
                           child: Container( width: imageWidth-inset-6,
-                                            child: Text(book.title, softWrap: true, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)))),
+                                            child: Text(book.title, maxLines: 3, overflow: TextOverflow.ellipsis,
+                                                        softWrap: true, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)))),
                        Padding(
                           padding: const EdgeInsets.fromLTRB(inset, 0, 6, 0),
                           child: Text("By: " + book.author, style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic))),
@@ -178,7 +178,7 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
         {
            newBook = foundBooks[selectedNewBook];
            await addToLibrary();
-           
+
            setState(() { 
                  selectedNewBook = 0;
                  foundBooks.clear();

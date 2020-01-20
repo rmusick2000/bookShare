@@ -684,6 +684,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
                appState.updateLibs = true;  // force rebuild of lib row bar, showing new stuff
                dirtyLibChunks = true;       // update sharing droplib
             });
+         Navigator.pop(context);
       }
 
                         

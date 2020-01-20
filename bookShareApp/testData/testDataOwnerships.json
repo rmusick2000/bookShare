@@ -3,124 +3,118 @@
     {
       "PutRequest": {
         "Item": {
-          "Books": {
-            "L": [
-              {
-                "M": {
-                  "BookId": {
-                    "S": "OKOJPqWXgA"
-                  },
-                  "ShareCount": {
-                    "N": "0"
-                  }
-                }
-              },
-              {
-                "M": {
-                  "BookId": {
-                    "S": "ewyiocnAsf"
-                  },
-                  "ShareCount": {
-                    "N": "0"
-                  }
-                }
-              },
-              {
-                "M": {
-                  "BookId": {
-                    "S": "afGGPgwTEa"
-                  },
-                  "ShareCount": {
-                    "N": "0"
-                  }
-                }
-              },
-              {
-                "M": {
-                  "BookId": {
-                    "S": "pmnnmdKXsc"
-                  },
-                  "ShareCount": {
-                    "N": "0"
-                  }
-                }
-              },
-              {
-                "M": {
-                  "BookId": {
-                    "S": "YPRXMOMAPv"
-                  },
-                  "ShareCount": {
-                    "N": "0"
-                  }
-                }
-              },
-              {
-                "M": {
-                  "BookId": {
-                    "S": "CSQNHWUHRv"
-                  },
-                  "ShareCount": {
-                    "N": "0"
-                  }
-                }
-              },
-              {
-                "M": {
-                  "BookId": {
-                    "S": "hJromdatwh"
-                  },
-                  "ShareCount": {
-                    "N": "0"
-                  }
-                }
-              },
-              {
-                "M": {
-                  "BookId": {
-                    "S": "MKJKYFIXUN"
-                  },
-                  "ShareCount": {
-                    "N": "0"
-                  }
-                }
-              },
-              {
-                "M": {
-                  "BookId": {
-                    "S": "OjRsRifnNb"
-                  },
-                  "ShareCount": {
-                    "N": "0"
-                  }
-                }
-              }
-            ]
+          "OwnershipId": {
+            "S": "YXMCRBLPQJ"
           },
-          "Shares": {
+          "Books": {
             "M": {
-              "bs12": {
-                "SS": [
-                  "OKOJPqWXgA",
-                  "ewyiocnAsf",
- 	          "afGGPgwTEa",
-		  "pmnnmdKXsc",
-		  "YPRXMOMAPv",
-		  "CSQNHWUHRv",
-		  "hJromdatwh",
-		  "MKJKYFIXUN",
-		  "OjRsRifnNb"
+              "CphgunSmrs": {
+                "L": [
+                  {
+                    "N": "0"
+                  }
                 ]
               },
-              "bs15": {
-                "SS": [
-                  "afGGPgwTEa"
+              "qWKYUbNiBw": {
+                "L": [
+                  {
+                    "N": "0"
+                  }
+                ]
+              },
+              "AvKDAExOlM": {
+                "L": [
+                  {
+                    "N": "0"
+                  }
+                ]
+              },
+              "Afdxqoomgk": {
+                "L": [
+                  {
+                    "N": "0"
+                  }
+                ]
+              },
+              "EDPCSyTHgX": {
+                "L": [
+                  {
+                    "N": "0"
+                  }
+                ]
+              },
+              "fMntIEULLa": {
+                "L": [
+                  {
+                    "N": "0"
+                  }
+                ]
+              },
+              "IdrqQJIsal": {
+                "L": [
+                  {
+                    "N": "0"
+                  }
+                ]
+              },
+              "ceyrHmAICG": {
+                "L": [
+                  {
+                    "N": "0"
+                  }
+                ]
+              },
+              "BLfMBkRDhG": {
+                "L": [
+                  {
+                    "N": "0"
+                  }
+                ]
+              },
+              "OvgvODkWlw": {
+                "L": [
+                  {
+                    "N": "0"
+                  }
                 ]
               }
             }
           },
-          "OwnershipId": {
-            "S": "bs38785"
+          "Shares": {
+            "M": {
+              "mRhgnSnsWp": {
+                "SS": [
+                  "Afdxqoomgk",
+                  "AvKDAExOlM",
+                  "BLfMBkRDhG",
+                  "CphgunSmrs",
+                  "EDPCSyTHgX",
+                  "IdrqQJIsal",
+                  "OvgvODkWlw",
+                  "ceyrHmAICG",
+                  "fMntIEULLa",
+                  "qWKYUbNiBw"
+                ]
+              },
+              "jwReknlTga": {
+                "SS": [
+                  "BLfMBkRDhG",
+                  "ceyrHmAICG"
+                ]
+              },
+              "NTMXPTWEQT": {
+                "SS": [
+                  "Afdxqoomgk",
+                  "AvKDAExOlM",
+                  "BLfMBkRDhG",
+                  "CphgunSmrs",
+                  "EDPCSyTHgX",
+                  "ceyrHmAICG",
+                  "fMntIEULLa",
+                  "qWKYUbNiBw"
+                ]
+              }
+            }
           }
         }
       }
@@ -129,92 +123,87 @@
       "PutRequest": {
         "Item": {
           "OwnershipId": {
-            "S": "bs38786"
+            "S": "BsKhcYtcdv"
           },
           "Books": {
-            "L": [
-              {
-                "M": {
-                  "BookId": {
-                    "S": "skuIdmdAso"
-                  },
-                  "ShareCount": {
-                    "N": "0"
-                  }
-                }
-              },
-              {
-                "M": {
-                  "BookId": {
-                    "S": "rqbTGwadkm"
-                  },
-                  "ShareCount": {
-                    "N": "0"
-                  }
-                }
-              },
-              {
-                "M": {
-                  "BookId": {
-                    "S": "VCBuUiMDMO"
-                  },
-                  "ShareCount": {
-                    "N": "0"
-                  }
-                }
-              },
-              {
-                "M": {
-                  "BookId": {
-                    "S": "CBTRKMIUBV"
-                  },
-                  "ShareCount": {
-                    "N": "0"
-                  }
-                }
-              },
-              {
-                "M": {
-                  "BookId": {
-                    "S": "XcJHIAKAVD"
-                  },
-                  "ShareCount": {
-                    "N": "0"
-                  }
-                }
-              },
-              {
-                "M": {
-                  "BookId": {
-                    "S": "JGiqSMcrVT"
-                  },
-                  "ShareCount": {
-                    "N": "0"
-                  }
-                }
-              }
-            ]
-          },
-         "Shares": {
             "M": {
-              "bs13": {
-                "SS": [
-                    "skuIdmdAso",
-		    "rqbTGwadkm",
-		    "VCBuUiMDMO",
-		    "CBTRKMIUBV",
-		    "XcJHIAKAVD",
-		    "JGiqSMcrVT"
-                ]
-              },
-              "bs15": {
-                "SS": [
-		    "JGiqSMcrVT"
+              "PmQIAxXHUY": {
+                "L": [
+                  {
+                    "N": "0"
+                  }
                 ]
               }
             }
-         }
-	}
+          },
+          "Shares": {
+            "M": {
+              "qjMgivjvvb": {
+                "SS": [
+                  "PmQIAxXHUY"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "OwnershipId": {
+            "S": "oFokvbEvxx"
+          },
+          "Books": {
+            "M": {
+              "MUEHRXJGUR": {
+                "L": [
+                  {
+                    "N": "0"
+                  }
+                ]
+              },
+              "orxrxEhofP": {
+                "L": [
+                  {
+                    "N": "0"
+                  }
+                ]
+              },
+              "yEvadAqlBD": {
+                "L": [
+                  {
+                    "N": "0"
+                  }
+                ]
+              },
+              "LXKPIgOQiG": {
+                "L": [
+                  {
+                    "N": "0"
+                  }
+                ]
+              }
+            }
+          },
+          "Shares": {
+            "M": {
+              "NTMXPTWEQT": {
+                "SS": [
+                  "yEvadAqlBD"
+                ]
+              },
+              "pnqQPHeJRq": {
+                "SS": [
+                  "LXKPIgOQiG",
+                  "MUEHRXJGUR",
+                  "orxrxEhofP",
+                  "yEvadAqlBD"
+                ]
+              }
+            }
+          }
+        }
       }
     }
   ]

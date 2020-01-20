@@ -267,7 +267,7 @@ Widget makeLibraryChunk( lib, screenHeight, highlight ) {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
          Padding(
-            padding: const EdgeInsets.fromLTRB(12.0, 12.0, 0, 0.0),
+            padding: const EdgeInsets.fromLTRB(12.0, 10.0, 0, 0.0),
             child: ClipRRect(
                borderRadius: new BorderRadius.circular(12.0),
                child: image )),
