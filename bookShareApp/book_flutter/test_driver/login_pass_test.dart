@@ -19,13 +19,11 @@ void main() {
 
         // Connect to the Flutter driver before running any tests.
         setUpAll(() async {
-              print( "IN SETUPALL" );
               driver = await FlutterDriver.connect();
            });
         
         // Close the connection to the driver after the tests have completed.
         tearDownAll(() async {
-              print( "IN TEARDOWN" );
               if (driver != null) { driver.close(); }
            });
 

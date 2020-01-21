@@ -96,6 +96,7 @@ makeActionButtonSmall( appState, buttonText, fn ) {
       borderRadius: BorderRadius.circular(10.0),
       color: Color(0xff01A0C7),
       child: MaterialButton(
+         key: Key( buttonText ),
          minWidth: appState.screenWidth * .25,
          onPressed: fn,
          child: Text( buttonText,
@@ -110,7 +111,8 @@ makeActionButtonSmall( appState, buttonText, fn ) {
 makeTitleText( title, width, wrap, lines ) {
    return Padding(
       padding: const EdgeInsets.fromLTRB(20, 6, 6, 0),
-      child: Container( width: width, 
+      child: Container( width: width,
+                        key: Key( title ),
                         child: Text(title, softWrap: wrap, maxLines: lines, overflow: TextOverflow.ellipsis,
                                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold))));
 }
@@ -119,6 +121,7 @@ makeAuthorText( author, width, wrap, lines ) {
    return Padding(
       padding: const EdgeInsets.fromLTRB(20, 0, 6, 0),
       child: Container( width: width,
+                        key: Key( author ),
                         child: Text("By: " + author, softWrap: wrap, maxLines: lines, overflow: TextOverflow.ellipsis,
                                     style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic))));
 }
@@ -266,7 +269,7 @@ Widget makeLibraryChunk( lib, screenHeight, highlight ) {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
          Padding(
-            padding: const EdgeInsets.fromLTRB(12.0, 12.0, 0, 0.0),
+            padding: const EdgeInsets.fromLTRB(12.0, 10.0, 0, 0.0),
             child: ClipRRect(
                borderRadius: new BorderRadius.circular(12.0),
                child: image )),

@@ -4,13 +4,121 @@
       "PutRequest": {
         "Item": {
           "Title": {
+            "S": "Crown of Renewal"
+          },
+          "PageCount": {
+            "S": "528"
+          },
+          "BookId": {
+            "S": "yEvadAqlBD"
+          },
+          "Author": {
+            "S": "Elizabeth Moon"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=6UJEAgAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=6UJEAgAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9780345533104"
+          },
+          "Publisher": {
+            "S": "Del Rey"
+          },
+          "Description": {
+            "S": "NAMED ONE OF THE BEST BOOKS OF THE YEAR BY KIRKUS REVIEWS Acclaimed author Elizabeth Moon spins gripping, richly imagined epic fantasy novels that have earned comparisons to the work of such authors as Robin Hobb and Lois McMaster Bujold. In this volume, Moon’s brilliant masterwork reaches its triumphant conclusion. The mysterious reappearance of magery throughout the land has been met with suspicion, fear, and violence. In the kingdom of Lyonya, Kieri, the half-elven, half-human king, struggles to balance the competing demands of his heritage while fighting a deadly threat to his rule: evil elves linked in some way to the rebirth of magic. Meanwhile, in the neighboring kingdom of Tsaia, a set of ancient artifacts recovered by the former mercenary Dorrin Verrakai may hold the answer to the riddle of magery’s return. Thus Dorrin embarks on a dangerous quest to return these relics of a bygone age to their all-but-mythical place of origin. What she encounters there will change her in unimaginable ways—and spell doom or salvation for the entire world. Praise for Crown of Renewal “Mesmerizing . . . [Elizabeth] Moon offers convincingly realized characters persuasively shaped by the extraordinary richness, depth and texture of the world they inhabit. . . . Such is the allure of an extremely talented writer at the the height of her powers.”—Kirkus Reviews (starred review) “Elves, demons, warped magicians, ancient artifacts, time travel, and an agrarian-based society make for an evocative story. . . . The depth of each character’s emotions . . . show the author’s writing power.”—Booklist Praise for Elizabeth Moon Limits of Power “Thoughtful and deeply character driven, full of personal crises as heartbreaking and hopeful as any dramatic invasion . . . Fantasy fans will be delighted by this impressive foray.”—Publishers Weekly (starred review) Echoes of Betrayal “This is an excellent series, and Echoes of Betrayal is particularly well done. [Moon is a] consistently entertaining writer, and this book lives up to her standards.”—San Jose Mercury News “Rousing action and intriguing plot twists.”—Kirkus Reviews Kings of the North “Moon’s characters navigate an intricate maze of alliances and rivalries. . . . Close attention to military detail gives the action convincing intensity.”—The Star-Ledger “Her storytelling is as electrifying as ever, and her readers should be delighted with this new vista of a well-known world.”—Booklist From the Hardcover edition."
+          },
+          "PublishedDate": {
+            "S": "2014-05-27"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "The Portable Steinbeck"
+          },
+          "PageCount": {
+            "S": "692"
+          },
+          "BookId": {
+            "S": "LXKPIgOQiG"
+          },
+          "Author": {
+            "S": "John Steinbeck"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=3jDuAAAAMAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=3jDuAAAAMAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9780140150025"
+          },
+          "Publisher": {
+            "S": "Penguin Group USA"
+          },
+          "Description": {
+            "S": "His major writings, passages of his war communications and a biographical sketch reveal the skill and versatility of Steinbeck"
+          },
+          "PublishedDate": {
+            "S": "1976-01-01"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "The Name of the Wind"
+          },
+          "PageCount": {
+            "S": "672"
+          },
+          "BookId": {
+            "S": "AvKDAExOlM"
+          },
+          "Author": {
+            "S": "Patrick Rothfuss"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=BcG2dVRXKukC&printsec=frontcover&img=1&zoom=5&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=BcG2dVRXKukC&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9780575087057"
+          },
+          "Publisher": {
+            "S": "Hachette UK"
+          },
+          "Description": {
+            "S": "'I have stolen princesses back from sleeping barrow kings. I burned down the town of Trebon. I have spent the night with Felurian and left with both my sanity and my life. I was expelled from the University at a younger age than most people are allowed in. I tread paths by moonlight that others fear to speak of during day. I have talked to Gods, loved women, and written songs that make the minstrels weep. My name is Kvothe. You may have heard of me' So begins the tale of Kvothe - currently known as Kote, the unassuming innkeepter - from his childhood in a troupe of traveling players, through his years spent as a near-feral orphan in a crime-riddled city, to his daringly brazen yet successful bid to enter a difficult and dangerous school of magic. In these pages you will come to know Kvothe the notorious magician, the accomplished thief, the masterful musician, the dragon-slayer, the legend-hunter, the lover, the thief and the infamous assassin. The Name of the Wind is fantasy at its very best, and an astounding must-read title."
+          },
+          "PublishedDate": {
+            "S": "2010-04-22"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
             "S": "The Prestige"
           },
           "PageCount": {
             "S": "404"
           },
           "BookId": {
-            "S": "YPRXMOMAPv"
+            "S": "CphgunSmrs"
           },
           "Author": {
             "S": "Christopher Priest"
@@ -40,409 +148,13 @@
       "PutRequest": {
         "Item": {
           "Title": {
-            "S": "The Kite Runner"
-          },
-          "PageCount": {
-            "S": "371"
-          },
-          "BookId": {
-            "S": "MKJKYFIXUN"
-          },
-          "Author": {
-            "S": "Khaled Hosseini"
-          },
-          "ImageSmall": {
-            "S": "http://books.google.com/books/content?id=bUJnkwEACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api"
-          },
-          "Image": {
-            "S": "http://books.google.com/books/content?id=bUJnkwEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
-          },
-          "ISBN": {
-            "S": "9781594631931"
-          },
-          "Publisher": {
-            "S": "Riverhead Trade (Paperbacks)"
-          },
-          "Description": {
-            "S": "Traces the unlikely friendship of a wealthy Afghan youth and a servant's son, in a tale that spans the final days of Afghanistan's monarchy through the atrocities of the present day."
-          },
-          "PublishedDate": {
-            "S": "2013-03-05"
-          }
-        }
-      }
-    },
-    {
-      "PutRequest": {
-        "Item": {
-          "Title": {
-            "S": "The Eight"
-          },
-          "PageCount": {
-            "S": "598"
-          },
-          "BookId": {
-            "S": "pmnnmdKXsc"
-          },
-          "Author": {
-            "S": "Katherine Neville"
-          },
-          "ImageSmall": {
-            "S": "http://books.google.com/books/content?id=uVSxAAAAIAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api"
-          },
-          "Image": {
-            "S": "http://books.google.com/books/content?id=uVSxAAAAIAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
-          },
-          "ISBN": {
-            "S": "9780345419088"
-          },
-          "Publisher": {
-            "S": "---"
-          },
-          "Description": {
-            "S": "National bestseller."
-          },
-          "PublishedDate": {
-            "S": "1997"
-          }
-        }
-      }
-    },
-    {
-      "PutRequest": {
-        "Item": {
-          "Title": {
-            "S": "Kitchen Confidential"
-          },
-          "PageCount": {
-            "S": "320"
-          },
-          "BookId": {
-            "S": "rqbTGwadkm"
-          },
-          "Author": {
-            "S": "Anthony Bourdain"
-          },
-          "ImageSmall": {
-            "S": "http://books.google.com/books/content?id=cocVLbFkgyQC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
-          },
-          "Image": {
-            "S": "http://books.google.com/books/content?id=cocVLbFkgyQC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
-          },
-          "ISBN": {
-            "S": "9781596917248"
-          },
-          "Publisher": {
-            "S": "Bloomsbury Publishing USA"
-          },
-          "Description": {
-            "S": "Anthony Bourdain, host of Parts Unknown, reveals \"twenty-five years of sex, drugs, bad behavior and haute cuisine\" in his breakout New York Times bestseller Kitchen Confidential. Bourdain spares no one's appetite when he told all about what happens behind the kitchen door. Bourdain uses the same \"take-no-prisoners\" attitude in his deliciously funny and shockingly delectable book, sure to delight gourmands and philistines alike. From Bourdain's first oyster in the Gironde, to his lowly position as dishwasher in a honky tonk fish restaurant in Provincetown (where he witnesses for the first time the real delights of being a chef); from the kitchen of the Rainbow Room atop Rockefeller Center, to drug dealers in the east village, from Tokyo to Paris and back to New York again, Bourdain's tales of the kitchen are as passionate as they are unpredictable. Kitchen Confidential will make your mouth water while your belly aches with laughter. You'll beg the chef for more, please."
-          },
-          "PublishedDate": {
-            "S": "2008-12-10"
-          }
-        }
-      }
-    },
-    {
-      "PutRequest": {
-        "Item": {
-          "Title": {
-            "S": "The Glorious Cause"
-          },
-          "PageCount": {
-            "S": "656"
-          },
-          "BookId": {
-            "S": "OKOJPqWXgA"
-          },
-          "Author": {
-            "S": "Jeff Shaara"
-          },
-          "ImageSmall": {
-            "S": "http://books.google.com/books/content?id=AVsOZaK3sNgC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
-          },
-          "Image": {
-            "S": "http://books.google.com/books/content?id=AVsOZaK3sNgC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
-          },
-          "ISBN": {
-            "S": "9780345458681"
-          },
-          "Publisher": {
-            "S": "Ballantine Books"
-          },
-          "Description": {
-            "S": "In Rise to Rebellion, bestselling author Jeff Shaara captured the origins of the American Revolution as brilliantly as he depicted the Civil War in Gods and Generals and The Last Full Measure. Now he continues the amazing saga of how thirteen colonies became a nation, taking the conflict from kingdom and courtroom to the bold and bloody battlefields of war. It was never a war in which the outcome was obvious. Despite their spirit and stamina, the colonists were outmanned and outfought by the brazen British army. General George Washington found his troops trounced in the battles of Brooklyn and Manhattan and retreated toward Pennsylvania. With the future of the colonies at its lowest ebb, Washington made his most fateful decision: to cross the Delaware River and attack the enemy. The stunning victory at Trenton began a saga of victory and defeat that concluded with the British surrender at Yorktown, a moment that changed the history of the world. The despair and triumph of America’s first great army is conveyed in scenes as powerful as any Shaara has written, a story told from the points of view of some of the most memorable characters in American history. There is George Washington, the charismatic leader who held his army together to achieve an unlikely victory; Charles Cornwallis, the no-nonsense British general, more than a match for his colonial counterpart; Nathaniel Greene, who rose from obscurity to become the finest battlefield commander in Washington’s army; The Marquis de Lafayette, the young Frenchman who brought a soldier’s passion to America; and Benjamin Franklin, a brilliant man of science and philosophy who became the finest statesman of his day. From Nathan Hale to Benedict Arnold, William Howe to “Light Horse” Harry Lee, from Trenton and Valley Forge, Brandywine and Yorktown, the American Revolution’s most immortal characters and poignant moments are brought to life in remarkable Shaara style. Yet, The Glorious Cause is more than just a story of the legendary six-year struggle. It is a tribute to an amazing people who turned ideas into action and fought to declare themselves free. Above all, it is a riveting novel that both expands and surpasses its beloved author’s best work."
-          },
-          "PublishedDate": {
-            "S": "2010-12-29"
-          }
-        }
-      }
-    },
-    {
-      "PutRequest": {
-        "Item": {
-          "Title": {
-            "S": "1491"
-          },
-          "PageCount": {
-            "S": "541"
-          },
-          "BookId": {
-            "S": "JGiqSMcrVT"
-          },
-          "Author": {
-            "S": "Charles C. Mann"
-          },
-          "ImageSmall": {
-            "S": "http://books.google.com/books/content?id=KPKMDQAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
-          },
-          "Image": {
-            "S": "http://books.google.com/books/content?id=KPKMDQAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
-          },
-          "ISBN": {
-            "S": "9781400032051"
-          },
-          "Publisher": {
-            "S": "Vintage"
-          },
-          "Description": {
-            "S": "Describes how recent archaeological research has transformed long-held myths about the Americas, revealing far older and more advanced cultures with a greater population than were previously thought to have existed."
-          },
-          "PublishedDate": {
-            "S": "2006"
-          }
-        }
-      }
-    },
-    {
-      "PutRequest": {
-        "Item": {
-          "Title": {
-            "S": "The Shipping News"
-          },
-          "PageCount": {
-            "S": "368"
-          },
-          "BookId": {
-            "S": "skuIdmdAso"
-          },
-          "Author": {
-            "S": "Annie Proulx"
-          },
-          "ImageSmall": {
-            "S": "http://books.google.com/books/content?id=jHp8VHqgCmQC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
-          },
-          "Image": {
-            "S": "http://books.google.com/books/content?id=jHp8VHqgCmQC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
-          },
-          "ISBN": {
-            "S": "9780743519809"
-          },
-          "Publisher": {
-            "S": "Simon and Schuster"
-          },
-          "Description": {
-            "S": "Winner of the Pulitzer Prize, Annie Proulx’s The Shipping News is a vigorous, darkly comic, and at times magical portrait of the contemporary North American family. Quoyle, a third-rate newspaper hack, with a “head shaped like a crenshaw, no neck, reddish hair...features as bunched as kissed fingertips,” is wrenched violently out of his workaday life when his two-timing wife meets her just desserts. An aunt convinces Quoyle and his two emotionally disturbed daughters to return with her to the starkly beautiful coastal landscape of their ancestral home in Newfoundland. Here, on desolate Quoyle’s Point, in a house empty except for a few mementos of the family’s unsavory past, the battered members of three generations try to cobble up new lives. Newfoundland is a country of coast and cove where the mercury rarely rises above seventy degrees, the local culinary delicacy is cod cheeks, and it’s easier to travel by boat and snowmobile than on anything with wheels. In this harsh place of cruel storms, a collapsing fishery, and chronic unemployment, the aunt sets up as a yacht upholsterer in nearby Killick-Claw, and Quoyle finds a job reporting the shipping news for the local weekly, the Gammy Bird (a paper that specializes in sexual-abuse stories and grisly photos of car accidents). As the long winter closes its jaws of ice, each of the Quoyles confronts private demons, reels from catastrophe to minor triumph—in the company of the obsequious Mavis Bangs; Diddy Shovel the strongman; drowned Herald Prowse; cane-twirling Beety; Nutbeem, who steals foreign news from the radio; a demented cousin the aunt refuses to recognize; the much-zippered Alvin Yark; silent Wavey; and old Billy Pretty, with his bag of secrets. By the time of the spring storms Quoyle has learned how to gut cod, to escape from a pickle jar, and to tie a true lover’s knot."
-          },
-          "PublishedDate": {
-            "S": "2008-01-01"
-          }
-        }
-      }
-    },
-    {
-      "PutRequest": {
-        "Item": {
-          "Title": {
-            "S": "Kushiel's Scion"
-          },
-          "PageCount": {
-            "S": "504"
-          },
-          "BookId": {
-            "S": "ewyiocnAsf"
-          },
-          "Author": {
-            "S": "Jacqueline Carey"
-          },
-          "ImageSmall": {
-            "S": "http://books.google.com/books/content?id=RcHfoQEACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api"
-          },
-          "Image": {
-            "S": "http://books.google.com/books/content?id=RcHfoQEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
-          },
-          "ISBN": {
-            "S": "9780446594257"
-          },
-          "Publisher": {
-            "S": "Warner Books (NY)"
-          },
-          "Description": {
-            "S": "\"The saga of Imriel de al Courcel, born third in line for the throne of Terre d'Ange, and gifted with the ability to deliver pain and to exploit others' faults\"--Provided by the publisher."
-          },
-          "PublishedDate": {
-            "S": "2014-07-01"
-          }
-        }
-      }
-    },
-    {
-      "PutRequest": {
-        "Item": {
-          "Title": {
-            "S": "The Admirals"
-          },
-          "PageCount": {
-            "S": "576"
-          },
-          "BookId": {
-            "S": "CBTRKMIUBV"
-          },
-          "Author": {
-            "S": "Walter R. Borneman"
-          },
-          "ImageSmall": {
-            "S": "http://books.google.com/books/content?id=ZyjYRvy-sE0C&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
-          },
-          "Image": {
-            "S": "http://books.google.com/books/content?id=ZyjYRvy-sE0C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
-          },
-          "ISBN": {
-            "S": "9780316202527"
-          },
-          "Publisher": {
-            "S": "Little, Brown"
-          },
-          "Description": {
-            "S": "How history's only five-star admirals triumphed in World War II and made the United States the world's dominant sea power. Only four men in American history have been promoted to the five-star rank of Admiral of the Fleet: William Leahy, Ernest King, Chester Nimitz, and William Halsey. These four men were the best and the brightest the navy produced, and together they led the U.S. navy to victory in World War II, establishing the United States as the world's greatest fleet. In THE ADMIRALS, award-winning historian Walter R. Borneman tells their story in full detail for the first time. Drawing upon journals, ship logs, and other primary sources, he brings an incredible historical moment to life, showing us how the four admirals revolutionized naval warfare forever with submarines and aircraft carriers, and how these men-who were both friends and rivals-worked together to ensure that the Axis fleets lay destroyed on the ocean floor at the end of World War II."
-          },
-          "PublishedDate": {
-            "S": "2012-05-01"
-          }
-        }
-      }
-    },
-    {
-      "PutRequest": {
-        "Item": {
-          "Title": {
-            "S": "Neverwhere"
-          },
-          "PageCount": {
-            "S": "400"
-          },
-          "BookId": {
-            "S": "CSQNHWUHRv"
-          },
-          "Author": {
-            "S": "Neil Gaiman"
-          },
-          "ImageSmall": {
-            "S": "http://books.google.com/books/content?id=yuCUZ3km3qIC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
-          },
-          "Image": {
-            "S": "http://books.google.com/books/content?id=yuCUZ3km3qIC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
-          },
-          "ISBN": {
-            "S": "9780060557812"
-          },
-          "Publisher": {
-            "S": "Harper Collins"
-          },
-          "Description": {
-            "S": "Richard Mayhew is a young man with a good heart and an ordinarylife, which is changed forever when he stops to help a girl he finds bleeding on a London sidewalk. His small act of kindness propels him into a world he never dreamed existed. There are people who fall through the cracks, and Richard has become one of them. And he must learn to survive in this city of shadows and darkness, monsters and saints, murderers and angels, if he is ever to return to the London that he knew."
-          },
-          "PublishedDate": {
-            "S": "2003-09-02"
-          }
-        }
-      }
-    },
-    {
-      "PutRequest": {
-        "Item": {
-          "Title": {
-            "S": "Inferno"
-          },
-          "PageCount": {
-            "S": "560"
-          },
-          "BookId": {
-            "S": "hJromdatwh"
-          },
-          "Author": {
-            "S": "Dan Brown"
-          },
-          "ImageSmall": {
-            "S": "http://books.google.com/books/content?id=bveKDQAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
-          },
-          "Image": {
-            "S": "http://books.google.com/books/content?id=bveKDQAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
-          },
-          "ISBN": {
-            "S": "9780804172264"
-          },
-          "Publisher": {
-            "S": "Anchor Books"
-          },
-          "Description": {
-            "S": "In the heart of Italy, Harvard professor of symbology Robert Langdon is drawn into a harrowing world centered on one of history's most enduring and mysterious literary masterpieces--Dante's \"Inferno\"--as he battles a chilling adversary and grapples with an ingenious riddle--"
-          },
-          "PublishedDate": {
-            "S": "2014"
-          }
-        }
-      }
-    },
-    {
-      "PutRequest": {
-        "Item": {
-          "Title": {
-            "S": "The Two Koreas"
-          },
-          "PageCount": {
-            "S": "512"
-          },
-          "BookId": {
-            "S": "XcJHIAKAVD"
-          },
-          "Author": {
-            "S": "Don Oberdorfer, Robert Carlin"
-          },
-          "ImageSmall": {
-            "S": "http://books.google.com/books/content?id=ScVWAAAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
-          },
-          "Image": {
-            "S": "http://books.google.com/books/content?id=ScVWAAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
-          },
-          "ISBN": {
-            "S": "9780465050888"
-          },
-          "Publisher": {
-            "S": "Basic Books"
-          },
-          "Description": {
-            "S": "Ever since Korea was first divided at the end of World War II, the tension between its northern and southern halves has riveted—and threatened to embroil—the rest of the world. In this landmark history, now thoroughly revised and updated in conjunction with Korea expert Robert Carlin, veteran journalist Don Oberdorfer grippingly describes how a historically homogenous people became locked in a perpetual struggle for supremacy—and how they might yet be reconciled."
-          },
-          "PublishedDate": {
-            "S": "2013-12-10"
-          }
-        }
-      }
-    },
-    {
-      "PutRequest": {
-        "Item": {
-          "Title": {
             "S": "The Awakening"
           },
           "PageCount": {
             "S": "272"
           },
           "BookId": {
-            "S": "OjRsRifnNb"
+            "S": "qWKYUbNiBw"
           },
           "Author": {
             "S": "L. A. Banks"
@@ -472,13 +184,265 @@
       "PutRequest": {
         "Item": {
           "Title": {
+            "S": "The President Is Missing"
+          },
+          "PageCount": {
+            "S": "528"
+          },
+          "BookId": {
+            "S": "PmQIAxXHUY"
+          },
+          "Author": {
+            "S": "James Patterson, Bill Clinton"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=DVnODgAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=DVnODgAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9780316412711"
+          },
+          "Publisher": {
+            "S": "Little, Brown and Company and Knopf"
+          },
+          "Description": {
+            "S": "#1 New York Times Bestseller #1 USA Today Bestseller #1 Wall Street Journal Bestseller #1 Indie Bestseller \"President Duncan for a second term!\" --USA Today \"This book's a big one.\" --New York Times \"Towers above most political thrillers.\" --Pittsburgh Post-Gazette \"The plotting is immaculate . . . the writing is taut.\" --Sunday Times (London) \"Ambitious and wildly readable.\" --New York Times Book Review The President Is Missing confronts a threat so huge that it jeopardizes not just Pennsylvania Avenue and Wall Street, but all of America. Uncertainty and fear grip the nation. There are whispers of cyberterror and espionage and a traitor in the Cabinet. Even the President himself becomes a suspect, and then he disappears from public view . . . Set over the course of three days, The President Is Missing sheds a stunning light upon the inner workings and vulnerabilities of our nation. Filled with information that only a former Commander-in-Chief could know, this is the most authentic, terrifying novel to come along in many years."
+          },
+          "PublishedDate": {
+            "S": "2018-06-04"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "Ataturk: The Biography of the Founder of Modern Turkey"
+          },
+          "PageCount": {
+            "S": "666"
+          },
+          "BookId": {
+            "S": "MUEHRXJGUR"
+          },
+          "Author": {
+            "S": "Andrew Mango"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=nu68vd_AmuYC&printsec=frontcover&img=1&zoom=5&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=nu68vd_AmuYC&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9781585673346"
+          },
+          "Publisher": {
+            "S": "Harry N. Abrams"
+          },
+          "Description": {
+            "S": "A full-scale portrait of the controversial founder of the Turkish Republic describes the complex and paradoxical life and times of a man whose high ideals and ruthless tactics transformed his country into a regional power. Reprint."
+          },
+          "PublishedDate": {
+            "S": "2002-08-26"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "Neuromancer"
+          },
+          "PageCount": {
+            "S": "271"
+          },
+          "BookId": {
+            "S": "BLfMBkRDhG"
+          },
+          "Author": {
+            "S": "William Gibson"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=-8FyDwAAQBAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=-8FyDwAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9780441569595"
+          },
+          "Publisher": {
+            "S": "Penguin"
+          },
+          "Description": {
+            "S": "Case, a burned out computer whiz, is asked to steal a security code that is locked in the most heavily guarded databank in the solar system"
+          },
+          "PublishedDate": {
+            "S": "1984"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "Daughter of Shanghai"
+          },
+          "PageCount": {
+            "S": "245"
+          },
+          "BookId": {
+            "S": "SktFqGrDvo"
+          },
+          "Author": {
+            "S": "Tsai Chin"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=xODHHAAACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=xODHHAAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9780312112585"
+          },
+          "Publisher": {
+            "S": "St Martins Press"
+          },
+          "Description": {
+            "S": "The author recalls her early life in Shanghai, her memories of the Japanese occupation, civil war and the communist takeover, her stage success in London, and her parents' brutal deaths during the Cultural Revolution"
+          },
+          "PublishedDate": {
+            "S": "1994"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "Digital Fortress"
+          },
+          "PageCount": {
+            "S": "371"
+          },
+          "BookId": {
+            "S": "ceyrHmAICG"
+          },
+          "Author": {
+            "S": "Dan Brown"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=NTCUrqzyhMsC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=NTCUrqzyhMsC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9780312263126"
+          },
+          "Publisher": {
+            "S": "Macmillan"
+          },
+          "Description": {
+            "S": "A former National Security Agency programmer threatens to release a mathematical formula that will allow organized crime and terrorism to skyrocket, unless the code-breaking computer that is used to keep them in check but that violates civil rights is exposed to the public. Reissue."
+          },
+          "PublishedDate": {
+            "S": "2000-05-05"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "Across the Nightingale Floor"
+          },
+          "PageCount": {
+            "S": "305"
+          },
+          "BookId": {
+            "S": "fMntIEULLa"
+          },
+          "Author": {
+            "S": "Lian Hearn"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=l46bZ1lQ3zoC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=l46bZ1lQ3zoC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9781573223324"
+          },
+          "Publisher": {
+            "S": "Penguin"
+          },
+          "Description": {
+            "S": "In a novel set in a land much like feudal Japan, a young boy named Takeo becomes a pawn in the ceaseless battles between rival warlord clans in a culture ruled by codes of honor and formal rituals."
+          },
+          "PublishedDate": {
+            "S": "2003"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "Neverwhere"
+          },
+          "PageCount": {
+            "S": "400"
+          },
+          "BookId": {
+            "S": "Afdxqoomgk"
+          },
+          "Author": {
+            "S": "Neil Gaiman"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=yuCUZ3km3qIC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=yuCUZ3km3qIC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9780060557812"
+          },
+          "Publisher": {
+            "S": "Harper Collins"
+          },
+          "Description": {
+            "S": "Richard Mayhew is a young man with a good heart and an ordinarylife, which is changed forever when he stops to help a girl he finds bleeding on a London sidewalk. His small act of kindness propels him into a world he never dreamed existed. There are people who fall through the cracks, and Richard has become one of them. And he must learn to survive in this city of shadows and darkness, monsters and saints, murderers and angels, if he is ever to return to the London that he knew."
+          },
+          "PublishedDate": {
+            "S": "2003-09-02"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
             "S": "Daughter of Shanghai"
           },
           "PageCount": {
             "S": "328"
           },
           "BookId": {
-            "S": "afGGPgwTEa"
+            "S": "IdrqQJIsal"
           },
           "Author": {
             "S": "釆芹"
@@ -508,34 +472,106 @@
       "PutRequest": {
         "Item": {
           "Title": {
-            "S": "Let the Sea Make a Noise..."
+            "S": "Inferno"
           },
           "PageCount": {
-            "S": "793"
+            "S": "560"
           },
           "BookId": {
-            "S": "VCBuUiMDMO"
+            "S": "EDPCSyTHgX"
           },
           "Author": {
-            "S": "Walter A. McDougall"
+            "S": "Dan Brown"
           },
           "ImageSmall": {
-            "S": "http://books.google.com/books/content?id=n2lR2fKPBh8C&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+            "S": "http://books.google.com/books/content?id=bveKDQAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
           },
           "Image": {
-            "S": "http://books.google.com/books/content?id=n2lR2fKPBh8C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+            "S": "http://books.google.com/books/content?id=bveKDQAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
           },
           "ISBN": {
-            "S": "9780060578206"
+            "S": "9780804172264"
           },
           "Publisher": {
-            "S": "Harper Collins"
+            "S": "Anchor Books"
           },
           "Description": {
-            "S": "A sweeping, action-filled saga that depicts the rise and fall of empires in the North Pacific details the four-hundred-year history of Hawaii, Japan, Siberia, California, and more. By the Pulitzer Prize-winning author of The Heavens and the Earth. Reprint"
+            "S": "In the heart of Italy, Harvard professor of symbology Robert Langdon is drawn into a harrowing world centered on one of history's most enduring and mysterious literary masterpieces--Dante's \"Inferno\"--as he battles a chilling adversary and grapples with an ingenious riddle--"
           },
           "PublishedDate": {
-            "S": "2004-03-30"
+            "S": "2014"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "The Kite Runner"
+          },
+          "PageCount": {
+            "S": "371"
+          },
+          "BookId": {
+            "S": "OvgvODkWlw"
+          },
+          "Author": {
+            "S": "Khaled Hosseini"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=bUJnkwEACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=bUJnkwEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9781594631931"
+          },
+          "Publisher": {
+            "S": "Riverhead Trade (Paperbacks)"
+          },
+          "Description": {
+            "S": "Traces the unlikely friendship of a wealthy Afghan youth and a servant's son, in a tale that spans the final days of Afghanistan's monarchy through the atrocities of the present day."
+          },
+          "PublishedDate": {
+            "S": "2013-03-05"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "Gorbachov"
+          },
+          "PageCount": {
+            "S": "---"
+          },
+          "BookId": {
+            "S": "orxrxEhofP"
+          },
+          "Author": {
+            "S": "William Taubman"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=fkNsDwAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=fkNsDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9788499928784"
+          },
+          "Publisher": {
+            "S": "DEBATE"
+          },
+          "Description": {
+            "S": "La biografía definitiva del líder que transformó el mundo, narrada por el Premio Pulitzer, William Taubman. En marzo de 1985, Mijaíl Gorbachov se convirtió en el líder de la Unión Soviética, una de las dos superpotencias mundiales de la guerra fría. Tras seis trepidantes años, sus reformas políticas, la perestroika y la glásnost, destinadas a transformar profundamente el comunismo soviético para salvarlo, condujeron al espectacular e inesperado derrumbe de la URSS y el final de la política de bloques que caracterizó la segunda mitad del siglo XX. Admirado en occidente y denostado en su país, Gorbachov es uno de los personajes clave de nuestra época. En la primera biografía exhaustiva del último gran líder soviético, William Taubman, ganador del premio Pulitzer por su biografía de Kruschev, explica cómo un joven hijo de campesinos se convirtió en máximo dirigente y promesa de renovación del sistema soviético, y cómo encontró un terreno común con el presidente Reagan que puso fin a la tensión de la guerra fría y acabó provocando que la URSS y su imperio se desmoronaran. ¿Fue un líder excepcional o un personaje atrapado por sus propias deficiencias y por el destino al que se enfrentó? A lo largo de estas páginas, Taubman nos perfila todas las facetas de un personaje único y, en palabras del propio Gorbachov, de «difícil comprensión». Basándose en entrevistas con el ex líder soviético, transcripciones y documentos de los archivos rusos, conversaciones con amigos y enemigos y múltiples líderes internacionales, William Taubman nos ofrece en esta monumental biografía un retrato íntimo y honesto, conmovedor, punzante y severo, de un personaje cuya vida podría situarse a la altura de las grandes novelas rusas. Reseñas: «Magistral. [...] Será por mucho tiempo la biografía definitiva de esta fascinante figura.» The New York Times Book Review «Gorbachov, como su Khrushchev, es un logro extraordinario. [...] Repleto de nueva información y juicios inteligentes; un doble triunfo para el género biográfico.» John Lewis Gaddis, ganador del Premio Pulitzer «Una lectura esencial para el siglo XXI.» The New York Times «Taubman aplica una lupa tolstoyana a la historia reciente de Rusia y despliega una especial sensibilidad al analizar una vida que demostraría ser más rica que la política.» The Economist «Una penetrante historia y un fascinante estudio psicológico.» Foreign Affairs Magazine"
+          },
+          "PublishedDate": {
+            "S": "2018-11-08"
           }
         }
       }
