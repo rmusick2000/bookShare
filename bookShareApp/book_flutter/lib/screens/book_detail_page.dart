@@ -88,7 +88,8 @@ class _BookShareBookDetailState extends State<BookShareBookDetailPage> {
             preferredSize: Size.fromHeight( appState.screenHeight*.001 ),
             child: AppBar( leading: Container() )),
          body: Center(
-           child: SingleChildScrollView( 
+           child: SingleChildScrollView(
+              key: Key( 'bookDetail' ),
               child: Column(
                  crossAxisAlignment: CrossAxisAlignment.start,
                  mainAxisAlignment: MainAxisAlignment.start,
@@ -140,6 +141,7 @@ class _BookShareBookDetailState extends State<BookShareBookDetailPage> {
                     Padding(
                        padding: const EdgeInsets.fromLTRB(inset, 12, 6, 0),
                        child: Container( width: appState.screenWidth * .9,
+                                         key: Key( 'Description' ),
                                          child: Text("Description: " + book.description, style: TextStyle(fontSize: 14)))),
                     Padding(
                        padding: const EdgeInsets.fromLTRB(inset, 12, 0, 0),

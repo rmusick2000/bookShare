@@ -8,10 +8,10 @@ const TESTER_PASSWD = "passWD123";
 
 
 // XXX darg... fluuuuuttterrrrrrr
-Future<bool> isPresent( FlutterDriver driver, SerializableFinder finder ) async {
+Future<bool> isPresent( FlutterDriver driver, SerializableFinder finder, [int timeout = 500]  ) async {
    try {
       // NOTE 200 was overly eager.  500 OK?
-      await driver.waitFor(finder, timeout: Duration( milliseconds: 500 ) );
+      await driver.waitFor(finder, timeout: Duration( milliseconds: timeout ) );
       return true;
    } catch (e) {
       return false;
@@ -32,6 +32,16 @@ Future<bool> enterText( FlutterDriver driver, SerializableFinder txtField, Strin
    return true;
 }
 
+Future<bool> verifyOnHomePage( FlutterDriver driver ) async {
+   print( "VOHP test" );
+   expect( await isPresent( driver, find.byValueKey( 'myLibraryIcon' ), 5000), true );  // on top bar, but..
+   expect( await isPresent( driver, find.byValueKey( 'homeHereIcon' )), true );   // landed here on bot bar
+   
+   // Default name of private lib, selected by default upon login.
+   // This takes longer, once it shows up, fully loaded.
+   expect( await isPresent( driver, find.byValueKey( 'My Books' )), true );  
+   return true;
+}
 
 Future<bool> login( FlutterDriver driver, known ) async {
 
@@ -62,15 +72,8 @@ Future<bool> login( FlutterDriver driver, known ) async {
 
    // verify topbar, botbar icons
    // These show up quickly.
-   if( known ) {
-      print( "FIND ICONS" );
-      await driver.waitFor( find.byValueKey( 'myLibraryIcon' ) );  // on top bar, but..
-      await driver.waitFor( find.byValueKey( 'homeHereIcon' ) );   // landed here on bot bar
-
-      // Default name of private lib, selected by default upon login.
-      // This takes longer, once it shows up, fully loaded.
-      await driver.waitFor( find.byValueKey( 'My Books' ) );  
-   } else {
+   if( known ) { expect( await verifyOnHomePage( driver ), true );  }
+   else {
       // can't apply key to toast, so... look for no app bar, yes login stuff
       expect( await isPresent( driver, find.byValueKey( 'homeIcon' ) ), false );
       expect( await isPresent( driver, find.byValueKey( 'homeHereIcon' ) ), false );
@@ -121,6 +124,21 @@ Future<bool> gotoAddBook( FlutterDriver driver ) async {
    return true;
 }
 
+Future<bool> gotoHome( FlutterDriver driver ) async {
+   SerializableFinder homeIcon = find.byValueKey( 'homeIcon' );
+   SerializableFinder homeHereIcon = find.byValueKey( 'homeHereIcon' );
+
+   expect( await isPresent( driver, homeIcon ), true );
+   expect( await isPresent( driver, homeHereIcon ), false );
+
+   await driver.tap( homeIcon );
+
+   expect( await isPresent( driver, homeIcon ), false );
+   expect( await isPresent( driver, homeHereIcon ), true );
+
+   return true;
+}
+
 Future<bool> refineAdd( FlutterDriver driver, titleKey, authorKey, bookChoice, closeOut, [bool checkScan = true] ) async {
    SerializableFinder refineSearch = find.byValueKey( 'Refine search' );
 
@@ -129,7 +147,7 @@ Future<bool> refineAdd( FlutterDriver driver, titleKey, authorKey, bookChoice, c
    // If got here from hitting refine search in a list of books, scan button is not present.
    // Hmmmm.... same with home...
    if( checkScan ) {
-      expect( await isPresent( driver, find.text( 'Scan' ) ), true );
+      expect( await isPresent( driver, find.text( 'Scan' ), 5000 ), true );  // if coming from addbook, this can take a while.
       expect( await isPresent( driver, refineSearch ), true );
       
       await driver.tap( refineSearch );

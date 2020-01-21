@@ -111,7 +111,8 @@ makeActionButtonSmall( appState, buttonText, fn ) {
 makeTitleText( title, width, wrap, lines ) {
    return Padding(
       padding: const EdgeInsets.fromLTRB(20, 6, 6, 0),
-      child: Container( width: width, 
+      child: Container( width: width,
+                        key: Key( title ),
                         child: Text(title, softWrap: wrap, maxLines: lines, overflow: TextOverflow.ellipsis,
                                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold))));
 }
@@ -120,6 +121,7 @@ makeAuthorText( author, width, wrap, lines ) {
    return Padding(
       padding: const EdgeInsets.fromLTRB(20, 0, 6, 0),
       child: Container( width: width,
+                        key: Key( author ),
                         child: Text("By: " + author, softWrap: wrap, maxLines: lines, overflow: TextOverflow.ellipsis,
                                     style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic))));
 }

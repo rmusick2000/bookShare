@@ -316,6 +316,7 @@ class _BookShareHomeState extends State<BookShareHomePage> {
          return Expanded(
             child: SizedBox(
                child: ListView(
+                  key: Key( "searchedBooks" ),                  
                   scrollDirection: Axis.horizontal,
                   children: bookChunks
                   )));
