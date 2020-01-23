@@ -210,7 +210,7 @@ class _BookShareHomeState extends State<BookShareHomePage> {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget> [
-               Text( name, key: Key( name ), style: TextStyle(fontSize: 14)),
+               Text( name, style: TextStyle(fontSize: 14)),
                Text( numM, style: TextStyle(fontSize: 14)),
                Text( numB, style: TextStyle(fontSize: 14)),
                _memberText()

@@ -52,9 +52,11 @@ void confirm( BuildContext context, confirmHeader, confirmBody, okFunc, cancelFu
                     content: new Text( confirmBody ),
                     actions: <Widget>[
                        new FlatButton(
+                          key: Key( 'confirmDelete' ),
                           child: new Text("Continue"),
                           onPressed: okFunc ),
                        new FlatButton(
+                          key: Key( 'cancelDelete' ),
                           child: new Text("Cancel"),
                           onPressed: cancelFunc )
                        ]);
@@ -262,6 +264,9 @@ Widget makeLibraryChunk( lib, screenHeight, highlight ) {
          padding: const EdgeInsets.fromLTRB(12.0, 1.0, 0, 0.0),
          child: Container( height: 5.0, width: imageSize, color: Colors.pinkAccent ));
    }
+
+   String libName = highlight ? "Selected: " : "";
+   libName += libraryName;
    
    return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -271,6 +276,7 @@ Widget makeLibraryChunk( lib, screenHeight, highlight ) {
          Padding(
             padding: const EdgeInsets.fromLTRB(12.0, 10.0, 0, 0.0),
             child: ClipRRect(
+               key: Key( libName ),
                borderRadius: new BorderRadius.circular(12.0),
                child: image )),
          Padding(

@@ -53,6 +53,7 @@ def collect( fname ):
     lines = f.readlines()
     for fl in lines :
         if( "I/flutter" in fl ) : continue
+        #if( "I/flutter" in fl ) : resultsBulk += fl
         elif( "BookShare Test Group" in fl or
               "tests passed!" in fl        or
               "tests failed!" in fl           ) :
