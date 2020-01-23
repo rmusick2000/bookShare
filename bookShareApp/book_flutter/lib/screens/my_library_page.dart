@@ -110,7 +110,8 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
                            ])),
                   Padding(
                      padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                     child: GestureDetector( 
+                     child: GestureDetector(
+                        key: Key( 'editIcon' ),
                         onTap:  ()
                         {
                            print( "SETSTATE makeContextMenu icon" );
@@ -121,6 +122,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
                   Padding(
                      padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
                      child: GestureDetector( 
+                        key: Key( 'shareIcon' ),
                         onTap:  ()
                         {
                            print( "SETSTATE makeContextMenu icon" );
@@ -136,6 +138,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
                         Padding(
                            padding: const EdgeInsets.fromLTRB(12, 12, 0, 12),
                            child: GestureDetector( 
+                              key: Key( 'gridIcon' ),
                               onTap:  ()
                               {
                                  print( "SETSTATE makeContextMenu icon" );
@@ -146,6 +149,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
                         Padding(
                            padding: const EdgeInsets.fromLTRB(12, 12, 0, 12),
                            child: GestureDetector( 
+                              key: Key( 'listIcon' ),
                               onTap:  ()
                               {
                                  print( "SETSTATE makeContextMenu icon" );
@@ -176,14 +180,15 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
      else                      { image = Image.asset( 'images/blankBook.jpeg', height: imageHeight, width: imageWidth, fit: BoxFit.contain); }
      
      return GestureDetector(
-           onTap:  ()
-           {
-              print( "SETSTATE makeBookChunk tap" );
-              setState(() { appState.detailBook = book; });
-              Navigator.push( context, MaterialPageRoute(builder: (context) => BookShareBookDetailPage()));
-           },
-           child: ClipRRect( borderRadius: new BorderRadius.circular(12.0), child: image )
-           );
+        key: Key( 'image: ' + book.title ),
+        onTap:  ()
+        {
+           print( "SETSTATE makeBookChunk tap" );
+           setState(() { appState.detailBook = book; });
+           Navigator.push( context, MaterialPageRoute(builder: (context) => BookShareBookDetailPage()));
+        },
+        child: ClipRRect( borderRadius: new BorderRadius.circular(12.0), child: image )
+        );
   }
 
    // gridview controls object sizing
@@ -255,6 +260,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
       return Theme(
          data: Theme.of(context).copyWith( canvasColor: Colors.grey[200] ),
          child: DropdownButton<String>(
+            key: Key( 'dropLib' ),
             value: shareLibrary,
             itemHeight: appState.screenHeight * .16,
             elevation: 5,
@@ -301,7 +307,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
            crossAxisAlignment: CrossAxisAlignment.center,
            mainAxisAlignment: MainAxisAlignment.spaceAround,
            children: <Widget>[
-              ClipRRect( borderRadius: new BorderRadius.circular(12.0), child: image ),
+              ClipRRect( key: Key('image: ' + book.title ), borderRadius: new BorderRadius.circular(12.0), child: image ),
               Column(
                  crossAxisAlignment: CrossAxisAlignment.start,
                  mainAxisAlignment: MainAxisAlignment.center,
@@ -339,6 +345,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
             Padding(
                padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
                child: Checkbox(
+                  key: Key( 'check: ' + book.title ),
                   value: checkVal(),
                   onChanged: (bool value)
                   {
@@ -374,6 +381,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
                             Padding(
                                padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
                                child: Checkbox(
+                                  key: Key( 'check: shareAll' ),
                                   value: shareAll,
                                   onChanged: (bool value)
                                   {
@@ -393,6 +401,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
             maxHeight: appState.screenHeight * .6
             ),
          child: ListView(
+            key: Key( 'bookShares' ),
             scrollDirection: Axis.vertical,
             children: bookShares
             ));
@@ -579,6 +588,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
 
    Widget _makeSmallInputField( txt, controller ) {
       return TextField(
+         key: Key( 'input: ' + txt ),
          obscureText: false,
          style: TextStyle(fontSize: 18),
          maxLines: 1,
@@ -728,7 +738,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
                   children: <Widget>[
                      Padding(
                         padding: EdgeInsets.fromLTRB( width * .05, height * .01, width * .07, height * .03),
-                        child: Text( "Description", style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold))),
+                        child: Text( "Description:", style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold))),
                      SizedBox( width: width * .65, height: height * .13, child: _makeLargeInputField( editLibrary.description, descController )),
                      ]),
 

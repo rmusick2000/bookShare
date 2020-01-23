@@ -18,30 +18,64 @@ Future<bool> verifyHomeBatch1( FlutterDriver driver ) async {
    SerializableFinder theList   = find.byValueKey('searchedBooks');
 
    // Find all 4 books that we just added
-   print( "Dragon Boogers" );
-   SerializableFinder theChoice = find.byValueKey('Dragon Boogers');
-   await driver.scroll( theList, 1000.0, 0.0, Duration( milliseconds: 500 ));       // go to start
-   await driver.scrollUntilVisible( theList, theChoice, dxScroll: -200.0 );
-   
-   print( "Warship" );
-   theChoice = find.byValueKey('Warship');
-   await driver.scroll( theList, 1000.0, 0.0, Duration( milliseconds: 500 ));
-   await driver.scrollUntilVisible( theList, theChoice, dxScroll: -200.0 );
+   expect( await findBook( driver, theList, 'Dragon Boogers' ), true );
+   expect( await findBook( driver, theList, 'Warship' ), true );
+   expect( await findBook( driver, theList, 'Money Magic Tricks' ), true );
 
-   print( "Money Magic Tricks" );
-   theChoice = find.byValueKey('Money Magic Tricks');
-   await driver.scroll( theList, 1000.0, 0.0, Duration( milliseconds: 500 ));
-   if( !(await isPresent( driver, theChoice ))) {
-      await driver.scrollUntilVisible( theList, theChoice, dxScroll: -200.0 );
-   }
-
-   print( "Musick" );
-   theChoice = find.byValueKey('Melissa Musick Nussbaum');
+   SerializableFinder theChoice = find.byValueKey('Melissa Musick Nussbaum');
    await driver.scroll( theList, 1000.0, 0.0, Duration( milliseconds: 500 ));
    await driver.scrollUntilVisible( theList, theChoice, dxScroll: -200.0 );
 
    return true;
 }
+
+Future<bool> checkKeanna( FlutterDriver driver ) async {
+   await driver.tap( find.byValueKey( 'image: Keanna' ) );
+   expect( await isPresent( driver, find.text( 'By: Namester Composition Notebooks' ), 2000), true);
+   expect( await isPresent( driver, find.text( 'Keanna' )), true);
+   expect( await isPresent( driver, find.byValueKey( 'Back' )), true);
+   await driver.tap( find.byValueKey( 'Back' ));
+   return true;
+}
+
+Future<bool> addLibrary( FlutterDriver driver, String libName, String coverName ) async {
+                         
+   SerializableFinder create = find.text('< CREATE >');
+   SerializableFinder accept = find.byValueKey( 'Accept' );
+   SerializableFinder cancel = find.byValueKey( 'Cancel' );
+   await driver.tap( create ); 
+   expect( await verifyEditLib( driver, "new" ), true );
+   await enterText( driver, find.byValueKey( 'input: new' ), libName );
+   expect( await verifyEditLib( driver, "new", libName ), true );
+   
+   await driver.tap( find.byValueKey( 'Choose Image' ) );
+   expect( await isPresent( driver, find.text( 'Select image source:' )), true );
+   expect( await isPresent( driver, find.byValueKey( 'galleryIcon' )), true );
+   expect( await isPresent( driver, find.byValueKey( 'cameraIcon' )), true );
+   expect( await isPresent( driver, find.byValueKey( 'coversIcon' )), true );
+   
+   await driver.tap( find.byValueKey( 'coversIcon' ));
+   expect( await isPresent( driver, find.byValueKey( 'image: Dragon Boogers' )), true);
+   expect( await isPresent( driver, find.byValueKey( 'image: Keanna' )), true);
+   expect( await isPresent( driver, find.byValueKey( 'image: Rain, Snow, Sleet, and Hail' )), true);
+   expect( await isPresent( driver, find.byValueKey( 'image: Elementary Functional Analysis' )), true);
+   
+   // choose cover
+   await driver.tap( find.byValueKey( coverName ));            
+   expect( await isPresent( driver, accept), true);
+   expect( await isPresent( driver, cancel), true);
+   
+   // crop(ish) & save
+   expect( await isPresent( driver, cancel), true);
+   await driver.tap( find.byValueKey( 'imageCrop' ));
+   await driver.tap( accept );
+   await driver.tap( accept );
+   expect( await verifyOnHomePage( driver ), true );              
+   await gotoMyLib( driver, "edit" );
+
+   return true;
+}
+
 
 void main() {
 
@@ -158,7 +192,6 @@ void main() {
               
            });
      });
-  */
   
   group('BookShare Test Group, content:myLibPage', () {
 
@@ -172,13 +205,130 @@ void main() {
               if (driver != null) { driver.close(); }
            });
 
-        test('XXX', () async {
+        test('MyLibPage, grid', () async {
+              await gotoMyLib( driver, "grid" );
+              expect( await isPresent( driver, find.byValueKey( 'image: Sandia Mountain Hiking Guide' )), true);
+              expect( await isPresent( driver, find.text( 'Sandia Mountain Hiking Guide' )), false);
+              expect( await isPresent( driver, find.text( 'By: Bob Longe' )), false);
+
+              expect( await isPresent( driver, find.byValueKey( 'image: Dragon Boogers' )), true);
+              expect( await isPresent( driver, find.byValueKey( 'image: Keanna' )), true);
+              expect( await isPresent( driver, find.byValueKey( 'image: Rain, Snow, Sleet, and Hail' )), true);
+              expect( await isPresent( driver, find.byValueKey( 'image: Elementary Functional Analysis' )), true);
+
+              // check access to book detail
+              expect( await checkKeanna( driver ), true );
+           });
+        
+        test('MyLibPage, list', () async {
+              await gotoMyLib( driver, "list" );
+              expect( await isPresent( driver, find.text( 'By: Bob Longe' )), true);
+
+              expect( await isPresent( driver, find.byValueKey( 'image: Sandia Mountain Hiking Guide' )), true);
+              expect( await isPresent( driver, find.text( 'Sandia Mountain Hiking Guide' )), true);
+              expect( await isPresent( driver, find.text( 'By: Michael Elliott Coltrin' )), true);
+              
+              expect( await isPresent( driver, find.byValueKey( 'image: Meet Hunca Munca' )), true);
+              expect( await isPresent( driver, find.text( 'Meet Hunca Munca' )), true);
+              expect( await isPresent( driver, find.text( 'By: Beatrix Potter' )), true);
+
+              // check access to book detail
+              expect( await checkKeanna( driver ), true );
+           });
+
+
+        test('MyLibPage, share', () async {
+              await gotoMyLib( driver, "share" );
+              String shareText = "Share books from your private library on this page, once you've created or joined another library.";
+              expect( await isPresent( driver, find.text( shareText )), true);              
+           });
+
+        test('MyLibPage, edit', () async {
+              await gotoMyLib( driver, "edit" );
+              
+              // Basic setup
+              SerializableFinder create = find.text('< CREATE >');
+              SerializableFinder cancel = find.byValueKey( 'Cancel' );
+              SerializableFinder myLib  = find.byValueKey( 'My Books' ); 
+              expect( await isPresent( driver, create), true);
+              expect( await isPresent( driver, find.text( 'Select a Library to edit...')), true);
+              expect( await isPresent( driver, myLib), true);
+              await driver.tap( myLib );
+              expect( await verifyEditLib( driver, "My Books" ), true );
+
+              // Change name, but cancel
+              SerializableFinder libName = find.byValueKey( 'input: My Books' );
+              await enterText( driver, libName, "BootCamp" );
+              expect( await verifyEditLib( driver, "My Books", "BootCamp" ), true );
+              await driver.tap( cancel );
+              expect( await verifyEditLib( driver, "My Books" ), true );
+
+              // Create lib
+              expect( await addLibrary( driver, "Stormy", "image: Warship" ), true );
+              expect( await addLibrary( driver, "Dreamy", "image: Keanna" ), true );
+              
+           });
+        
+        test('MyLibPage, share', () async {
+              await gotoMyLib( driver, "share" );
+              SerializableFinder dropLib = find.byValueKey('dropLib');
+              SerializableFinder dreamy = find.byValueKey('Dreamy');
+              SerializableFinder stormy = find.byValueKey('Stormy');
+              SerializableFinder theList = find.byValueKey('bookShares');
+              SerializableFinder theChoice = find.byValueKey('check: ' + 'Meet Hunca Munca');
+
+              // STORMY
+              // Can't check false version - both appear to be present.
+              expect( await isPresent( driver, dreamy ), true );
+              await driver.tap( dropLib );
+              await driver.tap( stormy );
+              expect( await isPresent( driver, stormy, 2000 ), true );
+
+
+              expect( await isPresent( driver, find.text( "Book shares for: " )), true );
+              expect( await isPresent( driver, find.text( "By: Sebastian Junger" )), true );
+              expect( await isPresent( driver, find.text( "Money Magic Tricks" )), true );
+              expect( await isPresent( driver, find.text( "By: Bob Longe" )), true );
+              expect( await isPresent( driver, find.text( "Dragon Boogers" )), true );
+
+              await driver.tap( find.byValueKey( 'check: Money Magic Tricks' ) );
+              await wait(driver, 500);
+              await driver.tap( find.byValueKey( 'check: Dragon Boogers' ) );
+              await wait(driver, 500);
+              await driver.scrollUntilVisible( theList, theChoice, dyScroll: -200.0 );
+              await driver.tap( theChoice );
+              await wait(driver, 500);
+
+              // DREAMY
+              await driver.tap( dropLib );
+              await driver.tap( dreamy );
+              expect( await isPresent( driver, dreamy, 2000 ), true );
+              
+              expect( await isPresent( driver, find.text( "Book shares for: " )), true );
+              expect( await isPresent( driver, find.text( "By: Sebastian Junger" )), true );
+              expect( await isPresent( driver, find.text( "Money Magic Tricks" )), true );
+              expect( await isPresent( driver, find.text( "By: Bob Longe" )), true );
+              expect( await isPresent( driver, find.text( "Dragon Boogers" )), true );
+
+              await driver.tap( find.byValueKey( 'check: shareAll' ) );
+              await wait(driver, 3000);
+                 
+              await driver.tap( find.byValueKey( 'check: Money Magic Tricks' ) );
+              await wait(driver, 500);
+              await driver.tap( find.byValueKey( 'check: Dragon Boogers' ) );
+              await wait(driver, 500);
+              await driver.scrollUntilVisible( theList, theChoice, dyScroll: -200.0 );
+              await driver.tap( theChoice );
+              await wait(driver, 500);
            });
      });
 
   group('BookShare Test Group, content:homePage', () {
 
         FlutterDriver driver;
+        SerializableFinder myLib   = find.byValueKey('My Books');
+        SerializableFinder dreamy  = find.byValueKey('Dreamy');
+        SerializableFinder stormy  = find.byValueKey('Stormy');
 
         setUpAll(() async {
               driver = await FlutterDriver.connect();
@@ -188,9 +338,63 @@ void main() {
               if (driver != null) { driver.close(); }
            });
 
-        test('XXX', () async {
+        test('HomePage: Check Libs', () async {
+
+              // Basics
+              if( !( await isPresent( driver, find.byValueKey( 'homeHereIcon' ))) ) { await gotoHome( driver ); }
+              expect( await isPresent( driver, myLib ), true );
+              expect( await isPresent( driver, stormy ), true );
+              expect( await isPresent( driver, dreamy ), true );
+
+              expect( await isPresent( driver, find.text( 'My Books' )), true );
+              expect( await isPresent( driver, find.text( '1 member' )), true );
+              expect( await isPresent( driver, find.text( '10 books' )), true );
+           });
+
+        test('HomePage: Check book sharing', () async {
+              if( !( await isPresent( driver, find.byValueKey( 'homeHereIcon' ))) ) { await gotoHome( driver ); }
+              expect( await isPresent( driver, dreamy ), true );
+
+              SerializableFinder theList  = find.byValueKey('searchedBooks');
+
+              // DREAMY
+              await driver.tap( dreamy ); 
+              expect( await isPresent( driver, myLib ), true );
+              expect( await isPresent( driver, stormy, 2000 ), true );
+              expect( await isPresent( driver, dreamy ), true );
+              
+              expect( await isPresent( driver, find.text( 'Dreamy' )), true );
+              expect( await isPresent( driver, find.text( '1 member' )), true );
+              expect( await isPresent( driver, find.text( '7 books' )), true );
+
+              // find 7
+              expect( await findBook( driver, theList, 'The Perfect Storm: A True Story of Men Against the Sea' ), true );
+              expect( await findBook( driver, theList, 'Sandia Mountain Hiking Guide' ), true );
+              expect( await findBook( driver, theList, 'Elementary Functional Analysis' ), true );
+              expect( await findBook( driver, theList, 'Warship' ), true );
+              expect( await findBook( driver, theList, 'Keanna' ), true );
+              expect( await findBook( driver, theList, 'I Will Lie Down This Night' ), true );
+              expect( await findBook( driver, theList, 'Rain, Snow, Sleet, and Hail' ), true );
+
+
+              // STORMY
+              await driver.tap( stormy ); 
+              expect( await isPresent( driver, myLib ), true );
+              expect( await isPresent( driver, stormy, 2000 ), true );
+              expect( await isPresent( driver, dreamy ), true );
+              
+              expect( await isPresent( driver, find.text( 'Stormy' )), true );
+              expect( await isPresent( driver, find.text( '1 member' )), true );
+              expect( await isPresent( driver, find.text( '3 books' )), true );
+
+              // find 3
+              expect( await findBook( driver, theList, 'Meet Hunca Munca' ), true );
+              expect( await findBook( driver, theList, 'Money Magic Tricks' ), true );
+              expect( await findBook( driver, theList, 'Dragon Boogers' ), true );
+              
            });
      });
+  */
 
   group('BookShare Test Group, content:delete books', () {
 
@@ -204,7 +408,57 @@ void main() {
               if (driver != null) { driver.close(); }
            });
 
-        test('XXX', () async {
+        test('Cleanup books', () async {
+              if( !( await isPresent( driver, find.byValueKey( 'homeHereIcon' ))) ) { await gotoHome( driver ); }
+              SerializableFinder theList    = find.byValueKey('searchedBooks');
+              SerializableFinder detailList = find.byValueKey('bookDetail');
+
+              SerializableFinder myLib   = find.byValueKey('My Books');
+              SerializableFinder dreamy  = find.byValueKey('Dreamy');
+              SerializableFinder stormy  = find.byValueKey('Stormy');
+              SerializableFinder delete  = find.byValueKey('Delete');
+
+              await driver.tap( myLib );
+
+              // DREAMY
+              // Check 1st.. cancel delete, then delete
+              /*
+              await deleteBook( driver, theList, dreamy, 'The Perfect Storm: A True Story of Men Against the Sea', true );
+              expect( await isPresent( driver, find.text( "7 books" )), true );
+              await driver.tap( myLib );
+              expect( await isPresent( driver, find.text( "10 books" )), true );
+              await driver.tap( stormy );
+              expect( await isPresent( driver, find.text( "3 books" )), true );
+
+              await deleteBook( driver, theList, dreamy, 'The Perfect Storm: A True Story of Men Against the Sea');
+              expect( await isPresent( driver, find.text( "6 books" ), 2000 ), true );
+              await driver.tap( myLib );
+              expect( await isPresent( driver, find.text( "9 books" )), true );
+              await driver.tap( stormy );
+              expect( await isPresent( driver, find.text( "3 books" )), true );
+
+              await deleteBook( driver, theList, dreamy, 'Sandia Mountain Hiking Guide' );
+              await deleteBook( driver, theList, dreamy, 'Elementary Functional Analysis' );
+              await deleteBook( driver, theList, dreamy, 'Warship' );
+              await deleteBook( driver, theList, dreamy, 'Keanna' );
+              await deleteBook( driver, theList, dreamy, 'I Will Lie Down This Night' );
+              await deleteBook( driver, theList, dreamy, 'Rain, Snow, Sleet, and Hail' );
+              expect( await isPresent( driver, find.text( "0 books" ), 2000 ), true );
+              await driver.tap( myLib );
+              expect( await isPresent( driver, find.text( "3 books" )), true );
+              await driver.tap( stormy );
+              expect( await isPresent( driver, find.text( "3 books" )), true );
+              */
+              
+              await deleteBook( driver, theList, stormy, 'Meet Hunca Munca' );
+              await deleteBook( driver, theList, stormy, 'Money Magic Tricks' );
+              await deleteBook( driver, theList, stormy, 'Dragon Boogers' );
+              expect( await isPresent( driver, find.text( "0 books" ), 2000 ), true );
+              await driver.tap( myLib );
+              expect( await isPresent( driver, find.text( "0 books" )), true );
+              await driver.tap( dreamy );
+              expect( await isPresent( driver, find.text( "0 books" )), true );
+
            });
      });
 

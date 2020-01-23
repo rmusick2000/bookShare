@@ -213,6 +213,7 @@ class _BookShareImagePageState extends State<BookShareImagePage> {
       else                      { return null; }
       
       return GestureDetector(
+         key: Key( 'image: ' + book.title ),
          onTap:  () async
          {
             // re-init for new image
@@ -239,6 +240,7 @@ class _BookShareImagePageState extends State<BookShareImagePage> {
       else if( selectedType == "file" )    { image = new FileImage( selectedImage ); }
       Widget _buildCropImage() {
          return Container(
+            key: Key( 'imageCrop' ),
             color: Colors.black,
             height: imageHeight,
             width:  imageWidth,
@@ -400,7 +402,8 @@ class _BookShareImagePageState extends State<BookShareImagePage> {
                      child: Text( "Select image source:", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))),
                   Padding(
                      padding: const EdgeInsets.fromLTRB(0,0,0,0),
-                     child: GestureDetector( 
+                     child: GestureDetector(
+                        key: Key( 'cameraIcon' ),
                         onTap:  ()
                         {
                            print( "Open camera " + editLibrary.id);
@@ -413,6 +416,7 @@ class _BookShareImagePageState extends State<BookShareImagePage> {
                   Padding(
                      padding: const EdgeInsets.fromLTRB(0,0,0,0),
                      child: GestureDetector( 
+                        key: Key( 'galleryIcon' ),
                         onTap:  ()
                         {
                            print( "Open gallery " + editLibrary.id);
@@ -423,7 +427,8 @@ class _BookShareImagePageState extends State<BookShareImagePage> {
                         )),
                   Padding(
                      padding: const EdgeInsets.fromLTRB(0,0,0,0),
-                     child: GestureDetector( 
+                     child: GestureDetector(
+                        key: Key( 'coversIcon' ),
                         onTap:  ()
                         {
                            print( "Open bookgrid " + editLibrary.id);
