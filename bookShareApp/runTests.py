@@ -7,7 +7,8 @@ import logging
 import time
 
 from os import path
-from subprocess import call, check_output, Popen, PIPE
+from subprocess import call, check_output, Popen, PIPE, STDOUT
+import shlex
 
 #from threading import Thread
 #import concurrent.futures
@@ -44,81 +45,82 @@ def verifyEmulator():
     return goodConfig
 
 
-def collect( fname ):
-
+def clean( output, filterExp ) :
     resultsSum = ""
-    resultsBulk = ""
+    if output:
+        keep = True
+        for fe in filterExp :
+            if fe in output :
+                keep = False
+                break
+        if keep :
+            if( "BookShare Test Group" in output or
+                "tests passed!" in output        or
+                "tests failed!" in output           ) :
+                resultsSum = output
+            print( output.strip() )
+    return resultsSum
     
-    f = open( fname, "r" )
-    lines = f.readlines()
-    for fl in lines :
-        if( "I/flutter" in fl ) : continue
-        #if( "I/flutter" in fl ) : resultsBulk += fl
-        elif( "BookShare Test Group" in fl or
-              "tests passed!" in fl        or
-              "tests failed!" in fl           ) :
-            resultsSum += fl
-        resultsBulk += fl
-
-    return resultsBulk, resultsSum
 
 
+def runCmd( cmd, filterExp ):
+    process = Popen(shlex.split(cmd), stderr=STDOUT, stdout=PIPE, encoding='utf8')
+    resultsSum = ""
+    while True:
+        output = process.stdout.readline()
+        if output == '' and process.poll() is not None:
+            break
+        resultsSum += clean( output, filterExp )
+
+    process.poll()
+    return resultsSum
+
+
+# NOTE using --no-build causes consequtive runs of flutter driver to connect to the same app, same state(!)
 def runTest( testName, noBuild = True ):
     logging.info( "" )
-    logging.info( "Running " + testName + " file..." );
-    fileName = 'rawTestOutput.txt'
 
-    cmd = "flutter drive "
-    # NOTE this causes consequtive runs of flutter driver to connect to the same app, same state(!)
-    # cmd += "--no-build" if noBuild else ""
-    cmd += " --target=test_driver/" + testName + " > " + fileName;
-    os.system( cmd )
+    cmd = "flutter drive --target=test_driver/" + testName
+    grepFilter = ['async/zone.dart','I/flutter', 'asynchronous gap', 'api/src/backend/', 'zone_specification', 'waitFor message is taking' ]
+
+    # poll for realtime stdout
+    tmpSum = runCmd( cmd, grepFilter )
     
-    tmpBulk, tmpSum = collect( fileName )
-    logging.info( "Local results: " )
-    logging.info( tmpBulk )
-    return tmpBulk, tmpSum
+    return tmpSum
 
 
+"""
+Common failure modes: 
+1. Google book search randomizes results.  Is the test content still where it used to be?
+2. Debug build, widget response time is highly variable - isPresent timeouts may need tweaking
+3. scrollUntilVisible is sensitive.  May need some additional scrollIntoView(s)
+
+"""
 def runTests():
 
     os.chdir( "./book_flutter" )
 
-    filename = 'rawTestOutput.txt'
-    resultsBulk = "" 
     resultsSum = ""
 
-
-    tbulk, tsum = runTest( "content.dart", False )
-    resultsBulk += tbulk
+    tsum = runTest( "login_pass.dart", False )
+    resultsSum  += tsum
+    
+    tsum = runTest( "login_fail.dart", False )
     resultsSum  += tsum
 
-    """
-    #tbulk, tsum = runTest( "sharing.dart", False )
-    #resultsBulk += tbulk
+    tsum = runTest( "content.dart", False )
+    resultsSum  += tsum
+
+    #tsum = runTest( "sharing.dart", False )
     #resultsSum  += tsum
 
-    tbulk, tsum = runTest( "login_pass.dart", False )
-    resultsBulk += tbulk
-    resultsSum  += tsum
-    
-    tbulk, tsum = runTest( "login_fail.dart", False )
-    resultsBulk += tbulk
-    resultsSum  += tsum
-    """
-
-    
-    logging.info( "" );
-    logging.info( "================================" );
-    logging.info( "Bulk output:" );
-    logging.info( "================================" );
-    logging.info( resultsBulk );
     logging.info( "" );
     logging.info( "" );
     logging.info( "================================" );
     logging.info( "Summary:" );
     logging.info( "================================" );
     logging.info( resultsSum );
+
     os.chdir( "../" )
 
 

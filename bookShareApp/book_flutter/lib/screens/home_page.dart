@@ -173,7 +173,8 @@ class _BookShareHomeState extends State<BookShareHomePage> {
       }
       else { return Container(); }
    }
-   
+
+   // XXX purpose of currentBookCount??
    Widget _makeSelectedLib( libId ) {
       // Selected Lib can be uninitialized briefly
       if( appState.myLibraries == null ) { return Container(); }
@@ -189,6 +190,11 @@ class _BookShareHomeState extends State<BookShareHomePage> {
          for( final lib in appState.exploreLibraries ) {
             if( lib.id == libId ) { selectedLib = lib; break; }
          };
+      }
+
+      var bil = appState.booksInLib[appState.selectedLibrary];
+      if( bil != null ) {
+         currentBookCount = bil.length;
       }
 
       // when navigate to home page, privateLib will be on top, and updateSelLib has not been called.
@@ -220,7 +226,7 @@ class _BookShareHomeState extends State<BookShareHomePage> {
 
   /// XXX How much overlap with add_book?
   // Title will wrap if need be, growing row height as needed
-  GestureDetector makeBookChunkCol( appState, book ) {
+   GestureDetector makeBookChunkCol( appState, book, itemNo ) {
      final imageHeight = appState.screenHeight * .45;
      final imageWidth  = appState.screenWidth * .42;
      const inset       = 20.0;
@@ -243,6 +249,7 @@ class _BookShareHomeState extends State<BookShareHomePage> {
               Padding(
                  padding: const EdgeInsets.fromLTRB(6.0, 0, 6.0, 0),
                  child: ClipRRect(
+                    key: Key( 'bookChunk${itemNo}' ),                    
                     borderRadius: new BorderRadius.circular(12.0),
                     child: image )),
               makeTitleText( book.title, imageWidth-inset-6, true, 2 ),
@@ -311,7 +318,13 @@ class _BookShareHomeState extends State<BookShareHomePage> {
                );
          }
 
-         bil.forEach((book) => bookChunks.add( makeBookChunkCol( appState, book )));
+         // bil.forEach((book) => bookChunks.add( makeBookChunkCol( appState, book )));
+         int itemNo = 0;
+         for( final book in bil ) {
+            bookChunks.add( makeBookChunkCol( appState, book, itemNo )); 
+            itemNo++;
+         }
+         
          
          return Expanded(
             child: SizedBox(

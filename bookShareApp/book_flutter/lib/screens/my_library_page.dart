@@ -194,6 +194,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
    // gridview controls object sizing
    Widget _gridView( bookChunks ) {
       return GridView.count(
+         key: Key( 'gridView' ),
          primary: false,
          scrollDirection: Axis.vertical,
          padding: const EdgeInsets.all(0),
