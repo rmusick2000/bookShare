@@ -7,8 +7,8 @@ const TESTER_PASSWD = "passWD123";
 // https://medium.com/flutter-community/testing-flutter-ui-with-flutter-driver-c1583681e337
 
 
-// XXX darg... fluuuuuttterrrrrrr
-Future<bool> isPresent( FlutterDriver driver, SerializableFinder finder, [int timeout = 500]  ) async {
+// darg... fluuuuuttterrrrrrr
+Future<bool> isPresent( FlutterDriver driver, SerializableFinder finder, [int timeout = 900]  ) async {
    try {
       // NOTE 200 was overly eager.  500 OK?
       await driver.waitFor(finder, timeout: Duration( milliseconds: timeout ) );
@@ -33,9 +33,8 @@ Future<bool> enterText( FlutterDriver driver, SerializableFinder txtField, Strin
 }
 
 Future<bool> verifyOnHomePage( FlutterDriver driver ) async {
-   print( "VOHP test" );
-   expect( await isPresent( driver, find.byValueKey( 'myLibraryIcon' ), 5000), true );  // on top bar, but..
-   expect( await isPresent( driver, find.byValueKey( 'homeHereIcon' )), true );   // landed here on bot bar
+   expect( await isPresent( driver, find.byValueKey( 'myLibraryIcon' ), 8000), true );  // on top bar, but..
+   expect( await isPresent( driver, find.byValueKey( 'homeHereIcon' ), 5000), true );   // landed here on bot bar
    
    // Default name of private lib, selected by default upon login.
    // This takes longer, once it shows up, fully loaded.
@@ -131,28 +130,51 @@ Future<bool> wait( FlutterDriver driver, int ms ) async {
    return true;
 }
 
-Future<bool> findBook( FlutterDriver driver, SerializableFinder theList, String theChoice ) async {
-   // go to start
-   await driver.scroll( theList, 2000.0, 0.0, Duration( milliseconds: 500 ));       
 
+// ScrollUntilVisible sometimes stops when just an edge of the book is in view.
+// Then when we try to tap the center, it fails.
+// Alignment for SUV didn't work, so instead add a final scrollIntoView step.
+Future<bool> findBook( FlutterDriver driver, SerializableFinder theList, theChoice, [dy = false] ) async {
+   // go to start
+   if( dy ) { await driver.scroll( theList, 0.0, 2000.0, Duration( milliseconds: 500 )); }
+   else     { await driver.scroll( theList, 2000.0, 0.0, Duration( milliseconds: 500 )); }
+
+   SerializableFinder choice  = null;
+   if( theChoice is String ) { choice = find.byValueKey( theChoice ); }
+   else                      { choice = theChoice; }
+   
    // Scrolls before checks visible, so help it
-   if( !(await isPresent( driver, find.byValueKey( theChoice ) ))) {
-      await driver.scrollUntilVisible( theList, find.byValueKey( theChoice ), dxScroll: -200.0 );
+   bool alreadyHere = await isPresent( driver, choice );
+   print( "Finding book.. already here?: " + alreadyHere.toString() );
+   if( !alreadyHere ) {
+      if( dy ) { await driver.scrollUntilVisible( theList, choice, dyScroll: -200.0 ); }
+      else     { await driver.scrollUntilVisible( theList, choice, dxScroll: -200.0 ); }
    }
+   await driver.scrollIntoView( choice );
    
    return true;
 }
 
-Future<bool> deleteBook( FlutterDriver driver, SerializableFinder theList, SerializableFinder theLib, String theChoice, [bool cancel = false] ) async {
+Future<bool> deleteFirstBook( FlutterDriver driver, SerializableFinder theList, SerializableFinder theLib ) async {
+   SerializableFinder theChoice = find.byValueKey('bookChunk0');
+   expect( await deleteBook( driver, theList, theLib, theChoice ), true );
+   return true;
+}
+
+
+Future<bool> deleteBook( FlutterDriver driver, SerializableFinder theList, SerializableFinder theLib, theChoice, [bool cancel = false] ) async {
    SerializableFinder detailList = find.byValueKey('bookDetail');
    SerializableFinder delete  = find.byValueKey('Delete');
-   SerializableFinder choice  = find.byValueKey( theChoice );
+
+   SerializableFinder choice  = null;
+   if( theChoice is String ) { print( "deleting " + theChoice ); choice = find.byValueKey( theChoice ); }
+   else                      { print( "deleting book"); choice = theChoice; }
 
    expect( await isPresent( driver, theLib, 2000 ), true );
    await driver.tap( theLib );
-   expect( await findBook( driver, theList, theChoice ), true );
 
-   expect( await isPresent( driver, choice ), true );
+   expect( await findBook( driver, theList, choice ), true );
+   expect( await isPresent( driver, choice, 2000 ), true );
    await driver.tap( choice );
    await driver.scrollUntilVisible( detailList, delete, dyScroll: -1000.0 );
 
@@ -177,14 +199,13 @@ Future<bool> gotoAddBook( FlutterDriver driver ) async {
    SerializableFinder addBookIcon = find.byValueKey( 'addBookIcon' );
    SerializableFinder addBookHereIcon = find.byValueKey( 'addBookHereIcon' );
 
-   expect( await isPresent( driver, addBookIcon ), true );
+   // no async ifs..
    expect( await isPresent( driver, addBookHereIcon ), false );
-
+   expect( await isPresent( driver, addBookIcon ), true );
    await driver.tap( addBookIcon );
 
-   expect( await isPresent( driver, addBookIcon ), false );
+   expect( await isPresent( driver, addBookIcon, 2000 ), false );
    expect( await isPresent( driver, addBookHereIcon ), true );
-
    return true;
 }
 
@@ -192,12 +213,12 @@ Future<bool> gotoHome( FlutterDriver driver ) async {
    SerializableFinder homeIcon = find.byValueKey( 'homeIcon' );
    SerializableFinder homeHereIcon = find.byValueKey( 'homeHereIcon' );
 
-   expect( await isPresent( driver, homeIcon ), true );
-   expect( await isPresent( driver, homeHereIcon ), false );
+   expect( await isPresent( driver, homeIcon, 4000 ), true );
+   expect( await isPresent( driver, homeHereIcon, 4000 ), false );
 
    await driver.tap( homeIcon );
 
-   expect( await isPresent( driver, homeIcon ), false );
+   expect( await isPresent( driver, homeIcon, 4000 ), false );
    expect( await isPresent( driver, homeHereIcon ), true );
 
    return true;
@@ -212,14 +233,15 @@ Future<bool> gotoMyLib( FlutterDriver driver, String sub ) async {
    SerializableFinder shareIcon = find.byValueKey( 'shareIcon' );
    SerializableFinder editIcon  = find.byValueKey( 'editIcon' );
 
-   if( !( await isPresent( driver, myLibraryHereIcon ))) {
+   bool inLib = await isPresent( driver, myLibraryHereIcon, 2000 );
+   if( !inLib ) {
          expect( await isPresent( driver, myLibraryIcon ), true );
          expect( await isPresent( driver, myLibraryHereIcon ), false );
          await driver.tap( myLibraryIcon );
    }
 
    expect( await isPresent( driver, myLibraryIcon ), false );
-   expect( await isPresent( driver, myLibraryHereIcon ), true );
+   expect( await isPresent( driver, myLibraryHereIcon, 4000 ), true );
 
    if( sub == "grid" ) {
       expect( await isPresent( driver, gridIcon ), true );
@@ -246,47 +268,49 @@ Future<bool> gotoMyLib( FlutterDriver driver, String sub ) async {
 Future<bool> refineAdd( FlutterDriver driver, titleKey, authorKey, bookChoice, closeOut, [bool checkScan = true] ) async {
    SerializableFinder refineSearch = find.byValueKey( 'Refine search' );
 
-   print( "RefineAdd: " + titleKey + " " + authorKey );
+   print( "RefineAdd: T:" + titleKey + " A:" + authorKey );
    
    // If got here from hitting refine search in a list of books, scan button is not present.
    // Hmmmm.... same with home...
    if( checkScan ) {
       expect( await isPresent( driver, find.text( 'Scan' ), 5000 ), true );  // if coming from addbook, this can take a while.
       expect( await isPresent( driver, refineSearch ), true );
-      
       await driver.tap( refineSearch );
    }
 
    // verify
    SerializableFinder title  = find.byValueKey( 'Keyword from title' );   
-   SerializableFinder author = find.byValueKey( 'Author\'s last name' );   
-   expect( await isPresent( driver, title ), true );
+   SerializableFinder author = find.byValueKey( 'Author\'s last name' );
+   expect( await isPresent( driver, title, 3000 ), true );
    expect( await isPresent( driver, author ), true );
 
    // search 
-   if( titleKey != "" ) { await enterText( driver, title, titleKey );  }
+   if( titleKey != "" ) { await enterText( driver, title, titleKey );    }
    if( authorKey != "") { await enterText( driver, author, authorKey );  }
-   SerializableFinder search  = find.byValueKey( 'Search' );      
+   SerializableFinder search  = find.byValueKey( 'Search' );
    expect( await isPresent( driver, search ), true );
    await driver.tap( search );
 
    // choose a result
    SerializableFinder theList   = find.byValueKey('searchedBooks');
    SerializableFinder theChoice = find.byValueKey('bookChunk${bookChoice}');
-   await driver.scrollUntilVisible( theList, theChoice, dxScroll: -200.0 );
+   await findBook( driver, theList, theChoice );
+   expect( await isPresent( driver, theChoice, 2000 ), true );   
    await driver.tap( theChoice );
 
    // Add it and go...
    SerializableFinder scanMore = find.byValueKey('Add this,\n scan more');      
    SerializableFinder goHome   = find.byValueKey('Add this,\n go to MyLib');      
-   expect( await isPresent( driver, scanMore ), true );      
+   expect( await isPresent( driver, scanMore, 2000 ), true );      
    expect( await isPresent( driver, goHome ), true );      
    expect( await isPresent( driver, refineSearch ), true );      
    if( closeOut == "more" )        { await driver.tap( scanMore ); }
-   else if( closeOut == "home" )   { await driver.tap( goHome ); }
+   else if( closeOut == "home" )   {
+      await driver.tap( goHome );
+      await isPresent( driver, find.byValueKey( 'homeHereIcon' ), 5000 );  // can take some time
+   }
    else if( closeOut == "refine" ) { await driver.tap( refineSearch ); }
    else { return false; }
 
    return true;
 }
-
