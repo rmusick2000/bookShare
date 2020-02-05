@@ -183,7 +183,7 @@ class _BookShareImagePageState extends State<BookShareImagePage> {
    }
 
    // convert network image to image
-   // XXX just do this with future, remove completer.
+   // XXX consider doing this with future, remove completer.
    _getImage( selectedImage ) async {
 
       Completer<ImageInfo> completer = Completer();

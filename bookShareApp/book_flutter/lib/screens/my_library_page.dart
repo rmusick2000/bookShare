@@ -695,7 +695,12 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
                appState.updateLibs = true;  // force rebuild of lib row bar, showing new stuff
                dirtyLibChunks = true;       // update sharing droplib
             });
-         Navigator.pop(context);
+
+         // Not the best choice. Feels wrong to return to, say, addBook from here. 
+         // Navigator.pop(context);
+
+         // Prefer homepage.  another option would be myLib page, gridview.
+         Navigator.push( context, MaterialPageRoute(builder: (context) => BookShareHomePage()));
       }
 
                         
@@ -828,6 +833,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
 
       _updateLibChunks();
       
+      // print( "Build myLib, scaffold." );
       return Scaffold(
          appBar: makeTopAppBar( context, "MyLibrary" ),
          bottomNavigationBar: makeBotAppBar( context, "MyLibrary" ),

@@ -1,6 +1,5 @@
 import 'dart:convert';  
 
-// XXX Get books later, not sure form is good
 class Ownership {
    final Map<String,Set> shares;  // lib: books
 

@@ -60,7 +60,10 @@ Future<bool> addLibrary( FlutterDriver driver, String libName, String coverName 
    await driver.tap( find.byValueKey( 'imageCrop' ));
    await driver.tap( accept );
    await driver.tap( accept );
-   expect( await verifyOnHomePage( driver ), true );              
+
+   // Verify new lib shows up on homepage
+   expect( await verifyOnHomePage( driver ), true );
+   expect( await isPresent( driver, find.byValueKey( libName ), 2000 ), true );
    await gotoMyLib( driver, "edit" );
    
    return true;
@@ -320,7 +323,11 @@ void main() {
                  
                  expect( await isPresent( driver, find.byValueKey( 'image: Sandia Mountain Hiking Guide' )), true);
                  expect( await isPresent( driver, find.text( 'Sandia Mountain Hiking Guide' )), true);
-                 expect( await isPresent( driver, find.text( 'By: Michael Elliott Coltrin' )), true);
+
+                 // Coltrin shows up multiple ways
+                 bool coltrin = await isPresent( driver, find.text( 'By: Michael Elliott Coltrin' ));
+                 if( !coltrin ) { coltrin = await isPresent( driver, find.text( 'By: Mike Coltrin' )); }
+                 expect( coltrin, true );
                  
                  expect( await isPresent( driver, find.byValueKey( 'image: Meet Hunca Munca' )), true);
                  expect( await isPresent( driver, find.text( 'Meet Hunca Munca' )), true);

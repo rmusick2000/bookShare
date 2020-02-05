@@ -145,7 +145,7 @@ Future<bool> findBook( FlutterDriver driver, SerializableFinder theList, theChoi
    
    // Scrolls before checks visible, so help it
    bool alreadyHere = await isPresent( driver, choice );
-   print( "Finding book.. already here?: " + alreadyHere.toString() );
+   //print( "Finding book.. already here?: " + alreadyHere.toString() );
    if( !alreadyHere ) {
       if( dy ) { await driver.scrollUntilVisible( theList, choice, dyScroll: -200.0 ); }
       else     { await driver.scrollUntilVisible( theList, choice, dxScroll: -200.0 ); }

@@ -74,9 +74,17 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
      String postData = '{ "Endpoint": "PutBook", "SelectedLib": "$libID", "NewBook": $book }';
      print( postData );
      bool success = await putBook( context, container, postData );
-     // XXX could, maybe, avoid call by adding newbook?  but would need to make sure it's not already there.. maybe?
+
      if( success ) {
-        await initLibBooks( context, container, libID );        
+        List<Book> bil = appState.booksInLib[libID];
+        bool addBook = true;
+        // No need to initOwnership - this has happened already upon first login
+        if( bil != null ) { 
+           for( final book in bil ) {
+              if( book.id == newBook.id ) { addBook = false; break; }
+           }
+        }
+        if( addBook ) { appState.booksInLib[libID].add( newBook ); }
      }
   }
      
@@ -368,6 +376,7 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
       container = AppStateContainer.of(context);
       appState = container.state;
 
+      // print( "Build addBook, scaffold." );
       return Scaffold(
             appBar: makeTopAppBar( context, "AddBook" ),
             bottomNavigationBar: makeBotAppBar( context, "AddBook" ),
