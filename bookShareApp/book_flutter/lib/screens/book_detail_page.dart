@@ -48,11 +48,10 @@ class _BookShareBookDetailState extends State<BookShareBookDetailPage> {
          String postData = '{ "Endpoint": "DelBook", "BookId": "$bookId", "PersonId": "$uid" }';               
          deleteBook( context, container, postData );
 
-         // Iterate through all libs, removing the book and lib as needed
-
-         // do not delete empty libs
          // No need to kill this.. book still exists, just not share, ownership.  If do kill, first rebuild tries reading and fails.
          // appState.detailBook = null;
+
+         // Iterate through all libs, removing the book (leave empty libs alone)
          appState.booksInLib.forEach((k, v) {
                for( final b in v ) {
                   if( b.id == bookId ) {
@@ -62,11 +61,9 @@ class _BookShareBookDetailState extends State<BookShareBookDetailPage> {
                }
             });
 
-         setState(() {
-               // appState.updateLibs = true;  // force rebuild of lib row bar, removing deleted
-            });
-         Navigator.of( context ).pop();  // dialog
-         Navigator.of( context ).pop();  // book detail
+         // pop means nothing rebuilds unless forced to.  Force here passing back deleted.
+         Navigator.of( context ).pop();            // dialog
+         Navigator.of( context ).pop( 'deleted');  // book detail
       }
 
       Function _deleteBook() {

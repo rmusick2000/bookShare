@@ -32,20 +32,19 @@ class BookShareHomePage extends StatefulWidget {
 
 class _BookShareHomeState extends State<BookShareHomePage> {
 
-   // XXX make this consistent in appState, and use it
-   TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
-   
    int currentBookCount;
    var container;
    AppState appState;
-   bool updateLibRow;                    // to allow joining a lib to show up 
+   bool updateLibRow;                    // to allow joining a lib to show up
+   bool deletedBook;                     // update selectedlib, books after deleting book and popping back
    
    @override
    void initState() {
       print( "HOMEPAGE INIT" );
       super.initState();
-      currentBookCount = -1;
+      currentBookCount = -1;             // setstate when select lib updates counts
       updateLibRow = true;
+      deletedBook = false;
    }
 
    @override
@@ -174,7 +173,7 @@ class _BookShareHomeState extends State<BookShareHomePage> {
       else { return Container(); }
    }
 
-   // XXX purpose of currentBookCount??
+
    Widget _makeSelectedLib( libId ) {
       // Selected Lib can be uninitialized briefly
       if( appState.myLibraries == null ) { return Container(); }
@@ -200,6 +199,13 @@ class _BookShareHomeState extends State<BookShareHomePage> {
       // when navigate to home page, privateLib will be on top, and updateSelLib has not been called.
       if( currentBookCount == -1 && libId == appState.privateLibId ) {
          currentBookCount = appState.booksInLib[appState.privateLibId].length;
+         deletedBook = false;
+      }
+
+      // Update current count for current sel lib
+      if( deletedBook ) {
+         currentBookCount = appState.booksInLib[libId].length;
+         deletedBook = false;
       }
 
       assert( selectedLib != null );
@@ -208,7 +214,7 @@ class _BookShareHomeState extends State<BookShareHomePage> {
       var numB = currentBookCount.toString();
 
       numM += ( numM == "1" ? " member" : " members" );
-      numB += ( currentBookCount == "1" ? " book" : " books" );
+      numB += ( numB == "1" ? " book" : " books" );
 
       return Padding(
          padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
@@ -224,7 +230,6 @@ class _BookShareHomeState extends State<BookShareHomePage> {
             ));
    }   
 
-  /// XXX How much overlap with add_book?
   // Title will wrap if need be, growing row height as needed
    GestureDetector makeBookChunkCol( appState, book, itemNo ) {
      final imageHeight = appState.screenHeight * .45;
@@ -239,7 +244,10 @@ class _BookShareHomeState extends State<BookShareHomePage> {
         onTap:  ()
         {
            setState(() { appState.detailBook = book; });
-           Navigator.push( context, MaterialPageRoute(builder: (context) => BookShareBookDetailPage()));
+           Navigator.push( context, MaterialPageRoute(builder: (context) => BookShareBookDetailPage()))
+              .then((value) {
+                    if( value == 'deleted' ) { setState(() => deletedBook = true ); } 
+                 });
         },
         child: Column(
            crossAxisAlignment: CrossAxisAlignment.start,
@@ -266,7 +274,8 @@ class _BookShareHomeState extends State<BookShareHomePage> {
 
       // ListView horizontal messes with singleChildScroll (to prevent overflow on orientation change). only on this page.
       SystemChrome.setPreferredOrientations([ DeviceOrientation.portraitUp, DeviceOrientation.portraitDown ]);
-      
+
+
       Widget _makeLibraryRow() {
          List<Widget> libChunks = [];
          if( appState.myLibraries == null || !updateLibRow ) { return Container(); }  // null during update
@@ -318,13 +327,11 @@ class _BookShareHomeState extends State<BookShareHomePage> {
                );
          }
 
-         // bil.forEach((book) => bookChunks.add( makeBookChunkCol( appState, book )));
          int itemNo = 0;
          for( final book in bil ) {
             bookChunks.add( makeBookChunkCol( appState, book, itemNo )); 
             itemNo++;
          }
-         
          
          return Expanded(
             child: SizedBox(

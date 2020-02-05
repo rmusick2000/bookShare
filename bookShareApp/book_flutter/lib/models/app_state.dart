@@ -15,10 +15,10 @@ class AppState {
    String idToken;
    String refreshToken;
    int authRetryCount;
-   var returnValue;       // XXX ???
+   var returnValue;       // catch callback return values from buttonpress calls to cognito funcs
    UserState userState;
-   bool cogInitDone;         // main: sometimes cog init is slow.  Timer refires until this is true
-   bool newUser;             // signup: newuser creating a login has some special requirements during setup
+   bool cogInitDone;      // main: sometimes cog init is slow.  Timer refires until this is true
+   bool newUser;          // signup: newuser creating a login has some special requirements during setup
    bool gatOverride;
    
    String apiBasePath;
@@ -29,7 +29,6 @@ class AppState {
    double screenHeight;
    double screenWidth;
 
-   // XXX comments
    // App logic   
    bool loaded;
    bool loading;
@@ -37,7 +36,7 @@ class AppState {
    String privateLibId;
    List<Library> myLibraries;
    List<Library> exploreLibraries;
-   bool updateLibs;               // time to update libs.  e.g. new image, or other edits
+   bool updateLibs;                       // time to update libs.  e.g. new image, or other edits
    Map<String, List<Book>> booksInLib;
    Book detailBook;
 

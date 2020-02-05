@@ -166,10 +166,6 @@ class _AppStateContainerState extends State<AppStateContainer> {
   // Cognito button-press wrapper
   onPressWrapper(fn) {
      wrapper() async {
-        setState(() {
-              //state.progress = null;
-           });
-        
         String value;
         try {
            value = (await fn()).toString();
@@ -177,11 +173,8 @@ class _AppStateContainerState extends State<AppStateContainer> {
            print(e);
            print(stacktrace);
            setState(() => value = e.toString());
-        } finally {
-           setState(() {
-                 //state.progress = -1;
-              });
         }
+        // finally { }
         
         setState(() => state.returnValue = value);
      }
