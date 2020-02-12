@@ -34,8 +34,8 @@ class AppState {
    bool loading;
    String userId;
    String privateLibId;
-   List<Library> myLibraries;
-   List<Library> exploreLibraries;
+   List<Library> myLibraries;             // libraries that I've a member of, or I've created
+   List<Library> exploreLibraries;        // libraries to explore
    bool updateLibs;                       // time to update libs.  e.g. new image, or other edits
    Map<String, List<Book>> booksInLib;
    Book detailBook;

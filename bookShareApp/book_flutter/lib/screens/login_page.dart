@@ -44,7 +44,7 @@ class _BookShareLoginState extends State<BookShareLoginPage> {
 
      final usernameField = makeInputField( context, "username", false, appState.usernameController );
      final passwordField = makeInputField( context, "password", true, appState.passwordController );
-     final loginButton = makeActionButton( context, 'Login', container.onPressWrapper(() async {
+     final loginButton = makeActionButton( appState, 'Login', container.onPressWrapper(() async {
               // print( "Logging in with " + appState.usernameController.text + " " + appState.passwordController.text );
               try{
                  await Cognito.signIn( appState.usernameController.text, appState.passwordController.text );

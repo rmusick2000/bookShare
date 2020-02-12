@@ -59,7 +59,7 @@ class _BookShareProfileState extends State<BookShareProfilePage> {
       appState = container.state;
 
       makeLogoutButton() {
-         return makeActionButton( context, 'Logout', _logout( context, container, appState) );
+         return makeActionButton( appState, 'Logout', _logout( context, container, appState) );
       }
 
       

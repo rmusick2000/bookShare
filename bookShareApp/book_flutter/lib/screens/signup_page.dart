@@ -52,7 +52,7 @@ class _BookShareSignupState extends State<BookShareSignupPage> {
       final emailField    = makeInputField( context, "email address", false, appState.attributeController );
       final confirmationCodeField = makeInputField( context, "confirmation code", false, appState.confirmationCodeController );
 
-      final signupButton = makeActionButton( context, "Send confirmation code", container.onPressWrapper(() async {
+      final signupButton = makeActionButton( appState, "Send confirmation code", container.onPressWrapper(() async {
                final email = {'email' : appState.attributeController.text };
                try{
                   await Cognito.signUp( appState.usernameController.text, appState.passwordController.text, email );
@@ -68,7 +68,7 @@ class _BookShareSignupState extends State<BookShareSignupPage> {
                   }}
             }));
 
-      final confirmSignupButton = makeActionButton( context, "Confirm signup, and Log in", container.onPressWrapper(() async {
+      final confirmSignupButton = makeActionButton( appState, "Confirm signup, and Log in", container.onPressWrapper(() async {
                await Cognito.confirmSignUp( appState.usernameController.text, appState.confirmationCodeController.text );
 
                appState.newUser = true;

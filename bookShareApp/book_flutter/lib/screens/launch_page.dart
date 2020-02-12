@@ -4,6 +4,8 @@ import 'package:bookShare/screens/login_page.dart';
 import 'package:bookShare/screens/signup_page.dart';
 
 import 'package:bookShare/utils.dart';  
+import 'package:bookShare/app_state_container.dart';
+import 'package:bookShare/models/app_state.dart';
 
 
 
@@ -31,16 +33,18 @@ class _BSLaunchPageState extends State<BSLaunchPage> {
   Widget build(BuildContext context) {
 
     Color color = Theme.of(context).primaryColor;
+    final container = AppStateContainer.of(context);
+    final appState = container.state;
 
     print( "start launch page builder" );
     
-    Widget _loginButton = makeActionButton( context, 'Login', (() {
+    Widget _loginButton = makeActionButton( appState, 'Login', (() {
              Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => BookShareLoginPage()));
           }));
        
-    Widget _signupButton = makeActionButton( context, 'Create New Account', (() {
+    Widget _signupButton = makeActionButton( appState, 'Create New Account', (() {
              Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => BookShareSignupPage()));

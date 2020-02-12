@@ -63,8 +63,8 @@ bool checkReauth( context, container ) {
 }
 
 
-Future<List<Library>> fetchLibraries( context, container, postData ) async {
-   print( "fetchLibrary " + postData );
+Future<http.Response> postIt( String shortName, postData, container ) async {
+   print( shortName );
    final appState  = container.state;
 
    final gatewayURL = appState.apiBasePath + "/find"; 
@@ -75,111 +75,164 @@ Future<List<Library>> fetchLibraries( context, container, postData ) async {
          headers: {HttpHeaders.authorizationHeader: appState.idToken},
          body: postData
          );
-   
-   if (response.statusCode == 201) {
-      // print( "JSON RESPONSE BODY: " + response.body.toString() );         
-      
-      Iterable l = json.decode(utf8.decode(response.bodyBytes));
-      List<Library> libs = l.map((sketch)=> Library.fromJson(sketch)).toList();
-      return libs;
-   } else if (response.statusCode == 204) {
-      print( "No content.");
-      return null;
-   } else if (response.statusCode == 401 ) {
+
+   return response;
+}
+
+
+// If failure is authorization, we can reauthorize to fix it, usually
+Future<bool> checkFailure( response, shortName, context, container ) async {
+   bool retval = false;
+   if (response.statusCode == 401 ) {  
       if( checkReauth( context, container ) ) {
          await container.getAuthTokens( true );
-         return await fetchLibraries( context, container, postData );
+         retval = true;
       }
    }
    else {
       print( "RESPONSE: " + response.statusCode.toString() + " " + json.decode(utf8.decode(response.bodyBytes)).toString());
-      throw Exception('Failed to load library');
+      throw Exception( shortName + ': AWS data failed to load.');
+   }
+
+   return retval;
+}
+
+
+Future<List<Library>> fetchLibraries( context, container, postData ) async {
+   String shortName = "fetchLibrary";
+   final response = await postIt( shortName, postData, container );
+   
+   if (response.statusCode == 201) {
+      // print( "JSON RESPONSE BODY: " + response.body.toString() );         
+      Iterable l = json.decode(utf8.decode(response.bodyBytes));
+      List<Library> libs = l.map((sketch)=> Library.fromJson(sketch)).toList();
+      return libs;
+   } else {
+      bool didReauth = await checkFailure( response, shortName, context, container );
+      if( didReauth ) { return await fetchLibraries( context, container, postData ); }
    }
 }
 
-// XXX 1 func for all here?  
 Future<List<Book>> fetchBooks( context, container, postData ) async {
-   final appState  = container.state;
-   print( "fetchBook " + postData );
-   final gatewayURL = appState.apiBasePath + "/find"; 
-   
-   final response =
-      await http.post(
-         gatewayURL,
-         headers: {HttpHeaders.authorizationHeader: appState.idToken},
-         body: postData
-         );
+   String shortName = "fetchBook";
+   final response = await postIt( shortName, postData, container );
    
    if (response.statusCode == 201) {
       Iterable l = json.decode(utf8.decode(response.bodyBytes));
       List<Book> books = l.map((sketch)=> Book.fromJson(sketch)).toList();
       return books;
-   } else if (response.statusCode == 401 ) {
-      if( checkReauth( context, container ) ) {
-         await container.getAuthTokens( true );
-         return await fetchBooks( context, container, postData );
-      }
    } else {
-      print( "RESPONSE: " + response.statusCode.toString() + " " + json.decode(utf8.decode(response.bodyBytes)).toString());
-      throw Exception('Failed to load books');
+      bool didReauth = await checkFailure( response, shortName, context, container );
+      if( didReauth ) { return await fetchBooks( context, container, postData ); }
    }
 }
 
-// XXX wrap all fetch.  pass in 201 and 401 responses
 Future<Map<String,Set>> fetchOwnerships( context, container, postData ) async {
-   final appState  = container.state;
-   print( "fetchOwnerships " + postData );
-   final gatewayURL = appState.apiBasePath + "/find"; 
-   
-   final response =
-      await http.post(
-         gatewayURL,
-         headers: {HttpHeaders.authorizationHeader: appState.idToken},
-         body: postData
-         );
+   String shortName = "fetchOwnerships";
+   final response = await postIt( shortName, postData, container );
    
    if (response.statusCode == 201) {
       print( response.body.toString() );         
       final o = json.decode(utf8.decode(response.bodyBytes));
       final ownership = Ownership.fromJson(o);
       return ownership.shares;
-   } else if (response.statusCode == 401 ) {
-      if( checkReauth( context, container ) ) {
-         await container.getAuthTokens( true );
-         return await fetchOwnerships( context, container, postData );
-      }
    } else {
-      print( "RESPONSE: " + response.statusCode.toString() + " " + json.decode(utf8.decode(response.bodyBytes)).toString());
-      throw Exception('Failed to load library shares');
+      bool didReauth = await checkFailure( response, shortName, context, container );
+      if( didReauth ) { return await fetchOwnerships( context, container, postData ); }
    }
 }
 
+
 Future<bool> initOwnership( context, container, postData ) async {
-   print( "initOwnership" + postData );
-   final appState  = container.state;
-   final gatewayURL = appState.apiBasePath + "/find"; 
-   
-   final response =
-      await http.post(
-         gatewayURL,
-         headers: {HttpHeaders.authorizationHeader: appState.idToken},
-         body: postData
-         );
+   String shortName = "initOwnership";
+   final response = await postIt( shortName, postData, container );
    
    if (response.statusCode == 201) {
       print( "JSON RESPONSE BODY: " + response.body.toString() );         
       return true;
-   } else if (response.statusCode == 401 ) {
-      if( checkReauth( context, container ) ) {
-         await container.getAuthTokens( true );
-         return await initOwnership( context, container, postData );
-      }
    } else {
-      print( "RESPONSE: " + response.statusCode.toString() + " " + json.decode(utf8.decode(response.bodyBytes)).toString());
-      throw Exception('Failed to load library');
+      bool didReauth = await checkFailure( response, shortName, context, container );
+      if( didReauth ) { return await initOwnership( context, container, postData ); }
    }
 }
 
+Future<bool> putBook( context, container, postData ) async {
+   String shortName = "putBook";
+   final response = await postIt( shortName, postData, container );
+   
+   if (response.statusCode == 201) {
+      print( response.body.toString() );         
+      return true;
+   } else {
+      bool didReauth = await checkFailure( response, shortName, context, container );
+      if( didReauth ) { return await putBook( context, container, postData ); }
+   }
+}
+
+Future<bool> putLib( context, container, postData ) async {
+   String shortName = "putLib";
+   final response = await postIt( shortName, postData, container );
+   
+   if (response.statusCode == 201) {
+      // print( response.body.toString() );         
+      return true;
+   } else {
+      bool didReauth = await checkFailure( response, shortName, context, container );
+      if( didReauth ) { return await putLib( context, container, postData ); }
+   }
+}
+
+Future<bool> putPerson( context, container, postData ) async {
+   String shortName = "putPerson";
+   final response = await postIt( shortName, postData, container );
+   
+   if (response.statusCode == 201) {
+      // print( response.body.toString() );         
+      return true;
+   } else {
+      bool didReauth = await checkFailure( response, shortName, context, container );
+      if( didReauth ) { return await putPerson( context, container, postData ); }
+   }
+}
+
+
+Future<bool> deleteLib( context, container, postData ) async {
+   String shortName = "deleteLib";
+   final response = await postIt( shortName, postData, container );
+   
+   if (response.statusCode == 201) {
+      // print( response.body.toString() );         
+      return true;
+   } else {
+      bool didReauth = await checkFailure( response, shortName, context, container );
+      if( didReauth ) { return await deleteLib( context, container, postData ); }
+   }
+}
+
+Future<bool> deleteBook( context, container, postData ) async {
+   String shortName = "deleteBook";
+   final response = await postIt( shortName, postData, container );
+   
+   if (response.statusCode == 201) {
+      return true;
+   } else {
+      bool didReauth = await checkFailure( response, shortName, context, container );
+      if( didReauth ) { return await deleteBook( context, container, postData ); }
+   }
+}
+
+Future<bool> putShares( context, container, postData ) async {
+   String shortName = "putShares";
+   final response = await postIt( shortName, postData, container );
+   
+   if (response.statusCode == 201) {
+      print( response.body.toString() );         
+      return true;
+   } else {
+      bool didReauth = await checkFailure( response, shortName, context, container );
+      if( didReauth ) { return await putShares( context, container, postData ); }
+   }
+}
 
 // Version 1 v1 of google books api
 // Note: undocumented varients, different results:   q=isbn#, q=isbn=#, q=isbn<#>, q=ISBN
@@ -239,164 +292,6 @@ Future<List<Book>> fetchKeyword( titleKey, authorKey ) async {
    return books;
 }
 
-// AWS has username via cognito signin
-// Update tables: Books, Ownerships
-Future<bool> putBook( context, container, postData ) async {
-   print( "putBook " + postData );
-   final appState  = container.state;
-   final gatewayURL = appState.apiBasePath + "/find"; 
-   
-   final response =
-      await http.post(
-         gatewayURL,
-         headers: {HttpHeaders.authorizationHeader: appState.idToken},
-         body: postData
-         );
-   
-   if (response.statusCode == 201) {
-      print( response.body.toString() );         
-      return true;
-   } else if (response.statusCode == 401 ) {
-      if( checkReauth( context, container ) ) {
-         await container.getAuthTokens( true );
-         return await putBook( context, container, postData );
-      }
-   } else {
-      print( "RESPONSE: " + response.statusCode.toString() + " " + json.decode(utf8.decode(response.bodyBytes)).toString());
-      throw Exception('Failed to add book');
-   }
-}
-
-Future<bool> putLib( context, container, postData ) async {
-   print( "putLib " );
-   final appState  = container.state;
-   final gatewayURL = appState.apiBasePath + "/find"; 
-   
-   final response =
-      await http.post(
-         gatewayURL,
-         headers: {HttpHeaders.authorizationHeader: appState.idToken},
-         body: postData
-         );
-   
-   if (response.statusCode == 201) {
-      // print( response.body.toString() );         
-      return true;
-   } else if (response.statusCode == 401 ) {
-      if( checkReauth( context, container ) ) {
-         await container.getAuthTokens( true );
-         return await putLib( context, container, postData );
-      }
-   } else {
-      print( "RESPONSE: " + response.statusCode.toString() + " " + json.decode(utf8.decode(response.bodyBytes)).toString());
-      throw Exception('Failed to update library');
-   }
-}
-
-Future<bool> putPerson( context, container, postData ) async {
-   print( "putPerson " );
-   final appState  = container.state;
-   final gatewayURL = appState.apiBasePath + "/find"; 
-   
-   final response =
-      await http.post(
-         gatewayURL,
-         headers: {HttpHeaders.authorizationHeader: appState.idToken},
-         body: postData
-         );
-   
-   if (response.statusCode == 201) {
-      // print( response.body.toString() );         
-      return true;
-   } else if (response.statusCode == 401 ) {
-      if( checkReauth( context, container ) ) {
-         await container.getAuthTokens( true );
-         return await putPerson( context, container, postData );
-      }
-   } else {
-      print( "RESPONSE: " + response.statusCode.toString() + " " + json.decode(utf8.decode(response.bodyBytes)).toString());
-      throw Exception('Failed to update person');
-   }
-}
-
-
-// XXX LOTS of overlap in these functions.
-Future<bool> deleteLib( context, container, postData ) async {
-   print( "deleteLib " );
-   final appState  = container.state;
-   final gatewayURL = appState.apiBasePath + "/find"; 
-   
-   final response =
-      await http.post(
-         gatewayURL,
-         headers: {HttpHeaders.authorizationHeader: appState.idToken},
-         body: postData
-         );
-   
-   if (response.statusCode == 201) {
-      // print( response.body.toString() );         
-      return true;
-   } else if (response.statusCode == 401 ) {
-      if( checkReauth( context, container ) ) {
-         await container.getAuthTokens( true );
-         return await deleteLib( context, container, postData );
-      }
-   } else {
-      print( "RESPONSE: " + response.statusCode.toString() + " " + json.decode(utf8.decode(response.bodyBytes)).toString());
-      throw Exception('Failed to update library');
-   }
-}
-
-Future<bool> deleteBook( context, container, postData ) async {
-   print( "deleteBook " );
-   final appState  = container.state;
-   final gatewayURL = appState.apiBasePath + "/find"; 
-   
-   final response =
-      await http.post(
-         gatewayURL,
-         headers: {HttpHeaders.authorizationHeader: appState.idToken},
-         body: postData
-         );
-   
-   if (response.statusCode == 201) {
-      return true;
-   } else if (response.statusCode == 401 ) {
-      if( checkReauth( context, container ) ) {
-         await container.getAuthTokens( true );
-         return await deleteBook( context, container, postData );
-      }
-   } else {
-      print( "RESPONSE: " + response.statusCode.toString() + " " + json.decode(utf8.decode(response.bodyBytes)).toString());
-      throw Exception('Failed to delete book');
-   }
-}
-
-Future<bool> putShares( context, container, postData ) async {
-   print( "putShares " + postData );
-   final appState  = container.state;
-   final gatewayURL = appState.apiBasePath + "/find"; 
-   
-   final response =
-      await http.post(
-         gatewayURL,
-         headers: {HttpHeaders.authorizationHeader: appState.idToken},
-         body: postData
-         );
-   
-   if (response.statusCode == 201) {
-      print( response.body.toString() );         
-      return true;
-   } else if (response.statusCode == 401 ) {
-      if( checkReauth( context, container ) ) {
-         await container.getAuthTokens( true );
-         return await putShares( context, container, postData );
-      }
-   } else {
-      print( "RESPONSE: " + response.statusCode.toString() + " " + json.decode(utf8.decode(response.bodyBytes)).toString());
-      throw Exception('Failed to add share');
-   }
-}
 
 
 // Called on signin
