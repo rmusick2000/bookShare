@@ -10,7 +10,6 @@ import 'package:bookShare/utils.dart';
 
 import 'package:bookShare/screens/launch_page.dart';
 
-import 'package:bookShare/models/app_state.dart';
 import 'package:bookShare/models/libraries.dart';
 import 'package:bookShare/models/books.dart';
 import 'package:bookShare/models/ownerships.dart';
@@ -319,7 +318,6 @@ initMyLibraries( context, container ) async {
    await initSelectedLibrary( context, container );
 }
 
-// XXX PAGINATE on aws
 initExploreLibraries( context, container ) async {
    print( "initExploreLibs" );
    final appState  = container.state;

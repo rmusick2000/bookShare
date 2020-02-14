@@ -12,10 +12,7 @@ import 'package:bookShare/screens/home_page.dart';
 import 'package:bookShare/screens/add_book_page.dart';
 import 'package:bookShare/screens/profile_page.dart';
 
-import 'package:bookShare/models/app_state.dart';
 import 'package:bookShare/models/libraries.dart';
-import 'package:bookShare/models/books.dart';
-
 
 
 int testIncrement( val ) {
@@ -246,9 +243,7 @@ makeBotAppBar( BuildContext context, currentPage ) {
 
 Widget makeLibraryChunk( lib, screenHeight, highlight ) {
    final imageSize   = screenHeight * .1014;
-   //final imageSize   = screenHeight * .08;
    final libraryName = lib.name;
-   final libraryId   = lib.id;
 
    var image = lib.image;
    if( image == null ) { image = Image.asset( 'images/kiteLibrary.jpg', height: imageSize, width: imageSize, fit: BoxFit.fill); }
@@ -293,7 +288,7 @@ makePngBytes( appState, picture, width, height ) async {
 }
 
 Library getPrivateLib( appState ) {
-   Library result = null;
+   Library result;
    if( appState.myLibraries == null || appState.myLibraries.length < 1 ) { return result; }
    for( final lib in appState.myLibraries ) {
       if( lib.private ) { result = lib; break; }
@@ -303,7 +298,7 @@ Library getPrivateLib( appState ) {
 
 // get the library object of the users current selected library, if the user is a member
 Library getMemberLib( appState ) {
-   Library result = null;
+   Library result;
    if( appState.myLibraries == null || appState.myLibraries.length < 1 ) { return result; }
 
    String currentLib = appState.selectedLibrary;
@@ -316,7 +311,7 @@ Library getMemberLib( appState ) {
 }
 
 Library getLib( appState ) {
-   Library result = null;
+   Library result;
    if( appState.myLibraries == null || appState.myLibraries.length < 1 ) { return result; }
 
    String currentLib = appState.selectedLibrary;
@@ -325,8 +320,8 @@ Library getLib( appState ) {
    bool found = false;
    for( final lib in appState.myLibraries ) {
       if( lib.id == currentLib ) {
-         result = lib; break;
          found = true;
+         result = lib; break;
       }
    }
 
@@ -340,46 +335,6 @@ Library getLib( appState ) {
    }
       
    return result;
-}
-
-
-
-// Title will wrap if need be, growing row height as needed
-GestureDetector makeBookChunk( appState, book ) {
-   final imageHeight = appState.screenHeight * .169;
-   final imageWidth  = appState.screenWidth * .48;
-
-   var image;
-   if( book.image != null && book.image != "" ) { image = Image.network( book.image, height: imageHeight, width: imageWidth, fit: BoxFit.contain ); }
-   else                                         { image = Image.asset( 'images/kush.jpeg', height: imageHeight, width: imageWidth, fit: BoxFit.cover); }
-   
-   return GestureDetector(
-      onTap: () { print( "Giggle!" ); },
-      child: Column(
-         crossAxisAlignment: CrossAxisAlignment.center,
-         mainAxisAlignment: MainAxisAlignment.center,
-         children: <Widget>[
-            Row(
-               crossAxisAlignment: CrossAxisAlignment.center,
-               mainAxisAlignment: MainAxisAlignment.start,
-               children: <Widget> [
-                  Padding(
-                     padding: const EdgeInsets.fromLTRB(6.0, 6.0, 6.0, 6.0),
-                     child: ClipRRect(
-                        borderRadius: new BorderRadius.circular(12.0),
-                        //child: Image.asset( 'images/dart.jpeg', height: imageHeight, width: imageWidth, fit: BoxFit.cover))),
-                        child: image )),
-                  Column(
-                     crossAxisAlignment: CrossAxisAlignment.start,
-                     mainAxisAlignment: MainAxisAlignment.center,
-                     children: <Widget>[
-                        // Text(title, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis),
-                        Container( width: imageWidth, child: Text(book.title, softWrap: true, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold))),
-                        Text("By: " + book.author, style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic)),
-                        Text("ISBN: " + book.ISBN, style: TextStyle(fontSize: 12)),
-                        ])]),
-            Container( color: Colors.lightBlue, height: appState.screenHeight*.0338 ),
-            ]));
 }
 
 

@@ -5,7 +5,6 @@ import 'package:bookShare/screens/signup_page.dart';
 
 import 'package:bookShare/utils.dart';  
 import 'package:bookShare/app_state_container.dart';
-import 'package:bookShare/models/app_state.dart';
 
 
 
@@ -32,7 +31,6 @@ class _BSLaunchPageState extends State<BSLaunchPage> {
   @override
   Widget build(BuildContext context) {
 
-    Color color = Theme.of(context).primaryColor;
     final container = AppStateContainer.of(context);
     final appState = container.state;
 

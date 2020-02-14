@@ -18,7 +18,9 @@ class AppStateContainer extends StatefulWidget {
 
   // Return container state with AppState, as the 'of' method which provides state to all children
   static _AppStateContainerState of(BuildContext context) {
-     return (context.inheritFromWidgetOfExactType(_InheritedStateContainer) as _InheritedStateContainer).data;
+     // deprecated 1.12
+     //return (context.inheritFromWidgetOfExactType(_InheritedStateContainer) as _InheritedStateContainer).data;
+     return (context.dependOnInheritedWidgetOfExactType<_InheritedStateContainer>() as _InheritedStateContainer).data;
   }
 
   
@@ -56,7 +58,7 @@ class _AppStateContainerState extends State<AppStateContainer> {
         });
   }
   
-  void getAuthTokens( override ) async {
+  Future<void> getAuthTokens( override ) async {
      print( "GAT, with " + state.idToken );
      state.gatOverride = override;
      if( state.accessToken == "" || state.idToken == "" || override == true) {
@@ -74,7 +76,7 @@ class _AppStateContainerState extends State<AppStateContainer> {
   }
 
 
-  void getAPIBasePath() async {
+  Future<void> getAPIBasePath() async {
      if( state.apiBasePath == "" ) {
         String basePath = await DefaultAssetBundle.of(context).loadString('files/api_base_path.txt');
         setState(() {
@@ -83,7 +85,7 @@ class _AppStateContainerState extends State<AppStateContainer> {
      }
   }
 
-  void newUserBasics() async {
+  Future<void> newUserBasics() async {
      assert( state.newUser );
      await getAuthTokens( false );
      await getAPIBasePath();

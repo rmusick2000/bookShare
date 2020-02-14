@@ -1,16 +1,12 @@
 import 'dart:convert';  // json encode/decode
-import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter_cognito_plugin/flutter_cognito_plugin.dart';
 import 'package:random_string/random_string.dart';
 
 import 'package:bookShare/utils.dart';
 import 'package:bookShare/utils_load.dart';
 import 'package:bookShare/app_state_container.dart';
-import 'package:bookShare/models/app_state.dart';
 import 'package:bookShare/models/people.dart';
 import 'package:bookShare/models/libraries.dart';
 import 'package:bookShare/screens/home_page.dart';

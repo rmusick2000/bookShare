@@ -1,11 +1,8 @@
 import 'dart:convert';  // json encode/decode
-import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:barcode_scan/barcode_scan.dart';
-import 'package:http/http.dart' as http;
 
 import 'package:bookShare/utils.dart';
 import 'package:bookShare/utils_load.dart';
@@ -15,7 +12,6 @@ import 'package:bookShare/screens/home_page.dart';
 
 import 'package:bookShare/models/app_state.dart';
 import 'package:bookShare/models/books.dart';
-import 'package:bookShare/models/libraries.dart';
 
 
 class BookShareAddBookPage extends StatefulWidget {
@@ -64,7 +60,7 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
     super.dispose();
   }
 
-  void addToLibrary() async {
+  Future<void> addToLibrary() async {
      print( "Adding " + newBook.title + " to private lib" );
      showToast( context, "Adding..." );
      
@@ -88,9 +84,7 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
      }
   }
      
-  
-  // XXX Moved out of utils to allow proper context for itemNo.  If move to colView, will need to sort this out.
-  // Title will wrap if need be, growing row height as needed
+  // Different display, tap function than in homePage
   GestureDetector makeBookChunkCol( appState, book, selectedItem, itemNo ) {
      final imageHeight = appState.screenHeight * .46;
      final imageWidth  = appState.screenWidth * .42;
@@ -117,7 +111,7 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
               Padding(
                  padding: const EdgeInsets.fromLTRB(6.0, 0, 6.0, 0),
                  child: ClipRRect(
-                    key: Key( 'bookChunk${itemNo}' ),
+                    key: Key( 'bookChunk$itemNo' ),
                     borderRadius: new BorderRadius.circular(12.0),
                     child: image )),
               Container(
@@ -142,10 +136,7 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
   }
   
   
-  // XXX tell user primary vs secondary isbn
-  // XXX allow selection + crop of cover art?
   Widget _makeBooks( ) {
-     
      var bil = foundBooks;
      List<Widget> bookChunks = [];
      if( bil == null || bil.length == 0 ) { return Container(); }
@@ -168,7 +159,7 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
      else { return Container(); }
   }
 
-  void _updateFoundBooks( barcode ) async {
+  Future<void> _updateFoundBooks( barcode ) async {
      if( barcode == "keywords" ) { foundBooks = await fetchKeyword( titleKey.text, authorKey.text );  }
      else if( barcode != "" )
      {
@@ -177,7 +168,6 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
      }
   }
 
-  // XXX go to MyPriv, not make home-page dirty
   Widget _acceptGotoButton( ) {
      return makeActionButtonSmall(
         appState,
@@ -187,10 +177,9 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
            newBook = foundBooks[selectedNewBook];
            await addToLibrary();
 
-           setState(() { 
-                 selectedNewBook = 0;
-                 foundBooks.clear();
-              });
+           selectedNewBook = 0;   
+           foundBooks.clear();
+
            MaterialPageRoute newPage = MaterialPageRoute(builder: (context) => BookShareHomePage());
            Navigator.pushReplacement(context, newPage );
         });
@@ -205,9 +194,9 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
            newBook = foundBooks[selectedNewBook];
            await addToLibrary();
            
+           selectedNewBook = 0; 
            setState(() { 
-                 selectedNewBook = 0;
-                 foundBooks.clear();
+                 foundBooks.clear();  // back out of current list, to scan mode
               });
         });
   }
@@ -300,7 +289,7 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
               }
            } on FormatException {
               showToast( context, "oops - user returned using back button before scanning" );
-           } catch( error, trace ) {
+           } catch( error ) {
               showToast( context, error.toString() );
            }
            

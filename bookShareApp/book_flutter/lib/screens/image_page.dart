@@ -3,7 +3,6 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:ui' as ui;
 import 'dart:math';
-import 'dart:convert'; 
 
 import 'package:image_crop/image_crop.dart';
 import 'package:image_picker/image_picker.dart';
@@ -12,7 +11,6 @@ import 'package:bookShare/models/app_state.dart';
 import 'package:bookShare/app_state_container.dart';
 
 import 'package:bookShare/utils.dart';
-import 'package:bookShare/utils_load.dart';
 import 'package:bookShare/models/books.dart';
 import 'package:bookShare/models/libraries.dart';
 
@@ -20,14 +18,14 @@ import 'package:bookShare/models/libraries.dart';
 // NOTE area represents original request, not resulting crop zone.  So, need to rectify values outside [0,1]
 // NOTE area is in percentages, so no need to understand original cropping Container size.  work from convertedNI directly.
 // image is the original network image, not the post-scaled one.  crop percentages applied here, then scaled to dstSize
-class libPainter extends CustomPainter {
+class LibPainter extends CustomPainter {
    final ui.Image image;
    final Rect     area;
    final double   scale;
    final double   dstSize;
    AppState appState;
    
-   libPainter({this.image, this.area, this.scale, this.dstSize, this.appState});
+   LibPainter({this.image, this.area, this.scale, this.dstSize, this.appState});
 
    @override
    void paint(Canvas canvas, Size size) {
@@ -99,9 +97,9 @@ class libPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(libPainter oldDelegate) => false;
+  bool shouldRepaint(LibPainter oldDelegate) => false;
   @override
-  bool shouldRebuildSemantics(libPainter oldDelegate) => false;
+  bool shouldRebuildSemantics(LibPainter oldDelegate) => false;
 }
 
 
@@ -287,7 +285,7 @@ class _BookShareImagePageState extends State<BookShareImagePage> {
                height: previewHeight,
                width: previewHeight,
                child: CustomPaint(
-                  painter: libPainter(
+                  painter: LibPainter(
                      image: convertedNI,
                      area: area,
                      scale: scale,
@@ -345,7 +343,7 @@ class _BookShareImagePageState extends State<BookShareImagePage> {
       
       if( pickerImage == null ) { return; }
       print( "MAKE GALLERY yes." );
-      var image = Image.file( pickerImage); 
+      // var image = Image.file( pickerImage); 
       
       // re-init cropper data for new image
       newSelection = true;
@@ -467,7 +465,6 @@ class _BookShareImagePageState extends State<BookShareImagePage> {
    // Save the image to dynamo, pop back
    _acceptCrop() async {
 
-      final crop = cropKey.currentState;
       if( !newSelection ) {
          // Save image  
          assert( appState.currentPng != null );
@@ -478,7 +475,8 @@ class _BookShareImagePageState extends State<BookShareImagePage> {
          
          print( "SETSTATE acceptCrop updateLibs" );
          setState(() => appState.updateLibs = true );
-         Navigator.pop(context);
+         // Navigator.pop(context);
+         Navigator.of( context ).pop( 'accepted');  // book detail
       } else {
          showToast( context, "Oops, forgot to crop image" );
       }
@@ -515,7 +513,6 @@ class _BookShareImagePageState extends State<BookShareImagePage> {
       appState    = container.state;
 
       final imageHeight = appState.screenHeight * .73;
-      final imageWidth  = imageHeight * .913;
 
       assert( editLibrary != null );
 

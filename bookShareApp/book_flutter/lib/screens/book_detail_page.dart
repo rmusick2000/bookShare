@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:bookShare/utils.dart';
 import 'package:bookShare/utils_load.dart';
-import 'package:bookShare/models/app_state.dart';
 import 'package:bookShare/app_state_container.dart';
 
 
@@ -66,7 +65,7 @@ class _BookShareBookDetailState extends State<BookShareBookDetailPage> {
          Navigator.of( context ).pop( 'deleted');  // book detail
       }
 
-      Function _deleteBook() {
+      void _deleteBook() {
          confirm( context, "Confirm delete", "Press Continue to proceed.",
                   _deleteConfirmed, () => Navigator.of( context ).pop() );
       }

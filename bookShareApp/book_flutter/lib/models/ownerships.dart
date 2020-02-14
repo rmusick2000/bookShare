@@ -1,4 +1,3 @@
-import 'dart:convert';  
 
 class Ownership {
    final Map<String,Set> shares;  // lib: books
@@ -10,7 +9,7 @@ class Ownership {
       // _InternalLinkedHashMap<String, dynamic>
       final dynamicLib = json['Shares'];
       // Map<String,Set<String>> shares  = new Map.fromIterable( dynamicLib, key: (v) => v[0], value: (v) => v[1] );
-      dynamicLib.forEach((k,v) => print('${k}: ${v}'));
+      dynamicLib.forEach((k,v) => print('$k: $v'));
       Map<String,Set<String>> shares = {};
       dynamicLib.forEach((k,v) {
             shares[k] = Set<String>.from(v);

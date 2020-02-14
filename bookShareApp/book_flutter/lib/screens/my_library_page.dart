@@ -1,15 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:random_string/random_string.dart';
 
-import 'package:bookShare/screens/my_library_page.dart';
-import 'package:bookShare/screens/loan_page.dart';
-import 'package:bookShare/screens/search_page.dart';
 import 'package:bookShare/screens/home_page.dart';
-import 'package:bookShare/screens/add_book_page.dart';
-import 'package:bookShare/screens/profile_page.dart';
 import 'package:bookShare/screens/book_detail_page.dart';
 import 'package:bookShare/screens/image_page.dart';
 
@@ -45,6 +39,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
    Library editLibrary;              // the selected lib
    bool    updateProspect;           // time to create a new prospect
    bool    prospectActive;           // active prospect on the library row bar
+   bool    newCropImage;             // image was selected, but lib edits not yet saved.  force update to createlib row
    
    // shares
    bool shareAll; 
@@ -66,6 +61,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
       editLibrary = null;
       updateProspect = false;
       prospectActive = false;
+      newCropImage = false;
       shareAll = false;
 
       nameController = new TextEditingController();   
@@ -225,7 +221,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
    }
 
 
-   // XXX Why repeat view in homepage?  Probably unneeded, wasteful.  see if this icon will go away.
+   // XXX Why repeat view in homepage?  Probably unneeded, wasteful.  Consider removing from UI
    Widget _fullView( bookChunks ) {
       return Container(); 
          }
@@ -477,7 +473,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
             ]);
    }
 
-   Function setNewEditLib( lib ) {
+   void setNewEditLib( lib ) {
       editLibrary = lib;
       if( editLibrary != null ) {
          // print( editLibrary.toString() );
@@ -488,12 +484,12 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
       }
    }
 
-   // XXX Confirm choice of new lib if editLib != null (will lose edits)
+   // XXX Consider confirming choice of new lib if editLib != null, otherwise if editing one, then choose another, edits are lost
    _editLibrary( libraryId, lib ) {
       if( lib == null ) {
          if( prospectActive ) { showToast( context, "Just one new lib at a time." ); }
          else {
-            print( "SETSTATE editLIb updateProspect" );
+            print( "SETSTATE editLib updateProspect" );
             setState(() => updateProspect = true );
          }
       } else {
@@ -548,19 +544,19 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
    }
       
    // Don't need to update elsewhere - this page must be on the stack to edit, and edits here mod other pages via appState
-   // XXX libChunks should be stateful?
    Widget _makeLibraryRow() {
-      List<Widget> libChunks = [];
+      List<Widget> libChunksCreateRow = [];
       if( appState.myLibraries == null ) { return Container(); }  // null during update
 
-      if( appState.updateLibs || libChunks.length == 0 ) {
+      if( appState.updateLibs || libChunksCreateRow.length == 0 ) {
          print( "myLib updating libs" );
-         libChunks.add( _makeNewLib() );
-         if( updateProspect ) { libChunks.add( _makeProspect() ); }
-         else if( editLibrary != null && editLibrary.prospect ) { libChunks.add( _makeLibraryChunk( editLibrary )); }
+         libChunksCreateRow.add( _makeNewLib() );
+         if( updateProspect ) { libChunksCreateRow.add( _makeProspect() ); }
+         else if( editLibrary != null && editLibrary.prospect ) { libChunksCreateRow.add( _makeLibraryChunk( editLibrary )); }
          assert( appState.myLibraries.length >= 1 );
-         appState.myLibraries.forEach((lib) => libChunks.add( _makeLibraryChunk( lib )));
+         appState.myLibraries.forEach((lib) => libChunksCreateRow.add( _makeLibraryChunk( lib )));
          appState.updateLibs = false;
+         newCropImage = false;
       }
       
       return ConstrainedBox( 
@@ -570,7 +566,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
             ),
          child: ListView(
             scrollDirection: Axis.horizontal,
-            children: libChunks
+            children: libChunksCreateRow
             ));
    }
 
@@ -582,7 +578,10 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
             {
                Navigator.push( context, MaterialPageRoute(
                                   builder: (context) => BookShareImagePage(),
-                                  settings: RouteSettings( arguments: editLibrary )));
+                                  settings: RouteSettings( arguments: editLibrary )))
+                  .then((value) {
+                        if( value == 'accepted' ) { setState(() => newCropImage = true ); }
+                     });
             });
    }
 
@@ -619,7 +618,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
          );
    }
 
-   Function _rejectEdit() {
+   void _rejectEdit() {
       if( editLibrary.prospect ) {
          prospectActive = false;
          editLibrary = null;
@@ -634,7 +633,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
          editLibrary.image = origImage;   // reversed, since tmp state is stored in the lib!
          setState(() => appState.updateLibs = true );   // force rebuild of lib row bar, with orig image
       } else {
-         print( "??? XXX ??? how? " );
+         // probably can't get here
          nameController.clear();
          descController.clear();
          origImage = null;
@@ -667,12 +666,12 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
          Navigator.of( context ).pop(); 
       }
       
-      Function _deleteLib() {
+      void _deleteLib() {
          confirm( context, "Confirm delete", "This action can not be undone.  Press Continue to proceed.",
                   _deleteConfirmed, () => Navigator.of( context ).pop() );
       }
 
-      Function _acceptEdit() {
+      void _acceptEdit() {
          // dynamo policy.. grrr
          editLibrary.name        = nameController.text;
          editLibrary.description = descController.text;
@@ -768,8 +767,6 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
    }
    
    Widget _createView() {
-      final height = appState.screenHeight;
-
       return Column(
          crossAxisAlignment: CrossAxisAlignment.start,
          mainAxisAlignment: MainAxisAlignment.start,

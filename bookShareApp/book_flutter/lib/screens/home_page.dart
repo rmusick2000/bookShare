@@ -1,18 +1,7 @@
 import 'dart:convert';  // json encode/decode
-import 'dart:async';
-import 'dart:io';
-import 'package:flutter_cognito_plugin/flutter_cognito_plugin.dart';
 import 'package:flutter/services.dart';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
-import 'package:bookShare/screens/my_library_page.dart';
-import 'package:bookShare/screens/loan_page.dart';
-import 'package:bookShare/screens/search_page.dart';
-import 'package:bookShare/screens/home_page.dart';
-import 'package:bookShare/screens/add_book_page.dart';
-import 'package:bookShare/screens/profile_page.dart';
 import 'package:bookShare/screens/book_detail_page.dart';
 
 import 'package:bookShare/utils.dart';
@@ -20,7 +9,6 @@ import 'package:bookShare/utils_load.dart';
 import 'package:bookShare/app_state_container.dart';
 import 'package:bookShare/models/app_state.dart';
 import 'package:bookShare/models/libraries.dart';
-import 'package:bookShare/models/books.dart';
 
 
 class BookShareHomePage extends StatefulWidget {
@@ -91,7 +79,7 @@ class _BookShareHomeState extends State<BookShareHomePage> {
          onTap: ()
          {
             updateLibRow = false;
-            Library currentLib = null;
+            Library currentLib;
             appState.exploreLibraries.forEach((lib) { if( lib.id == appState.selectedLibrary ) { currentLib = lib; } });
             print( "JOINING LIB " + currentLib.name + " " + currentLib.id );
             
@@ -119,7 +107,7 @@ class _BookShareHomeState extends State<BookShareHomePage> {
          onTap: ()
          {
             updateLibRow = false;
-            Library currentLib = null;
+            Library currentLib;
             appState.myLibraries.forEach((lib) { if( lib.id == appState.selectedLibrary ) { currentLib = lib; } });
             print( "LEAVING LIB " + currentLib.name + " " + currentLib.id );
             
@@ -182,13 +170,13 @@ class _BookShareHomeState extends State<BookShareHomePage> {
       assert( appState.myLibraries.length >= 1 );
       for( final lib in appState.myLibraries ) {
          if( lib.id == libId ) { selectedLib = lib; break; }
-      };
+      }
 
       // picked exploreLib
       if( selectedLib == null ) {
          for( final lib in appState.exploreLibraries ) {
             if( lib.id == libId ) { selectedLib = lib; break; }
-         };
+         }
       }
 
       var bil = appState.booksInLib[appState.selectedLibrary];
@@ -257,7 +245,7 @@ class _BookShareHomeState extends State<BookShareHomePage> {
               Padding(
                  padding: const EdgeInsets.fromLTRB(6.0, 0, 6.0, 0),
                  child: ClipRRect(
-                    key: Key( 'bookChunk${itemNo}' ),                    
+                    key: Key( 'bookChunk$itemNo' ),                    
                     borderRadius: new BorderRadius.circular(12.0),
                     child: image )),
               makeTitleText( book.title, imageWidth-inset-6, true, 2 ),
