@@ -1,15 +1,9 @@
-import 'dart:convert';  // json encode/decode
-import 'dart:async';
-import 'dart:io';
-
 import 'package:flutter_cognito_plugin/flutter_cognito_plugin.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
 import 'package:bookShare/utils.dart';
 import 'package:bookShare/app_state_container.dart';
 import 'package:bookShare/screens/home_page.dart';
-import 'package:bookShare/models/app_state.dart';
 
 // new
 class BookShareLoginPage extends StatefulWidget {

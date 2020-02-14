@@ -28,7 +28,9 @@ class BSApp extends StatelessWidget {
            primarySwatch: Colors.green,
            appBarTheme: AppBarTheme(
               color: Colors.grey[200],
-              textTheme: TextTheme( title: TextStyle( color: Colors.black )),
+              // deprecated 1.13
+              // textTheme: TextTheme( title: TextStyle( color: Colors.black )),
+              textTheme: TextTheme( headline6: TextStyle( color: Colors.black )),
               iconTheme: IconThemeData( color: Colors.black ) ),
            bottomAppBarColor: Colors.grey[200] ),
         home:  BSSplashPage( title: 'BookShare'),
@@ -119,7 +121,6 @@ class _BSSplashPageState extends State<BSSplashPage> {
      var container = AppStateContainer.of(context);
      appState = container.state;
      
-     Color color     = Theme.of(context).primaryColor;
      final devWidth  = MediaQuery.of(context).size.width;
      final devHeight = MediaQuery.of(context).size.height;
      appState.screenHeight = devHeight;

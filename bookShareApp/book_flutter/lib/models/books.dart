@@ -1,4 +1,3 @@
-import 'dart:convert';  
 import 'package:random_string/random_string.dart';
 
 class Book {
@@ -55,7 +54,7 @@ class Book {
          final identifiers = new List<Map<String, dynamic>>.from(dynamicIden);
          for( final ident in identifiers ) {
             if( ident['type'] == "ISBN_13" ) { isbn = ident['identifier'].toString(); break; }
-         };
+         }
       }
 
       if( json['imageLinks'] != null ) {

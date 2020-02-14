@@ -1,5 +1,4 @@
 import 'dart:typed_data';                   // ByteData
-import 'dart:convert';  
 
 import 'package:flutter/material.dart';
 
@@ -27,8 +26,8 @@ class Person {
    
    factory Person.fromJson(Map<String, dynamic> json) {
 
-      var imagePng = null;
-      var image    = null;
+      var imagePng;
+      var image;
       final dynamicImage = json['ImagePng'];   // string rep of bytes
       if( dynamicImage != null ) {
          imagePng =  Uint8List.fromList( dynamicImage.codeUnits );   // codeUnits gets Uint16List
