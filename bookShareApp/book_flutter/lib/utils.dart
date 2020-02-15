@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'dart:typed_data';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -61,13 +62,13 @@ void confirm( BuildContext context, confirmHeader, confirmBody, okFunc, cancelFu
               });
 }
 
-paddedLTRB( child, double L, double T, double R, double B ) {
+Widget paddedLTRB( child, double L, double T, double R, double B ) {
    return Padding(
       padding: EdgeInsets.fromLTRB(L,T,R,B),
       child: child );
 }
 
-makeActionButton( appState, buttonText, fn ) {
+Widget makeActionButton( appState, buttonText, fn ) {
    TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 14.0);
    return Material(
       elevation: 5.0,
@@ -86,7 +87,7 @@ makeActionButton( appState, buttonText, fn ) {
       );
 }
 
-makeActionButtonSmall( appState, buttonText, fn ) {
+Widget makeActionButtonSmall( appState, buttonText, fn ) {
    TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 12.0);
    return Material(
       elevation: 5.0,
@@ -105,7 +106,7 @@ makeActionButtonSmall( appState, buttonText, fn ) {
 }
 
 
-makeTitleText( title, width, wrap, lines ) {
+Widget makeTitleText( title, width, wrap, lines ) {
    return Padding(
       padding: const EdgeInsets.fromLTRB(20, 6, 6, 0),
       child: Container( width: width,
@@ -114,7 +115,7 @@ makeTitleText( title, width, wrap, lines ) {
                                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold))));
 }
 
-makeAuthorText( author, width, wrap, lines ) {
+Widget makeAuthorText( author, width, wrap, lines ) {
    return Padding(
       padding: const EdgeInsets.fromLTRB(20, 0, 6, 0),
       child: Container( width: width,
@@ -123,7 +124,7 @@ makeAuthorText( author, width, wrap, lines ) {
                                     style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic))));
 }
       
-makeInputField( BuildContext context, hintText, obscure, controller ) {
+Widget makeInputField( BuildContext context, hintText, obscure, controller ) {
    TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
    return TextField(
       key: Key( hintText ),
@@ -138,7 +139,7 @@ makeInputField( BuildContext context, hintText, obscure, controller ) {
 }
 
 
-makeTopAppBar( BuildContext context, currentPage ) {
+Widget makeTopAppBar( BuildContext context, currentPage ) {
    final container   = AppStateContainer.of(context);
    final appState    = container.state;
    final iconSize    = appState.screenHeight*.0422;
@@ -185,7 +186,7 @@ makeTopAppBar( BuildContext context, currentPage ) {
             ]));
 }
 
-makeBotAppBar( BuildContext context, currentPage ) {
+Widget makeBotAppBar( BuildContext context, currentPage ) {
    final container   = AppStateContainer.of(context);
    final appState    = container.state;
    final iconSize    = appState.screenHeight*.0422;
@@ -279,8 +280,7 @@ Widget makeLibraryChunk( lib, screenHeight, highlight ) {
          ]);
 }
 
-// Future<dynamic>   hmmmmm... maybe either write, or save to libchunk here, don't pass back.
-makePngBytes( appState, picture, width, height ) async {
+Future<ByteData> makePngBytes( appState, picture, width, height ) async {
    final img      = await picture.toImage( width, height );
    final pngBytes = await img.toByteData(format: ImageByteFormat.png);
    appState.currentPng = pngBytes.buffer.asUint8List();
