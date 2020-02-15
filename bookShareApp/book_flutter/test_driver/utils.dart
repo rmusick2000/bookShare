@@ -139,7 +139,7 @@ Future<bool> findBook( FlutterDriver driver, SerializableFinder theList, theChoi
    if( dy ) { await driver.scroll( theList, 0.0, 2000.0, Duration( milliseconds: 500 )); }
    else     { await driver.scroll( theList, 2000.0, 0.0, Duration( milliseconds: 500 )); }
 
-   SerializableFinder choice  = null;
+   SerializableFinder choice;
    if( theChoice is String ) { choice = find.byValueKey( theChoice ); }
    else                      { choice = theChoice; }
    
@@ -166,7 +166,7 @@ Future<bool> deleteBook( FlutterDriver driver, SerializableFinder theList, Seria
    SerializableFinder detailList = find.byValueKey('bookDetail');
    SerializableFinder delete  = find.byValueKey('Delete');
 
-   SerializableFinder choice  = null;
+   SerializableFinder choice;
    if( theChoice is String ) { print( "deleting " + theChoice ); choice = find.byValueKey( theChoice ); }
    else                      { print( "deleting book"); choice = theChoice; }
 
@@ -293,7 +293,7 @@ Future<bool> refineAdd( FlutterDriver driver, titleKey, authorKey, bookChoice, c
 
    // choose a result
    SerializableFinder theList   = find.byValueKey('searchedBooks');
-   SerializableFinder theChoice = find.byValueKey('bookChunk${bookChoice}');
+   SerializableFinder theChoice = find.byValueKey('bookChunk$bookChoice');
    await findBook( driver, theList, theChoice );
    expect( await isPresent( driver, theChoice, 2000 ), true );   
    await driver.tap( theChoice );

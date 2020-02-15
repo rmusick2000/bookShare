@@ -15,7 +15,7 @@ import 'package:bookShare/models/books.dart';
 import 'package:bookShare/models/ownerships.dart';
 
 
-logout( context, container, appState ) {
+void logout( context, container, appState ) {
    final wrapper = container.onPressWrapper((){
          Cognito.signOut();
          
@@ -294,7 +294,7 @@ Future<List<Book>> fetchKeyword( titleKey, authorKey ) async {
 
 
 // Called on signin
-initMyLibraries( context, container ) async {
+Future<void> initMyLibraries( context, container ) async {
    print( "initMyLibs" );
    final appState  = container.state;
 
@@ -318,13 +318,13 @@ initMyLibraries( context, container ) async {
    await initSelectedLibrary( context, container );
 }
 
-initExploreLibraries( context, container ) async {
+Future<void> initExploreLibraries( context, container ) async {
    print( "initExploreLibs" );
    final appState  = container.state;
    appState.exploreLibraries = await fetchLibraries( context, container, '{ "Endpoint": "GetExploreLibs" }' );
 }
 
-initSelectedLibrary( context, container ) async {
+Future<void> initSelectedLibrary( context, container ) async {
    print( "InitSelectedLib" );
    final appState  = container.state;
    assert( appState.myLibraries.length >= 1 );
@@ -332,7 +332,7 @@ initSelectedLibrary( context, container ) async {
    await initLibBooks( context, container, selectedLib );
 }
 
-initLibBooks( context, container, selectedLibrary ) async {
+Future<void> initLibBooks( context, container, selectedLibrary ) async {
    print( "InitLIBBOOKS " + selectedLibrary);
    final appState  = container.state;
    appState.booksInLib[selectedLibrary] = await fetchBooks( context, container, '{ "Endpoint": "GetBooks", "SelectedLib": "$selectedLibrary" }' );
@@ -345,14 +345,14 @@ initLibBooks( context, container, selectedLibrary ) async {
 }
 
 
-initOwnerships( context, container ) async {
+Future<void> initOwnerships( context, container ) async {
    print( "InitOwnerships" );
    final appState  = container.state;
    String uid = appState.userId;
    appState.ownerships = await fetchOwnerships( context, container, '{ "Endpoint": "GetOwnerships", "PersonId": "$uid" }' );
 }
 
-setShare( context, container, bookId, libId, newValue ) async {
+Future<void> setShare( context, container, bookId, libId, newValue ) async {
    print( "setSHARES" );
    final appState  = container.state;
 
@@ -363,7 +363,7 @@ setShare( context, container, bookId, libId, newValue ) async {
    await putShares( context, container, postData );
 }
 
-setAllShares( context, container, libId, newValue ) async {
+Future<void> setAllShares( context, container, libId, newValue ) async {
    print( "setAllSHARES" );
    showToast( context, "Updating sharing data" );
    final appState  = container.state;
