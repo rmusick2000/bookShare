@@ -80,6 +80,9 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
    // IconButton theme likes 48 pixel spread, which is huge.  use GD instead.
    Widget _makeContextMenu( context ) {
 
+      // if this page is on the stack when log out, myLibraries may be null here
+      if( appState.myLibraries == null ) { return Container(); }
+      
       Library myLib;
       for( final lib in appState.myLibraries ) {
          if( lib.id == appState.privateLibId ){ myLib = lib; break; }

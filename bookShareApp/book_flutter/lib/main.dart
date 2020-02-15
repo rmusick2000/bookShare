@@ -28,9 +28,9 @@ class BSApp extends StatelessWidget {
            primarySwatch: Colors.green,
            appBarTheme: AppBarTheme(
               color: Colors.grey[200],
-              // deprecated 1.13
-              // textTheme: TextTheme( title: TextStyle( color: Colors.black )),
-              textTheme: TextTheme( headline6: TextStyle( color: Colors.black )),
+              // title is deprecated 1.13, but as of 2/20 headline6 has not yet made it to the stable release
+               textTheme: TextTheme( title: TextStyle( color: Colors.black )),
+              //textTheme: TextTheme( headline6: TextStyle( color: Colors.black )),
               iconTheme: IconThemeData( color: Colors.black ) ),
            bottomAppBarColor: Colors.grey[200] ),
         home:  BSSplashPage( title: 'BookShare'),
@@ -57,7 +57,7 @@ class _BSSplashPageState extends State<BSSplashPage> {
    void initState() {
       print( "... Main init state" );
       super.initState();  
-      startTimer( 0 );
+      _startTimer( 0 );
    }
 
   @override
@@ -65,7 +65,7 @@ class _BSSplashPageState extends State<BSSplashPage> {
      super.dispose();
   }
 
-  void startTimer( attempts ) {
+  void _startTimer( attempts ) {
      int duration = attempts == 0 ? 3 : 1; 
      print( "In timer, attempt " + attempts.toString() + " next duration " + duration.toString() );
 
@@ -76,7 +76,7 @@ class _BSSplashPageState extends State<BSSplashPage> {
         Timer(Duration(seconds: duration), () {
               print("after duration, checking cogDone" );
               if( !appState.cogInitDone ) {
-                 startTimer( attempts + 1 );
+                 _startTimer( attempts + 1 );
               } else {
                  navigateUser();
               }
@@ -84,25 +84,6 @@ class _BSSplashPageState extends State<BSSplashPage> {
      }
   }
 
-  /*
-  void startTimer() {
-     print( "In timer" );
-     Timer(Duration(seconds: 3), () {
-           print("after duration, checking cogDone" );
-           if( !appState.cogInitDone ) {
-              Timer(Duration(seconds: 4), () {
-                    print("Second duration, checking cogDone" );
-                    if( !appState.cogInitDone ) {
-                       showToast( context, "AWS token initialization is slow.  Is your wifi on?" );
-                    } 
-                    navigateUser();
-                 }); 
-           } else {
-              navigateUser();
-           }
-        });
-  }
-  */
   
   void navigateUser() async{
      print( "Weh do i go?" );

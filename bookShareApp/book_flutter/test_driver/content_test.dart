@@ -2,7 +2,7 @@ import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 import '../test_driver/utils.dart';
 
-bool CLEANUP = false;
+const bool CLEANUP = false;
 //bool CLEANUP = true;
 
 // ScrollUntil scrolls before looking. 
@@ -174,7 +174,6 @@ void main() {
               });
            
            test( 'check functionality', () async {
-                 bool known = true;
                  SerializableFinder refineSearch = find.byValueKey( 'Refine search' );
                  SerializableFinder title  = find.byValueKey( 'Keyword from title' );   
                  SerializableFinder author = find.byValueKey( 'Author\'s last name' );   
@@ -209,7 +208,6 @@ void main() {
 
            // DARG!  Default timeout on tests is 30s!  Could be a much clearer error message.
            test('Add book w/refine search', () async {
-                 bool known = true;
                  await gotoAddBook( driver );
                  
                  await refineAdd( driver, "Dragon Boogers", "", 0, "more" );
@@ -519,12 +517,10 @@ void main() {
                  bool atHome = await isPresent( driver, find.byValueKey( 'homeHereIcon' )); 
                  if( !atHome ) { await gotoHome( driver ); }
                  SerializableFinder theList    = find.byValueKey('searchedBooks');
-                 SerializableFinder detailList = find.byValueKey('bookDetail');
                  
                  SerializableFinder myLib   = find.byValueKey('My Books');
                  SerializableFinder dreamy  = find.byValueKey('Dreamy');
                  SerializableFinder stormy  = find.byValueKey('Stormy');
-                 SerializableFinder delete  = find.byValueKey('Delete');
                  
                  await driver.tap( myLib );
                  
