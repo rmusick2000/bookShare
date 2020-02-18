@@ -16,14 +16,16 @@ const EMPTY = "---EMPTY---";
 // header first and use a different parsing strategy based on that value.
 exports.handler = (event, context, callback) => {
 
-    console.log( 'BookShare Handler start' );
+    // console.log( 'BookShare Handler start' );
     
     if (!event.requestContext.authorizer) {
 	callback( null, errorResponse("401", 'Authorization not configured, dude', context.awsRequestId));
 	return;
     }
-    
-    console.log('Received event: ', event);
+
+    // This includes auth, etc
+    // console.log('Received event: ', event);
+    console.log('Received event: ', event.body);
 
     const username = event.requestContext.authorizer.claims['cognito:username'];
     const rb = JSON.parse(event.body);
@@ -35,7 +37,7 @@ exports.handler = (event, context, callback) => {
     else if( endPoint == "GetLibs")        { resultPromise = getLibs( username, true); }
     else if( endPoint == "GetExploreLibs") { resultPromise = getLibs( username, false ); }
     else if( endPoint == "GetBooks")       { resultPromise = getBooks( rb.SelectedLib ); }
-    else if( endPoint == "PutBook")        { resultPromise = putBook( rb.SelectedLib, rb.NewBook, username ); }
+    else if( endPoint == "PutBook")        { resultPromise = putBook( rb.NewBook, rb.PersonId, rb.PrivLibId ); }
     else if( endPoint == "PutPerson")      { resultPromise = putPerson( rb.NewPerson ); }
     else if( endPoint == "PutLib")         { resultPromise = putLib( rb.NewLib ); }
     else if( endPoint == "DelLib")         { resultPromise = delLib( rb.LibId, rb.PersonId ); }
@@ -49,7 +51,7 @@ exports.handler = (event, context, callback) => {
     }
 
     resultPromise.then((result) => {
-	console.log( 'Result: ', result ); 
+	console.log( 'Result: ', result.statusCode ); 
 	callback( null, result );
     }).catch((err) => {
         console.error(err);
@@ -58,7 +60,15 @@ exports.handler = (event, context, callback) => {
 
 };
 
+function success( result ) {
+    return {
+	statusCode: 201,
+	body: JSON.stringify( result ),
+	headers: { 'Access-Control-Allow-Origin': '*' }
+    };
+}
 
+// Note: during initialization, personId may not yet be known on the app side.
 function getPersonId( username ) {
     // Params to get PersonID from UserName
     const paramsP = {
@@ -69,37 +79,20 @@ function getPersonId( username ) {
 
     let personPromise = bsdb.scan( paramsP ).promise();
     return personPromise.then((persons) => {
-	console.log( "Persons: ", persons );
+	// console.log( "Persons: ", persons );
 	assert(persons.Count == 1 );
 	console.log( "Found person ", persons.Items[0] );
 	return persons.Items[0].PersonId;
     });
 }
 
-function getPrivLibId( personId ) {
-    // Params to get Private LibraryId from personId
-    const paramsPL = {
-        TableName: 'Libraries',
-        FilterExpression: 'contains( Members, :pid ) AND JustMe = :true',
-        ExpressionAttributeValues: { ":pid": personId, ":true": true }
-    };
-    
-    let libraryPromise = bsdb.scan( paramsPL ).promise();
-    return libraryPromise.then((libraries) => {
-	console.log( "Libraries: ", libraries );
-	assert(libraries.Count == 1 );
-	console.log( "Found Private Library ", libraries.Items[0] );
-	return libraries.Items[0].LibraryId;
-    });
-}
 
-// XXX
 // ownershipId == personId
 // books: list <map<bookid, sharecount>> (actually, not)  -->
 // books: map<bookid, list<int>>   list: sharecount, ?, ?
 // shares: map<libid, stringset<bookid> >
 function lookupOwnerships( personId ) {
-    console.log('Get shares! ', personId );
+    // console.log('Get shares! ', personId );
 
     const paramsO = {
         TableName: 'Ownerships',
@@ -116,7 +109,7 @@ function lookupOwnerships( personId ) {
 }
 
 function lookupLibraries( personId, memberLibs ) {
-    console.log('LookupLibs!', personId, memberLibs  );
+    // console.log('LookupLibs!', personId, memberLibs  );
 
     var paramsL;
     if( memberLibs ) {
@@ -135,13 +128,13 @@ function lookupLibraries( personId, memberLibs ) {
     
     let librariesPromise = bsdb.scan( paramsL ).promise();
     return librariesPromise.then((libraries) => {
-	console.log( libraries );
+	// console.log( libraries );
 	return libraries;
     });
 }
 
 async function initOwn( username, privLib ) {
-    console.log('init ownership', username );
+    // console.log('init ownership', username );
 
     const personId  = await getPersonId( username );
 	
@@ -160,25 +153,14 @@ async function initOwn( username, privLib ) {
 	    { Put: paramsO }
 	]}).promise();
     
-    return initPromise.then(() => {
-	console.log("Success!");
-	return {
-	    statusCode: 201,
-	    body: JSON.stringify( true ),
-	    headers: { 'Access-Control-Allow-Origin': '*' }
-	};
-    });
-    
+    return initPromise.then(() => success( true ));
 }    
 
-// XXX kill selectedLib
 // Want some error msgs? https://github.com/aws/aws-sdk-js/issues/2464
 // Updates tables: Books, Ownerships
-async function putBook( selectedLib, newBook, username ) {
-    console.log('Put Book!', username, selectedLib, newBook.title );
+async function putBook( newBook, personId, libraryId ) {
+    // console.log('Put Book!', personId, newBook.title );
 
-    const personId   = await getPersonId( username );
-    const libraryId  = await getPrivLibId( personId );
     const ownerships = await lookupOwnerships( personId );
     
     // Books is map<string, list>  id: attributes
@@ -232,18 +214,11 @@ async function putBook( selectedLib, newBook, username ) {
 	    { Update: paramsO },
 	]}).promise();
     
-    return bookPromise.then(() => {
-	console.log("Success!");
-	return {
-	    statusCode: 201,
-	    body: JSON.stringify( true ),
-	    headers: { 'Access-Control-Allow-Origin': '*' }
-	};
-    });
+    return bookPromise.then(() => success( true ));
 }
 
 async function putPerson( newPerson ) {
-    console.log('Put Person!', newPerson.firstName );
+    // console.log('Put Person!', newPerson.firstName );
 
     const paramsPP = {
 	TableName: 'People',
@@ -258,18 +233,11 @@ async function putPerson( newPerson ) {
     };
     
     let personPromise = bsdb.put( paramsPP ).promise();
-    return personPromise.then(() => {
-	console.log("Success!");
-	return {
-	    statusCode: 201,
-	    body: JSON.stringify( true ),
-	    headers: { 'Access-Control-Allow-Origin': '*' }
-	};
-    });
+    return personPromise.then(() => success( true ));
 }
 
 async function putLib( newLib ) {
-    console.log('Put Lib!', newLib.name );
+    // console.log('Put Lib!', newLib.name );
 
     const paramsPL = {
 	TableName: 'Libraries',
@@ -284,19 +252,12 @@ async function putLib( newLib ) {
     };
     
     let libPromise = bsdb.put( paramsPL ).promise();
-    return libPromise.then(() => {
-	console.log("Success!");
-	return {
-	    statusCode: 201,
-	    body: JSON.stringify( true ),
-	    headers: { 'Access-Control-Allow-Origin': '*' }
-	};
-    });
+    return libPromise.then(() => success( true ));
 }
 
 
 async function delLib( libId, personId ) {
-    console.log('Kill Lib!', libId, personId );
+    // console.log('Kill Lib!', libId, personId );
 
     const ownerships = await lookupOwnerships( personId );
     const myLibs = await lookupLibraries( personId, true );
@@ -326,19 +287,12 @@ async function delLib( libId, personId ) {
 	    { Update: paramsO },
 	]}).promise();
     
-    return libPromise.then(() => {
-	console.log("Success!");
-	return {
-	    statusCode: 201,
-	    body: JSON.stringify( true ),
-	    headers: { 'Access-Control-Allow-Origin': '*' }
-	};
-    });
+    return libPromise.then(() => success( true ));
 }
 
 // XXX Books table is unaltered.  Just the ownership of the book.  Desired behavior?
 async function delBook( bookId, personId ) {
-    console.log('Del book!', bookId, personId );
+    // console.log('Del book!', bookId, personId );
 
     const ownerships = await lookupOwnerships( personId );
     var books  = ownerships.Books;
@@ -371,19 +325,13 @@ async function delBook( bookId, personId ) {
 	    { Update: paramsO },
 	]}).promise();
 
-    return libPromise.then(() => {
-	console.log("Success!");
-	return {
-	    statusCode: 201,
-	    body: JSON.stringify( true ),
-	    headers: { 'Access-Control-Allow-Origin': '*' }
-	};
-    });
+    return libPromise.then(() => success( true ));
 }
+
 
 // XXX Beware 100 item limit in scan
 function getBooks( selectedLib ) {
-    console.log('Get Books!', selectedLib );
+    // console.log('Get Books!', selectedLib );
 
     // Note the # instead of : for attribute name, not value
     // Params to get ownerships that have selectedLib in shares
@@ -414,35 +362,22 @@ function getBooks( selectedLib ) {
 	};
 
 	let booksPromise = bsdb.scan( paramsB ).promise();
-	return booksPromise.then((books) => {
-	    
-	    console.log( "Result: ", books );
-	    return {
-		statusCode: 201,
-		body: JSON.stringify( books.Items ),
-		headers: { 'Access-Control-Allow-Origin': '*' }
-	    };
-	});
-	
+	return booksPromise.then((books) => success( books.Items ));
     });
 }
 
 
 async function getOwnerships( personId ) {
-    console.log('Get ownerships! ', personId );
+    // console.log('Get ownerships! ', personId );
     const ownerships = await lookupOwnerships( personId );
 
-    return {
-	statusCode: 201,
-	body: JSON.stringify( ownerships ),
-	headers: { 'Access-Control-Allow-Origin': '*' }
-    };
+    return success( ownerships );
 }
 
 // XXX test dbase for initOwn
 // data volume is tiny, put is overwrite... so just grab, rebuild and put
 async function updateShare( bookId, personId, libId, plibId, all, value ) {
-    console.log('Put share(s) for', libId, personId, "all?", all );
+    // console.log('Put share(s) for', libId, personId, "all?", all );
 
     const ownerships = await lookupOwnerships( personId );
     var shares = ownerships.Shares;
@@ -453,7 +388,7 @@ async function updateShare( bookId, personId, libId, plibId, all, value ) {
     else {
 	// initialize set from one we know exists.  this is an odd dynamodb object
 	shares[libId] = Object.assign( {}, shares[plibId] );
-	console.log( shares[libId], shares[plibId] );
+	// console.log( shares[libId], shares[plibId] );
 	sharesSet = new Set();
     }
     const booksSet  = new Set( shares[plibId].values );
@@ -482,14 +417,7 @@ async function updateShare( bookId, personId, libId, plibId, all, value ) {
 	}};
     
     let ownershipsPromise = bsdb.put( paramsO ).promise();
-    return ownershipsPromise.then((ownership) => {
-	console.log( "Success!" );
-	return {
-	    statusCode: 201,
-	    body: JSON.stringify( true ),
-	    headers: { 'Access-Control-Allow-Origin': '*' }
-	};
-    });
+    return ownershipsPromise.then((ownership) => success( true ));
 }
 
 async function getLibs( userName, memberLibs ) {
@@ -499,15 +427,10 @@ async function getLibs( userName, memberLibs ) {
     
     // exploring, can have 0 libs
     if( libraries.Count >= 1 ) {
-	console.log( "Result: ", libraries.Count );
-	return {
-	    statusCode: 201,
-	    body: JSON.stringify( libraries.Items ),
-	    headers: { 'Access-Control-Allow-Origin': '*' }
-	};
+	return success( libraries.Items );
     } else
     {
-	console.log( "Result: no libs" );
+	// console.log( "Result: no libs" );
 	return {
 	    statusCode: 204,
 	    body: JSON.stringify( "---" ),
@@ -518,7 +441,7 @@ async function getLibs( userName, memberLibs ) {
 
 
 function findBook(bookTitle, username) {
-    console.log('Finding book for ', bookTitle ); 
+    // console.log('Finding book for ', bookTitle ); 
 
     // Title must be :bookTitle, where :bookTitle = bookTitle.  grack.
     const params = {
@@ -535,17 +458,12 @@ function findBook(bookTitle, username) {
 
 	let book = {};
 	books.Items.forEach(function (element) {
-	    console.log( "Element: ", element );  
+	    // console.log( "Element: ", element );  
 	    book = element;
 	});
 
-	console.log( "Result: ", book );
-	return {
-            statusCode: 201,
-            body: JSON.stringify( book ),
-            headers: { 'Access-Control-Allow-Origin': '*' }
-	};
-	
+	// console.log( "Result: ", book );
+	return success( book );	
     });
 }
 
@@ -561,17 +479,34 @@ function errorResponse(status, errorMessage, awsRequestId) {
 }
 
 
-    /*
-    return new Promise((resolve, reject) => {
-	resolve(  {
-        statusCode: 201,
-        body: JSON.stringify([{
-            id: 3,
-            name: "MoJo Moomin",
+
+/*
+return new Promise((resolve, reject) => {
+    resolve(  {
+	statusCode: 201,
+	body: JSON.stringify([{
+	    id: 3,
+	    name: "MoJo Moomin",
 	    imageID: 234
-        }]),
-        headers: {
-            'Access-Control-Allow-Origin': '*',
-        }});
+	}]),
+	headers: {
+	    'Access-Control-Allow-Origin': '*',
+	}});
+});
+
+function getPrivLibId( personId ) {
+    const paramsPL = {
+        TableName: 'Libraries',
+        FilterExpression: 'contains( Members, :pid ) AND JustMe = :true',
+        ExpressionAttributeValues: { ":pid": personId, ":true": true }
+    };
+    
+    let libraryPromise = bsdb.scan( paramsPL ).promise();
+    return libraryPromise.then((libraries) => {
+	console.log( "Libraries: ", libraries );
+	assert(libraries.Count == 1 );
+	console.log( "Found Private Library ", libraries.Items[0] );
+	return libraries.Items[0].LibraryId;
     });
-    */
+}
+*/

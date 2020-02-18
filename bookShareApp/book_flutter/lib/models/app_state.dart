@@ -19,10 +19,10 @@ class AppState {
    UserState userState;
    bool cogInitDone;      // main: sometimes cog init is slow.  Timer refires until this is true
    bool newUser;          // signup: newuser creating a login has some special requirements during setup
-   bool gatOverride;
+   bool gatOverride;      // prevent cognito callback from double-firing
    
-   String apiBasePath;
-   TextEditingController usernameController;
+   String apiBasePath;                         // where to find lambda interface to aws
+   TextEditingController usernameController;   
    TextEditingController passwordController;
    TextEditingController attributeController; 
    TextEditingController confirmationCodeController;
@@ -30,8 +30,8 @@ class AppState {
    double screenWidth;
 
    // App logic   
-   bool loaded;
-   bool loading;
+   bool loaded;                           // control expensive aspects of state initialization
+   bool loading;                    
    String userId;
    String privateLibId;
    List<Library> myLibraries;             // libraries that I've a member of, or I've created
