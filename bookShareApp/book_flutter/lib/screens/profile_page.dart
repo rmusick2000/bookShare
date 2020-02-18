@@ -33,7 +33,7 @@ class _BookShareProfileState extends State<BookShareProfilePage> {
   }
 
   
-  _logout( context, container, appState) {
+  Function _logout( context, container, appState) {
      wrapper() async { 
         setState(() => bookState = "illiterate" );
         logout( context, container, appState );

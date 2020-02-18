@@ -60,7 +60,7 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
     super.dispose();
   }
 
-  Future<void> addToLibrary() async {
+  Future<void> _addToLibrary() async {
      print( "Adding " + newBook.title + " to private lib" );
      showToast( context, "Adding..." );
      
@@ -85,7 +85,7 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
   }
      
   // Different display, tap function than in homePage
-  GestureDetector makeBookChunkCol( appState, book, selectedItem, itemNo ) {
+  GestureDetector _makeBookChunkCol( appState, book, selectedItem, itemNo ) {
      final imageHeight = appState.screenHeight * .46;
      final imageWidth  = appState.screenWidth * .42;
      const inset       = 20.0;
@@ -143,7 +143,7 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
 
      int itemNo = 0;
      for( final book in bil ) {
-        bookChunks.add( makeBookChunkCol( appState, book, selectedNewBook, itemNo )); 
+        bookChunks.add( _makeBookChunkCol( appState, book, selectedNewBook, itemNo )); 
         itemNo++;
      }
      
@@ -175,7 +175,7 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
         () async
         {
            newBook = foundBooks[selectedNewBook];
-           await addToLibrary();
+           await _addToLibrary();
 
            selectedNewBook = 0;   
            foundBooks.clear();
@@ -192,7 +192,7 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
         () async
         {
            newBook = foundBooks[selectedNewBook];
-           await addToLibrary();
+           await _addToLibrary();
            
            selectedNewBook = 0; 
            setState(() { 

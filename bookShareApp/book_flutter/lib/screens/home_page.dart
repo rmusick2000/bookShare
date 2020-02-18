@@ -219,7 +219,7 @@ class _BookShareHomeState extends State<BookShareHomePage> {
    }   
 
   // Title will wrap if need be, growing row height as needed
-   GestureDetector makeBookChunkCol( appState, book, itemNo ) {
+   GestureDetector _makeBookChunkCol( appState, book, itemNo ) {
      final imageHeight = appState.screenHeight * .45;
      final imageWidth  = appState.screenWidth * .42;
      const inset       = 20.0;
@@ -317,7 +317,7 @@ class _BookShareHomeState extends State<BookShareHomePage> {
 
          int itemNo = 0;
          for( final book in bil ) {
-            bookChunks.add( makeBookChunkCol( appState, book, itemNo )); 
+            bookChunks.add( _makeBookChunkCol( appState, book, itemNo )); 
             itemNo++;
          }
          

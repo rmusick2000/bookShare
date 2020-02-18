@@ -221,7 +221,7 @@ void main() {
                  await refineAdd( driver, "Elementary Functional Analysis", "", 0, "more" );    
                  await refineAdd( driver, "Keanna", "", 0, "more" );    
                  await refineAdd( driver, "Rain, Snow, Sleet, and Hail", "", 0, "more" );    
-                 await refineAdd( driver, "The Perfect Storm: A True Story of Men Against the Sea", "", 0, "more" );    
+                 await refineAdd( driver, "The Perfect Storm", "Junger", 0, "more" );    
                  await refineAdd( driver, "Sandia Mountain Hiking Guide", "", 0, "more" );    
                  await refineAdd( driver, "Meet hunca munca", "", 0, "home" );    
               },
@@ -473,7 +473,7 @@ void main() {
                  expect( await isPresent( driver, find.text( '7 books' )), true );
                  
                  // find 7
-                 expect( await findBook( driver, theList, 'The Perfect Storm: A True Story of Men Against the Sea' ), true );
+                 expect( await findBook( driver, theList, 'The Perfect Storm' ), true );
                  expect( await findBook( driver, theList, 'Sandia Mountain Hiking Guide' ), true );
                  expect( await findBook( driver, theList, 'Elementary Functional Analysis' ), true );
                  expect( await findBook( driver, theList, 'Warship' ), true );
@@ -526,14 +526,14 @@ void main() {
                  
                  // DREAMY
                  // Check 1st.. cancel delete, then delete
-                 await deleteBook( driver, theList, dreamy, 'The Perfect Storm: A True Story of Men Against the Sea', true );
+                 await deleteBook( driver, theList, dreamy, 'The Perfect Storm', true );
                  expect( await isPresent( driver, find.text( "7 books" )), true );
                  await driver.tap( myLib );
                  expect( await isPresent( driver, find.text( "10 books" ), 2000 ), true );
                  await driver.tap( stormy );
                  expect( await isPresent( driver, find.text( "3 books" ), 2000 ), true );
                  
-                 await deleteBook( driver, theList, dreamy, 'The Perfect Storm: A True Story of Men Against the Sea');
+                 await deleteBook( driver, theList, dreamy, 'The Perfect Storm');
                  expect( await isPresent( driver, find.text( "6 books" ), 2000 ), true );
                  await driver.tap( myLib );
                  expect( await isPresent( driver, find.text( "9 books" ), 2000), true );
