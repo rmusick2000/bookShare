@@ -59,7 +59,7 @@ class _AppStateContainerState extends State<AppStateContainer> {
   }
   
   Future<void> getAuthTokens( override ) async {
-     print( "GAT, with " + state.idToken );
+     //print( "GAT, with " + state.idToken );
      state.gatOverride = override;
      if( state.accessToken == "" || state.idToken == "" || override == true) {
         List tokenString = (await Cognito.getTokens()).toString().split(" ");

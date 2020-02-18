@@ -131,7 +131,7 @@ Future<Map<String,Set>> fetchOwnerships( context, container, postData ) async {
    final response = await postIt( shortName, postData, container );
    
    if (response.statusCode == 201) {
-      print( response.body.toString() );         
+      // print( response.body.toString() );         
       final o = json.decode(utf8.decode(response.bodyBytes));
       final ownership = Ownership.fromJson(o);
       return ownership.shares;
