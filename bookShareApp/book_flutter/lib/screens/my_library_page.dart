@@ -407,7 +407,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
             ));
    }
 
-   _updateOwnerships( bookId, libId, newValue, setAll ) async {
+   Future<void> _updateOwnerships( bookId, libId, newValue, setAll ) async {
       print( "updating Share, all? " + setAll.toString() );
       // setState here would force a reload that you do not want, at least not without going to tristate.
       appState.sharesLoaded = false;
@@ -439,7 +439,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
          });
    }
 
-   _initOwnerships() async {
+   Future<void> _initOwnerships() async {
       print( "loading Ownerships" );
       await initOwnerships( context, container );
       print( "SETSTATE initOwnership init" );
@@ -476,7 +476,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
             ]);
    }
 
-   void setNewEditLib( lib ) {
+   void _setNewEditLib( lib ) {
       editLibrary = lib;
       if( editLibrary != null ) {
          // print( editLibrary.toString() );
@@ -488,7 +488,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
    }
 
    // XXX Consider confirming choice of new lib if editLib != null, otherwise if editing one, then choose another, edits are lost
-   _editLibrary( libraryId, lib ) {
+   void _editLibrary( libraryId, lib ) {
       if( lib == null ) {
          if( prospectActive ) { showToast( context, "Just one new lib at a time." ); }
          else {
@@ -497,7 +497,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
          }
       } else {
          prospectActive = false;
-         setNewEditLib( lib );
+         _setNewEditLib( lib );
          print( "SETSTATE editLIb editLibId" );
          setState(() => editLibId = libraryId );
       }
@@ -520,7 +520,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
       editLibrary = new Library( id: editLibId, name: "new", private: false, members: meme, imagePng: null, image: null, prospect: true );
       updateProspect = false;
       prospectActive = true;
-      setNewEditLib( editLibrary );
+      _setNewEditLib( editLibrary );
       return GestureDetector(
          onTap: () { _editLibrary( editLibId, editLibrary); },
          child: makeLibraryChunk( editLibrary, appState.screenHeight, highlight ) 

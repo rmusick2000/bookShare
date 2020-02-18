@@ -463,7 +463,7 @@ class _BookShareImagePageState extends State<BookShareImagePage> {
    
 
    // Save the image to dynamo, pop back
-   _acceptCrop() async {
+   Future<void> _acceptCrop() async {
 
       if( !newSelection ) {
          // Save image  
