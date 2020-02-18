@@ -64,10 +64,10 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
      print( "Adding " + newBook.title + " to private lib" );
      showToast( context, "Adding..." );
      
-     // AWS has username via cognito signin
+     String book  = json.encode( newBook );
+     String uid   = appState.userId;
      String libID = appState.privateLibId;
-     String book = json.encode( newBook ); 
-     String postData = '{ "Endpoint": "PutBook", "SelectedLib": "$libID", "NewBook": $book }';
+     String postData = '{ "Endpoint": "PutBook", "PersonId": "$uid", "PrivLibId": "$libID", "NewBook": $book }';
      print( postData );
      bool success = await putBook( context, container, postData );
 
