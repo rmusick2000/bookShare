@@ -29,6 +29,7 @@ to share and track any book that a participating member is willing to
 loan out to the community.
 
 <p float="left">
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
   <img src="doc/images/bookshare_home.jpg" width="240" height="400" />
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
   <img src="doc/images/bookshare_search.jpg" width="240" height="400" />
@@ -36,20 +37,14 @@ loan out to the community.
   <img src="doc/images/bookshare_detail.jpg" width="240" height="400"  />
 </p>
 
-:-------------------------:|:-------------------------:|:-------------------------:
-  <img src="doc/images/bookshare_home.jpg" width="240" height="400" /> |
-  <img src="doc/images/bookshare_search.jpg" width="240" height="400" /> |
-  <img src="doc/images/bookshare_detail.jpg" width="240" height="400"  />
-
-
-:-------------------------:|:-------------------------:|:-------------------------:
-  <img src="doc/images/bookshare_home.jpg" width="240" height="400" /> | <img src="doc/images/bookshare_search.jpg" width="240" height="400" /> | <img src="doc/images/bookshare_detail.jpg" width="240" height="400"  />
-
-![](doc/images/bookshare_home.jpg)
-![](doc/images/bookshare_search.jpg)
-![](doc/images/bookshare_detail.jpg)
-![](doc/images/bookshare_share.jpg)
-![](doc/images/bookshare_request.jpg)
+<p float="left">
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
+  <img src="doc/images/bookshare_share.jpg" width="240" height="400" />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
+  <img src="doc/images/bookshare_join.jpg" width="240" height="400" />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
+  <img src="doc/images/bookshare_request.jpg" width="240" height="400"  />
+</p>
 
 # BookShare Backend
 
