@@ -28,11 +28,11 @@ foreign language books.  Bookshare helps the school by making it easy
 to share and track any book that a participating member is willing to
 loan out to the community.
 
-![](doc/images/bookshare-home.jpg)
-![](doc/images/bookshare-search.jpg)
-![](doc/images/bookshare-detail.jpg)
-![](doc/images/bookshare-share.jpg)
-![](doc/images/bookshare-request.jpg)
+![](doc/images/bookshare_home.jpg)
+![](doc/images/bookshare_search.jpg)
+![](doc/images/bookshare_detail.jpg)
+![](doc/images/bookshare_share.jpg)
+![](doc/images/bookshare_request.jpg)
 
 # BookShare Backend
 
