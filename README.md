@@ -29,22 +29,21 @@ to share and track any book that a participating member is willing to
 loan out to the community.
 
 <p float="left">
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
+  <img src="doc/images/bookshare_join.jpg" width="360" height="600" />
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
-  <img src="doc/images/bookshare_home.jpg" width="240" height="400" />
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
-  <img src="doc/images/bookshare_search.jpg" width="240" height="400" />
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
-  <img src="doc/images/bookshare_detail.jpg" width="240" height="400"  />
+  <img src="doc/images/bookshare_share.jpg" width="360" height="600" />
 </p>
 
+<br>
+
 <p float="left">
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
+  <img src="doc/images/bookshare_search.jpg" width="360" height="600" />
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
-  <img src="doc/images/bookshare_share.jpg" width="240" height="400" />
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
-  <img src="doc/images/bookshare_join.jpg" width="240" height="400" />
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
-  <img src="doc/images/bookshare_request.jpg" width="240" height="400"  />
+  <img src="doc/images/bookshare_detail.jpg" width="360" height="600"  />
 </p>
+
 
 # BookShare Backend
 
