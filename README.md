@@ -33,7 +33,7 @@ Left to right, the screenshots show: a homepage; the book scanning and search pa
 <p float="left">
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
   <img src="doc/images/bookshare_join.jpg" width="360" height="600" />
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
   <img src="doc/images/bookshare_search.jpg" width="360" height="600" />
 </p>
 
@@ -44,13 +44,12 @@ a book detail page; and the book sharing page.
 <p float="left">
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
   <img src="doc/images/bookshare_detail.jpg" width="360" height="600"  />
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
   <img src="doc/images/bookshare_share.jpg" width="360" height="600" />
 </p>
 
 <br>
-More screenshots can be found [here](doc/images/).
-<br>
+
 
 # BookShare Backend
 
