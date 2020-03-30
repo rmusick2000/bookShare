@@ -24,26 +24,33 @@ between the cousins.
 
 For example, a language school typically has a very interested, active
 community of families, together with a rich but inaccessible trove of
-foreign language books.  Bookshare helps the school by making it easy
-to share and track any book that a participating member is willing to
-loan out to the community.
+foreign language books.  Bookshare makes it easy to share and track
+any book that a participating member is willing to loan out to the
+community.
 
+Left to right, the screenshots show: <br>
+your homepage; your book scanning and search page;
 <p float="left">
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
   <img src="doc/images/bookshare_join.jpg" width="360" height="600" />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
+  <img src="doc/images/bookshare_search.jpg" width="360" height="600" />
+</p>
+
+<br>
+<br>
+your book detail page; and your book sharing page.
+
+<p float="left">
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
+  <img src="doc/images/bookshare_detail.jpg" width="360" height="600"  />
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
   <img src="doc/images/bookshare_share.jpg" width="360" height="600" />
 </p>
 
 <br>
-
-<p float="left">
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
-  <img src="doc/images/bookshare_search.jpg" width="360" height="600" />
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
-  <img src="doc/images/bookshare_detail.jpg" width="360" height="600"  />
-</p>
-
+<br>
+More screenshots can be found [here](doc/images).
 
 # BookShare Backend
 
