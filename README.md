@@ -28,7 +28,7 @@ foreign language books.  Bookshare helps the school by making it easy
 to share and track any book that a participating member is willing to
 loan out to the community.
 
-<p 
+<p float="left">
   <img src="doc/images/bookshare_home.jpg" width="240" height="400" />
   <img src="doc/images/bookshare_search.jpg" width="240" height="400" />
 </p>
