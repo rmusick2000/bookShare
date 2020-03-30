@@ -28,8 +28,8 @@ foreign language books.  Bookshare makes it easy to share and track
 any book that a participating member is willing to loan out to the
 community.
 
-Left to right, the screenshots show: <br>
-your homepage; your book scanning and search page;
+Left to right, the screenshots show: a homepage; the book scanning and search page;
+<br>
 <p float="left">
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
   <img src="doc/images/bookshare_join.jpg" width="360" height="600" />
@@ -38,8 +38,8 @@ your homepage; your book scanning and search page;
 </p>
 
 <br>
+a book detail page; and the book sharing page.
 <br>
-your book detail page; and your book sharing page.
 
 <p float="left">
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
@@ -49,8 +49,8 @@ your book detail page; and your book sharing page.
 </p>
 
 <br>
+More screenshots can be found [here](doc/images/).
 <br>
-More screenshots can be found [here](doc/images).
 
 # BookShare Backend
 
