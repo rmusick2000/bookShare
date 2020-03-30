@@ -68,7 +68,7 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
      String uid   = appState.userId;
      String libID = appState.privateLibId;
      String postData = '{ "Endpoint": "PutBook", "PersonId": "$uid", "PrivLibId": "$libID", "NewBook": $book }';
-     print( postData );
+     // print( postData );
      bool success = await putBook( context, container, postData );
 
      if( success ) {
