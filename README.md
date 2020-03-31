@@ -52,7 +52,7 @@ a book detail page; and the book sharing page.
 
 <p float="left">
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
-  <img src="doc/images/bookshare.gif" width="360" height="600"  />
+  <img src="doc/images/bookshare.gifV" width="360" height="600"  />
 </p>
 
 <br>
@@ -79,6 +79,27 @@ Details coming soon!
 
 
 # Developer Quickstart
+
+Create or destroy the BookShare Backend infrascture with
+[createBS.py](bookShareApp/createBS.py), for example:
+* python createBS.py help
+* python createBS.py makeBSResources
+
+Carry out integration testing with
+[runTests.py](bookShareApp/runTests.py), for example:
+* python runTests.py
+
+runTests.py carries out several minutes of integration testing using the Android emulator for
+Nexus IV with API 27.
+
+Main development components for both the app and the backend include: 
+* flutter, master channel  v1.16+
+* android studio, v3.6+
+* javascript, for AWS lambda 
+* python 3.6.7+
+* aws development environment with boto/awscli/awssam as detailed
+here: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html
+
 
 # Known Issues
 
