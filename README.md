@@ -14,7 +14,7 @@ BookShare helps organize private libraries between a small group of
 people.  With BookShare, you add your own contributions to a library
 by scanning the book's barcode with your phone.  You can join
 libraries of people you know.  You can also locate and request books
-your libraries that currently reside with other members.
+in your libraries that currently reside with other members.
 
 For example, a bookclub can use BookShare to keep track of who
 currently has which books on the reading list for the summer.
@@ -46,6 +46,13 @@ a book detail page; and the book sharing page.
   <img src="doc/images/bookshare_detail.jpg" width="360" height="600"  />
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
   <img src="doc/images/bookshare_share.jpg" width="360" height="600" />
+</p>
+
+<br>
+
+<p float="left">
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
+  <img src="doc/images/bookshare.gif" width="360" height="600"  />
 </p>
 
 <br>
