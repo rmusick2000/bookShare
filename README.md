@@ -10,11 +10,11 @@ major elements:
 
 # BookShare App
 
-BookShare is an easy to use app for organizing a private library
-between a small group of people.  With BookShare, you can add your own
-contributions to a library by scanning the barcode with your phone.
-You can join libraries of people you know.  You can also locate and
-request books your libraries that currently reside with other members.
+BookShare helps organize private libraries between a small group of
+people.  With BookShare, you add your own contributions to a library
+by scanning the book's barcode with your phone.  You can join
+libraries of people you know.  You can also locate and request books
+your libraries that currently reside with other members.
 
 For example, a bookclub can use BookShare to keep track of who
 currently has which books on the reading list for the summer.
@@ -22,7 +22,7 @@ currently has which books on the reading list for the summer.
 For example, an extended family can share all the Warriors books
 between the cousins.
 
-For example, a language school typically has a very interested, active
+For example, a language school may have a very interested, active
 community of families, together with a rich but inaccessible trove of
 foreign language books.  Bookshare makes it easy to share and track
 any book that a participating member is willing to loan out to the
@@ -53,11 +53,25 @@ a book detail page; and the book sharing page.
 
 # BookShare Backend
 
-![](doc/images/bookshare-backend.png)
+The BookShare backend is a _serverless_ architecture on AWS.  The
+architecture is specified with a [yaml
+file](bookShareApp/samInfrasctructure.yaml) that is a mixture of AWS's
+SAM and CloudFormation specifications.  The following diagram is an
+overview of the major components in the backend, and how they interact.
+
+![](doc/images/bookshare_backend.png)
 
 # CodeEquity for BookShare
 
 Details coming soon!
+
+
+# Developer Quickstart
+
+# Known Issues
+
+Visit the Issue page in this repository for known issues and feature requests.
+
 
 # Status 3/1/20
 
@@ -89,12 +103,6 @@ STATUS 10/23/19:
  * App development:  Flutter, on Android emulator for Nexus IV
    with API 27.
 
-
-# Developer Quickstart
-
-# Known Issues
-
-Visit the Issue page in this repository for known issues and feature requests.
 
 # Release History
 
