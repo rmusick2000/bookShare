@@ -55,11 +55,16 @@ a book detail page; and the book sharing page.
 
 The BookShare backend is a _serverless_ architecture on AWS.  The
 architecture is specified with a [yaml
-file](bookShareApp/samInfrasctructure.yaml) that is a mixture of AWS's
+file](bookShareApp/samInfrastructure.yaml) that is a mixture of AWS's
 SAM and CloudFormation specifications.  The following diagram is an
 overview of the major components in the backend, and how they interact.
 
-![](doc/images/bookshare_backend.png)
+<p float="left">
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
+  <img src="doc/images/bookshare_backend.png" />
+</p>
+
+<br>
 
 # CodeEquity for BookShare
 
