@@ -67,7 +67,7 @@ Details coming soon!
 * `python createBS.py help`
 * `python createBS.py makeBSResources`
 
-   Backend development requires setting the BSPATH evironment variable
+   Backend development requires setting the BSPATH environment variable
    to the root of this repository.  For example, in your .bashrc,
    `export BSPATH=$CODEPATH/src/bookShare`.
 
