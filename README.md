@@ -67,21 +67,22 @@ Details coming soon!
 * `python createBS.py help`
 * `python createBS.py makeBSResources`
 
-Backend development requires setting the BSPATH evironment variable to
-the root of this repository.  For example, in your .bashrc, `export
-BSPATH=$CODEPATH/src/bookShare`.
+   Backend development requires setting the BSPATH evironment variable
+   to the root of this repository.  For example, in your .bashrc,
+   `export BSPATH=$CODEPATH/src/bookShare`.
 
-NOTE: a related known issue: AWS S3 bucket names are unique per
-region.  S3 bucket names should be parameterized.  Your bucket names
-should be set and used in 
-[awsBSCommon.py](ops/awsUtils/awsBSCommon.py) and [samStaticWeb.yaml](bookShareApp/samStaticWeb.yaml).
+   NOTE: a related known issue: AWS S3 bucket names are unique per
+   region.  S3 bucket names should be parameterized.  Your bucket
+   names should be set and used in
+   [awsBSCommon.py](ops/awsUtils/awsBSCommon.py) and
+   [samStaticWeb.yaml](bookShareApp/samStaticWeb.yaml).
 
 2. Carry out integration testing with
 [runTests.py](bookShareApp/runTests.py), for example:
 * `python runTests.py`
 
-runTests.py carries out several minutes of integration testing using the Android emulator for
-Nexus IV with API 27.
+   runTests.py carries out several minutes of integration testing using the Android emulator for
+   Nexus IV with API 27.
 
 3. Main development components for both the app and the backend include: 
 * flutter, master channel  v1.16+
