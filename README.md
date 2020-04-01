@@ -28,31 +28,13 @@ foreign language books.  Bookshare makes it easy to share and track
 any book that a participating member is willing to loan out to the
 community.
 
-Left to right, the screenshots show: a homepage; the book scanning and search page;
-<br>
-<p float="left">
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
-  <img src="doc/images/bookshare_join.jpg" width="360" height="600" />
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
-  <img src="doc/images/bookshare_search.jpg" width="360" height="600" />
-</p>
-
-<br>
-a book detail page; and the book sharing page.
-<br>
+The following gif shows screens including: home; scan a book; refine
+search and choose; check details; share book with a member library;
+visit a non-member library.
 
 <p float="left">
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
-  <img src="doc/images/bookshare_detail.jpg" width="360" height="600"  />
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
-  <img src="doc/images/bookshare_share.jpg" width="360" height="600" />
-</p>
-
-<br>
-
-<p float="left">
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
-  <img src="doc/images/bookshare.gifV" width="360" height="600"  />
+  <img src="doc/images/bookshare.gif" width="360" height="600"  />
 </p>
 
 <br>
