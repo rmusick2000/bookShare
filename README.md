@@ -64,21 +64,21 @@ Details coming soon!
 
 1. Create or destroy the BookShare Backend infrascture with
 [createBS.py](bookShareApp/createBS.py), for example:
-* python createBS.py help
-* python createBS.py makeBSResources
+* `python createBS.py help`
+* `python createBS.py makeBSResources`
 
 Backend development requires setting the BSPATH evironment variable to
-the root of this repository.  For example, in your .bashrc, _export
-BSPATH=$CODEPATH/src/bookShare_.
+the root of this repository.  For example, in your .bashrc, `export
+BSPATH=$CODEPATH/src/bookShare`.
 
 NOTE: a related known issue: AWS S3 bucket names are unique per
 region.  S3 bucket names should be parameterized.  Your bucket names
 should be set and used in 
-(awsBSCommon.py)[ops/awsUtils/awsBSCommon.py] and (samStaticWeb.yaml)[bookShareApp/samStaticWeb.yaml].
+[awsBSCommon.py](ops/awsUtils/awsBSCommon.py) and [samStaticWeb.yaml](bookShareApp/samStaticWeb.yaml).
 
 2. Carry out integration testing with
 [runTests.py](bookShareApp/runTests.py), for example:
-* python runTests.py
+* `python runTests.py`
 
 runTests.py carries out several minutes of integration testing using the Android emulator for
 Nexus IV with API 27.
@@ -99,7 +99,7 @@ Visit the Issue page in this repository for known issues and feature requests.
 
 # Status 3/30/20
 
- * **BookShare App Status**
+### BookShare App Status
 
  Content milestone has been reached.  All features related to 
  libraries and books are implemented and tested.
@@ -107,7 +107,7 @@ Visit the Issue page in this repository for known issues and feature requests.
  No sharing-related features have been implemented.  IOS version is
  untouched.  No profile or settings work has been done.
 
- * **BookShare Backend Status**
+### BookShare Backend Status
 
  AWS infrastructure creation with createBS.py runs AWS SAM and
  Cloudformation templates through boto3 and the AWS CLI.  
@@ -115,7 +115,7 @@ Visit the Issue page in this repository for known issues and feature requests.
  This is in reasonable shape, with two exceptions: cloud resource
  discovery, and the parameterization of S3 names (see known issues).
 
- * **CodeEquity for BookShare Status**
+### CodeEquity for BookShare Status
 
  In progress.
 
