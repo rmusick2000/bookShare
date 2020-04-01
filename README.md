@@ -62,19 +62,28 @@ Details coming soon!
 
 # Developer Quickstart
 
-Create or destroy the BookShare Backend infrascture with
+1. Create or destroy the BookShare Backend infrascture with
 [createBS.py](bookShareApp/createBS.py), for example:
 * python createBS.py help
 * python createBS.py makeBSResources
 
-Carry out integration testing with
+Backend development requires setting the BSPATH evironment variable to
+the root of this repository.  For example, in your .bashrc, _export
+BSPATH=$CODEPATH/src/bookShare_.
+
+NOTE: a related known issue: AWS S3 bucket names are unique per
+region.  S3 bucket names should be parameterized.  Your bucket names
+should be set and used in 
+(awsBSCommon.py)[ops/awsUtils/awsBSCommon.py] and (samStaticWeb.yaml)[bookShareApp/samStaticWeb.yaml].
+
+2. Carry out integration testing with
 [runTests.py](bookShareApp/runTests.py), for example:
 * python runTests.py
 
 runTests.py carries out several minutes of integration testing using the Android emulator for
 Nexus IV with API 27.
 
-Main development components for both the app and the backend include: 
+3. Main development components for both the app and the backend include: 
 * flutter, master channel  v1.16+
 * android studio, v3.6+
 * javascript, for AWS lambda 
@@ -88,38 +97,28 @@ here: https://docs.aws.amazon.com/serverless-application-model/latest/developerg
 Visit the Issue page in this repository for known issues and feature requests.
 
 
-# Status 3/1/20
+# Status 3/30/20
 
  * **BookShare App Status**
+
+ Content milestone has been reached.  All features related to 
+ libraries and books are implemented and tested.
+
+ No sharing-related features have been implemented.  IOS version is
+ untouched.  No profile or settings work has been done.
+
  * **BookShare Backend Status**
- * **CodeEquity for BookShare Status **
 
+ AWS infrastructure creation with createBS.py runs AWS SAM and
+ Cloudformation templates through boto3 and the AWS CLI.  
 
-STATUS 10/23/19:
- * AWS infrastructure creation in createBS.py is in reasonable shape.
-   Python script runs AWS SAM and Cloudformation templates and
-   commands through boto3 and the command line interface.
-   Infrastucture includes: 
-   - S3 deployment bucket
-   - S3 bucket set up for static web site
-   - Cognito user pool authentication
-   - API + Lambda stub using dynamo
-   - DynamoDB
-   - Cloudwatch
-   - all necessary IAM roles
+ This is in reasonable shape, with two exceptions: cloud resource
+ discovery, and the parameterization of S3 names (see known issues).
 
-  CreateBS.py requires a functional boto/awscli/awssam environment as
-  detailed here: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html
-  The script includes functionality to set this up for a Linux build,
-  but it is not well-tested.
+ * **CodeEquity for BookShare Status**
 
- * Bookshare App:  EARLY STAGES, work in progress.
+ In progress.
 
- * App development:  Flutter, on Android emulator for Nexus IV
-   with API 27.
-
-
-# Release History
 
 # Contributing
 
@@ -132,8 +131,5 @@ See the [LICENSE](LICENSE) file for our project's licensing.
 Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
-
-
-NOTE: Set environment variable BSPATH to this github project directory.
 
 
