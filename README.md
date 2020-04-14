@@ -62,7 +62,17 @@ Details coming soon!
 
 # Developer Quickstart
 
-1. Create or destroy the BookShare Backend infrascture with
+1. Carry out integration testing on the BookShare App with
+[runTests.py](bookShareApp/runTests.py), for example:
+* `python runTests.py`
+
+   runTests.py carries out several minutes of integration testing using the Android emulator for
+   Nexus IV with API 27.
+
+   NOTE: pre-release BookShare App content is not guaranteed to be preserved.
+
+
+2. Create or destroy your own BookShare Backend infrastructure with
 [createBS.py](bookShareApp/createBS.py), for example:
 * `python createBS.py help`
 * `python createBS.py makeBSResources`
@@ -77,12 +87,6 @@ Details coming soon!
    [awsBSCommon.py](ops/awsUtils/awsBSCommon.py) and
    [samStaticWeb.yaml](bookShareApp/samStaticWeb.yaml).
 
-2. Carry out integration testing with
-[runTests.py](bookShareApp/runTests.py), for example:
-* `python runTests.py`
-
-   runTests.py carries out several minutes of integration testing using the Android emulator for
-   Nexus IV with API 27.
 
 3. Main development components for both the app and the backend include: 
 * flutter, master channel  v1.16+
