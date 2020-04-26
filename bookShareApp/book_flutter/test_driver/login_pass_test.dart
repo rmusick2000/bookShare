@@ -41,6 +41,9 @@ void main() {
               await login( driver, known );
            });
 
+        test('Logout.', () async {
+              await logout( driver );
+           });
      });
   
 }

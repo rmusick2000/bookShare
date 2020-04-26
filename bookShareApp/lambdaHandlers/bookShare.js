@@ -39,6 +39,9 @@ exports.handler = (event, context, callback) => {
     else if( endPoint == "GetBooks")       { resultPromise = getBooks( rb.SelectedLib ); }
     else if( endPoint == "PutBook")        { resultPromise = putBook( rb.NewBook, rb.PersonId, rb.PrivLibId ); }
     else if( endPoint == "PutPerson")      { resultPromise = putPerson( rb.NewPerson ); }
+    else if( endPoint == "SetLock")        { resultPromise = setLock( rb.UserName, rb.LockVal ); }
+    else if( endPoint == "UnLock")         { resultPromise = unLock( username ); }
+    else if( endPoint == "GetFree")        { resultPromise = getFree( username ); }
     else if( endPoint == "PutLib")         { resultPromise = putLib( rb.NewLib ); }
     else if( endPoint == "DelLib")         { resultPromise = delLib( rb.LibId, rb.PersonId ); }
     else if( endPoint == "DelBook")        { resultPromise = delBook( rb.BookId, rb.PersonId ); }
@@ -71,6 +74,7 @@ function success( result ) {
 // Note: during initialization, personId may not yet be known on the app side.
 function getPersonId( username ) {
     // Params to get PersonID from UserName
+    console.log( "getPID, checking ", username );
     const paramsP = {
         TableName: 'People',
         FilterExpression: 'UserName = :uname',
@@ -228,12 +232,65 @@ async function putPerson( newPerson ) {
 	    "Last":     newPerson.lastName,
 	    "UserName": newPerson.userName,
 	    "Email":    newPerson.email,
+	    "Locked":   newPerson.locked,
 	    "ImagePng": newPerson.imagePng            
 	}
     };
     
     let personPromise = bsdb.put( paramsPP ).promise();
     return personPromise.then(() => success( true ));
+}
+
+async function setLock( userName, lockVal ) {
+
+    const personId  = await getPersonId( userName );
+
+    const paramsSL = {
+	TableName: 'People',
+	Key: {"PersonId": personId },
+	UpdateExpression: 'set Locked = :lockVal',
+	ExpressionAttributeValues: { ':lockVal': lockVal }};
+    
+    let lockPromise = bsdb.update( paramsSL ).promise();
+    return lockPromise.then(() => success( true ));
+}
+
+async function unLock( userName ) {
+
+    if( userName.includes( "_bs_tester_1664_" ) )
+    {
+	const personId  = await getPersonId( userName );
+	
+	const paramsSL = {
+	    TableName: 'People',
+	    Key: {"PersonId": personId },
+	    UpdateExpression: 'set Locked = :lockVal',
+	    ExpressionAttributeValues: { ':lockVal': "false" }};
+	
+	let lockPromise = bsdb.update( paramsSL ).promise();
+	return lockPromise.then(() => success( true ));
+    }
+    else
+    {
+	return success( false );
+    }
+}
+
+async function getFree( username ) {
+
+    const uname = username + "_";
+
+    const paramsGL = {
+	TableName: 'People',
+	FilterExpression: 'begins_with(UserName, :username ) AND Locked = :false',
+	ExpressionAttributeValues: { ":username": uname, ":false": "false" }};
+    
+    let lockPromise = bsdb.scan( paramsGL ).promise();
+    return lockPromise.then((persons) => {
+	console.log( "Pass", persons.Items );
+	if( persons.Items.length > 0 ) { return success( persons.Items[0].UserName ); }
+	else                           { return success( "" ); }
+    });
 }
 
 async function putLib( newLib ) {

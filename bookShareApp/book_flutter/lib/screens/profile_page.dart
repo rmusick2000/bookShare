@@ -37,6 +37,7 @@ class _BookShareProfileState extends State<BookShareProfilePage> {
      wrapper() async { 
         setState(() => bookState = "illiterate" );
         logout( context, container, appState );
+        unLock( context, container, '{ "Endpoint": "UnLock" }' );
      }
      return wrapper;
   }
