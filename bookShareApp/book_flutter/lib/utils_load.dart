@@ -33,6 +33,19 @@ void logout( context, container, appState ) {
    wrapper();
 }      
 
+Future<void> logoutWait( context, container, appState ) async {
+   final wrapper = container.onPressWrapper(() async {
+         await Cognito.signOut();
+         
+         // Rebuilding page below, don't need to setState (which isn't available here). 
+         appState.usernameController.clear();
+         appState.passwordController.clear();
+         appState.attributeController.clear();
+         appState.confirmationCodeController.clear();
+      });
+   wrapper();
+}      
+
 
 bool checkReauth( context, container ) {
    final appState  = container.state;
@@ -191,6 +204,48 @@ Future<bool> putPerson( context, container, postData ) async {
    } else {
       bool didReauth = await checkFailure( response, shortName, context, container );
       if( didReauth ) { return await putPerson( context, container, postData ); }
+   }
+}
+
+Future<bool> setLock( context, container, postData ) async {
+   String shortName = "setLock";
+   final response = await postIt( shortName, postData, container );
+   
+   if (response.statusCode == 201) {
+      // print( response.body.toString() );         
+      return true;
+   } else {
+      bool didReauth = await checkFailure( response, shortName, context, container );
+      if( didReauth ) { return await setLock( context, container, postData ); }
+   }
+}
+
+Future<bool> unLock( context, container, postData ) async {
+   String shortName = "unLock";
+   final response = await postIt( shortName, postData, container );
+   
+   if (response.statusCode == 201) {
+      // print( response.body.toString() );         
+      return true;
+   } else {
+      bool didReauth = await checkFailure( response, shortName, context, container );
+      if( didReauth ) { return await unLock( context, container, postData ); }
+   }
+}
+
+
+Future<String> getFree( context, container, postData ) async {
+   String shortName = "getFree";
+   // print( postData );
+   final response = await postIt( shortName, postData, container );
+      
+   if (response.statusCode == 201) {
+      // print( response.body.toString() );
+      final retVal = json.decode(utf8.decode(response.bodyBytes));
+      return retVal;
+   } else {
+      bool didReauth = await checkFailure( response, shortName, context, container );
+      if( didReauth ) { return await getFree( context, container, postData ); }
    }
 }
 

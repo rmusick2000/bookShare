@@ -473,7 +473,8 @@ void main() {
                  expect( await isPresent( driver, find.text( '7 books' )), true );
                  
                  // find 7
-                 expect( await findBook( driver, theList, 'The Perfect Storm' ), true );
+                 //expect( await findBook( driver, theList, 'The Perfect Storm' ), true );
+                 expect( await findBook( driver, theList, 'The Perfect Storm: A True Story of Men Against the Sea' ), true );
                  expect( await findBook( driver, theList, 'Sandia Mountain Hiking Guide' ), true );
                  expect( await findBook( driver, theList, 'Elementary Functional Analysis' ), true );
                  expect( await findBook( driver, theList, 'Warship' ), true );
@@ -526,14 +527,17 @@ void main() {
                  
                  // DREAMY
                  // Check 1st.. cancel delete, then delete
-                 await deleteBook( driver, theList, dreamy, 'The Perfect Storm', true );
+                 // await deleteBook( driver, theList, dreamy, 'The Perfect Storm', true );
+                 await deleteBook( driver, theList, dreamy, 'The Perfect Storm: A True Story of Men Against the Sea', true );
+
                  expect( await isPresent( driver, find.text( "7 books" )), true );
                  await driver.tap( myLib );
                  expect( await isPresent( driver, find.text( "10 books" ), 2000 ), true );
                  await driver.tap( stormy );
                  expect( await isPresent( driver, find.text( "3 books" ), 2000 ), true );
                  
-                 await deleteBook( driver, theList, dreamy, 'The Perfect Storm');
+                 // await deleteBook( driver, theList, dreamy, 'The Perfect Storm');
+                 await deleteBook( driver, theList, dreamy, 'The Perfect Storm: A True Story of Men Against the Sea');
                  expect( await isPresent( driver, find.text( "6 books" ), 2000 ), true );
                  await driver.tap( myLib );
                  expect( await isPresent( driver, find.text( "9 books" ), 2000), true );
@@ -607,6 +611,10 @@ void main() {
                  await gotoHome( driver );
                  expect( await isPresent( driver, stormy, 2000 ), false );
                  expect( await isPresent( driver, dreamy ), false );
+              });
+
+           test('Logout.', () async {
+                 await logout( driver );
               });
         });
   }

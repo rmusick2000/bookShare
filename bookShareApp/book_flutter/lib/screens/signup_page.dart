@@ -95,7 +95,7 @@ class _BookShareSignupState extends State<BookShareSignupPage> {
 
                
                Person user = new Person( id: pid, firstName: "Marion", lastName: "Star", userName: appState.usernameController.text,
-                                         email: appState.attributeController.text, imagePng: null, image: null );
+                                         email: appState.attributeController.text, locked: false, imagePng: null, image: null );
 
                String newUser = json.encode( user );
                String ppostData = '{ "Endpoint": "PutPerson", "NewPerson": $newUser }';

@@ -9,18 +9,20 @@ class Person {
    String       lastName;
    String       userName;
    String       email;
+   bool         locked;
    Uint8List    imagePng;     // ONLY   use to, from and in dynamoDB
    Image        image;        // ALWAYS use elsewhere
 
-   Person({this.id, this.firstName, this.lastName, this.userName, this.email, this.imagePng, this.image});
+   Person({this.id, this.firstName, this.lastName, this.userName, this.email, this.locked, this.imagePng, this.image});
    
    dynamic toJson() {
       if( imagePng == null ) {
-         return { 'id': id, 'firstName': firstName, 'lastName': lastName, 'userName': userName, 'email': email, 'imagePng': null };
+         return { 'id': id, 'firstName': firstName, 'lastName': lastName, 'userName': userName, 'email': email,
+               'locked': false, 'imagePng': null }; 
 
       } else {
          return { 'id': id, 'firstName': firstName, 'lastName': lastName, 'userName': userName, 'email': email, 
-               'imagePng': String.fromCharCodes( imagePng ) };
+               'locked': false, 'imagePng': String.fromCharCodes( imagePng ) };
       }
    }
    
@@ -40,6 +42,7 @@ class Person {
          lastName:    json['LastName'],
          userName:    json['UserName'],
          email:       json['Email'],
+         locked:      json['Locked'],
          imagePng:    imagePng,
          image:       image
          );

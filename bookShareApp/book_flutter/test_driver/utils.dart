@@ -131,6 +131,7 @@ Future<bool> wait( FlutterDriver driver, int ms ) async {
 }
 
 
+// Note - byValueKey requires the full title, no partials.
 // ScrollUntilVisible sometimes stops when just an edge of the book is in view.
 // Then when we try to tap the center, it fails.
 // Alignment for SUV didn't work, so instead add a final scrollIntoView step.
