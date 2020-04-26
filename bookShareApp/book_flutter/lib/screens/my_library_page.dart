@@ -651,6 +651,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
       void _deleteConfirmed() {
          if( editLibrary.prospect ) { _rejectEdit(); }
          else if( editLibrary.members.length > 1 ) { notYetImplemented( context ); } 
+         else if( editLibId == appState.privateLibId) { showToast( context, "Your private library can not be deleted." ); }
          else {
             String libId = editLibId;
             String uid = appState.userId;
