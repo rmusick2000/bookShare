@@ -171,6 +171,39 @@ def makeBSResources( sam ) :
 
     # XXX Until we have dynamic resource configuration, create local BS config files
     createConfigFiles( sam )
+    createTestAccounts( sam )
+
+
+    
+def createTestAccounts( sam ) :
+    #Create and confirm all _bs_tester accounts
+    poolID   = sam.getStackOutput( awsBSCommon.samBookShareAppStackName, "UserPoolID" )
+    cmdBase = "aws cognito-idp admin-create-user --message-action SUPPRESS --user-pool-id " + poolID + " --username "
+    pwdBase = "aws cognito-idp admin-set-user-password --user-pool-id " + poolID + " --username "
+    unameBase = "_bs_tester_1664"
+
+    # Test login switchboard, does very little work
+    tbase  = cmdBase + unameBase + " --user-attributes Name=email,Value=success@simulator.amazonses.com Name=email_verified,Value=true"
+    tpBase = pwdBase + unameBase + " --password passWD123 --permanent"
+    if( call(tbase,  shell=True) != 0 ) : logging.warning( "Failed to create tester " )
+    if( call(tpBase, shell=True) != 0 ) : logging.warning( "Failed set password " )
+
+    # Actual test accounts that do all the work
+    username = ""
+    for i in range(10):
+        username = unameBase + "_" + str(i)
+        tbase  = cmdBase + username + " --user-attributes Name=email,Value=success@simulator.amazonses.com Name=email_verified,Value=true"
+        tpBase = pwdBase + username + " --password passWD123 --permanent"
+        if( call(tbase,  shell=True) != 0 ) : logging.warning( "Failed to create tester " )
+        if( call(tpBase, shell=True) != 0 ) : logging.warning( "Failed set password " )
+
+    # Create corresponding entries in library and person tables.
+    cmd = "aws dynamodb batch-write-item --request-items file://testData/testDataPeople.json"
+    if( call(cmd, shell=True) != 0 ) : logging.warning( "Failed to write test data: People " )
+    
+    cmd = "aws dynamodb batch-write-item --request-items file://testData/testDataLibraries.json"
+    if( call(cmd, shell=True) != 0 ) : logging.warning( "Failed to write test data: Libraries " )
+
 
 
 def help() :
@@ -181,6 +214,7 @@ def help() :
     logging.info( "  - getStackOutputs:       display the outputs of BookShare's AWS CloudFormation stacks." )
     logging.info( "  - validateConfiguration: Will assert if your dev environment doesn't look suitable." )
     logging.info( "  - createTestDDBEntries:  Adds some test data to AWS DynamoDB tables")
+    logging.info( "  - createTestAccounts:    Adds _bs_tester accounts and signup data for integration testing.")
     logging.info( "  - help:                  list available commands." )
     logging.info( "" )
     logging.info( "Alpha-level commands:" )
