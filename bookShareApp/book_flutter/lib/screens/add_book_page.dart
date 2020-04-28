@@ -60,6 +60,7 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
     super.dispose();
   }
 
+  // will not add book if it already exists.  add ownership and shares.
   Future<void> _addToLibrary() async {
      print( "Adding " + newBook.title + " to private lib" );
      showToast( context, "Adding..." );

@@ -41,6 +41,7 @@ class _BookShareBookDetailState extends State<BookShareBookDetailPage> {
       if( book.image != null && book.image != "" ) { image = Image.network( book.image, height: imageHeight, width: imageWidth, fit: BoxFit.contain ); }
       else                                         { image = Image.asset( 'images/blankBook.jpeg', height: imageHeight, width: imageWidth, fit: BoxFit.cover); }
 
+      // do not delete books, delete ownerships and shares.  Don't add book if it exists already.
       void _deleteConfirmed() {
          String uid = appState.userId;
          String bookId = book.id;

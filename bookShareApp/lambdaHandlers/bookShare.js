@@ -33,8 +33,7 @@ exports.handler = (event, context, callback) => {
     var endPoint = rb.Endpoint;
     var resultPromise;
 
-    if(      endPoint == "FindBook" )      { resultPromise = findBook( rb.Title, username ); }
-    else if( endPoint == "GetLibs")        { resultPromise = getLibs( username, true); }
+    if(      endPoint == "GetLibs")        { resultPromise = getLibs( username, true); }
     else if( endPoint == "GetExploreLibs") { resultPromise = getLibs( username, false ); }
     else if( endPoint == "GetBooks")       { resultPromise = getBooks( rb.SelectedLib ); }
     else if( endPoint == "PutBook")        { resultPromise = putBook( rb.NewBook, rb.PersonId, rb.PrivLibId ); }
@@ -90,6 +89,27 @@ function getPersonId( username ) {
     });
 }
 
+function findBook( newBook ) {
+    // console.log('Finding book for ', bookTitle ); 
+
+    // Title must be :bookTitle, where :bookTitle = bookTitle.  grack.
+    const params = {
+        TableName: 'Books',
+        FilterExpression: 'Title = :title AND Author = :author AND ISBN = :isbn',
+        ExpressionAttributeValues: { ":title": newBook.title, ":author": newBook.author, ":isbn": newBook.ISBN }
+    };
+
+    // findbook returns a promise - scan is async.  
+    let booksPromise = bsdb.scan( params ).promise();
+
+    // findbook return val is in books
+    return booksPromise.then((books) => {
+
+	var retVal = false;
+	if( books.Items.length > 0 ) { retVal = true; }
+	return retVal;	
+    });
+}
 
 // ownershipId == personId
 // books: list <map<bookid, sharecount>> (actually, not)  -->
@@ -161,7 +181,7 @@ async function initOwn( username, privLib ) {
 }    
 
 // Want some error msgs? https://github.com/aws/aws-sdk-js/issues/2464
-// Updates tables: Books, Ownerships
+// Updates tables: Books, Ownerships. 
 async function putBook( newBook, personId, libraryId ) {
     // console.log('Put Book!', personId, newBook.title );
 
@@ -194,31 +214,46 @@ async function putBook( newBook, personId, libraryId ) {
             ':newBooks':  newBooks, ':newShares': newShares
         }
     };
+
+    // XXX get book -exists?  do not re-add.  pkey?
+    const foundBook = await findBook( newBook );
+
+    if( !foundBook ) {
+	console.log( "Book not found", newBook.title );
+	// Put book 
+	const paramsPB = {
+	    TableName: 'Books',
+	    Item: {
+		"BookId":      newBook.id,
+		"Author":      newBook.author,
+		"Title":       newBook.title,
+		"ISBN":        newBook.ISBN,
+		"Publisher":   newBook.publisher,
+		"PublishedDate": newBook.publishedDate,
+		"PageCount":   newBook.pageCount,
+		"Description": newBook.description,
+		"ImageSmall":  newBook.imageSmall,
+		"Image":       newBook.image            
+	    }
+	};
+	
+	let bookPromise = bsdb.transactWrite({
+	    TransactItems: [
+		{ Put: paramsPB }, 
+		{ Update: paramsO },
+	    ]}).promise();
+	return bookPromise.then(() => success( true ));
+    }
+    else
+    {
+	console.log( "Book found", newBook.title );
+	let bookPromise = bsdb.transactWrite({
+	    TransactItems: [
+		{ Update: paramsO },
+	    ]}).promise();
+	return bookPromise.then(() => success( true ));
+    }
     
-    // Put book 
-    const paramsPB = {
-	TableName: 'Books',
-	Item: {
-	    "BookId":      newBook.id,
-	    "Author":      newBook.author,
-	    "Title":       newBook.title,
-	    "ISBN":        newBook.ISBN,
-	    "Publisher":   newBook.publisher,
-	    "PublishedDate": newBook.publishedDate,
-	    "PageCount":   newBook.pageCount,
-	    "Description": newBook.description,
-	    "ImageSmall":  newBook.imageSmall,
-	    "Image":       newBook.image            
-	}
-    };
-    
-    let bookPromise = bsdb.transactWrite({
-	TransactItems: [
-	    { Put: paramsPB }, 
-	    { Update: paramsO },
-	]}).promise();
-    
-    return bookPromise.then(() => success( true ));
 }
 
 async function putPerson( newPerson ) {
@@ -347,7 +382,7 @@ async function delLib( libId, personId ) {
     return libPromise.then(() => success( true ));
 }
 
-// XXX Books table is unaltered.  Just the ownership of the book.  Desired behavior?
+// Books table is unaltered.  Just the ownership and shares of the book.
 async function delBook( bookId, personId ) {
     // console.log('Del book!', bookId, personId );
 
@@ -496,33 +531,6 @@ async function getLibs( userName, memberLibs ) {
     }
 }
 
-
-function findBook(bookTitle, username) {
-    // console.log('Finding book for ', bookTitle ); 
-
-    // Title must be :bookTitle, where :bookTitle = bookTitle.  grack.
-    const params = {
-        TableName: 'Books',
-        FilterExpression: 'Title = :bookTitle',
-        ExpressionAttributeValues: { ":bookTitle": bookTitle }
-    };
-
-    // findbook returns a promise - scan is async.  
-    let booksPromise = bsdb.scan( params ).promise();
-
-    // findbook return val is in books
-    return booksPromise.then((books) => {
-
-	let book = {};
-	books.Items.forEach(function (element) {
-	    // console.log( "Element: ", element );  
-	    book = element;
-	});
-
-	// console.log( "Result: ", book );
-	return success( book );	
-    });
-}
 
 function errorResponse(status, errorMessage, awsRequestId) {
     return {
