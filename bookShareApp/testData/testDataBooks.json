@@ -4,6 +4,330 @@
       "PutRequest": {
         "Item": {
           "Title": {
+            "S": "The Pale Horseman"
+          },
+          "PageCount": {
+            "S": "384"
+          },
+          "BookId": {
+            "S": "ukuTysrfaC"
+          },
+          "Author": {
+            "S": "Bernard Cornwell"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=2S4NkAEACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=2S4NkAEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9780061144837"
+          },
+          "Publisher": {
+            "S": "Harper Perennial"
+          },
+          "Description": {
+            "S": "The last unvanquished piece of England, Wessex is eyed hungrily by the fearsome Viking conquerors. A dispossessed young nobleman, Uhtred is tied to the imperiled land by birth and marriage but was raised by the Danish invaders—and he questions where his allegiance must lie. But blood is his destiny, and when the overwhelming Viking horde attacks out of a wintry darkness, Uhtred must put aside all hatred and distrust and stand beside his embattled country's staunch defender—the fugitive King Alfred. The Pale Horseman is a gripping, monumental adventure that gives breathtaking life to one of the most important epochs in English history—yet another masterwork from New York Times bestselling author Bernard Cornwell."
+          },
+          "PublishedDate": {
+            "S": "2006-12-26"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "No Plain Hair"
+          },
+          "PageCount": {
+            "S": "32"
+          },
+          "BookId": {
+            "S": "eUDlvaslyQ"
+          },
+          "Author": {
+            "S": "---"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=zwy5QgOvs4sC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=zwy5QgOvs4sC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9781402730832"
+          },
+          "Publisher": {
+            "S": "Sterling Publishing Company, Inc."
+          },
+          "Description": {
+            "S": "Tired of just \"plain\" hair, Brenda wants to try a week of different styles such as spikes with red sides and bangs that look like spaghetti."
+          },
+          "PublishedDate": {
+            "S": "2006"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "DK Eyewitness Books: Climate Change"
+          },
+          "PageCount": {
+            "S": "72"
+          },
+          "BookId": {
+            "S": "atvhoDnNwn"
+          },
+          "Author": {
+            "S": "DK Publishing"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=5-TOZsc5GhIC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=5-TOZsc5GhIC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9780756643515"
+          },
+          "Publisher": {
+            "S": "Penguin"
+          },
+          "Description": {
+            "S": "The most trusted nonfiction series on the market, Eyewitness Books provide an in-depth, comprehensive look at their subjects with a unique integration of words and pictures. An in-depth look at the phenomenon of global warming--what’s causing it, what it might lead to, and what we can do to fight back."
+          },
+          "PublishedDate": {
+            "S": "2008-06-30"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "Femmenism and the Mexican Woman Intellectual from Sor Juana to Poniatowska"
+          },
+          "PageCount": {
+            "S": "268"
+          },
+          "BookId": {
+            "S": "TmmhFWNNIu"
+          },
+          "Author": {
+            "S": "Emily Hind"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=XZBiAQAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=XZBiAQAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9780230113497"
+          },
+          "Publisher": {
+            "S": "Springer"
+          },
+          "Description": {
+            "S": "Hind draws on poetry, short stories, plays, novels, photographs, personal correspondence, advertising, and interviews to make visible the anti-feminine tendencies in femmenism and to imagine a femmenism that will appeal to the next generation of women."
+          },
+          "PublishedDate": {
+            "S": "2010-10-11"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "K-Pop Hand Symbol Kpop Heart Korean Love Music"
+          },
+          "PageCount": {
+            "S": "122"
+          },
+          "BookId": {
+            "S": "WQNAGqgnqp"
+          },
+          "Author": {
+            "S": "Journal Notebook"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=vVyWzAEACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=vVyWzAEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9781675562222"
+          },
+          "Publisher": {
+            "S": "---"
+          },
+          "Description": {
+            "S": "This 120 Dot Graph pages notebook can be used as a sktech book for drawing and painting, aswell as a writing and composition notebook or as a school and students exercise book. Great gift idea for a birthday, christmas, valentine's day and anniversary."
+          },
+          "PublishedDate": {
+            "S": "2019-12-14"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "The Biogeochemistry of the Amazon Basin"
+          },
+          "PageCount": {
+            "S": "384"
+          },
+          "BookId": {
+            "S": "ukAAkolnxD"
+          },
+          "Author": {
+            "S": "Michael E. McClain, Reynaldo Victoria, Jeffrey E. Richey"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=5GIk2Nrrz_gC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=5GIk2Nrrz_gC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9780195354232"
+          },
+          "Publisher": {
+            "S": "Oxford University Press"
+          },
+          "Description": {
+            "S": "With a complex assemblage of largely intact ecosystems that support the earth's greatest diversity of life, the Amazon basin is a focal point of international scientific interest. And, as development and colonization schemes transform the landscape in increasing measure, scientists from around the world are directing attention to questions of regional and global significance. Some of these qustions are: What are the fluxes of greenhouse gases across the atmospheric interface of ecosystems? How mush carbon is stored in the biomass and soils of the basin? How are elements from the land transferred to the basin's surface waters? What is the sum of elements transferred from land to ocean, and what is its marine \"fate\"? This book of original chapters by experts in chemical and biological oceanography, tropical agronomy and biology, and the atmospheric sciences will address these and other important questions, with the aim of synthesizing the current knowledge of biochemical processes operating within and between the various ecosystems in the Amazon basin."
+          },
+          "PublishedDate": {
+            "S": "2001-11-08"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "The Universal Vampire"
+          },
+          "PageCount": {
+            "S": "249"
+          },
+          "BookId": {
+            "S": "cMtTTDDLYC"
+          },
+          "Author": {
+            "S": "Barbara Brodman, James E. Doan"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=x58UH6xvbcMC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=x58UH6xvbcMC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9781611475807"
+          },
+          "Publisher": {
+            "S": "Rowman & Littlefield"
+          },
+          "Description": {
+            "S": "This book presents the vampire as a truly international phenomenon, not restricted to the original folk character, the literary vampire (such as Dracula), or 20th and 21st-century film versions. Instead, we find examples of vampires from literally around the world: each culture and age reshaping the legend in its own image and even seeking psychological and scientific explanations to explain the phenomenon."
+          },
+          "PublishedDate": {
+            "S": "2013"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "Lords of the North"
+          },
+          "PageCount": {
+            "S": "317"
+          },
+          "BookId": {
+            "S": "OYLSeNPBNo"
+          },
+          "Author": {
+            "S": "Bernard Cornwell"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=aZVnvwEACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=aZVnvwEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9780060888626"
+          },
+          "Publisher": {
+            "S": "Harper Collins"
+          },
+          "Description": {
+            "S": "Returning to his northern home, Uhtred of Bebbanburg finds himself caught up in the takeover crusade of a self-proclaimed ruler of Northumbria, a situation that culminates in a midnight siege on a seemingly impregnable city."
+          },
+          "PublishedDate": {
+            "S": "2007-01-23"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "Osaka Including Kyoto & Kobe"
+          },
+          "PageCount": {
+            "S": "200"
+          },
+          "BookId": {
+            "S": "IsFAAfVmDp"
+          },
+          "Author": {
+            "S": "Robb Satterwhite"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=u3tBp2Vt8KQC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=u3tBp2Vt8KQC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9789812329202"
+          },
+          "Publisher": {
+            "S": "Marshall Cavendish"
+          },
+          "Description": {
+            "S": "---"
+          },
+          "PublishedDate": {
+            "S": "2006-06-01"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
             "S": "Crown of Renewal"
           },
           "PageCount": {
@@ -76,6 +400,114 @@
       "PutRequest": {
         "Item": {
           "Title": {
+            "S": "Engineering an Enigma"
+          },
+          "PageCount": {
+            "S": "168"
+          },
+          "BookId": {
+            "S": "ETJRBJeLUE"
+          },
+          "Author": {
+            "S": "Richard E. Cragg"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=dFLuZtzHWhMC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=dFLuZtzHWhMC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9780741424440"
+          },
+          "Publisher": {
+            "S": "Infinity Publishing"
+          },
+          "Description": {
+            "S": "Cragg's hand-made Enigma machines deciphered German U-boat messages. Head of Naval Code and Signal Laboratory Research & Development, Cragg describes his cryptographic missions and life in wartime Washington, D.C."
+          },
+          "PublishedDate": {
+            "S": "2005-03"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "Foundation Series/Foundation Bk 1/Foundation and Empire Bk 2/Second Foundation Bk 3/Foundations Edge"
+          },
+          "PageCount": {
+            "S": "---"
+          },
+          "BookId": {
+            "S": "iNNGpAXxei"
+          },
+          "Author": {
+            "S": "Isaac Asimov"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=MqMgAAAACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=MqMgAAAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9780345340504"
+          },
+          "Publisher": {
+            "S": "Ballantine Books"
+          },
+          "Description": {
+            "S": "---"
+          },
+          "PublishedDate": {
+            "S": "1986"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "The Green Door"
+          },
+          "PageCount": {
+            "S": "62"
+          },
+          "BookId": {
+            "S": "OjvupkyysB"
+          },
+          "Author": {
+            "S": "Mary Eleanor Wilkins Freeman"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=FEYeAAAAMAAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=FEYeAAAAMAAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "---"
+          },
+          "Publisher": {
+            "S": "---"
+          },
+          "Description": {
+            "S": "---"
+          },
+          "PublishedDate": {
+            "S": "1910"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
             "S": "The Name of the Wind"
           },
           "PageCount": {
@@ -112,6 +544,186 @@
       "PutRequest": {
         "Item": {
           "Title": {
+            "S": "Jlo Drawing Journal"
+          },
+          "PageCount": {
+            "S": "24"
+          },
+          "BookId": {
+            "S": "GOUJXUleNW"
+          },
+          "Author": {
+            "S": "Sir Michael Huhn"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=WMlSxwEACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=WMlSxwEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9780464040088"
+          },
+          "Publisher": {
+            "S": "Blurb"
+          },
+          "Description": {
+            "S": "iconic superstar jlo jennifer lopez drawing Blank . journal.. get inspired with this limited collectors edition book and write your ideas on paperA lovely and beautiful journal that invites private contemplation while providing a home for all your thoughts, secrets and doodles, this extremely portable journal contains 24 pages sure to be a inspiration."
+          },
+          "PublishedDate": {
+            "S": "2019-07-08"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "Crafts from Salt Dough"
+          },
+          "PageCount": {
+            "S": "32"
+          },
+          "BookId": {
+            "S": "QlSEmTMRnA"
+          },
+          "Author": {
+            "S": "Audrey Gessat, Cheryl L. Smith"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=jJirw7Ey6n0C&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=jJirw7Ey6n0C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9780736814751"
+          },
+          "Publisher": {
+            "S": "Capstone"
+          },
+          "Description": {
+            "S": "Describes how to make salt dough and provides detailed instructions with photographs for making crafts with the dough."
+          },
+          "PublishedDate": {
+            "S": "2003"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "Darrien"
+          },
+          "PageCount": {
+            "S": "112"
+          },
+          "BookId": {
+            "S": "kRVIJREsro"
+          },
+          "Author": {
+            "S": "Handwriting Journals"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=gzTGywEACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=gzTGywEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9781704265254"
+          },
+          "Publisher": {
+            "S": "---"
+          },
+          "Description": {
+            "S": "110 Pages (dot grid) Size: 6x9 Personalized Journal for Kids Premium Glossy Soft Cover We hope you enjoy our Premium Notebooks for Kids. Perfect for: Sketching Drawing Writing down Notes Journalling Etc. Etc."
+          },
+          "PublishedDate": {
+            "S": "2019-10-31"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "iPop"
+          },
+          "PageCount": {
+            "S": "144"
+          },
+          "BookId": {
+            "S": "FUEGBIYNJj"
+          },
+          "Author": {
+            "S": "Helmut Nigbur"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=SV7Z3bHx5MkC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=SV7Z3bHx5MkC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9783837033298"
+          },
+          "Publisher": {
+            "S": "BoD – Books on Demand"
+          },
+          "Description": {
+            "S": "---"
+          },
+          "PublishedDate": {
+            "S": "2009"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "Hilda Tablet and others"
+          },
+          "PageCount": {
+            "S": "204"
+          },
+          "BookId": {
+            "S": "yoYuevrekq"
+          },
+          "Author": {
+            "S": "Henry Reed"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=zWwaAQAAMAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=zWwaAQAAMAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "---"
+          },
+          "Publisher": {
+            "S": "---"
+          },
+          "Description": {
+            "S": "---"
+          },
+          "PublishedDate": {
+            "S": "1971-01-01"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
             "S": "The Prestige"
           },
           "PageCount": {
@@ -140,6 +752,42 @@
           },
           "PublishedDate": {
             "S": "1997-09-15"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "Cpop Blank Lined Journal Gift for C-Pop Fans: Ideal for Music Lovers and Fans of Chinese C Pop Jpop Kpop Gift & School Notes (9 X 6 Inches) Diary"
+          },
+          "PageCount": {
+            "S": "122"
+          },
+          "BookId": {
+            "S": "ujkjeQyvAo"
+          },
+          "Author": {
+            "S": "Kpop Notebooks and Merchandise"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=qoqqwwEACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=qoqqwwEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9781091665613"
+          },
+          "Publisher": {
+            "S": "Independently Published"
+          },
+          "Description": {
+            "S": "Cpop is Life! Is your child a massive Cpop fan? Are you a massive Cpop fan? If so, this notebook is Ideal for anyone that is Cpop crazy! This beautifully designed book is the perfect size to take anywhere with you and will fit perfectly in a school bag or handbag. Paperback notebook with strong white pages which will make for smooth writing even with a fountain pen. Dimensions 6 x 9 inches with a beautiful matte front cover. 120 pages with black lines."
+          },
+          "PublishedDate": {
+            "S": "2019-03-26"
           }
         }
       }
@@ -220,6 +868,186 @@
       "PutRequest": {
         "Item": {
           "Title": {
+            "S": "Ender Saga 01. Ender's Game"
+          },
+          "PageCount": {
+            "S": "326"
+          },
+          "BookId": {
+            "S": "qcEErpVxXg"
+          },
+          "Author": {
+            "S": "Orson Scott Card"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=bYVtMAEACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=bYVtMAEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9780356501888"
+          },
+          "Publisher": {
+            "S": "Orbit Books"
+          },
+          "Description": {
+            "S": "The human race faces annihilation. An alien threat is on the horizon, ready to strike. And if humanity is to be defended, the government must create the greatest military commander in history. The brilliant young Ender Wiggin is their last hope. But first he must survive the rigours of a brutal military training programme - to prove that he can be the leader of all leaders. A saviour for mankind must be produced, through whatever means possible. But are they creating a hero or a monster? This is the multiple award-winning classic ENDER'S GAME - a groundbreaking tale of war, strategy and survival."
+          },
+          "PublishedDate": {
+            "S": "2013-10"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "Mistborn Trilogy"
+          },
+          "PageCount": {
+            "S": "1712"
+          },
+          "BookId": {
+            "S": "IYOPkVJQCY"
+          },
+          "Author": {
+            "S": "Brandon Sanderson"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=F8u01NaEZU0C&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=F8u01NaEZU0C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9781429989817"
+          },
+          "Publisher": {
+            "S": "Tor Books"
+          },
+          "Description": {
+            "S": "This discounted ebundle includes: Mistborn: The Final Empire, The Well of Ascension, The Hero of Ages From #1 New York Times bestselling author Brandon Sanderson, the Mistborn trilogy is a heist story of political intrigue and magical, martial-arts action. For a thousand years the ash fell and no flowers bloomed. For a thousand years the Skaa slaved in misery and lived in fear. For a thousand years the Lord Ruler, the \"Sliver of Infinity,\" reigned with absolute power and ultimate terror, divinely invincible. This saga dares to ask a simple question: What if the hero of prophecy fails? Mistborn: The Final Empire — Kelsier, a brilliant thief has turned his talents to the ultimate caper, with the Lord Ruler as the mark. Kel's plan is the ultimate long shot, until luck brings a ragged girl named Vin into the fold. But she will have to learn to trust if she is to master powers of which she never dreamed. The Well of Ascension — Evil has been defeated; the war has just begun. Vin, the street urchin who has become the most powerful Mistborn in the land, and Elend Venture, the idealistic young nobleman who loves her, must build a healthy new society in the ashes of an empire. The Hero of Ages — The Deepness has returned, along with unusually heavy ashfalls and powerful earthquakes. Humanity appears to be doomed. Vin and Eland investigate the past to save the future, and in the end, sacrifices must be made. Other Tor books by Brandon Sanderson The Cosmere The Stormlight Archive The Way of Kings Words of Radiance Edgedancer (Novella) Oathbringer The Mistborn trilogy Mistborn: The Final Empire The Well of Ascension The Hero of Ages Mistborn: The Wax and Wayne series Alloy of Law Shadows of Self Bands of Mourning Collection Arcanum Unbounded Other Cosmere novels Elantris Warbreaker The Alcatraz vs. the Evil Librarians series Alcatraz vs. the Evil Librarians The Scrivener's Bones The Knights of Crystallia The Shattered Lens The Dark Talent The Rithmatist series The Rithmatist Other books by Brandon Sanderson The Reckoners Steelheart Firefight Calamity At the Publisher's request, this title is being sold without Digital Rights Management Software (DRM) applied."
+          },
+          "PublishedDate": {
+            "S": "2011-02-01"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "Hollywood in the Neighborhood"
+          },
+          "PageCount": {
+            "S": "276"
+          },
+          "BookId": {
+            "S": "kGiSJKHKDW"
+          },
+          "Author": {
+            "S": "Kathryn Fuller-Seeley"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=EMWe32w_iAQC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=EMWe32w_iAQC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9780520249738"
+          },
+          "Publisher": {
+            "S": "Univ of California Press"
+          },
+          "Description": {
+            "S": "Hollywood in the Neighborhood presents a vivid new picture of how movies entered the American heartland—the thousands of smaller cities, towns, and villages far from the East and West Coast film centers. Using a broad range of research sources, essays from scholars including Richard Abel, Robert Allen, Kathryn Fuller-Seeley, Terry Lindvall, and Greg Waller examine in detail the social and cultural changes this new form of entertainment brought to towns from Gastonia, North Carolina to Placerville, California, and from Norfolk, Virginia to rural Ontario and beyond. Emphasizing the roles of local exhibitors, neighborhood audiences, regional cultures, and the growing national mass media, their essays chart how motion pictures so quickly and successfully moved into old opera houses and glittering new picture palaces on Main Streets across America."
+          },
+          "PublishedDate": {
+            "S": "2008-03-04"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "New Music of the Nordic Countries"
+          },
+          "PageCount": {
+            "S": "605"
+          },
+          "BookId": {
+            "S": "rbvbbNLpyc"
+          },
+          "Author": {
+            "S": "John White, Jean Christensen, Kimmo Kornhonen"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=zyUOv6EQrWcC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=zyUOv6EQrWcC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9781576470190"
+          },
+          "Publisher": {
+            "S": "Pendragon Press"
+          },
+          "Description": {
+            "S": "New Music of the Nordic Countries describes the music of Denmark, Finland, Iceland, Norway and Sweden composed during the latter half of the twentieth century. Along with providing biographical material on most of the living Nordic composers, the book discusses in detail the major trends in Scandinavian contemporary music as well as many of the recent musical works. The 800-page volume is edited by John D. White, a former Scholar to Iceland and a Fellow of the American-Scandinavian Foundation. White is the author of Part III, New Music in Iceland and has enlisted five other distinguished Nordic musical scholars to write the remaining sections of the book. Bound together philosophically, geographically, and to a significant extent ethnically, the five Nordic countries hold a unique place in today's world. They are populated by talented, creative achievers, and each nation possesses its own special qualities. This is certainly true in its music, yet little of Nordic tone art of the late twentieth century is widely known outside of Northern Europe. Thus, this comprehensive volume will serve a valuable purpose in disseminating knowledge about this important body of music literature."
+          },
+          "PublishedDate": {
+            "S": "2002"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "Monica Pedersen Make It Beautiful"
+          },
+          "PageCount": {
+            "S": "208"
+          },
+          "BookId": {
+            "S": "qInvBgbvww"
+          },
+          "Author": {
+            "S": "Monica"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=Ata4rdPrqu0C&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=Ata4rdPrqu0C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9781572846968"
+          },
+          "Publisher": {
+            "S": "Agate Publishing"
+          },
+          "Description": {
+            "S": "Lavishly illustrated and full of practical home-entertaining know-how, this book will appeal to everyone from first-time hosts to seasoned party-throwers. Author, designer, and HGTV host Monica Pederson will inspire and teach readers how to entertain at home with her exclusive insider tips. Her book shows readers how to create beautiful, innovative parties for a range of occasions and budgets. Monica Pedersen Make it Beautiful is a step-by-step guide featuring simple, must-know party planning secrets, in addition to social etiquette tips and how to dress for each event. Pedersen explains how readers can work with what they have in their home when planning a party, taking direction from their very own interiors and generating creative ideas. In 10 gorgeous chapters, Pedersen presents 10 separate parties--each for its own occasion and with its own themes--using her accessible approach and distinctive style to set the tone. For each party, Pedersen assembles a presentation board the same way she would for a design client, with dazzling sample fabrics, flowers, colors, renderings, descriptions, invitations and party favors. Each chapter will also feature sample menus from some of the nation’s top celebrity chefs, including the Wynn Hotel’s Paul Bartolotta and Top Chef's All-Star Fabio Viviani. Mike Ditka of Chicago Bears fame and owner of Chicago's fabled Ditkas Restaurant, even provides a special Super Bowl menu. Also included are exclusive wine pairings from Napa Valley’s Rutherford Hill Winery, to round out this reader-friendly guide to all-around entertaining. Pedersen, a former fashion model and popular HGTV host who appears regularly on the Today Show and Live with Kelly & Regis, will feature prominently throughout this inspirational, do-it-yourself party-planning book. Using her mother’s fabulous parties as inspiration, Pedersen offers up her personal take on entertaining--the same know-how that’s made her one of the go-to designer-hosts on HGTV--by pairing old traditions with new opportunities This book is sure to become the go-to guide for those who want to host stylish and beautiful events in their own homes."
+          },
+          "PublishedDate": {
+            "S": "2012-04-16"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
             "S": "Ataturk: The Biography of the Founder of Modern Turkey"
           },
           "PageCount": {
@@ -248,6 +1076,42 @@
           },
           "PublishedDate": {
             "S": "2002-08-26"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "Boy Oh Boy"
+          },
+          "PageCount": {
+            "S": "314"
+          },
+          "BookId": {
+            "S": "yfHQuomgKH"
+          },
+          "Author": {
+            "S": "Tim Hawkes"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=8nobAQAAMAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=8nobAQAAMAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "---"
+          },
+          "Publisher": {
+            "S": "Longman Publishing Group"
+          },
+          "Description": {
+            "S": "Boys are sons and brothers and they become husbands, partners and fathers. But how well do our social, political and educational institutions help boys fulfil their promise and live lives that develop their values and talents?Boy oh Boyis a practical and highly entertaining resource for those who wish to understand the needs of boys and how to best meet those needs. Dr Tim Hawkes uses a refreshing mix of common sense and scholarly research in a book that gives hope and inspiration to those interested in helping boys. Some questions answered include: Are boys really in as much trouble as some people are suggesting? How can boys be helped to perform better at school? Are there ways to encourage boys to read more? What needs to be understood about boys, friendship and sex? How should the issue of aggression and bullying be handled? - How can boys become more socially responsible? Are there ways to encourage boys to have better relations with their parents? Dr Hawkes examines several additional topics including drugs, depression, sport & body image and friendship & sex."
+          },
+          "PublishedDate": {
+            "S": "2001"
           }
         }
       }
@@ -328,6 +1192,114 @@
       "PutRequest": {
         "Item": {
           "Title": {
+            "S": "Never Call Retreat"
+          },
+          "PageCount": {
+            "S": "512"
+          },
+          "BookId": {
+            "S": "GTBYBUYheX"
+          },
+          "Author": {
+            "S": "Newt Gingrich, William R. Forstchen"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=144r2nz1MpUC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=144r2nz1MpUC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9780312342999"
+          },
+          "Publisher": {
+            "S": "Macmillan"
+          },
+          "Description": {
+            "S": "Traces the events surrounding the pivotal battle of August 1863, during which Lee and Grant both cross the Susquehanna and make decisions that culminate in the war's outcome."
+          },
+          "PublishedDate": {
+            "S": "2006-05-16"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "The Glorious Cause"
+          },
+          "PageCount": {
+            "S": "656"
+          },
+          "BookId": {
+            "S": "WUAGDUIEDM"
+          },
+          "Author": {
+            "S": "Jeff Shaara"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=AVsOZaK3sNgC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=AVsOZaK3sNgC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9780345458681"
+          },
+          "Publisher": {
+            "S": "Ballantine Books"
+          },
+          "Description": {
+            "S": "In Rise to Rebellion, bestselling author Jeff Shaara captured the origins of the American Revolution as brilliantly as he depicted the Civil War in Gods and Generals and The Last Full Measure. Now he continues the amazing saga of how thirteen colonies became a nation, taking the conflict from kingdom and courtroom to the bold and bloody battlefields of war. It was never a war in which the outcome was obvious. Despite their spirit and stamina, the colonists were outmanned and outfought by the brazen British army. General George Washington found his troops trounced in the battles of Brooklyn and Manhattan and retreated toward Pennsylvania. With the future of the colonies at its lowest ebb, Washington made his most fateful decision: to cross the Delaware River and attack the enemy. The stunning victory at Trenton began a saga of victory and defeat that concluded with the British surrender at Yorktown, a moment that changed the history of the world. The despair and triumph of America’s first great army is conveyed in scenes as powerful as any Shaara has written, a story told from the points of view of some of the most memorable characters in American history. There is George Washington, the charismatic leader who held his army together to achieve an unlikely victory; Charles Cornwallis, the no-nonsense British general, more than a match for his colonial counterpart; Nathaniel Greene, who rose from obscurity to become the finest battlefield commander in Washington’s army; The Marquis de Lafayette, the young Frenchman who brought a soldier’s passion to America; and Benjamin Franklin, a brilliant man of science and philosophy who became the finest statesman of his day. From Nathan Hale to Benedict Arnold, William Howe to “Light Horse” Harry Lee, from Trenton and Valley Forge, Brandywine and Yorktown, the American Revolution’s most immortal characters and poignant moments are brought to life in remarkable Shaara style. Yet, The Glorious Cause is more than just a story of the legendary six-year struggle. It is a tribute to an amazing people who turned ideas into action and fought to declare themselves free. Above all, it is a riveting novel that both expands and surpasses its beloved author’s best work."
+          },
+          "PublishedDate": {
+            "S": "2010-12-29"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "Telegraphic Code, to Ensure Secresy in the Transmission of Telegrams"
+          },
+          "PageCount": {
+            "S": "250"
+          },
+          "BookId": {
+            "S": "xdqlhxDdWY"
+          },
+          "Author": {
+            "S": "---"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=MJYBAAAAQAAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=MJYBAAAAQAAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "---"
+          },
+          "Publisher": {
+            "S": "---"
+          },
+          "Description": {
+            "S": "---"
+          },
+          "PublishedDate": {
+            "S": "1870"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
             "S": "Digital Fortress"
           },
           "PageCount": {
@@ -356,6 +1328,42 @@
           },
           "PublishedDate": {
             "S": "2000-05-05"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "Life Goes On"
+          },
+          "PageCount": {
+            "S": "202"
+          },
+          "BookId": {
+            "S": "cwkmjWelmq"
+          },
+          "Author": {
+            "S": "Jennifer Dopson"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=Bv5Tshp4F3UC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=Bv5Tshp4F3UC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9780557017416"
+          },
+          "Publisher": {
+            "S": "Lulu.com"
+          },
+          "Description": {
+            "S": "When friends are hard to find and heroes are the thing of fantasies and fairytales, Kayla has to make her own. Caught between love, lies and the desire to self destruct she has to find the courage to believe she's worth more. Will she find her own inner hero, or will it all go horribly wrong?Dealing with medical and family issues are two things seventeen year old Kayla has learned to do well, but add a single new element to the mix and her world suddenly spirals out of control.Having been a \"disabled child\" all of her life, making the transition to \"mature girlfriend\" was harder than she expected. While everyone around her is convinced she's crazy, she simply wonders how to cope."
+          },
+          "PublishedDate": {
+            "S": "2008-10-17"
           }
         }
       }
@@ -436,6 +1444,438 @@
       "PutRequest": {
         "Item": {
           "Title": {
+            "S": "Istorii︠a︡ ukraïnsʹkoï literatury: ch. 2. Biky XVI-XVIII"
+          },
+          "PageCount": {
+            "S": "---"
+          },
+          "BookId": {
+            "S": "NQBALnJJNH"
+          },
+          "Author": {
+            "S": "Mykhaĭlo Vozni︠a︡k"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=NbF9l0LyNbEC&printsec=frontcover&img=1&zoom=5&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=NbF9l0LyNbEC&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "---"
+          },
+          "Publisher": {
+            "S": "---"
+          },
+          "Description": {
+            "S": "---"
+          },
+          "PublishedDate": {
+            "S": "1924"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "Abundance"
+          },
+          "PageCount": {
+            "S": "386"
+          },
+          "BookId": {
+            "S": "xyFBwPsYkg"
+          },
+          "Author": {
+            "S": "Peter H. Diamandis, Steven Kotler"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=lCifxlN8ZIoC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=lCifxlN8ZIoC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9781451614213"
+          },
+          "Publisher": {
+            "S": "Simon and Schuster"
+          },
+          "Description": {
+            "S": "A contrarian assessment of the near future explains how rapidly growing technologies and other powerful forces will be able to meet and exceed the basic needs of all people, profiling the revolutionary work of leading innovators in such areas as energy, health care and education. 50,000 first printing."
+          },
+          "PublishedDate": {
+            "S": "2012-02-21"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "A Sor Juana Anthology"
+          },
+          "PageCount": {
+            "S": "248"
+          },
+          "BookId": {
+            "S": "Ygbhmjreln"
+          },
+          "Author": {
+            "S": "Sister Juana Inés de la Cruz"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=j3R4_rnL7VIC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=j3R4_rnL7VIC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9780674821217"
+          },
+          "Publisher": {
+            "S": "Harvard University Press"
+          },
+          "Description": {
+            "S": "Juana Inés de la Cruz was acclaimed in her time as the \"Phoenix of Mexico\", America's tenth muse; a generation later she was forgotten. Rediscovered 300 years later, her works were reissued and she is now considered one of the finest Hispanic poets of the seventeenth century. Her works speak directly to our concern for the freedom of women to realize themselves artistically and intellectually. This anthology contains a selection of her poems."
+          },
+          "PublishedDate": {
+            "S": "1988"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "Llama and Alpaca Care - E-Book"
+          },
+          "PageCount": {
+            "S": "808"
+          },
+          "BookId": {
+            "S": "BLSQXDBMPC"
+          },
+          "Author": {
+            "S": "Chris Cebra, David E. Anderson, Ahmed Tibary, Robert J. Van Saun, LaRue Willard Johnson"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=8sU0AwAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=8sU0AwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9780323242912"
+          },
+          "Publisher": {
+            "S": "Elsevier Health Sciences"
+          },
+          "Description": {
+            "S": "Designed for the mixed practice large animal veterinarian, veterinary students, and camelid caretakers alike, Llama and Alpaca Care covers all major body systems, herd health, physical examination, nutrition, reproduction, surgery, anesthesia, and multisystem diseases of llamas and alpacas. Written by world-renowned camelid specialists and experts in the field, this comprehensive and uniquely global text offers quick access to the most current knowledge in this area. With coverage ranging from basic maintenance such as restraint and handling to more complex topics including anesthesia and surgery, this text provides the full range of knowledge required for the management of llamas and alpacas. \"..an essential text for anyone working with South American camelids.\" Reviewed by Claire E. Whitehead on behalf of Veterinary Record, July 2015 Over 500 full-color images provide detailed, highly illustrated coverage of all major body systems, physical examination, nutrition, anesthesia, fluid therapy, multisystem diseases, and surgical disorders. World-renowned camelid experts and specialists in the field each bring a specific area of expertise for a uniquely global text. Comprehensive herd health content includes handling techniques, vaccinations, biosecurity, and protecting the herd from predators. Coverage of anesthesia and analgesia includes the latest information on pharmacokinetics of anesthetic drugs, chemical restraint, injectable and inhalation anesthesia, neuroanesthesia, and pain management. Reproduction section contains information on breeding management, lactation, infertility, and embryo transfer. Nutrition information offers detailed nutritional requirements and discusses feeding management systems and feeding behavior."
+          },
+          "PublishedDate": {
+            "S": "2014-02-15"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "The Last Kingdom (The Last Kingdom Series, Book 1)"
+          },
+          "PageCount": {
+            "S": "352"
+          },
+          "BookId": {
+            "S": "lmhmlbRdxx"
+          },
+          "Author": {
+            "S": "Bernard Cornwell"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=F5QjxA42DIIC&printsec=frontcover&img=1&zoom=5&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=F5QjxA42DIIC&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9780007338818"
+          },
+          "Publisher": {
+            "S": "HarperCollins UK"
+          },
+          "Description": {
+            "S": "BBC2’s major TV series THE LAST KINGDOM is based on Bernard Cornwell’s bestselling novels on the making of England and the fate of his great hero, Uhtred of Bebbanburg. The Last Kingdom is the first book in the series. Season 2 of the epic TV series premiers this March."
+          },
+          "PublishedDate": {
+            "S": "2009-07-24"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "Gold Ore Processing"
+          },
+          "PageCount": {
+            "S": "1040"
+          },
+          "BookId": {
+            "S": "McBJFMjXIK"
+          },
+          "Author": {
+            "S": "Mike D. Adams"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=mN5xCQAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=mN5xCQAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9780444636706"
+          },
+          "Publisher": {
+            "S": "Elsevier"
+          },
+          "Description": {
+            "S": "Gold Ore Processing: Project Development and Operations, Second Edition, brings together all the technical aspects relevant to modern gold ore processing, offering a practical perspective that is vital to the successful and responsible development, operation, and closure of any gold ore processing operation. This completely updated edition features coverage of established, newly implemented, and emerging technologies; updated case studies; and additional topics, including automated mineralogy and geometallurgy, cyanide code compliance, recovery of gold from e-waste, handling of gaseous emissions, mercury and arsenic, emerging non-cyanide leaching systems, hydro re-mining, water management, solid–liquid separation, and treatment of challenging ores such as double refractory carbonaceous sulfides. Outlining best practices in gold processing from a variety of perspectives, Gold Ore Processing: Project Development and Operations is a must-have reference for anyone working in the gold industry, including metallurgists, geologists, chemists, mining engineers, and many others. Includes several new chapters presenting established, newly implemented, and emerging technologies in gold ore processing Covers all aspects of gold ore processing, from feasibility and development stages through environmentally responsible operations, to the rehabilitation stage Offers a mineralogy-based approach to gold ore process flowsheet development that has application to multiple ore types"
+          },
+          "PublishedDate": {
+            "S": "2016-05-03"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "Startide Rising"
+          },
+          "PageCount": {
+            "S": "496"
+          },
+          "BookId": {
+            "S": "rqbcfrqkRx"
+          },
+          "Author": {
+            "S": "David Brin"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=IKoFX1gqU6wC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=IKoFX1gqU6wC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9780307575210"
+          },
+          "Publisher": {
+            "S": "Spectra"
+          },
+          "Description": {
+            "S": "David Brin's Uplift novels are among the most thrilling and extraordinary science fiction ever written. Sundiver, Startide Rising, and The Uplift War--a New York Times bestseller--together make up one of the most beloved sagas of all time. Brin's tales are set in a future universe in which no species can reach sentience without being \"uplifted\" by a patron race. But the greatest mystery of all remains unsolved: who uplifted humankind? The Terran exploration vessel Streaker has crashed in the uncharted water world of Kithrup, bearing one of the most important discoveries in galactic history. Below, a handful of her human and dolphin crew battles armed rebellion and a hostile planet to safeguard her secret--the fate of the Progenitors, the fabled First Race who seeded wisdom throughout the stars."
+          },
+          "PublishedDate": {
+            "S": "2010-07-21"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "YAYO"
+          },
+          "PageCount": {
+            "S": "284"
+          },
+          "BookId": {
+            "S": "YMVVKEKJGI"
+          },
+          "Author": {
+            "S": "S. Allen"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=DexHygEACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=DexHygEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9781951081317"
+          },
+          "Publisher": {
+            "S": "---"
+          },
+          "Description": {
+            "S": "Growing up on the murderous streets of Chicago, Illinois, YATON ANDERSON A.K.A. YAYO falls into a life of crime at a very young age and is convicted of a brutal homicide. After serving a \"juvenile\" life sentence, Yayo is released back to the streets as a full grown man who's on a \"win at all cost\" paper chase. Yayo's once tender heart has been turned ice cold, and he has the mind to match. In a short amount of time, he puts together the Get It Boy Click, and they reign terror throughout the city's drug trade, while Yayo's family prays for him to leave the streets alone. But the addiction to power, fast money and seductive women are hard vices to quit. With rival gangs and gangsta's, along with crooked cops, gunning for their heads, will Yayo and his crew be able to survive the disloyalty and treachery that cause the demise of so many other drug gangs? Or will their blood be the next to soak the streets that they ruthlessly and unapologetically fight to own?"
+          },
+          "PublishedDate": {
+            "S": "2019-09-26"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "How To Seduce A Woman"
+          },
+          "PageCount": {
+            "S": "---"
+          },
+          "BookId": {
+            "S": "msPfvdbihl"
+          },
+          "Author": {
+            "S": "Lara Ditta"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=0wK3CwAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=0wK3CwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9781329950344"
+          },
+          "Publisher": {
+            "S": "Lulu.com"
+          },
+          "Description": {
+            "S": "---"
+          },
+          "PublishedDate": {
+            "S": "---"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "The Dresden Files Collection 1-6"
+          },
+          "PageCount": {
+            "S": "2400"
+          },
+          "BookId": {
+            "S": "jtbgAsbdMp"
+          },
+          "Author": {
+            "S": "Jim Butcher"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=VBkTaVhVkg0C&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=VBkTaVhVkg0C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9781101499689"
+          },
+          "Publisher": {
+            "S": "Penguin"
+          },
+          "Description": {
+            "S": "The first six novels featuring Harry Dresden—Chicago’s only professional wizard—are a perfect introduction to the # 1 New York Times bestselling series that Entertainment Weekly describes as “Buffy the Vampire Slayer starring Philip Marlowe.” STORM FRONT FOOL MOON GRAVE PERIL SUMMER KNIGHT DEATH MASKS BLOOD RITES"
+          },
+          "PublishedDate": {
+            "S": "2010-12-28"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "The Violin"
+          },
+          "PageCount": {
+            "S": "410"
+          },
+          "BookId": {
+            "S": "qfXHfnUyNd"
+          },
+          "Author": {
+            "S": "Mark Katz"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=ScAPGsv8W5gC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=ScAPGsv8W5gC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9780815336372"
+          },
+          "Publisher": {
+            "S": "Taylor & Francis"
+          },
+          "Description": {
+            "S": "First published in 2006. Routledge is an imprint of Taylor & Francis, an informa company."
+          },
+          "PublishedDate": {
+            "S": "2006"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "Peace Love Jpop 120 Page Notebook Lined Journal for Lovers of Japanese Pop Music"
+          },
+          "PageCount": {
+            "S": "122"
+          },
+          "BookId": {
+            "S": "HNsBNQSVrV"
+          },
+          "Author": {
+            "S": "Joel Kirei"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=1KPPyQEACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=1KPPyQEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9781692399184"
+          },
+          "Publisher": {
+            "S": "---"
+          },
+          "Description": {
+            "S": "An awesome journal with 120 blank lined pages perfect for you to fill out with your thoughts, dreams and ideas. Makes a great gift! Notebook with 120 cream colored pages. Measures 6x9 inches."
+          },
+          "PublishedDate": {
+            "S": "2019-09-11"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
             "S": "Daughter of Shanghai"
           },
           "PageCount": {
@@ -464,6 +1904,42 @@
           },
           "PublishedDate": {
             "S": "2002"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "The Practice Effect"
+          },
+          "PageCount": {
+            "S": "288"
+          },
+          "BookId": {
+            "S": "hSKHDABJvE"
+          },
+          "Author": {
+            "S": "David Brin"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=jCLCPAFEWZYC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=jCLCPAFEWZYC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9780307575029"
+          },
+          "Publisher": {
+            "S": "Spectra"
+          },
+          "Description": {
+            "S": "Physicist Dennis Nuel is the first human to probe the strange realms called anomaly worlds: alternate universes where the laws of science are unpredictably changed. But the world Dennis discovers seems almost like our own―with one perplexing difference. To his astonishment, he’s hailed as a wizard, meets a beautiful woman with strange powers, and finds himself fighting a mysterious warlord as he struggles to solve the riddle of this baffling world."
+          },
+          "PublishedDate": {
+            "S": "2009-12-23"
           }
         }
       }
@@ -508,6 +1984,258 @@
       "PutRequest": {
         "Item": {
           "Title": {
+            "S": "The Publications of the Pennsylvania Chestnut Tree Blight Commission"
+          },
+          "PageCount": {
+            "S": "---"
+          },
+          "BookId": {
+            "S": "vldnGJANhU"
+          },
+          "Author": {
+            "S": "---"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=rbpDAAAAIAAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=rbpDAAAAIAAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "---"
+          },
+          "Publisher": {
+            "S": "---"
+          },
+          "Description": {
+            "S": "---"
+          },
+          "PublishedDate": {
+            "S": "1912"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "Shakira"
+          },
+          "PageCount": {
+            "S": "104"
+          },
+          "BookId": {
+            "S": "WGVKARvaGC"
+          },
+          "Author": {
+            "S": "Holly Day"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=_rVji23NYM0C&printsec=frontcover&img=1&zoom=5&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=_rVji23NYM0C&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9781590189740"
+          },
+          "Publisher": {
+            "S": "---"
+          },
+          "Description": {
+            "S": "Describes the life and career of Columbian singer Shakira."
+          },
+          "PublishedDate": {
+            "S": "2007"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "Amazing Grace"
+          },
+          "PageCount": {
+            "S": "304"
+          },
+          "BookId": {
+            "S": "lNPNfEXSPG"
+          },
+          "Author": {
+            "S": "Jonathan Kozol"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=ULgqQvXAQxIC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=ULgqQvXAQxIC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9780060976972"
+          },
+          "Publisher": {
+            "S": "Harper Collins"
+          },
+          "Description": {
+            "S": "The children in this book defy the stereotypes of urban youth too frequently presented by the media. Tender, generous and often religiously devout, they speak with eloquence and honesty about the poverty and racial isolation that have wounded but not hardened them. The book does not romanticize or soften the effects of violence and sickness. One fourth of the child-bearing women in the neighborhoods where these children live test positive for HIV. Pediatric AIDs, life-consuming fires and gang rivalries take a high toll. Several children die during the year in which this narrative takes place. A gently written work, Amazing Grace asks questions that are at once political and theological. What is the value of a child's life? What exactly do we plan to do with those whom we appear to have defined as economically and humanly superfluous? How cold -- how cruel, how tough -- do we dare be?"
+          },
+          "PublishedDate": {
+            "S": "1996-09-27"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "Reject High"
+          },
+          "PageCount": {
+            "S": "270"
+          },
+          "BookId": {
+            "S": "MUWVuYhNPU"
+          },
+          "Author": {
+            "S": "Brian Thompson"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=P2tFDAAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=P2tFDAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "---"
+          },
+          "Publisher": {
+            "S": "Great Nation Publishing, LLC"
+          },
+          "Description": {
+            "S": "After his latest fight, Jason Champion is sent to a rundown alternative school, nicknamed “Reject High.” Fine by him, except a girl named Cherish died there under strange circumstances. At first glance, it's a suicide. But the girl's best friend, a Goth with an attitude named Rhapsody, suspects something different at work. . . One day during detention, Rhapsody shows Jason a crystal that turns her invisible. He tries one on and he jumps over a city. Their classmates, Sasha and Selby, see Jason and Rhapsody in action and receive crystals of their own. They keep a low profile until Jason discovers they are being studied by people they trust. With eleven days until Reject High is destroyed, Jason and his friends must dodge their pursuers, solve the mystery of Cherish’s death, and save their power source from falling into the wrong hands. The first installment in a young adult fantasy series, Reject High combines engaging characters inside of a page-turning adventure. Equal parts sci-fi, fantasy, and action-adventure, Reject High is written from the perspective of Jason Champion, a 15-year old teenager with rage blackouts and a penchant for getting in trouble,"
+          },
+          "PublishedDate": {
+            "S": "2013-06-13"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "100 Bollywood Films"
+          },
+          "PageCount": {
+            "S": "251"
+          },
+          "BookId": {
+            "S": "BpVjAAINIb"
+          },
+          "Author": {
+            "S": "Rachel Dwyer"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=4EBNAQAAIAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=4EBNAQAAIAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9788174364333"
+          },
+          "Publisher": {
+            "S": "Lotus Roli"
+          },
+          "Description": {
+            "S": "Brief reviews of 100 Hindi motion pictures."
+          },
+          "PublishedDate": {
+            "S": "2005"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "Golly Gee Gosh Dang It!"
+          },
+          "PageCount": {
+            "S": "24"
+          },
+          "BookId": {
+            "S": "NAWSIJDfHQ"
+          },
+          "Author": {
+            "S": "Amy Stevens"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=UfW_DAAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=UfW_DAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9781524615864"
+          },
+          "Publisher": {
+            "S": "AuthorHouse"
+          },
+          "Description": {
+            "S": "A moral lesson is learned by a boy named Thomas. We all struggle at times with our children. But patience and understanding are virtuous, so if we just let them struggle, maybe theyll find their way. And we as parents might find some peace!"
+          },
+          "PublishedDate": {
+            "S": "2016-07-23"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "Grant Comes East"
+          },
+          "PageCount": {
+            "S": "404"
+          },
+          "BookId": {
+            "S": "eovtSkrxvx"
+          },
+          "Author": {
+            "S": "Newt Gingrich, William R. Forstchen, Albert S. Hanser"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=ew3X8S4Tz00C&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=ew3X8S4Tz00C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9780312309381"
+          },
+          "Publisher": {
+            "S": "Macmillan"
+          },
+          "Description": {
+            "S": "A fictionalized account of an alternate American Civil War recounts events following the capture of Vicksburg by General Ulysses S. Grant and traces the northern army's journey to Gettysburg."
+          },
+          "PublishedDate": {
+            "S": "2005-06"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
             "S": "The Kite Runner"
           },
           "PageCount": {
@@ -536,6 +2264,78 @@
           },
           "PublishedDate": {
             "S": "2013-03-05"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "Maria Molina and the Days of the Dead"
+          },
+          "PageCount": {
+            "S": "32"
+          },
+          "BookId": {
+            "S": "PxKrSBCiCI"
+          },
+          "Author": {
+            "S": "Kathleen Krull"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=c92TBAAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=c92TBAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9781623347253"
+          },
+          "Publisher": {
+            "S": "StarWalk Kids Media"
+          },
+          "Description": {
+            "S": "It's October 31, the first of the Days of the Dead in Mexico, and Maria Molina and her family are in the graveyard to honor her baby brother Pablo, who died when he was just a few months old. A candle flickers in the dark night, and on Pablo's grave they have placed his favorite toys, some chocolate, a sugar skull, and even a small 'Bread of the Dead.'Throughout Mexico, other families are doing exactly the same thing, for the threeday festival of The Days of the Dead is one of Mexico's most important holidays."
+          },
+          "PublishedDate": {
+            "S": "2014-07-30"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "The Forgotten Legion"
+          },
+          "PageCount": {
+            "S": "544"
+          },
+          "BookId": {
+            "S": "raxnKiejuf"
+          },
+          "Author": {
+            "S": "Ben Kane"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=DOOl9-g1M5AC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=DOOl9-g1M5AC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9781466815049"
+          },
+          "Publisher": {
+            "S": "St. Martin's Press"
+          },
+          "Description": {
+            "S": "Set in the late Roman Republic, in the first century B.C.E., The Forgotten Legion is a tale of the greatest empire of the ancient world from the perspective of those on the lowest rungs of its society. Romulus and Fabiola are twins, born into slavery to a enslaved mother who is much beloved by them, and much abused by their owner. At 13 years old, they and their mother are sold: Romulus to gladiator school, Fabiola into prostitution, where she will catch the eye of one of the most powerful men in Rome, and their mother into obscurity and death in the salt mines. Tarquinius is an Etruscan, a warrior and soothsayer, born enemy of Rome and trained by the last haruspex in the forgotten arts of divination. A runaway slave, then an AWOL Legionaire, he has a long foretold destiny that will take him to the very ends of the known world. Brennus is a Gaul from the Allobreges tribe. In the battle against the Roman army, his entire family, perhaps his entire tribe, is slaughtered, and only he survives to be sold as a slave to be trained as a gladiator. He rises to become one of the most famous and feared gladiators of his day - and mentor to the boy slave, Romulus, who dreams night and day of escape and of revenge. The lives of these four characters are bound and interwoven in a marvellous story which begins in a Rome riven by corruption, violence and political enmities, but ends far away, where Romulus, Brennus and Tarquinius find themselves fighting against the Parthians and overwhelming odds - survivors of one of the most legendary battles in Roman military history and destined to become part of one of the most compelling, enduring legends: The Forgotten Legion."
+          },
+          "PublishedDate": {
+            "S": "2010-01-05"
           }
         }
       }
