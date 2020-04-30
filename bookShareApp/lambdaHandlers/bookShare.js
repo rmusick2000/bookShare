@@ -105,8 +105,11 @@ function findBook( newBook ) {
     // findbook return val is in books
     return booksPromise.then((books) => {
 
-	var retVal = false;
-	if( books.Items.length > 0 ) { retVal = true; }
+	var retVal = newBook.id;
+	if( books.Items.length > 0 ) {
+	    retVal = books.Items[0].BookId;
+	    //console.log( "findBook: ", books.Items[0], "rv: ", retVal );
+	}
 	return retVal;	
     });
 }
@@ -186,11 +189,15 @@ async function putBook( newBook, personId, libraryId ) {
     // console.log('Put Book!', personId, newBook.title );
 
     const ownerships = await lookupOwnerships( personId );
+
+    // get book .. exists?  do not re-add. 
+    const foundBook = await findBook( newBook );
+    console.log( "old: ", foundBook, "new: ", newBook.id );
     
     // Books is map<string, list>  id: attributes
     let newBooks = ownerships.Books;
     let oEntry = [0];
-    newBooks[newBook.id] = oEntry;
+    newBooks[foundBook] = oEntry;
     
     // Deal with dynamodb set object.. grr  can't just newShares.add( newBook.id );
     let   newShares = ownerships.Shares;
@@ -203,7 +210,7 @@ async function putBook( newBook, personId, libraryId ) {
 	sharesSet = new Set();
     }
 
-    sharesSet.add( newBook.id );
+    sharesSet.add( foundBook );
     newShares[libraryId].values = Array.from( sharesSet );
 
     const paramsO = {
@@ -214,17 +221,13 @@ async function putBook( newBook, personId, libraryId ) {
             ':newBooks':  newBooks, ':newShares': newShares
         }
     };
-
-    // XXX get book -exists?  do not re-add.  pkey?
-    const foundBook = await findBook( newBook );
-
-    if( !foundBook ) {
-	console.log( "Book not found", newBook.title );
+    
+    if( foundBook == newBook.id ) {
 	// Put book 
 	const paramsPB = {
 	    TableName: 'Books',
 	    Item: {
-		"BookId":      newBook.id,
+		"BookId":      foundBook,
 		"Author":      newBook.author,
 		"Title":       newBook.title,
 		"ISBN":        newBook.ISBN,
@@ -242,16 +245,15 @@ async function putBook( newBook, personId, libraryId ) {
 		{ Put: paramsPB }, 
 		{ Update: paramsO },
 	    ]}).promise();
-	return bookPromise.then(() => success( true ));
+	return bookPromise.then(() => success( foundBook ));
     }
     else
     {
-	console.log( "Book found", newBook.title );
 	let bookPromise = bsdb.transactWrite({
 	    TransactItems: [
 		{ Update: paramsO },
 	    ]}).promise();
-	return bookPromise.then(() => success( true ));
+	return bookPromise.then(() => success( foundBook ));
     }
     
 }

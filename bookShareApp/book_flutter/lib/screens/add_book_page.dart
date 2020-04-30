@@ -70,19 +70,19 @@ class _BookShareAddBookState extends State<BookShareAddBookPage> {
      String libID = appState.privateLibId;
      String postData = '{ "Endpoint": "PutBook", "PersonId": "$uid", "PrivLibId": "$libID", "NewBook": $book }';
      // print( postData );
-     bool success = await putBook( context, container, postData );
+     String foundBookID = await putBook( context, container, postData );
+     newBook.id = foundBookID;
 
-     if( success ) {
-        List<Book> bil = appState.booksInLib[libID];
-        bool addBook = true;
-        // No need to initOwnership - this has happened already upon first login
-        if( bil != null ) { 
-           for( final book in bil ) {
-              if( book.id == newBook.id ) { addBook = false; break; }
-           }
+     // XXX
+     List<Book> bil = appState.booksInLib[libID];
+     bool addBook = true;
+     if( bil != null ) { 
+        for( final book in bil ) {
+           if( book.id == newBook.id ) { addBook = false; break; }
+           print( "BIL " + book.id.toString() + " " + newBook.id.toString() + " " + addBook.toString() );
         }
-        if( addBook ) { appState.booksInLib[libID].add( newBook ); }
      }
+     if( addBook ) { appState.booksInLib[libID].add( newBook ); }
   }
      
   // Different display, tap function than in homePage

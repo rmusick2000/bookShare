@@ -1,7 +1,7 @@
 import 'package:random_string/random_string.dart';
 
 class Book {
-   final String  id;
+   String  id;
    final String  title;
    final String  author;
    final String  ISBN;
@@ -14,6 +14,9 @@ class Book {
 
    Book({this.id, this.title, this.author, this.ISBN, this.publisher, this.publishedDate, this.pageCount, this.description, this.imageSmall, this.image});
 
+
+   //void set id( String newID ) { this.id = newID; }
+   
    dynamic toJson() => {'id': id, 'title': title, 'author': author, 'ISBN': ISBN, 
                            'imageSmall': imageSmall, 'image': image, 'publisher': publisher, 
                            'publishedDate': publishedDate, 'pageCount': pageCount, 'description': description
