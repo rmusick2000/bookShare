@@ -168,13 +168,13 @@ Future<bool> initOwnership( context, container, postData ) async {
    }
 }
 
-Future<bool> putBook( context, container, postData ) async {
+Future<String> putBook( context, container, postData ) async {
    String shortName = "putBook";
    final response = await postIt( shortName, postData, container );
    
    if (response.statusCode == 201) {
-      print( response.body.toString() );         
-      return true;
+      print( json.decode(utf8.decode(response.bodyBytes)).toString());
+      return json.decode(utf8.decode(response.bodyBytes)).toString();
    } else {
       bool didReauth = await checkFailure( response, shortName, context, container );
       if( didReauth ) { return await putBook( context, container, postData ); }
