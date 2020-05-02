@@ -5,6 +5,9 @@ import os
 import platform
 import logging
 
+import json    #test data import
+import boto3   #test data import
+
 from os import path
 
 from threading import Thread
@@ -16,10 +19,8 @@ from samInstance import samInstance
 import awsBSCommon
 
 # XXX create, delete awsConfig for bookFlutter, when create/delete BS resources
-# XXX buuuuuuuuut.... app in wild, BS rejuvinates, app dies??  no. need to connect.
-# XXX aws resource discovery?  somehow via static web?  reinstall updated apk... ummm..
 # XXX later, something like https://aws.amazon.com/blogs/architecture/new-application-integration-with-aws-cloud-map-for-service-discovery/
-# XXX add db entries for testing
+# XXX Add jq to setup script.  (sudo apt install jq)
 
 def updateHost():
     logging.info("Trying to update localhost")
@@ -90,9 +91,9 @@ def getCFStacks( sam ) :
     sam.getStacks()
 
 
-# XXX Add jq to setup script.  (sudo apt install jq)
-# XXX get all tables, named properly, put in test data dir
-# XXX get size of table: aws dynamodb describe-table --table-name Libraries
+# Get size of table: aws dynamodb describe-table --table-name Libraries
+# https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Backup.Tutorial.html
+
 
 #def getDynamoData( sam ) :
     #cmd = "aws dynamodb scan --table-name Books | jq '{"Books": [.Items[] | {PutRequest: {Item: .}}]}' > testData/testDataBooks.json"
@@ -101,23 +102,25 @@ def getCFStacks( sam ) :
     #cmd = "aws dynamodb scan --table-name People | jq '{"People": [.Items[] | {PutRequest: {Item: .}}]}' > testData/testDataPeople.json"
     
 
-# CAREFUL.  This writes to dynamo
-def createTestDDBEntries( sam ) :
+def splitAndLoad( sam, fileName, tableName ) :
+    d={}
+    with open( fileName ) as f:
+        d = json.load(f)
 
-    cmd = "aws dynamodb batch-write-item --request-items file://testData/testDataPeople.json"
-    if( call(cmd, shell=True) != 0 ) : logging.warning( "Failed to write test data: People " )
+    client = boto3.client('dynamodb')
+
+    for x in sam.batchRip( d[tableName], 25 ):
+        subbatch_dict = {tableName: x}
+        response = client.batch_write_item(RequestItems=subbatch_dict)
+
     
-    cmd = "aws dynamodb batch-write-item --request-items file://testData/testDataBooks.json"
-    if( call(cmd, shell=True) != 0 ) : logging.warning( "Failed to write test data: Books " )
-
-    cmd = "aws dynamodb batch-write-item --request-items file://testData/testDataOwnerships.json"
-    if( call(cmd, shell=True) != 0 ) : logging.warning( "Failed to write test data: Ownerships " )
-
-    cmd = "aws dynamodb batch-write-item --request-items file://testData/testDataLibraries.json"
-    if( call(cmd, shell=True) != 0 ) : logging.warning( "Failed to write test data: Libraries " )
-
-
-
+# CAREFUL (!!!) this writes to dynamo
+def createTestDDBEntries( sam ) :
+    # cmd = "aws dynamodb batch-write-item --request-items file://testData/testDataOwnerships.json"
+    splitAndLoad(sam, "testData/testDataPeople.json", "People" )
+    splitAndLoad(sam, "testData/testDataLibraries.json", "Libraries" )
+    splitAndLoad(sam, "testData/testDataBooks.json", "Books" )
+    splitAndLoad(sam, "testData/testDataOwnerships.json", "Ownerships" )
 
     
 def createConfigFiles( sam, Xs = False ):
@@ -197,6 +200,17 @@ def createTestAccounts( sam ) :
         if( call(tbase,  shell=True) != 0 ) : logging.warning( "Failed to create tester " )
         if( call(tpBase, shell=True) != 0 ) : logging.warning( "Failed set password " )
 
+    # Add aspell and dbase accounts for by-hand testing
+    tbase  = cmdBase + "dbase --user-attributes Name=email,Value=success@simulator.amazonses.com Name=email_verified,Value=true"
+    tpBase = pwdBase + "dbase --password passWD123 --permanent"
+    if( call(tbase,  shell=True) != 0 ) : logging.warning( "Failed to create tester " )
+    if( call(tpBase, shell=True) != 0 ) : logging.warning( "Failed set password " )
+
+    tbase  = cmdBase + "aspell --user-attributes Name=email,Value=success@simulator.amazonses.com Name=email_verified,Value=true"
+    tpBase = pwdBase + "aspell --password passWD123 --permanent"
+    if( call(tbase,  shell=True) != 0 ) : logging.warning( "Failed to create tester " )
+    if( call(tpBase, shell=True) != 0 ) : logging.warning( "Failed set password " )
+
     # Create corresponding entries in library and person tables.
     cmd = "aws dynamodb batch-write-item --request-items file://testData/testDataPeople.json"
     if( call(cmd, shell=True) != 0 ) : logging.warning( "Failed to write test data: People " )
@@ -253,10 +267,8 @@ def main( cmd ):
 
     logging.info("")
     logging.info("TODO:")
-    logging.info("Separate Cognito auth in yamls?")
     logging.info("Run stress tests")
     logging.info("Get insights AWS")
-    logging.info("Get insights Github")
     logging.info( "END TODO")
     logging.info("")
     

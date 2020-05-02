@@ -4,6 +4,87 @@
       "PutRequest": {
         "Item": {
           "OwnershipId": {
+            "S": "CkUvxNtFWb"
+          },
+          "Books": {
+            "M": {}
+          },
+          "Shares": {
+            "M": {}
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "OwnershipId": {
+            "S": "vKXGVMTLhH"
+          },
+          "Books": {
+            "M": {}
+          },
+          "Shares": {
+            "M": {
+              "kivjduiMpo": {
+                "SS": [
+                  "---EMPTY---"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "OwnershipId": {
+            "S": "WVPNyeURut"
+          },
+          "Books": {
+            "M": {}
+          },
+          "Shares": {
+            "M": {}
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "OwnershipId": {
+            "S": "kNVxnsjlea"
+          },
+          "Books": {
+            "M": {}
+          },
+          "Shares": {
+            "M": {}
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "OwnershipId": {
+            "S": "FAEYJBVHLP"
+          },
+          "Books": {
+            "M": {}
+          },
+          "Shares": {
+            "M": {}
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "OwnershipId": {
             "S": "YXMCRBLPQJ"
           },
           "Books": {
@@ -123,6 +204,268 @@
       "PutRequest": {
         "Item": {
           "OwnershipId": {
+            "S": "LHQrgGkLCh"
+          },
+          "Books": {
+            "M": {}
+          },
+          "Shares": {
+            "M": {}
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "OwnershipId": {
+            "S": "llhfamoViM"
+          },
+          "Books": {
+            "M": {}
+          },
+          "Shares": {
+            "M": {}
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "OwnershipId": {
+            "S": "UDXYWVRSDD"
+          },
+          "Books": {
+            "M": {}
+          },
+          "Shares": {
+            "M": {}
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "OwnershipId": {
+            "S": "yDrrkFuqVm"
+          },
+          "Books": {
+            "M": {
+              "PxKrSBCiCI": {
+                "L": [
+                  {
+                    "N": "0"
+                  }
+                ]
+              },
+              "ukuTysrfaC": {
+                "L": [
+                  {
+                    "N": "0"
+                  }
+                ]
+              },
+              "ETJRBJeLUE": {
+                "L": [
+                  {
+                    "N": "0"
+                  }
+                ]
+              },
+              "rqbcfrqkRx": {
+                "L": [
+                  {
+                    "N": "0"
+                  }
+                ]
+              },
+              "hSKHDABJvE": {
+                "L": [
+                  {
+                    "N": "0"
+                  }
+                ]
+              },
+              "rbvbbNLpyc": {
+                "L": [
+                  {
+                    "N": "0"
+                  }
+                ]
+              },
+              "jtbgAsbdMp": {
+                "L": [
+                  {
+                    "N": "0"
+                  }
+                ]
+              },
+              "lNPNfEXSPG": {
+                "L": [
+                  {
+                    "N": "0"
+                  }
+                ]
+              },
+              "OYLSeNPBNo": {
+                "L": [
+                  {
+                    "N": "0"
+                  }
+                ]
+              },
+              "WUAGDUIEDM": {
+                "L": [
+                  {
+                    "N": "0"
+                  }
+                ]
+              },
+              "JxqiBayUPU": {
+                "L": [
+                  {
+                    "N": "0"
+                  }
+                ]
+              },
+              "raxnKiejuf": {
+                "L": [
+                  {
+                    "N": "0"
+                  }
+                ]
+              },
+              "eovtSkrxvx": {
+                "L": [
+                  {
+                    "N": "0"
+                  }
+                ]
+              },
+              "TmmhFWNNIu": {
+                "L": [
+                  {
+                    "N": "0"
+                  }
+                ]
+              },
+              "cwkmjWelmq": {
+                "L": [
+                  {
+                    "N": "0"
+                  }
+                ]
+              },
+              "xyFBwPsYkg": {
+                "L": [
+                  {
+                    "N": "0"
+                  }
+                ]
+              },
+              "iNNGpAXxei": {
+                "L": [
+                  {
+                    "N": "0"
+                  }
+                ]
+              },
+              "lmhmlbRdxx": {
+                "L": [
+                  {
+                    "N": "0"
+                  }
+                ]
+              },
+              "IYOPkVJQCY": {
+                "L": [
+                  {
+                    "N": "0"
+                  }
+                ]
+              },
+              "GTBYBUYheX": {
+                "L": [
+                  {
+                    "N": "0"
+                  }
+                ]
+              },
+              "qcEErpVxXg": {
+                "L": [
+                  {
+                    "N": "0"
+                  }
+                ]
+              }
+            }
+          },
+          "Shares": {
+            "M": {
+              "jwReknlTga": {
+                "SS": [
+                  "ETJRBJeLUE",
+                  "xyFBwPsYkg"
+                ]
+              },
+              "pXkidycobs": {
+                "SS": [
+                  "---EMPTY---",
+                  "IYOPkVJQCY",
+                  "hSKHDABJvE",
+                  "iNNGpAXxei",
+                  "jtbgAsbdMp",
+                  "qcEErpVxXg",
+                  "rqbcfrqkRx"
+                ]
+              },
+              "frfAJVTxNV": {
+                "SS": [
+                  "GTBYBUYheX",
+                  "OYLSeNPBNo",
+                  "WUAGDUIEDM",
+                  "eovtSkrxvx",
+                  "lmhmlbRdxx",
+                  "raxnKiejuf",
+                  "ukuTysrfaC"
+                ]
+              },
+              "GrhRMAHEBa": {
+                "SS": [
+                  "ETJRBJeLUE",
+                  "GTBYBUYheX",
+                  "IYOPkVJQCY",
+                  "JxqiBayUPU",
+                  "OYLSeNPBNo",
+                  "PxKrSBCiCI",
+                  "TmmhFWNNIu",
+                  "WUAGDUIEDM",
+                  "cwkmjWelmq",
+                  "eovtSkrxvx",
+                  "hSKHDABJvE",
+                  "iNNGpAXxei",
+                  "jtbgAsbdMp",
+                  "lNPNfEXSPG",
+                  "lmhmlbRdxx",
+                  "qcEErpVxXg",
+                  "raxnKiejuf",
+                  "rbvbbNLpyc",
+                  "rqbcfrqkRx",
+                  "ukuTysrfaC",
+                  "xyFBwPsYkg"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "OwnershipId": {
             "S": "BsKhcYtcdv"
           },
           "Books": {
@@ -137,10 +480,25 @@
             }
           },
           "Shares": {
+            "M": {}
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "OwnershipId": {
+            "S": "qsaNyAQcdQ"
+          },
+          "Books": {
+            "M": {}
+          },
+          "Shares": {
             "M": {
-              "qjMgivjvvb": {
+              "uUQQxdJwiS": {
                 "SS": [
-                  "PmQIAxXHUY"
+                  "---EMPTY---"
                 ]
               }
             }
@@ -202,6 +560,36 @@
                 ]
               }
             }
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "OwnershipId": {
+            "S": "VdxCEJXVXX"
+          },
+          "Books": {
+            "M": {}
+          },
+          "Shares": {
+            "M": {}
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "OwnershipId": {
+            "S": "NEEhhuCRIF"
+          },
+          "Books": {
+            "M": {}
+          },
+          "Shares": {
+            "M": {}
           }
         }
       }
