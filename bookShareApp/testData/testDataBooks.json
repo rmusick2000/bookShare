@@ -112,6 +112,42 @@
       "PutRequest": {
         "Item": {
           "Title": {
+            "S": "Kushiel - Der Verrat"
+          },
+          "PageCount": {
+            "S": "---"
+          },
+          "BookId": {
+            "S": "YFDPQXNVBU"
+          },
+          "Author": {
+            "S": "Jacqueline Carey"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=2_JTAgAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=2_JTAgAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9783641135393"
+          },
+          "Publisher": {
+            "S": "Heyne Verlag"
+          },
+          "Description": {
+            "S": "Brillant, düster, erotisch Nachdem die Verschwörung gegen die Königin von Terre d’Ange aufgedeckt wurde, kehrt wieder Ruhe in das Land ein. Doch dann gelingt der ebenso schönen wie gefährlichen Anführerin der Verschwörer die Flucht, und Phedré muss sich auf die Suche nach ihrer Widersacherin begeben. Ihr Weg führt sie in die geheimnisvolle Stadt La Serenissima. Nach „Das Zeichen“ der zweite Roman der vielfach preisgekrönten amerikanischen Kultserie."
+          },
+          "PublishedDate": {
+            "S": "2013-02-17"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
             "S": "Femmenism and the Mexican Woman Intellectual from Sor Juana to Poniatowska"
           },
           "PageCount": {
@@ -148,6 +184,78 @@
       "PutRequest": {
         "Item": {
           "Title": {
+            "S": "The Perfect Storm: A True Story of Men Against the Sea"
+          },
+          "PageCount": {
+            "S": "240"
+          },
+          "BookId": {
+            "S": "WYOlBmTOAT"
+          },
+          "Author": {
+            "S": "Sebastian Junger"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=txV3Zlx5iuUC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=txV3Zlx5iuUC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9780393076615"
+          },
+          "Publisher": {
+            "S": "W. W. Norton & Company"
+          },
+          "Description": {
+            "S": "\"There is nothing imaginary about Junger's book; it is all terrifyingly, awesomely real.\" —Los Angeles Times It was the storm of the century, boasting waves over one hundred feet high—a tempest created by so rare a combination of factors that meteorologists deemed it \"the perfect storm.\" In a book that has become a classic, Sebastian Junger explores the history of the fishing industry, the science of storms, and the candid accounts of the people whose lives the storm touched. The Perfect Storm is a real-life thriller that makes us feel like we've been caught, helpless, in the grip of a force of nature beyond our understanding or control. Winner of the American Library Association's 1998 Alex Award."
+          },
+          "PublishedDate": {
+            "S": "1997-05-17"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "Meet Hunca Munca"
+          },
+          "PageCount": {
+            "S": "12"
+          },
+          "BookId": {
+            "S": "BHKTTwksFe"
+          },
+          "Author": {
+            "S": "Beatrix Potter"
+          },
+          "ImageSmall": {
+            "S": "---"
+          },
+          "Image": {
+            "S": "---"
+          },
+          "ISBN": {
+            "S": "9780723234210"
+          },
+          "Publisher": {
+            "S": "Warne"
+          },
+          "Description": {
+            "S": "In this segment of Potter's \"Tale of Two Bad Mice\", mice Hunca Munca and her husband Tom Thumb explore a dolls' house whose dolls are away and steal some of the contents for themselves. On board pages."
+          },
+          "PublishedDate": {
+            "S": "1986"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
             "S": "K-Pop Hand Symbol Kpop Heart Korean Love Music"
           },
           "PageCount": {
@@ -176,6 +284,42 @@
           },
           "PublishedDate": {
             "S": "2019-12-14"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "No More Boogers Book"
+          },
+          "PageCount": {
+            "S": "16"
+          },
+          "BookId": {
+            "S": "oyfxahBunr"
+          },
+          "Author": {
+            "S": "Tara Dowd"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=afefAgAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=afefAgAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9780615261225"
+          },
+          "Publisher": {
+            "S": "Lulu.com"
+          },
+          "Description": {
+            "S": "Presents social situations in a humorous manor in order to teach children the proper methods of using a tissue, blowing their nose and appropriate social behaviors."
+          },
+          "PublishedDate": {
+            "S": "2009-01-01"
           }
         }
       }
@@ -284,6 +428,42 @@
           },
           "PublishedDate": {
             "S": "2007-01-23"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "Dragon Boogers"
+          },
+          "PageCount": {
+            "S": "40"
+          },
+          "BookId": {
+            "S": "RuTFSGKKiD"
+          },
+          "Author": {
+            "S": "Joe Garcia Iii"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=cbveNR-8mGwC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=cbveNR-8mGwC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9781449056391"
+          },
+          "Publisher": {
+            "S": "AuthorHouse"
+          },
+          "Description": {
+            "S": "Dragon Boogers is about a dragon who does not understand that when you have something bothering you, you should always speak up and ask for help. Because sometimes when you don't speak up for help you might do or say something to someone that you really don't mean."
+          },
+          "PublishedDate": {
+            "S": "2010-01"
           }
         }
       }
@@ -652,6 +832,42 @@
       "PutRequest": {
         "Item": {
           "Title": {
+            "S": "Minion"
+          },
+          "PageCount": {
+            "S": "304"
+          },
+          "BookId": {
+            "S": "lfkyawkOlL"
+          },
+          "Author": {
+            "S": "L. A. Banks"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=GRfSV_71yHkC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=GRfSV_71yHkC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9780312987015"
+          },
+          "Publisher": {
+            "S": "Macmillan"
+          },
+          "Description": {
+            "S": "A spoken-word artist by day for Warriors of Light Records and a vampire hunter at night, Damali Richards and her Guardian team take on a vicious group of rogue vampires who have been killing off the artists of Warriors of Light and their rival, Blood Music, a gang led by the most powerful vampire Damali has ever encountered. Reprint."
+          },
+          "PublishedDate": {
+            "S": "2004-05-04"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
             "S": "iPop"
           },
           "PageCount": {
@@ -824,6 +1040,42 @@
           },
           "PublishedDate": {
             "S": "2004-01-21"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "Warship"
+          },
+          "PageCount": {
+            "S": "---"
+          },
+          "BookId": {
+            "S": "dnBFCBUOCI"
+          },
+          "Author": {
+            "S": "John Jordan, Stephen Dent"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=kmEqAQAAIAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=kmEqAQAAIAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "---"
+          },
+          "Publisher": {
+            "S": "---"
+          },
+          "Description": {
+            "S": "---"
+          },
+          "PublishedDate": {
+            "S": "2008"
           }
         }
       }
@@ -1084,6 +1336,42 @@
       "PutRequest": {
         "Item": {
           "Title": {
+            "S": "Keanna"
+          },
+          "PageCount": {
+            "S": "162"
+          },
+          "BookId": {
+            "S": "kTcprlGbxS"
+          },
+          "Author": {
+            "S": "Namester Composition Notebooks"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=-TudyAEACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=-TudyAEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9781686030673"
+          },
+          "Publisher": {
+            "S": "---"
+          },
+          "Description": {
+            "S": "Beautifully designed, personalized notebook to make studying a little more special for Keanna. This notebook contains 160 pages of wide ruled, white paper and measures 7.44 x 9.69 inches (between A4 and A5 format). The journal provides plenty of writing space and is easy to carry everywhere in a bag or backpack. Size: 7.44 x 9.69 inch (18.9 x 24.6 cm) (Standard Composition Book Format) Page Count: 160 pages (80 sheets) Paper Type: Wide Ruled (Lined) Paper Cover Type: Paperback, Matte Namester - We Love Names We at Namester, are passionate about names and creating unique, personalized notebooks. We believe that your name is something special and we hope to make your writing experience a bit more extraordinary. For more designs - Search on Amazon for \"Namester Keanna\""
+          },
+          "PublishedDate": {
+            "S": "2019-08-13"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
             "S": "Boy Oh Boy"
           },
           "PageCount": {
@@ -1228,6 +1516,42 @@
       "PutRequest": {
         "Item": {
           "Title": {
+            "S": "Rain, Snow, Sleet, and Hail"
+          },
+          "PageCount": {
+            "S": "24"
+          },
+          "BookId": {
+            "S": "ivnoBFKUWp"
+          },
+          "Author": {
+            "S": "Mari Schuh"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=hNmxDwAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=hNmxDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9781731628480"
+          },
+          "Publisher": {
+            "S": "Carson-Dellosa Publishing"
+          },
+          "Description": {
+            "S": "GRADES K–2: This 24-page book (8’’ x 8’’) complements early elementary classroom weather units; introduces readers to the different types of precipitation. FEATURES: Includes an age-appropriate activity, a photo glossary, index, and an after reading activity to advance learning. WHY WEATHER WATCHERS: Each title in this collection focuses on a specific weather-related topic and its effects on people. These titles are great tools for helping build children’s reading comprehension skills. BUILD A LIBRARY: Collect every title from the collection to stock your home or classroom library. Reading together is a great way to bond while fostering communication and a lifelong love of reading."
+          },
+          "PublishedDate": {
+            "S": "2020-01-07"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
             "S": "The Glorious Cause"
           },
           "PageCount": {
@@ -1328,6 +1652,42 @@
           },
           "PublishedDate": {
             "S": "2000-05-05"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "Sandia Mountain Hiking Guide"
+          },
+          "PageCount": {
+            "S": "177"
+          },
+          "BookId": {
+            "S": "jrqkrYhYht"
+          },
+          "Author": {
+            "S": "Michael Elliott Coltrin"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=d3dOGz6JCasC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=d3dOGz6JCasC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9780826336613"
+          },
+          "Publisher": {
+            "S": "UNM Press"
+          },
+          "Description": {
+            "S": "This guide to fifty-seven hiking trails in New Mexico's Sandia Mountains includes twenty-five contour maps and one large four-color pull-out map on water-resistant paper."
+          },
+          "PublishedDate": {
+            "S": "2005"
           }
         }
       }
@@ -1444,6 +1804,42 @@
       "PutRequest": {
         "Item": {
           "Title": {
+            "S": "La Grâce de Kushiel"
+          },
+          "PageCount": {
+            "S": "672"
+          },
+          "BookId": {
+            "S": "tHvxrsgLeb"
+          },
+          "Author": {
+            "S": "Jacqueline Carey"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=3g7YBgAAQBAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=3g7YBgAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9782820521422"
+          },
+          "Publisher": {
+            "S": "Bragelonne"
+          },
+          "Description": {
+            "S": "Imriel et Sidonie renoncent enfin à la clandestinité. Mais l’aveu de leur amour s’apprête à précipiter le royaume dans le plus grand tumulte. Car les D’Angelins n’ont pas oublié les crimes de la mère d’Imriel, la perfide Melisande. Aussi la reine Ysandre impose-t-elle une condition absolue à l’union des amants. Imriel doit accomplir un acte de foi : retrouver sa mère et la ramener en Terre d’Ange pour qu’elle y soit exécutée. Mais tandis que Sidonie et lui se préparent à une nouvelle séparation, une force étrangère venue de loin étend son ombre sur le royaume. Les deux amants survivront-ils à cette nouvelle menace ? « Magnifique. Ce que l’heroic fantasy peut faire de mieux. » Publishers Weekly « Intelligent, sexy, d’une humanité à vous briser le cœur : Carey, enivrante, livre le meilleur d’elle-même. » Booklist"
+          },
+          "PublishedDate": {
+            "S": "2016-08-26"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
             "S": "Istorii︠a︡ ukraïnsʹkoï literatury: ch. 2. Biky XVI-XVIII"
           },
           "PageCount": {
@@ -1508,6 +1904,42 @@
           },
           "PublishedDate": {
             "S": "2012-02-21"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "Peanut Butter Boogers"
+          },
+          "PageCount": {
+            "S": "24"
+          },
+          "BookId": {
+            "S": "ybOuVkEgaB"
+          },
+          "Author": {
+            "S": "Debra D. Wiley"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=w0fDTeIehYsC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=w0fDTeIehYsC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9781598867305"
+          },
+          "Publisher": {
+            "S": "Tate Publishing"
+          },
+          "Description": {
+            "S": "Have you ever heard of a peanut butter booger? Do you even know what one is? In Peanut Butter Boogers, Author Debra D. Wiley tells the tale of a determined little girl at her wit's end. Desperate to outwit the little boy who sits beside her in class and refuses to blow his nose, a little girl searches far and near for a solution, and does she find one! Want to know what it is? Pick up Peanut Butter Boogers and find out!"
+          },
+          "PublishedDate": {
+            "S": "2007-01-01"
           }
         }
       }
@@ -1760,6 +2192,42 @@
           },
           "PublishedDate": {
             "S": "---"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "Elementary Functional Analysis"
+          },
+          "PageCount": {
+            "S": "208"
+          },
+          "BookId": {
+            "S": "qKSLnDCSNY"
+          },
+          "Author": {
+            "S": "Barbara MacCluer"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=8KB-ALmOSagC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=8KB-ALmOSagC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9780387855295"
+          },
+          "Publisher": {
+            "S": "Springer Science & Business Media"
+          },
+          "Description": {
+            "S": "Functional analysis arose in the early twentieth century and gradually, conquering one stronghold after another, became a nearly universal mathematical doctrine, not merely a new area of mathematics, but a new mathematical world view. Its appearance was the inevitable consequence of the evolution of all of nineteenth-century mathematics, in particular classical analysis and mathematical physics. Its original basis was formed by Cantor’s theory of sets and linear algebra. Its existence answered the question of how to state general principles of a broadly interpreted analysis in a way suitable for the most diverse situations. A.M. Vershik ([45], p. 438). This text evolved from the content of a one semester introductory course in fu- tional analysis that I have taught a number of times since 1996 at the University of Virginia. My students have included ?rst and second year graduate students prep- ing for thesis work in analysis, algebra, or topology, graduate students in various departments in the School of Engineering and Applied Science, and several und- graduate mathematics or physics majors. After a ?rst draft of the manuscript was completed, it was also used for an independent reading course for several und- graduates preparing for graduate school."
+          },
+          "PublishedDate": {
+            "S": "2008-10-20"
           }
         }
       }
@@ -2228,6 +2696,114 @@
           },
           "PublishedDate": {
             "S": "2005-06"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "Magic and Its Professors"
+          },
+          "PageCount": {
+            "S": "220"
+          },
+          "BookId": {
+            "S": "pbKpuqERhm"
+          },
+          "Author": {
+            "S": "Henry Ridgely Evans"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=VGbzAAAAMAAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=VGbzAAAAMAAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "---"
+          },
+          "Publisher": {
+            "S": "---"
+          },
+          "Description": {
+            "S": "---"
+          },
+          "PublishedDate": {
+            "S": "1902"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "Money Magic Tricks"
+          },
+          "PageCount": {
+            "S": "127"
+          },
+          "BookId": {
+            "S": "ijCvsftMal"
+          },
+          "Author": {
+            "S": "Bob Longe"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=n1e4cRcdQfgC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=n1e4cRcdQfgC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9780806980195"
+          },
+          "Publisher": {
+            "S": "Sterling Publishing Company, Inc."
+          },
+          "Description": {
+            "S": "Presents instructions for a variety of magic tricks using coins."
+          },
+          "PublishedDate": {
+            "S": "2001"
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "Title": {
+            "S": "I Will Lie Down This Night"
+          },
+          "PageCount": {
+            "S": "152"
+          },
+          "BookId": {
+            "S": "lncRBNJSAJ"
+          },
+          "Author": {
+            "S": "Melissa Musick Nussbaum"
+          },
+          "ImageSmall": {
+            "S": "http://books.google.com/books/content?id=DStKDlmtL7EC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+          },
+          "Image": {
+            "S": "http://books.google.com/books/content?id=DStKDlmtL7EC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+          },
+          "ISBN": {
+            "S": "9781568540856"
+          },
+          "Publisher": {
+            "S": "LiturgyTrainingPublications"
+          },
+          "Description": {
+            "S": "A mother and master storyteller shares reflections on her family's bedtime rituals and prayers."
+          },
+          "PublishedDate": {
+            "S": "1995-01-01"
           }
         }
       }

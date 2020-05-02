@@ -36,8 +36,9 @@ class _BookShareProfileState extends State<BookShareProfilePage> {
   Function _logout( context, container, appState) {
      wrapper() async { 
         setState(() => bookState = "illiterate" );
+        // This has to happen before logout, else can lose credentials too fast
+        await unLock( context, container, '{ "Endpoint": "UnLock" }' );
         logout( context, container, appState );
-        unLock( context, container, '{ "Endpoint": "UnLock" }' );
      }
      return wrapper;
   }

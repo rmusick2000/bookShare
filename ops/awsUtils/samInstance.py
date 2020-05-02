@@ -116,6 +116,13 @@ class samInstance():
 
 
     # Public facing
+    
+    #https://stackoverflow.com/questions/40941231/aws-cli-dynamo-db-validationexception-error
+    def batchRip(self, iterable, n=1):
+        l = len(iterable)
+        for ndx in range(0, l, n):
+            yield iterable[ndx:min(ndx + n, l)]
+    
     def getStacks( self ) :
         return self._refreshStacks()
         

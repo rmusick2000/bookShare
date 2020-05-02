@@ -404,7 +404,14 @@ Future<void> initOwnerships( context, container ) async {
    print( "InitOwnerships" );
    final appState  = container.state;
    String uid = appState.userId;
-   appState.ownerships = await fetchOwnerships( context, container, '{ "Endpoint": "GetOwnerships", "PersonId": "$uid" }' );
+
+   // setState chain is triggering this during signouts.  cut the chain.
+   if( appState.userState == UserState.SIGNED_IN ) {
+      appState.ownerships = await fetchOwnerships( context, container, '{ "Endpoint": "GetOwnerships", "PersonId": "$uid" }' );
+   }
+   else {
+      print( "User is not signed in" );
+   }
 }
 
 Future<void> setShare( context, container, bookId, libId, newValue ) async {

@@ -73,7 +73,7 @@
             "S": "_bs_tester_1664"
           },
           "Email": {
-            "S": "success@simulator.amazonses.com
+            "S": "success@simulator.amazonses.com"
           },
           "First": {
             "S": "Marion"
@@ -154,7 +154,7 @@
             "S": "Marion"
           },
           "Email": {
-            "S": "rmusick+aspell@gmail.com"
+            "S": "success@simulator.amazonses.com"
           }
         }
       }
@@ -310,7 +310,7 @@
             "S": "Marion"
           },
           "Email": {
-            "S": "rmusick+dbase@gmail.com"
+            "S": "success@simulator.amazonses.com"
           }
         }
       }
