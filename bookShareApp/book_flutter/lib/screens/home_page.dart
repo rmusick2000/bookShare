@@ -91,7 +91,7 @@ class _BookShareHomeState extends State<BookShareHomePage> {
             
             // update dynamo
             String newLib = json.encode( currentLib );
-            String postData = '{ "Endpoint": "PutLib", "NewLib": $newLib }';               
+            String postData = '{ "Endpoint": "PutLib", "NewLib": "$newLib" }';               
             putLib( context, container, postData );
             
             print( "SET STATE hompage updatelibrow" );
@@ -120,7 +120,7 @@ class _BookShareHomeState extends State<BookShareHomePage> {
             
             // update dynamo
             String newLib = json.encode( currentLib );
-            String postData = '{ "Endpoint": "PutLib", "NewLib": $newLib }';               
+            String postData = '{ "Endpoint": "PutLib", "NewLib": "$newLib" }';
             putLib( context, container, postData );
             
             print( "SET STATE hompage updatelibrow" );

@@ -423,7 +423,35 @@ async function delBook( bookId, personId ) {
 }
 
 
-// XXX Beware 100 item limit in scan
+function paginatedScan( params ) {
+
+    return new Promise((resolve, reject) => {
+	var result = [];
+	
+	// adding 1 extra items due to a corner case bug in DynamoDB
+	params.Limit = params.Limit + 1;
+	bsdb.scan( params, onScan );
+
+	function onScan(err, data) {
+	    if (err) {
+		return reject(err);
+	    }
+	    result = result.concat(data.Items);
+	    //console.log( "on scan.." );
+	    //data.Items.forEach(function(book) { console.log( book.Title ); });	    
+	    if (typeof data.LastEvaluatedKey === "undefined") {
+		return resolve(result);
+	    } else {
+		params.ExclusiveStartKey = data.LastEvaluatedKey;
+		//console.log( "scan more, last: ", data.LastEvaluatedKey );
+		bsdb.scan( params, onScan );
+	    }
+
+	}
+    });
+}
+
+
 function getBooks( selectedLib ) {
     // console.log('Get Books!', selectedLib );
 
@@ -434,7 +462,7 @@ function getBooks( selectedLib ) {
         FilterExpression: 'attribute_exists(Shares.#lid)',
         ExpressionAttributeNames: { "#lid": selectedLib }
     };
-    
+
     let ownershipsPromise = bsdb.scan( paramsO ).promise();
     return ownershipsPromise.then((ownerships) => {
 	var books = [];
@@ -444,22 +472,20 @@ function getBooks( selectedLib ) {
 	    });
 	}
 	return books;
-    }).then((books) => {
+    }).then((bookIDs) => {
 
-	// Get Books for shares
-
-	// Params to get Books that are in books
-	const paramsB = {
+	// Params to get Books with bookIDs
+	var paramsB = {
 	    TableName: 'Books',
+	    Limit: 99,
 	    FilterExpression: 'contains(:books, BookId)',
-	    ExpressionAttributeValues: { ":books": books }
+	    ExpressionAttributeValues: { ":books": bookIDs }
 	};
 
-	let booksPromise = bsdb.scan( paramsB ).promise();
-	return booksPromise.then((books) => success( books.Items ));
+	let booksPromise = paginatedScan( paramsB );
+	return booksPromise.then((books) => success( books ) );
     });
 }
-
 
 async function getOwnerships( personId ) {
     // console.log('Get ownerships! ', personId );
@@ -468,7 +494,6 @@ async function getOwnerships( personId ) {
     return success( ownerships );
 }
 
-// XXX test dbase for initOwn
 // data volume is tiny, put is overwrite... so just grab, rebuild and put
 async function updateShare( bookId, personId, libId, plibId, all, value ) {
     // console.log('Put share(s) for', libId, personId, "all?", all );
