@@ -90,7 +90,7 @@ class _BookShareSignupState extends State<BookShareSignupPage> {
                                                   prospect: false );
 
                String newLib = json.encode( editLibrary );
-               String lpostData = '{ "Endpoint": "PutLib", "NewLib": $newLib }';
+               String lpostData = '{ "Endpoint": "PutLib", "NewLib": "$newLib" }';
                await putLib( context, container, lpostData );
 
                
@@ -98,7 +98,7 @@ class _BookShareSignupState extends State<BookShareSignupPage> {
                                          email: appState.attributeController.text, locked: false, imagePng: null, image: null );
 
                String newUser = json.encode( user );
-               String ppostData = '{ "Endpoint": "PutPerson", "NewPerson": $newUser }';
+               String ppostData = '{ "Endpoint": "PutPerson", "NewPerson": "$newUser" }';
                await putPerson( context, container, ppostData );
 
                appState.newUser = false;

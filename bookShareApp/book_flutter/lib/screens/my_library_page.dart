@@ -689,7 +689,7 @@ class _BookShareMyLibraryState extends State<BookShareMyLibraryPage> {
          }
          
          String newLib = json.encode( editLibrary );
-         String postData = '{ "Endpoint": "PutLib", "NewLib": $newLib }';               
+         String postData = '{ "Endpoint": "PutLib", "NewLib": "$newLib" }';               
          putLib( context, container, postData );
 
          if( editLibrary.description == "---EMPTY---" ) { editLibrary.description = ""; }
