@@ -144,13 +144,30 @@ def createConfigFiles( sam, Xs = False ):
     configData += "    }\n"
     configData += "}\n\n"
     
-    filename = awsBSCommon.bsAppConfigPath + awsBSCommon.bsAppConfigName
-    with open(filename, "w+") as f:
+    filenameConfig = awsBSCommon.bsAppConfigPath + awsBSCommon.bsAppConfigName
+    with open(filenameConfig, "w+") as f:
         f.write(configData)
 
-    filename = awsBSCommon.bsAppAssetPath + "api_base_path.txt"
-    with open(filename, "w+") as f:
+    filenamePath = awsBSCommon.bsAppAssetPath + "api_base_path.txt"
+    with open(filenamePath, "w+") as f:
         f.write(apiBase)
+
+    # push to S3 bucket to allow deployed apps to reach new backend Cognito
+    # unfortunately, flutter_cognito plugin bakes this info in at deploy time - no way to update
+    """
+    if( not Xs ) :
+        s3Name = "s3://" + awsBSCommon.samStaticWebBucket + "/"
+        cmd1 = "aws s3 cp " + filenameConfig + " " + s3Name + filenameConfig
+        cmd2 = "aws s3 cp " + filenamePath   + " " + s3Name + filenamePath
+        if( call(cmd1,  shell=True) != 0 ) : logging.warning( "Failed to create config file on S3" )
+        if( call(cmd2,  shell=True) != 0 ) : logging.warning( "Failed to create apiBase file on S3" )
+    """
+
+    # instead, write configData to files as well - xplatform.  Could get from awsconfig, but that is Android-specific
+    filenameConfig = awsBSCommon.bsAppAssetPath + awsBSCommon.bsAppConfigName
+    with open(filenameConfig, "w+") as f:
+        f.write(configData)
+    
     
     
 def anonymizeConfigFiles( sam ):
@@ -175,7 +192,7 @@ def makeBSResources( sam ) :
     # XXX Until we have dynamic resource configuration, create local BS config files
     createConfigFiles( sam )
     createTestAccounts( sam )
-
+    createTestDDBEntries( sam )
 
     
 def createTestAccounts( sam ) :

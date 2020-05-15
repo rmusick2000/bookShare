@@ -207,23 +207,24 @@ void main() {
               timeout: Timeout( Duration( seconds:300 )) );
 
            // DARG!  Default timeout on tests is 30s!  Could be a much clearer error message.
+           // Hoy.  Needed to add authors to all, too many failures with new books.
            test('Add book w/refine search', () async {
                  await gotoAddBook( driver );
                  
-                 await refineAdd( driver, "Dragon Boogers", "", 0, "more" );
+                 await refineAdd( driver, "Dragon Boogers", "Garcia", 0, "more" );
                  await refineAdd( driver, "Warship", "Jordan, Dent", 0, "more" );    
                  await refineAdd( driver, "I will lie down", "Melissa Musick", 0, "more" ); 
-                 await refineAdd( driver, "Money Magic Tricks", "", 0, "home" );         
+                 await refineAdd( driver, "Money Magic Tricks", "Longe", 0, "home" );         
                  
                  expect( await verifyHomeBatch1( driver ), true );
                  await gotoAddBook( driver );
                  
-                 await refineAdd( driver, "Elementary Functional Analysis", "", 0, "more" );    
-                 await refineAdd( driver, "Keanna", "", 0, "more" );    
-                 await refineAdd( driver, "Rain, Snow, Sleet, and Hail", "", 0, "more" );    
+                 await refineAdd( driver, "Elementary Functional Analysis", "Maccluer", 0, "more" );    
+                 await refineAdd( driver, "Keanna", "Namester Composition Notebooks", 0, "more" );    
+                 await refineAdd( driver, "Rain, Snow, Sleet, and Hail", "Schuh", 0, "more" );    
                  await refineAdd( driver, "The Perfect Storm", "Junger", 0, "more" );    
-                 await refineAdd( driver, "Sandia Mountain Hiking Guide", "", 0, "more" );    
-                 await refineAdd( driver, "Meet hunca munca", "", 0, "home" );    
+                 await refineAdd( driver, "Sandia Mountain Hiking Guide", "Coltrin", 0, "more" );    
+                 await refineAdd( driver, "Meet hunca munca", "Potter", 0, "home" );    
               },
               timeout: Timeout( Duration( seconds:300 )) );
            
