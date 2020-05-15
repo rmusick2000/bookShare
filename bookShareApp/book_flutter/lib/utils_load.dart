@@ -288,6 +288,27 @@ Future<bool> putShares( context, container, postData ) async {
    }
 }
 
+Future<bool> checkValidConfig( context ) async {
+   print( "Validating configuration" );
+
+   String baseConfigS = await DefaultAssetBundle.of(context).loadString('files/awsconfiguration.json');
+   final baseConfig = json.decode( baseConfigS );
+
+   final poolId = baseConfig["CognitoUserPool"]["Default"]["PoolId"];
+   final region = baseConfig["CognitoUserPool"]["Default"]["Region"];
+   final poolKeys = "https://cognito-idp." + region + ".amazonaws.com/" + poolId + "/.well-known/jwks.json";
+
+   print( "Cog Key location: " + poolKeys );
+
+   var response = await http.get( poolKeys );
+   var rbody = json.decode(utf8.decode(response.bodyBytes));
+   print( "RESPONSE " + rbody.toString() );
+
+   if( rbody.toString().contains( "does not exist" )) { return false; }
+   else{ return true; }
+}
+
+
 // Version 1 v1 of google books api
 // Note: undocumented varients, different results:   q=isbn#, q=isbn=#, q=isbn<#>, q=ISBN
 // Note: multiple editions per book, google asks for a primary isbn, then related isbn.

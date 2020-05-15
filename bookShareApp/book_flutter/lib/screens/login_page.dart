@@ -36,7 +36,11 @@ class _BookShareLoginState extends State<BookShareLoginPage> {
         MaterialPageRoute newPage = MaterialPageRoute(builder: (context) => BookShareHomePage());
         Navigator.push( context, newPage );
      } catch(e) {
-        if( e.toString().contains("User does not exist") ) {
+        bool validConfig = await checkValidConfig( context );
+        if( !validConfig ) {
+           showToast( context, "Your app is out of date.  Please update BookShare and try again." );
+        }
+        else if( e.toString().contains("User does not exist") ) {
            showToast( context, "Username or password is incorrect." );
         } else if( e.toString().contains( "NotAuthorizedExcept" ) ) {
            showToast( context, "Username or password is incorrect." );                    
