@@ -117,8 +117,8 @@ Visit the Issue page in this repository for known issues and feature requests.
  AWS infrastructure creation with createBS.py runs AWS SAM and
  Cloudformation templates through boto3 and the AWS CLI.  
 
- This is in reasonable shape, with two exceptions: cloud resource
- discovery, and the parameterization of S3 names (see known issues).
+ This is in reasonable shape, with the exception of 
+ parameterization of S3 names (see known issues).
 
 ### CodeEquity for BookShare Status
 
